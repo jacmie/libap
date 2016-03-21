@@ -1,7 +1,9 @@
 #include "JMbezierAirfoil.h"
 
+#ifdef WIN32
 #include "JMconsole.h"
 extern CONSOLE con;
+#endif
 
 using namespace std;
 

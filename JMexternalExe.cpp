@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef WIN32
 #include <windows.h>
-
+#endif
 //#include <FL/fl_ask.H>
 
 using namespace std;
@@ -66,7 +67,9 @@ int Pipe(char *Program, char *input, char *log, char *buffer, char *mode)
 
 	return 1;
 }
-	
+
+#ifdef WIN32
+
 int CreateProcess(bool Wait, char *Proc, char *Arg)
 {
     int ProcResult;
@@ -133,3 +136,5 @@ int CreateProcess(bool Wait, string Proc, string Arg)
 	
 	return CreateProcess(Wait, CstrProc, CstrArg);
 }
+
+#endif

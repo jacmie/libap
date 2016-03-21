@@ -75,7 +75,7 @@ double Cstr2d(char *Cstr)
 char *d2Cstr(double d)
 {
    static char Cstr[15];
-   gcvt(d, 7, Cstr);
+   gcvt(d, 6, Cstr);
    //sprintf(Cstr, "%f", d);
    return Cstr;
 }

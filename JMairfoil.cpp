@@ -1,4 +1,4 @@
-#include "JMAirfoil.h"
+#include "JMairfoil.h"
 
 using namespace std;
 

@@ -33,11 +33,11 @@ class BEZIER
     double tVertex(int XYZ, double Value);
     void PrintPoints(std::ostream &out);
 	void PrintVertex(std::ostream &out);
+	void PMinMax(int XYZ, double &min, double &max);
 
     private:
     
     void BinomialCoef();
-    void PMinMax(int XYZ, double &min, double &max);
 };
 
 #endif

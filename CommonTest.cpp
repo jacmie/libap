@@ -13,7 +13,10 @@
 #include "JMfilter.h"
 
 using namespace std;
+
+#ifdef WIN32
 CONSOLE con;
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -270,6 +273,6 @@ int main(int argc, char *argv[])
 	con << endl;
 	fout.close();
 	*/
-    system("PAUSE");
+    //system("PAUSE");
     return EXIT_SUCCESS;
 }

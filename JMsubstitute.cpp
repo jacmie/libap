@@ -1,4 +1,4 @@
-#include "JMSubstitute.h"
+#include "JMsubstitute.h"
 
 #include "JMconsole.h"
 //extern CONSOLE con;

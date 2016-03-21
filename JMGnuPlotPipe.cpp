@@ -1,26 +1,34 @@
 #include "JMGnuPlotPipe.h"
 
 using namespace std;
-//#include "Console.h"
-//CONSOLE con;
 
 GNUPLOT::GNUPLOT()
 {
 	MatrixFlag = 0;
 	FromCloumn = 1;
 	NrOfDataCloumns = 1;
-	GnuPlotDir = "pgnuplot";
+	
 	//DataFile;
 	ConfigFile = "";
+
+#ifdef WIN32
+	GnuPlotDir = "pgnuplot";
+#else
+	GnuPlotDir = "gnuplot -persist";
+#endif
 }
 
 int GNUPLOT::Plot2D()
 {
     char Num[16], Line[256];
     
+#ifdef WIN32
     FILE *gnucmd = _popen(GnuPlotDir.c_str(), "w");
-    
-	if(!gnucmd)
+#else    
+    FILE *gnucmd = popen(GnuPlotDir.c_str(), "w");
+#endif
+
+    if(!gnucmd)
 	{
 		fl_alert("GnuPlot pipe error!");
         return 0;
@@ -57,7 +65,7 @@ int GNUPLOT::Plot2D()
 	//strcat(Line, "pause -1\n");
    
     fputs(Line, gnucmd);
-    //con << Line << endl;
+    cout << Line << endl;
     fflush(gnucmd);
 	
 	return 1;
@@ -67,8 +75,12 @@ int GNUPLOT::Plot3D()
 {
 	char Line[20056];
     
+#ifdef WIN32
     FILE *gnucmd = _popen(GnuPlotDir.c_str(), "w");
-    
+#else    
+    FILE *gnucmd = popen(GnuPlotDir.c_str(), "w");
+#endif
+   
 	if(!gnucmd)
 	{
 		fl_alert("GnuPlot pipe error!");
