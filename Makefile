@@ -19,18 +19,11 @@ SOURCES = 	CommonTest.cpp\
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-#/local/lib/libfltk.a
+#--------------------------  Static libraries  ----------------------------
 
+STAT_LIBS = -L. -L/usr/local/lib $(FLTK_LIBS) -lJMcommon
 FLTK_LIBS = -lfltk_forms -lfltk -lfltk_gl -lfltk_images -lfltk_png -lfltk_jpeg -lfltk_z
-STAT_LIBS = -L/usr/local/lib $(FLTK_LIBS)
 
-BIN  = CommonTest
-
-#-------------------  Linker, options and libraries  ----------------------
-
-#FLTK_LIBS = -L/usr/local/lib -lfltk_forms -lfltk -lfltk_images -lfltk_png -lfltk_jpeg -lfltk_z
-#STAT_LIBS = $(FLTK_LIBS) 
-#/usr/local/lib/libfltk.a
 #-----------------------  system depend options  --------------------------
 
 OSTYPE = $(shell uname -s)
@@ -45,17 +38,25 @@ endif
 
 .PHONY: clean
 
-all: $(BIN)
+all: libJMcommon.a CommonTest
 
 .cpp.o:
 	echo --- compilation: $*.cpp ...
 	g++ -c -Wall -O2 -I/usr/local/include $< -o $@
-	
-$(BIN): $(OBJECTS)
+
+libJMcommon.a: $(OBJECTS)
+	@echo --- make library: $@
+	ar rcs $@ $(OBJECTS)
+
+CommonTest: $(OBJECTS)
 	@echo --- make: $@
-	g++ $(OBJECTS) -static-libgcc -static-libstdc++ -Wl,-Bstatic $(STAT_LIBS) -Wl,-Bdynamic $(DYN_LIBS) -o $(BIN)
-#	g++ $(OBJS) -L./bin -static-libgcc -static-libstdc++ -Wl,-Bstatic $(STAT_LIBS) -Wl,-Bdynamic $(DYN_LIBS) -o ./bin/$(TARGET)	
+	g++ -static-libgcc -static-libstdc++ -Wl,-Bstatic $(STAT_LIBS) -Wl,-Bdynamic $(DYN_LIBS) -o $@
 	rm -f CommonTest.o
 	
 clean:
-	rm -f *.o CommonTest CommonTest.exe 
+	rm -f *.o libJMcommon.a CommonTest CommonTest.exe 
+
+install: 
+	@echo --- make: $@
+	cp -f *.h /usr/local/include
+	cp -f libJMcommon.a /usr/local/lib/libJMcommon.a

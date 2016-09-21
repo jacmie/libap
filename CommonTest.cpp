@@ -205,7 +205,9 @@ int main(int argc, char *argv[])
 	//CreateProcess(1, (char *)"GnuPlot\\pgnuplot.exe", (char *)"");
 	*/
 	//*** JMsubstite ***
-	
+
+	cout << "Substitute" << endl;
+
 	int n = 5;
     Variables *Var = new Variables [5];
    
