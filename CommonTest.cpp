@@ -33,13 +33,13 @@ int main(int argc, char *argv[])
 	
 	//+++ BASIC FUNCTIONS +++
 	
-	//*** Console ***
+	// *** Console ***
 	//OK
 	
-	//*** JMmath ***
+	// *** JMmath ***
 	//OK
 	
-	//*** JMconvert ***
+	// *** JMconvert ***
 	//OK
 	
 	//*** JMdiscretization ***
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	
 	//+++ ADVANCED FUNCTIONS +++
 	
-	//*** JMxfoil ***
+	// *** JMxfoil ***
 	
 	XFOIL CreateFoil;
 	
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 	else
 		con << errors << endl;
 	
-	//*** JMairfoil ***
+	// *** JMairfoil ***
 	
 	AIRFOIL TestFoil;
 	
@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 	TestFoil.Transformations();
 	TestFoil.WriteAirfoil((char *)"TestDir/AirfoilMix3D.dat");
 	
-	//*** JMbezier ***
+	// *** JMbezier ***
 	
     int n = 4;  //points -> degrees of freedom n-1 
     int u = 30; //vertex on spline
@@ -162,14 +162,14 @@ int main(int argc, char *argv[])
     
     out.close();
 	
-	//*** BezierAirfoil ***
+	// *** BezierAirfoil ***
 	
 	con << "*** BezierAirfoil ***" << endl;
 	
 	BEZIERAIRFOIL Airfoil;
 	
 	Airfoil.Init(40, 60);
-	/*Airfoil.Spline0.Init(4, 60);
+	/ *Airfoil.Spline0.Init(4, 60);
 	Airfoil.Spline1.Init(3, 40);
 	Airfoil.Spline2.Init(3, 40);
 	Airfoil.Spline3.Init(4, 60);
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
 	
 	Airfoil.PrintOutVertex("TestDir/BezierAiroil.xls", "Bla");
 	
-	//*** JMGnuPlotPipe ***
+	// *** JMGnuPlotPipe ***
 
 	GNUPLOT GnuPlot;
 	
@@ -198,13 +198,13 @@ int main(int argc, char *argv[])
 	GnuPlot.ConfigFile = "\"TestDir/config3.gnu\"\n";
 	GnuPlot.Plot3D();
 	
-	//*** JMparallel ***
+	// *** JMparallel ***
 	//Call((char *)"Notepad");
 	//Pipe((char *)"Xfoil.exe", (char *)"", (char *)"TestDir\\Xfoil.log", (char *)"NACA0012", (char *)"w"); //NOT GOOD
 	//CreateProcess(1, (char *)"TestDir\\Xfoil.exe", (char *)"");
 	//CreateProcess(1, (char *)"GnuPlot\\pgnuplot.exe", (char *)"");
 	*/
-	//*** JMsubstite ***
+	// *** JMsubstite ***
 
 	cout << "Substitute" << endl;
 

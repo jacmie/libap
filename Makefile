@@ -21,8 +21,9 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 #--------------------------  Static libraries  ----------------------------
 
+DIRS_INC  = -I.
 STAT_LIBS = -L. -L/usr/local/lib $(FLTK_LIBS) -lJMcommon
-FLTK_LIBS = -lfltk_forms -lfltk -lfltk_gl -lfltk_images -lfltk_png -lfltk_jpeg -lfltk_z
+FLTK_LIBS = -lfltk -lfltk_forms -lfltk_gl -lfltk_images -lfltk_png -lfltk_jpeg -lfltk_z
 
 #-----------------------  system depend options  --------------------------
 
@@ -36,13 +37,15 @@ else
   DYN_LIBS = -mwindows  -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm
 endif
 
+#-------------------------------  Targets  --------------------------------
+
 .PHONY: clean
 
 all: libJMcommon.a CommonTest
 
 .cpp.o:
 	echo --- compilation: $*.cpp ...
-	g++ -c -Wall -O2 -I/usr/local/include $< -o $@
+	g++ -c -Wall -O2 $(DIRS_INC) $< -o $@
 
 libJMcommon.a: $(OBJECTS)
 	@echo --- make library: $@
@@ -58,5 +61,7 @@ clean:
 
 install: 
 	@echo --- make: $@
-	cp -f *.h /usr/local/include
+	rm -r /usr/local/include/JMcommon
+	mkdir /usr/local/include/JMcommon
+	cp -f *.h /usr/local/include/JMcommon
 	cp -f libJMcommon.a /usr/local/lib/libJMcommon.a
