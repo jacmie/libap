@@ -61,7 +61,7 @@ clean:
 	rm -f *.o libJMcommon.a CommonTest CommonTest.exe 
 
 install: 
-	rm -r /usr/local/include/JMcommon
+	if [ -d /usr/local/include/JMcommon ]; then rm -r /usr/local/include/JMcommon; fi
 	mkdir /usr/local/include/JMcommon
 	cp -f *.h /usr/local/include/JMcommon
 	cp -f libJMcommon.a /usr/local/lib/libJMcommon.a
