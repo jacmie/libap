@@ -32,6 +32,7 @@ OSTYPE = $(shell uname -s)
 ifeq ($(OSTYPE),Linux)
   SYSTEM   = -D_LINUX_ -DLinux -DLNX
   DYN_LIBS = -L/usr/X11R6/lib -lX11 -lXext -lXft -lXpm -ldl -lfontconfig -lXcursor -lXfixes -lXinerama
+  PIC = -fPIC
 else
   SYSTEM   = -DWIN32 -mwindows
   DYN_LIBS = -mwindows  -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm
@@ -45,7 +46,7 @@ all: libJMcommon.a CommonTest
 
 .cpp.o:
 	echo --- compilation: $*.cpp ...
-	g++ -c -Wall -O2 $(DIRS_INC) $< -o $@
+	g++ -c $(PIC) -Wall -O2 $(DIRS_INC) $< -o $@
 
 libJMcommon.a: $(OBJECTS)
 	@echo --- make library: $@
@@ -60,7 +61,6 @@ clean:
 	rm -f *.o libJMcommon.a CommonTest CommonTest.exe 
 
 install: 
-	@echo --- make: $@
 	rm -r /usr/local/include/JMcommon
 	mkdir /usr/local/include/JMcommon
 	cp -f *.h /usr/local/include/JMcommon
