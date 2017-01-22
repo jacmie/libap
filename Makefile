@@ -21,7 +21,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 #--------------------------  Static libraries  ----------------------------
 
-DIRS_INC  = -I.
+DIRS_INC  = -I/local/include/
 STAT_LIBS = -L. -L/usr/local/lib $(FLTK_LIBS) -lJMcommon
 FLTK_LIBS = -lfltk -lfltk_forms -lfltk_gl -lfltk_images -lfltk_png -lfltk_jpeg -lfltk_z
 
@@ -32,10 +32,12 @@ OSTYPE = $(shell uname -s)
 ifeq ($(OSTYPE),Linux)
   SYSTEM   = -D_LINUX_ -DLinux -DLNX
   DYN_LIBS = -L/usr/X11R6/lib -lX11 -lXext -lXft -lXpm -ldl -lfontconfig -lXcursor -lXfixes -lXinerama
-  PIC = -fPIC
+  PIC      = -fPIC
+  INSTALL_DIR = /usr/local/
 else
   SYSTEM   = -DWIN32 -mwindows
   DYN_LIBS = -mwindows  -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm
+  INSTALL_DIR = /local/
 endif
 
 #-------------------------------  Targets  --------------------------------
@@ -61,7 +63,7 @@ clean:
 	rm -f *.o libJMcommon.a CommonTest CommonTest.exe 
 
 install: 
-	if [ -d /usr/local/include/JMcommon ]; then rm -r /usr/local/include/JMcommon; fi
-	mkdir /usr/local/include/JMcommon
-	cp -f *.h /usr/local/include/JMcommon
-	cp -f libJMcommon.a /usr/local/lib/libJMcommon.a
+	if [ -d $(INSTALL_DIR)include/JMcommon ]; then rm -r $(INSTALL_DIR)include/JMcommon; fi
+	mkdir $(INSTALL_DIR)include/JMcommon
+	cp -f *.h $(INSTALL_DIR)include/JMcommon
+	cp -f libJMcommon.a $(INSTALL_DIR)lib/libJMcommon.a
