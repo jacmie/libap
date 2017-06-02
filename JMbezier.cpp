@@ -30,7 +30,10 @@ void BEZIER::Init(int nmax, int umax)
 	
 	V.InitArray2d(u, 3);
 	V.FillArray2d(0.0);
-       
+
+    L.InitArray(u);
+	L.FillArray(0.0);
+
     BinomialCoef();
 }
 
@@ -39,6 +42,7 @@ BEZIER::~BEZIER()
 	P.DelArray2d();
 	V.DelArray2d();
 	C.DelArray();
+	L.DelArray();
 }
 
 void BEZIER::Vertex(double t, double &X, double &Y, double &Z)
@@ -120,6 +124,67 @@ double BEZIER::tVertex(int XYZ, double Value)
     }
 }
 
+double BEZIER::Length()
+{
+	double dx=0, dy=0, dz=0;
+
+    for(int i=1; i<u; i++)
+	{
+		dx = V.Array2d[i][0] - V.Array2d[i-1][0];
+        dy = V.Array2d[i][1] - V.Array2d[i-1][1];
+		dz = V.Array2d[i][2] - V.Array2d[i-1][2];
+
+		L.Array[i] = L.Array[i-1] + sqrt(dx*dx + dy*dy + dz*dz);
+	}
+
+	return L.Array[u-1];
+}
+
+double BEZIER::LengthXY()
+{
+	double dx=0, dy=0;
+
+    for(int i=1; i<u; i++)
+	{
+		dx = V.Array2d[i][0] - V.Array2d[i-1][0];
+        dy = V.Array2d[i][1] - V.Array2d[i-1][1];
+		
+		L.Array[i] = L.Array[i-1] + sqrt(dx*dx + dy*dy);
+	}
+
+	return L.Array[u-1];
+}
+
+double BEZIER::LengthYZ()
+{
+	double dy=0, dz=0;
+
+    for(int i=1; i<u; i++)
+	{
+        dy = V.Array2d[i][1] - V.Array2d[i-1][1];
+		dz = V.Array2d[i][2] - V.Array2d[i-1][2];
+
+		L.Array[i] = L.Array[i-1] + sqrt(dy*dy + dz*dz);
+	}
+
+	return L.Array[u-1];
+}
+
+double BEZIER::LengthXZ()
+{
+	double dx=0, dz=0;
+
+    for(int i=1; i<u; i++)
+	{
+        dx = V.Array2d[i][0] - V.Array2d[i-1][0];
+		dz = V.Array2d[i][2] - V.Array2d[i-1][2];
+
+		L.Array[i] = L.Array[i-1] + sqrt(dx*dx + dz*dz);
+	}
+
+	return L.Array[u-1];
+}
+
 void BEZIER::BinomialCoef()
 {
     C.Array[0] = C.Array[n] = 1;
@@ -162,3 +227,4 @@ void BEZIER::PrintVertex(ostream &out)
     for(int i=0; i<u; i++)
         out << V.Array2d[i][0] << "\t" << V.Array2d[i][1] << "\t" << V.Array2d[i][2] << endl;
 }
+

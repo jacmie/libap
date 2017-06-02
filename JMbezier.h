@@ -19,7 +19,8 @@ class BEZIER
 	DYNAMIC_ARRAY <double> C;
 	DYNAMIC_ARRAY_2D <double> P;
 	DYNAMIC_ARRAY_2D <double> V;
-	
+	DYNAMIC_ARRAY <double> L;
+
     //int     *C;
     //double **P; //def points
     //double **V; //vertex
@@ -31,6 +32,10 @@ class BEZIER
     void Vertex(double t, double &X, double &Y, double &Z);
     void VertexSeq();
     double tVertex(int XYZ, double Value);
+	double Length();
+	double LengthXY();
+	double LengthYZ();
+	double LengthXZ();
     void PrintPoints(std::ostream &out);
 	void PrintVertex(std::ostream &out);
 	void PMinMax(int XYZ, double &min, double &max);

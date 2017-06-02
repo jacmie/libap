@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 	TestFoil.ReadAirfoil((char *)"TestDir/AirfoilMix.dat");
 	TestFoil.Transformations();
 	TestFoil.WriteAirfoil((char *)"TestDir/AirfoilMix3D.dat");
-	
+	*/
 	// *** JMbezier ***
 	
     int n = 4;  //points -> degrees of freedom n-1 
@@ -133,7 +133,8 @@ int main(int argc, char *argv[])
     Bez.P.Array2d[3][0] = 2;
     Bez.P.Array2d[3][1] = 0;
     Bez.P.Array2d[3][2] = 0.5;
-    Bez.PrintPoints(con);
+
+    Bez.PrintPoints(cout);
     
 	//Bezier curve
     
@@ -145,25 +146,28 @@ int main(int argc, char *argv[])
     out << fixed << setprecision(6);
     cout << fixed << setprecision(6);
 	Bez.PrintPoints(out);
-	Bez.PrintPoints(con);
+	Bez.PrintPoints(cout);
     cout << endl;
     Bez.PrintVertex(out);
-	Bez.PrintVertex(con);	
+	Bez.PrintVertex(cout);	
     cout << endl;
     
+	//Curve Length
+	cout << "L = " << Bez.Length() << endl << endl;
+
 	//Point t & point from X
 	
     double X, Y, Z;
     
-    con << Bez.tVertex(0, 1.4) << endl; //X
+    cout << Bez.tVertex(0, 1.4) << endl; //X
     Bez.Vertex(Bez.tVertex(0, 1.4), X, Y, Z);
-    con << X << "\t" << Y << "\t" << Z << endl;
+    cout << X << "\t" << Y << "\t" << Z << endl;
     out << endl << X << "\t" << Y << "\t" << Z << endl;
     
     out.close();
 	
 	// *** BezierAirfoil ***
-	
+	/*
 	con << "*** BezierAirfoil ***" << endl;
 	
 	BEZIERAIRFOIL Airfoil;
@@ -203,7 +207,7 @@ int main(int argc, char *argv[])
 	//Pipe((char *)"Xfoil.exe", (char *)"", (char *)"TestDir\\Xfoil.log", (char *)"NACA0012", (char *)"w"); //NOT GOOD
 	//CreateProcess(1, (char *)"TestDir\\Xfoil.exe", (char *)"");
 	//CreateProcess(1, (char *)"GnuPlot\\pgnuplot.exe", (char *)"");
-	*/
+	
 	// *** JMsubstite ***
 
 	cout << "Substitute" << endl;
@@ -236,10 +240,10 @@ int main(int argc, char *argv[])
 	delete [] Var;
 	
 	
-	//*** JM3dx ***
+	// *** JM3dx ***
 	
-	//*** Filters ***
-	/*
+	// *** Filters ***
+	
 	double X[10];
     
     X[0] = -0.00693;
