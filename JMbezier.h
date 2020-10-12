@@ -20,10 +20,14 @@ class BEZIER
 	DYNAMIC_ARRAY_2D <double> P;
 	DYNAMIC_ARRAY_2D <double> V;
 	DYNAMIC_ARRAY <double> L;
+	DYNAMIC_ARRAY <double> Pt;
+	DYNAMIC_ARRAY <double> Vt;
 
     //int     *C;
     //double **P; //def points
     //double **V; //vertex
+	//double  *L; //distance from first vertex
+	//double  *Vt; //vertexes' t
        
 	BEZIER();
     BEZIER(int n, int umax);

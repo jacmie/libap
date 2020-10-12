@@ -23,7 +23,8 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 DIRS_INC  = -I/local/include/
 STAT_LIBS = -L. -L/usr/local/lib $(FLTK_LIBS) -lJMcommon
-FLTK_LIBS = -lfltk -lfltk_forms -lfltk_gl -lfltk_images -lfltk_png -lfltk_jpeg -lfltk_z
+FLTK_LIBS = -lfltk -lfltk_forms -lfltk_gl -lfltk_images -lfltk_jpeg
+#-lfltk_png  -lfltk_z
 
 #-----------------------  system depend options  --------------------------
 
@@ -31,7 +32,7 @@ OSTYPE = $(shell uname -s)
 
 ifeq ($(OSTYPE),Linux)
   SYSTEM   = -D_LINUX_ -DLinux -DLNX
-  DYN_LIBS = -L/usr/X11R6/lib -lX11 -lXext -lXft -lXpm -ldl -lfontconfig -lXcursor -lXfixes -lXinerama
+  DYN_LIBS = -L/usr/X11R6/lib -lX11 -lXext -lXft -lXpm -ldl -lfontconfig -lXcursor -lXfixes -lXinerama -lXrender
   PIC      = -fPIC
   INSTALL_DIR = /usr/local/
 else

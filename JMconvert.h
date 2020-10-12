@@ -13,6 +13,8 @@ std::string int2Str(int i);
 int    Str2int(std::string str);
 
 double Cstr2d(char *Cstr);
+char *d2Cstr(std::string format, double d);
 char     *d2Cstr(double d);
 double  Str2d(std::string Str);
 std::string    d2Str(double d);
+std::string	   d2Str(std::string format, double d);

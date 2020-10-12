@@ -80,6 +80,17 @@ char *d2Cstr(double d)
    return Cstr;
 }
 
+char *d2Cstr(string format, double d)
+{
+   //string Str;
+   //stringstream ss;
+   //ss << d;
+   //ss >> Str;
+   static char Cstr[15];
+   sprintf(Cstr, format.c_str(), d);
+   return Cstr;
+}
+
 double Str2d(string Str)
 {
     return strtod(Str.c_str(), NULL);
@@ -93,4 +104,15 @@ string d2Str(double d)
    ss << d;
    ss >> Str;
    return Str;
+}
+
+string d2Str(string format, double d)
+{
+   //string Str;
+   //stringstream ss;
+   //ss << d;
+   //ss >> Str;
+   static char Cstr[15];
+   sprintf(Cstr, format.c_str(), d);
+   return string(Cstr);
 }

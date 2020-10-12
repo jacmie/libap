@@ -34,6 +34,9 @@ void BEZIER::Init(int nmax, int umax)
     L.InitArray(u);
 	L.FillArray(0.0);
 
+	Vt.InitArray(u);
+	Vt.FillArray(0.0);
+
     BinomialCoef();
 }
 
@@ -43,6 +46,7 @@ BEZIER::~BEZIER()
 	V.DelArray2d();
 	C.DelArray();
 	L.DelArray();
+	Vt.DelArray();
 }
 
 void BEZIER::Vertex(double t, double &X, double &Y, double &Z)
@@ -65,6 +69,7 @@ void BEZIER::VertexSeq()
     for(int x=0; x<u; x++)
     {
         Vertex(t, V.Array2d[x][0], V.Array2d[x][1], V.Array2d[x][2]);
+		Vt.Array[x] = t;
         t += du;
     }
 }
