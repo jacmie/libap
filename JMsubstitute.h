@@ -1,30 +1,35 @@
+#ifndef _SUBSTITUTE_H_
+#define _SUBSTITUTE_H_
+
 #include <string.h>
 #include <iostream>
 #include <fstream>
+#include <vector>
 
-struct Variables
+#include "JMconvert.h"
+
+struct VARIABLE
 {  
     std::string Name;
     std::string Value;
 };
 
-class Substitute
+class SUBSTITUTE
 {
-    char InPut[255];
-    char OutPut[255];
+	std::string InPut;
+	std::string OutPut;
     char Prompt, EndPrompt;
     bool EndFlag;
-	
+	std::vector <VARIABLE> Var;
+
     public:
         
-    Substitute();
-    //Substitute(std::string InFile, std::string OutFile);
-    Substitute(std::string InFile, std::string OutFile, char Mark = '@', char EndMark = ' ');
-    int Insert(int n, Variables *Var);
-	
-	//Error types:
-	//1 - Ok
-	//2 - in  stream couldn't open
-	//3 - out stream couldn't open
-	//4 - no such variable name???
+    SUBSTITUTE();
+    //SUBSTITUTE(std::string InFile, std::string OutFile);
+    SUBSTITUTE(std::string InFile, std::string OutFile, char Mark = '@', char EndMark = ' ');
+	void AddVariable(std::string Name, std::string Value);
+	void AddVariable(std::string Name, double Value);
+	int  Insert();
 };
+
+#endif

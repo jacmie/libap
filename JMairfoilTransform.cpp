@@ -1,4 +1,4 @@
-#include "JMairfoil.h"
+#include "JMairfoilTransform.h"
 
 using namespace std;
 
@@ -33,13 +33,11 @@ int AIRFOIL_TRANSFORM::ReadAirfoil(char *AirfoilFile)
 
     if(!in)
     {
-		fl_alert("Can't read airfoil:\n%s", AirfoilFile);
+		//fl_alert("Can't read airfoil:\n%s", AirfoilFile);
+		clog << "Can't read airfoil:" << AirfoilFile << endl;
         return 0;
     }
-    
-    else
-        cout << AirfoilFile << " read" << endl;  
-		
+
 	//*** Count rows and initialize table ***
 	
 	CountRows(in);

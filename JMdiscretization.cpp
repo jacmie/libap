@@ -8,8 +8,6 @@ void Discretization(int n, int paneling_type, double factor, double maxVal, doub
     double di = 1.0/(n-1);
     double CosPart, LinearPart;
 	
-	cout << di << endl << endl;
-	
     for(int i=0; i<n; i++)
     {															//Wing Span Paneling
 		LinearPart = di*i;							  	      	//*  *  *  *  *  *

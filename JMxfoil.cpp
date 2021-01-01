@@ -31,6 +31,8 @@ XFOIL::XFOIL()
 	Re = 200000;
 	Ma = 0;
 	XfoilIter = 40;
+	
+	global_pipe_command = "./Xfoil > Xfoil.log";
 }
 
 void XFOIL::PrintParams(ostream &out)
@@ -55,14 +57,19 @@ void XFOIL::PrintParams(ostream &out)
 	out << "XfoilIter = " << XfoilIter << endl;
 }
 
-int XFOIL::MakeAirfoil(string airfoil_in, string airfoil_out)
-{   
+int XFOIL::MakeAirfoil(std::string airfoil_in, std::string airfoil_out, std::string pipe_command)
+{ 
+	string command = global_pipe_command;
+
+	if(pipe_command.length())
+		command = pipe_command;
+
     FILE *pXfoil;
           
-    if (( pXfoil = popen("Xfoil > XfoilMake.log", "w")) == NULL)
+    if (( pXfoil = popen(command.c_str(), "w")) == NULL)
     {
-        cout << "XFoil pipe error!!!" << endl;
-        return 0;
+        clog << "XFoil pipe error!!!" << endl;
+        return 1;
     }
     
     fputs("PLOP\n", pXfoil);
@@ -88,17 +95,22 @@ int XFOIL::MakeAirfoil(string airfoil_in, string airfoil_out)
   
     pclose(pXfoil);
 	
-	return 1;
+	return 0;
 }
 
-int XFOIL::Mixing(string airfoil_in1, string airfoil_in2, string airfoil_out)
+int XFOIL::Mixing(string airfoil_in1, string airfoil_in2, string airfoil_out, std::string pipe_command)
 {
+	string command = global_pipe_command;
+
+	if(pipe_command.length())
+		command = pipe_command;
+
 	FILE *pXfoil;
           
-    if (( pXfoil = popen("Xfoil > XfoilMixing.log", "w")) == NULL)
+    if (( pXfoil = popen(command.c_str(), "w")) == NULL)
     {
-        cout << "XFoil pipe error!!!" << endl;
-        return 0;
+        clog << "XFoil pipe error!!!" << endl;
+        return 1;
     }
 	
 	fputs("PLOP\n", pXfoil);
@@ -129,17 +141,22 @@ int XFOIL::Mixing(string airfoil_in1, string airfoil_in2, string airfoil_out)
   
     pclose(pXfoil);
 	
-	return 1;
+	return 0;
 }
 
-int XFOIL::ModifyAirfoil(string airfoil_in, string airfoil_out)
+int XFOIL::ModifyAirfoil(string airfoil_in, string airfoil_out, std::string pipe_command)
 {
+	string command = global_pipe_command;
+
+	if(pipe_command.length())
+		command = pipe_command;
+
 	FILE *pXfoil;
           
-    if (( pXfoil = popen("Xfoil > XfoilModify.log", "w")) == NULL)
+    if (( pXfoil = popen(command.c_str(), "w")) == NULL)
     {
-        cout << "XFoil pipe error!!!" << endl;
-        return 0;
+        clog << "XFoil pipe error!!!" << endl;
+        return 1;
     }
 	
 	fputs("PLOP\n", pXfoil);
@@ -188,17 +205,22 @@ int XFOIL::ModifyAirfoil(string airfoil_in, string airfoil_out)
   
     pclose(pXfoil);
 	
-	return 1;
+	return 0;
 }
 
-int XFOIL::Flap(string airfoil_in, string airfoil_out)
+int XFOIL::Flap(string airfoil_in, string airfoil_out, std::string pipe_command)
 {
+	string command = global_pipe_command;
+
+	if(pipe_command.length())
+		command = pipe_command;
+
 	FILE *pXfoil;
           
-    if (( pXfoil = popen("Xfoil > Xfoil.log", "w")) == NULL)
+    if (( pXfoil = popen(command.c_str(), "w")) == NULL)
     {
-        cout << "XFoil pipe error!!!" << endl;
-        return 0;
+        clog << "XFoil pipe error!!!" << endl;
+        return 1;
     }
 	
 	fputs("PLOP\n", pXfoil);
@@ -232,17 +254,22 @@ int XFOIL::Flap(string airfoil_in, string airfoil_out)
   
     pclose(pXfoil);
 	
-	return 1;
+	return 0;
 }
 
-int XFOIL::Analyz(bool FlowFlag, double Flow, string airfoil_in, string aero_dat)
+int XFOIL::Analyz(bool FlowFlag, double Flow, string airfoil_in, string aero_dat, std::string pipe_command)
 {       
+	string command = global_pipe_command;
+
+	if(pipe_command.length())
+		command = pipe_command;
+
     FILE *pXfoil;
-          
-    if (( pXfoil = popen("Xfoil > XfoilAnalyz.log", "w")) == NULL)
+    
+	if (( pXfoil = popen(command.c_str(), "w")) == NULL)
     {
-        cout << "XFoil pipe error!!!" << endl;
-        return 0;
+        clog << "XFoil pipe error!!!" << endl;
+        return 1;
     }
 	
 	fputs("PLOP\n", pXfoil);
@@ -312,10 +339,10 @@ int XFOIL::Analyz(bool FlowFlag, double Flow, string airfoil_in, string aero_dat
   
     pclose(pXfoil);
 	
-	return 1;
+	return 0;
 }
 
-void XFOIL::Convergence(string log_file, int &err_nr, string &errors)
+int XFOIL::Convergence(string log_file, int &err_nr, string &errors)
 {
 	int  i   = 0;
 	string logline;
@@ -325,6 +352,12 @@ void XFOIL::Convergence(string log_file, int &err_nr, string &errors)
 	
 	ifstream in(log_file.c_str());
 	
+	if(!in)
+	{
+		clog << "Couldn't read log file for convergence check!" << endl;
+		return 1;
+	}
+
 	while(!in.eof())
 	{
 		i++;
@@ -348,20 +381,22 @@ void XFOIL::Convergence(string log_file, int &err_nr, string &errors)
 	errors += "nr of log lines: " + int2Str(i) + "\n";
 	
 	in.close();
+
+	return 0;
 }
 
-int  XFOIL::GetData(string aero_dat)
+int XFOIL::GetData(string aero_dat)
 {
     // *** DATA FROM Xfoil ***
      
     string linia;
-     
+    
     ifstream in(aero_dat.c_str());
 	
     if(!in)
     {
-        cout << "Data_out error!!!" << endl;
-        return 0;
+        clog << "Data_out error!!!" << endl;
+        return 1;
     }
        
     while(true)
@@ -393,12 +428,12 @@ int  XFOIL::GetData(string aero_dat)
 			if(PeekResult==-1)
 			{
 				in.close(); 
-				return 0;
+				return 2;
 			}
 			
 			in >> fixed >> Alfa >> CL >> CD >> CDp >> CM >> Top_Xtr >> Bot_Xtr;
 			in.close(); 
-			return 1;
+			return 0;
 		}
 	}
 
@@ -409,8 +444,15 @@ int  XFOIL::GetData(string aero_dat)
 
 void DelFile(string File)
 {
-	string Str = "@if exist \"" + File + "\" del /q \"" + File + "\"";
-    system(Str.c_str());
+	string Str;
+
+	#ifdef WIN32
+		Str = "@if exist \"" + File + "\" del /q \"" + File + "\"";
+	#else
+		Str = "test -f \"" + File + "\" && rm -f \"" + File + "\"";
+	#endif
+	
+	system(Str.c_str());
 }
 
 void XFOIL::pPpar(FILE *pXfoil)

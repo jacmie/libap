@@ -2,7 +2,6 @@
 #include "JMconsole.h"
 
 using namespace std;
-//extern CONSOLE con;
 
 BEZIER::BEZIER()
 {
@@ -22,31 +21,23 @@ void BEZIER::Init(int nmax, int umax)
     iter = 50;
     relax = 1;
 	
-    C.InitArray(npt);
-	C.FillArray(0.0);
-	
-    P.InitArray2d(npt, 3);
-	P.FillArray2d(0.0);
-	
-	V.InitArray2d(u, 3);
-	V.FillArray2d(0.0);
+	C.assign(npt, 0.0);
 
-    L.InitArray(u);
-	L.FillArray(0.0);
+	P.resize(npt);
+	for(unsigned int p=0; p<P.size(); p++)
+		P[p].assign(3, 0.0);
+	
+	V.resize(u);
+	for(unsigned int v=0; v<V.size(); v++)
+		V[v].assign(3, 0.0);
 
-	Vt.InitArray(u);
-	Vt.FillArray(0.0);
+	tV.assign(u, 0.0);
 
     BinomialCoef();
 }
 
 BEZIER::~BEZIER()
 {
-	P.DelArray2d();
-	V.DelArray2d();
-	C.DelArray();
-	L.DelArray();
-	Vt.DelArray();
 }
 
 void BEZIER::Vertex(double t, double &X, double &Y, double &Z)
@@ -55,9 +46,9 @@ void BEZIER::Vertex(double t, double &X, double &Y, double &Z)
         
     for(int k=0; k<npt; k++)
     {
-        X += C.Array[k]*pow(t, k)*pow(1 - t, n - k)*P.Array2d[k][0];
-        Y += C.Array[k]*pow(t, k)*pow(1 - t, n - k)*P.Array2d[k][1];
-        Z += C.Array[k]*pow(t, k)*pow(1 - t, n - k)*P.Array2d[k][2];
+        X += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k][0];
+        Y += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k][1];
+        Z += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k][2];
     }
 }
 
@@ -68,8 +59,8 @@ void BEZIER::VertexSeq()
     
     for(int x=0; x<u; x++)
     {
-        Vertex(t, V.Array2d[x][0], V.Array2d[x][1], V.Array2d[x][2]);
-		Vt.Array[x] = t;
+        Vertex(t, V[x][0], V[x][1], V[x][2]);
+		tV[x] = t;
         t += du;
     }
 }
@@ -81,8 +72,8 @@ double BEZIER::tVertex(int XYZ, double Value)
     
     if(Value<min || Value>max)
     {
-        cout << "!!!\tmin < X < max\t\t";
-        cout << min << " < " << Value << " < " << max << endl;
+        clog << "!!!\tmin < X < max\t\t";
+        clog << min << " < " << Value << " < " << max << endl;
         return 999;
     }
     
@@ -101,21 +92,18 @@ double BEZIER::tVertex(int XYZ, double Value)
             //*** f ***
     
             for(int k=0; k<npt; k++)
-                f += C.Array[k]*pow(t, k)*pow(1 - t, n - k)*P.Array2d[k][XYZ];
+                f += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k][XYZ];
         
             f -= Value;
         
             //*** fprim ***
     
             for(int k=0; k<npt; k++)
-			{
-				fprim += C.Array[k]*P.Array2d[k][XYZ]*( k*pow(t, k-1)*pow(1 - t, n - k) + 
-														  pow(t, k)*(n - k)*pow(1 - t, n - k - 1) );
-			}
+				fprim += C[k]*P[k][XYZ]*( k*pow(t, k-1)*pow(1 - t, n - k) + pow(t, k)*(n - k)*pow(1 - t, n - k - 1) );
 			
 			if(fprim == 0)
 			{
-				cout << "Can't devide by fprim = 0!" << endl;
+				clog << "Can't devide by fprim = 0!" << endl;
 				return 999;
 			}
 			
@@ -131,68 +119,95 @@ double BEZIER::tVertex(int XYZ, double Value)
 
 double BEZIER::Length()
 {
-	double dx=0, dy=0, dz=0;
+	return Length(1, 1, 1);
+}
 
-    for(int i=1; i<u; i++)
-	{
-		dx = V.Array2d[i][0] - V.Array2d[i-1][0];
-        dy = V.Array2d[i][1] - V.Array2d[i-1][1];
-		dz = V.Array2d[i][2] - V.Array2d[i-1][2];
+double BEZIER::LengthX()
+{
+	return Length(1, 0, 0);
+}
 
-		L.Array[i] = L.Array[i-1] + sqrt(dx*dx + dy*dy + dz*dz);
-	}
+double BEZIER::LengthY()
+{
+	return Length(0, 1, 0);
+}
 
-	return L.Array[u-1];
+double BEZIER::LengthZ()
+{
+	return Length(0, 0, 1);
 }
 
 double BEZIER::LengthXY()
 {
-	double dx=0, dy=0;
-
-    for(int i=1; i<u; i++)
-	{
-		dx = V.Array2d[i][0] - V.Array2d[i-1][0];
-        dy = V.Array2d[i][1] - V.Array2d[i-1][1];
-		
-		L.Array[i] = L.Array[i-1] + sqrt(dx*dx + dy*dy);
-	}
-
-	return L.Array[u-1];
+	return Length(1, 1, 0);
 }
 
 double BEZIER::LengthYZ()
 {
-	double dy=0, dz=0;
-
-    for(int i=1; i<u; i++)
-	{
-        dy = V.Array2d[i][1] - V.Array2d[i-1][1];
-		dz = V.Array2d[i][2] - V.Array2d[i-1][2];
-
-		L.Array[i] = L.Array[i-1] + sqrt(dy*dy + dz*dz);
-	}
-
-	return L.Array[u-1];
+	return Length(0, 1, 1);
 }
 
 double BEZIER::LengthXZ()
 {
-	double dx=0, dz=0;
+	return Length(1, 0, 1);
+}
+
+void BEZIER::PMinMax(int XYZ, double &min, double &max)
+{
+    min = max = P[0][XYZ];
+    
+    for(int k=0; k<npt; k++)
+    {
+        if(P[k][XYZ] < min)
+            min = P[k][XYZ];
+            
+        if(P[k][XYZ] > max)
+            max = P[k][XYZ];    
+    }
+}
+
+void BEZIER::PrintPoints(ostream &out)
+{
+    for(int i=0; i<npt; i++)
+        out << P[i][0] << "\t" << P[i][1] << "\t" << P[i][2] << endl;
+}
+
+void BEZIER::PrintVertex(ostream &out)
+{
+    for(int i=0; i<u; i++)
+        out << V[i][0] << "\t" << V[i][1] << "\t" << V[i][2] << endl;
+}
+
+double BEZIER::Length(bool xflag, bool yflag, bool zflag)
+{
+	double L=0, dx=0, dy=0, dz=0;
 
     for(int i=1; i<u; i++)
 	{
-        dx = V.Array2d[i][0] - V.Array2d[i-1][0];
-		dz = V.Array2d[i][2] - V.Array2d[i-1][2];
+		if(xflag)
+			dx = V[i][0] - V[i-1][0];
+		else
+			dx = 0;
 
-		L.Array[i] = L.Array[i-1] + sqrt(dx*dx + dz*dz);
+		if(yflag)
+	        dy = V[i][1] - V[i-1][1];
+		else
+			dy = 0;
+
+		if(zflag)
+			dz = V[i][2] - V[i-1][2];
+		else
+			dz = 0;
+		
+		L += sqrt(dx*dx + dy*dy + dz*dz);
 	}
 
-	return L.Array[u-1];
+	return L;
 }
 
 void BEZIER::BinomialCoef()
 {
-    C.Array[0] = C.Array[n] = 1;
+    C[0] = C[n] = 1;
     
     double Cc;
      
@@ -203,33 +218,8 @@ void BEZIER::BinomialCoef()
         for(int i=1; i<=k; i++)
             Cc *=  double((n - (k - i)))/i;
            
-        C.Array[k] = int(Cc);
+        C[k] = int(Cc);
     }
 }
 
-void BEZIER::PMinMax(int XYZ, double &min, double &max)
-{
-    min = max = P.Array2d[0][XYZ];
-    
-    for(int k=0; k<npt; k++)
-    {
-        if(P.Array2d[k][XYZ] < min)
-            min = P.Array2d[k][XYZ];
-            
-        if(P.Array2d[k][XYZ] > max)
-            max = P.Array2d[k][XYZ];    
-    }
-}
-
-void BEZIER::PrintPoints(ostream &out)
-{
-    for(int i=0; i<npt; i++)
-        out << P.Array2d[i][0] << "\t" << P.Array2d[i][1] << "\t" << P.Array2d[i][2] << endl;
-}
-
-void BEZIER::PrintVertex(ostream &out)
-{
-    for(int i=0; i<u; i++)
-        out << V.Array2d[i][0] << "\t" << V.Array2d[i][1] << "\t" << V.Array2d[i][2] << endl;
-}
 

@@ -99,7 +99,7 @@ end_wing
 
 #######################
 /*
-FUSELAGE 555 ("begin_fuselage")
+FUSELAGE 555("begin_fuselage")
    does the fuselage exist: 1 - fuselage exists, 0 - doesn't exist
    is the fuselage active:  1 - active, 0 - not active
    type of fuselage: FromFile - from file, FromParams - automatically generated

@@ -4,7 +4,7 @@
 .SUFFIXES: .cpp .c .o .h
 
 SOURCES = 	CommonTest.cpp\
-			JMairfoil.cpp\
+			JMairfoilTransform.cpp\
 			JMmath.cpp\
 			JMbezier.cpp\
 			JMbezierAirfoil.cpp\

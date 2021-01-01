@@ -20,12 +20,11 @@ class GNUPLOT
 	int NrOfDataCloumns;
 	
 	std::string GnuPlotDir;
-	std::string DataFile;
-	std::string ConfigFile;
 	
 	GNUPLOT();
-	int Plot2D();
-	int Plot3D();
+	int Plot2D(std::string DataFile);
+	int Plot3D(std::string DataFile);
+	void PlotFromPlt(std::string PltFile);
 };
 
 #endif

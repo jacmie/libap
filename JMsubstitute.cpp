@@ -5,11 +5,11 @@
 
 using namespace std;
 
-Substitute::Substitute()
+SUBSTITUTE::SUBSTITUTE()
 {
 }
 /*
-Substitute::Substitute(string InFile, string OutFile)
+SUBSTITUTE::SUBSTITUTE(string InFile, string OutFile)
 {
     strcpy(InPut, InFile.c_str());
     strcpy(OutPut, OutFile.c_str());
@@ -18,10 +18,10 @@ Substitute::Substitute(string InFile, string OutFile)
 	EndPrompt = ' ';
 }*/
 
-Substitute::Substitute(string InFile, string OutFile, char Mark, char EndMark)
+SUBSTITUTE::SUBSTITUTE(string InFile, string OutFile, char Mark, char EndMark)
 {
-    strcpy(InPut, InFile.c_str());
-    strcpy(OutPut, OutFile.c_str());
+    InPut	= InFile;
+    OutPut	= OutFile;
     
     Prompt    = Mark;
 	EndPrompt = EndMark;
@@ -32,15 +32,33 @@ Substitute::Substitute(string InFile, string OutFile, char Mark, char EndMark)
 		EndFlag = 1;
 }
 
-int Substitute::Insert(int n, Variables *Var)
+void SUBSTITUTE::AddVariable(std::string Name, std::string Value)
+{
+	VARIABLE TempVar;
+	TempVar.Name  = Name;
+	TempVar.Value = Value;
+
+	Var.push_back(TempVar);
+}
+
+void SUBSTITUTE::AddVariable(std::string Name, double Value)
+{
+	VARIABLE TempVar;
+	TempVar.Name  = Name;
+	TempVar.Value = d2Str(Value);
+
+	Var.push_back(TempVar);
+}
+
+int SUBSTITUTE::Insert()
 {
     //*** Clean Marks ***
     
-    for(int i=0; i<n; i++)
+    for(unsigned int i=0; i<Var.size(); i++)
     {
         if(Var[i].Name[0] == Prompt)
         {
-            for(int x=0; x<n-1; x++)
+            for(unsigned int x=0; x<Var.size()-1; x++)
                 Var[i].Name[x] = Var[i].Name[x+1];
         }
         
@@ -55,12 +73,12 @@ int Substitute::Insert(int n, Variables *Var)
     ifstream in(InPut);
 	
 	if(!in)
-		return 2;
+		return 1;
 	
     ofstream out(OutPut);
     
     if(!out)
-        return 3;
+        return 2;
     
     while(!in.eof())
     {
@@ -82,7 +100,7 @@ int Substitute::Insert(int n, Variables *Var)
 			{
 				out << line.substr(0, pos);
 				
-				for(int i=0; i<n; i++)
+				for(unsigned int i=0; i<Var.size(); i++)
 				{
 					len = strlen(Var[i].Name.c_str());
 					
@@ -115,6 +133,6 @@ int Substitute::Insert(int n, Variables *Var)
     out.close();
     in.close();
 		
-	return 1;
+	return 0;
 }
 

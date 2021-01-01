@@ -5,8 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <math.h>
-
-#include "JMdynArray.h"
+#include <vector>
 
 class BEZIER
 {
@@ -16,19 +15,10 @@ class BEZIER
     int iter;
     double eps, relax;
     
-	DYNAMIC_ARRAY <double> C;
-	DYNAMIC_ARRAY_2D <double> P;
-	DYNAMIC_ARRAY_2D <double> V;
-	DYNAMIC_ARRAY <double> L;
-	DYNAMIC_ARRAY <double> Pt;
-	DYNAMIC_ARRAY <double> Vt;
+	std::vector < std::vector <double> > P; // defining points
+	std::vector < std::vector <double> > V; // vertexes
+	std::vector <double> tV; 				// t of the vertexes
 
-    //int     *C;
-    //double **P; //def points
-    //double **V; //vertex
-	//double  *L; //distance from first vertex
-	//double  *Vt; //vertexes' t
-       
 	BEZIER();
     BEZIER(int n, int umax);
     ~BEZIER();
@@ -37,16 +27,22 @@ class BEZIER
     void VertexSeq();
     double tVertex(int XYZ, double Value);
 	double Length();
+	double LengthX();
+	double LengthY();
+	double LengthZ();
 	double LengthXY();
 	double LengthYZ();
 	double LengthXZ();
+	void PMinMax(int XYZ, double &min, double &max);
     void PrintPoints(std::ostream &out);
 	void PrintVertex(std::ostream &out);
-	void PMinMax(int XYZ, double &min, double &max);
 
     private:
     
-    void BinomialCoef();
+	std::vector <double> C;
+    
+	double Length(bool xflag, bool yflag, bool zflag);
+	void BinomialCoef();
 };
 
 #endif

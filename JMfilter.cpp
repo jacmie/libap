@@ -9,9 +9,8 @@ FILTER::FILTER(int array_n, int filter_n, double amplitude)
 	n  = array_n;
 	fn = filter_n;
 	
-	filter.InitArray(fn);
-	Xfiltered.InitArray(n);
-	Xfiltered.FillArray(0.0);
+	filter.resize(fn);
+	Xfiltered.assign(n, 0.0);
 	
 	//*** Make filter ***
 	
@@ -23,23 +22,23 @@ FILTER::FILTER(int array_n, int filter_n, double amplitude)
     
     for(int i=1; i<fn-1; i++)
     {
-        filter.Array[i-1] = amplitude*0.5*(1-cos(i*del));
-        sum += filter.Array[i-1];
+        filter[i-1] = amplitude*0.5*(1-cos(i*del));
+        sum += filter[i-1];
     }
    
     for(int i=1; i<fn-1; i++)
-        filter.Array[i-1] /= sum;
-        
+	{
+        filter[i-1] /= sum;
+	}
+
 	fn -= 2;
 }
 
 FILTER::~FILTER()
 {
-	filter.DelArray();
-	Xfiltered.DelArray(); 
 }
 
-int FILTER::Filter(double *Xinput, bool overwrite)
+int FILTER::Filter(std::vector <double> &Xinput, bool overwrite)
 {
 	if(fn > n)
 		return 0;
@@ -54,7 +53,7 @@ int FILTER::Filter(double *Xinput, bool overwrite)
         fcount = 0;
 		filt_edge = 0;
 		filt_sum  = 0;
-        Xfiltered.Array[i] = 0;
+        Xfiltered[i] = 0;
         
         for(int f=0; f<fn; f++)
         {
@@ -63,23 +62,23 @@ int FILTER::Filter(double *Xinput, bool overwrite)
             if(0 <= findicator && findicator < n)
             {
                 ++fcount;
-                Xfiltered.Array[i] += filter.Array[f]*Xinput[findicator];
+                Xfiltered[i] += filter[f]*Xinput[findicator];
             }
 			
 			else
 			{
 				filt_edge = 1;
-				filt_sum += filter.Array[f];
+				filt_sum += filter[f];
 			}
         }
        
 		if(filt_edge)
-			Xfiltered.Array[i] /= (1-filt_sum);
+			Xfiltered[i] /= (1-filt_sum);
     }
 	
 	if(overwrite)
 		for(int x=0; x<n; x++)
-			Xinput[x] = Xfiltered.Array[x]; 
+			Xinput[x] = Xfiltered[x]; 
 		
 	return 1;
 }
@@ -89,24 +88,22 @@ int FILTER::FilterRange(int shift, double *Xinput, bool overwrite)
 	if(fn > n)
 		return 0;
 	
-	DYNAMIC_ARRAY <double> Xin(n);
+	vector <double> Xin;
 	
 	for(int x=0; x<n; x++) //"n" limits range
-		Xin.Array[x] = Xinput[shift + x]; 
+		Xin.push_back(Xinput[shift + x]); 
 	
-    Filter(Xin.Array, overwrite);
+    Filter(Xin, overwrite);
     
 	if(overwrite)
 		for(int x=0; x<n; x++)
-			Xinput[x + shift] = Xin.Array[x];
+			Xinput[x + shift] = Xin[x];
 		
-	Xin.DelArray();
-	
 	return 1;
 }
 
 void FILTER::Print(std::ofstream &out)
 {
 	for(int x=0; x<n; x++)
-        out << x << "\t" << Xfiltered.Array[x] << endl;
+        out << x << "\t" << Xfiltered[x] << endl;
 }

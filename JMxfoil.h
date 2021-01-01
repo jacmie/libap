@@ -46,7 +46,8 @@ class XFOIL
 	double Re;
 	double Ma;
 	int	   XfoilIter;
-	
+
+	std::string global_pipe_command;
 	std::string XfoilLogFile;
 	std::string Airfoil;
 	
@@ -56,12 +57,12 @@ class XFOIL
 	
 	XFOIL();
 	void	PrintParams(std::ostream &out);
-	int 	MakeAirfoil(std::string airfoil_in, std::string airfoil_out);
-	int 	Mixing(std::string airfoil_in1, std::string airfoil_in2, std::string airfoil_out);
-	int 	ModifyAirfoil(std::string airfoil_in, std::string airfoil_out);
-	int		Flap(std::string airfoil_in, std::string airfoil_out);
-	int		Analyz(bool FlowFlag, double Flow, std::string airfoil_in, std::string aero_dat);
-	void	Convergence(std::string log_file, int &err_nr, std::string &errors);
+	int 	MakeAirfoil(std::string airfoil_in, std::string airfoil_out, std::string pipe_command="");
+	int 	Mixing(std::string airfoil_in1, std::string airfoil_in2, std::string airfoil_out, std::string pipe_command="");
+	int 	ModifyAirfoil(std::string airfoil_in, std::string airfoil_out, std::string pipe_command="");
+	int		Flap(std::string airfoil_in, std::string airfoil_out, std::string pipe_command="");
+	int		Analyz(bool FlowFlag, double Flow, std::string airfoil_in, std::string aero_dat, std::string pipe_command="");
+	int		Convergence(std::string log_file, int &err_nr, std::string &errors);
 	int  	GetData(std::string aero_dat);
 	void	DelFile(std::string file);
 	

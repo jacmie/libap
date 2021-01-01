@@ -8,9 +8,6 @@ GNUPLOT::GNUPLOT()
 	FromCloumn = 1;
 	NrOfDataCloumns = 1;
 	
-	//DataFile;
-	ConfigFile = "";
-
 #ifdef WIN32
 	GnuPlotDir = "pgnuplot";
 #else
@@ -18,7 +15,7 @@ GNUPLOT::GNUPLOT()
 #endif
 }
 
-int GNUPLOT::Plot2D()
+int GNUPLOT::Plot2D(std::string DataFile)
 {
     char Num[16], Line[256];
     
@@ -30,17 +27,13 @@ int GNUPLOT::Plot2D()
 
     if(!gnucmd)
 	{
-		fl_alert("GnuPlot pipe error!");
-        return 0;
+		//fl_alert("GnuPlot pipe error!");
+		clog << "GnuPlot pipe error!" << endl;
+        return 1;
 	}
-	
-    strcpy(Line, "load ");
-    strcat(Line, ConfigFile.c_str());
-	strcat(Line, "\n");
-	
-    strcat(Line, "plot");
-            
+    
     //plot 'PlotFile.dat' using 1:3, '' using 1:2 
+	strcpy(Line, "plot");
     
     for(int i=FromCloumn; i<=NrOfDataCloumns; i++)
     {   
@@ -64,14 +57,15 @@ int GNUPLOT::Plot2D()
    
 	//strcat(Line, "pause -1\n");
    
+    clog << "Command: " << Line << endl;
     fputs(Line, gnucmd);
-    cout << Line << endl;
-    fflush(gnucmd);
+    
+	fflush(gnucmd);
 	
-	return 1;
+	return 0;
 }
 
-int GNUPLOT::Plot3D()
+int GNUPLOT::Plot3D(std::string DataFile)
 {
 	char Line[20056];
     
@@ -83,15 +77,12 @@ int GNUPLOT::Plot3D()
    
 	if(!gnucmd)
 	{
-		fl_alert("GnuPlot pipe error!");
-        return 0;
+		//fl_alert("GnuPlot pipe error!");
+		clog << "GnuPlot pipe error!" << endl;
+        return 1;
 	}
             
-    strcpy(Line, "load ");
-    strcat(Line, ConfigFile.c_str());
-    strcat(Line, "\n");
-   
-    strcat(Line, "splot");
+    strcpy(Line, "splot");
             
         strcat(Line, " '");
         strcat(Line, DataFile.c_str());
@@ -102,9 +93,16 @@ int GNUPLOT::Plot3D()
            
     strcat(Line, "\n");
    
+    clog << "Command: " << Line << endl;
     fputs(Line, gnucmd);
     
     fflush(gnucmd);
 	
-	return 1;
+	return 0;
+}
+
+void GNUPLOT::PlotFromPlt(std::string PltFile)
+{
+	string Command = GnuPlotDir + " " + PltFile; 
+	system(Command.c_str());
 }

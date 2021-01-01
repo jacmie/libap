@@ -1,0 +1,195 @@
+
+ ===================================================
+  XFOIL Version 6.99
+  Copyright (C) 2000   Mark Drela, Harold Youngren
+
+  This software comes with ABSOLUTELY NO WARRANTY,
+    subject to the GNU General Public License.
+
+  Caveat computor
+ ===================================================
+
+ File  xfoil.def  not found
+
+   QUIT    Exit program
+
+  .OPER    Direct operating point(s)
+  .MDES    Complex mapping design routine
+  .QDES    Surface speed design routine
+  .GDES    Geometry design routine
+
+   SAVE f  Write airfoil to labeled coordinate file
+   PSAV f  Write airfoil to plain coordinate file
+   ISAV f  Write airfoil to ISES coordinate file
+   MSAV f  Write airfoil to MSES coordinate file
+   REVE    Reverse written-airfoil node ordering
+   DELI i  Change written-airfoil file delimiters
+
+   LOAD f  Read buffer airfoil from coordinate file
+   NACA i  Set NACA 4,5-digit airfoil and buffer airfoil
+   INTE    Set buffer airfoil by interpolating two airfoils
+   NORM    Buffer airfoil normalization toggle
+   HALF    Halve the number of points in buffer airfoil
+   XYCM rr Change CM reference location, currently  0.25000 0.00000
+
+   BEND    Display structural properties of current airfoil
+
+   PCOP    Set current-airfoil panel nodes directly from buffer airfoil points
+   PANE    Set current-airfoil panel nodes ( 160 ) based on curvature
+  .PPAR    Show/change paneling
+
+  .PLOP    Plotting options
+
+   WDEF f  Write  current-settings file
+   RDEF f  Reread current-settings file
+   NAME s  Specify new airfoil name
+   NINC    Increment name version number
+
+   Z       Zoom    | (available in all menus)
+   U       Unzoom  | 
+
+ XFOIL   c>   ...............................................
+
+  G raphics-enable flag:        T
+  S ize of plot object          10.00"
+  A spect ratio of plot object   0.5500
+  P age dimensions              11.00 x  8.50"
+  M argins from page edges       0.00",  0.00"
+  F ont size (relative)          0.0150
+  W indow/screen size fraction   0.8000
+  B lowup input method:        Cursor    
+  O rientation of plot:        Landscape 
+  C olor PostScript output?     T
+  L ine colors for top,bottom    8  3
+
+      Option, Value   (or <Return>)    c>   ...............................................
+
+  G raphics-enable flag:        F
+  S ize of plot object          10.00"
+  A spect ratio of plot object   0.5500
+  P age dimensions              11.00 x  8.50"
+  M argins from page edges       0.00",  0.00"
+  F ont size (relative)          0.0150
+  W indow/screen size fraction   0.8000
+  B lowup input method:        Cursor    
+  O rientation of plot:        Landscape 
+  C olor PostScript output?     T
+  L ine colors for top,bottom    8  3
+
+      Option, Value   (or <Return>)    c>  
+ XFOIL   c>  
+ Labeled airfoil file.  Name:  TestDir/JMxfoil/AirfoilMix.dat                  
+
+ Number of input coordinate points: 160
+ Counterclockwise ordering
+ Max thickness =     0.119398  at x =   0.296
+ Max camber    =     0.017117  at x =   0.313
+
+  LE  x,y  =  -0.00000   0.00000  |   Chord =   1.00000
+  TE  x,y  =   1.00000   0.00000  |
+
+ Current airfoil nodes set from buffer airfoil nodes ( 160 )
+
+ XFOIL   c>  
+ Enter airfoil name or <return> for default:  TestDir/JMxfoil/AirfoilMix.dat                  
+
+ XFOIL   c>  
+    Present paneling parameters...
+  N  i   Number of panel nodes       160
+  P  r   Panel bunching parameter    1.000
+  T  r   TE/LE panel density ratio   0.150
+  R  r   Refined area/LE  panel density ratio   0.200
+  XT rr  Top    side refined area x/c limits    1.000 1.000
+  XB rr  Bottom side refined area x/c limits    1.000 1.000
+  Z oom
+  U nzoom
+  H ardcopy
+
+Change what ? (<cr> if nothing else)   c>  
+Enter number of panel nodes   i>  
+Change what ? (<cr> if nothing else)   c>  
+Enter panel bunching parameter (0 to ~1)   r>  
+Change what ? (<cr> if nothing else)   c>  
+Enter TE/LE panel density ratio   r>  
+Change what ? (<cr> if nothing else)   c>  
+Enter refined-area panel density ratio   r>  
+Change what ? (<cr> if nothing else)   c>  
+ Sharp trailing edge
+
+ Maximum panel corner angle =  9.559   at  i,x,y  =  84   0.0008  -0.0049
+
+    Present paneling parameters...
+  N  i   Number of panel nodes       160
+  P  r   Panel bunching parameter    0.800
+  T  r   TE/LE panel density ratio   0.800
+  R  r   Refined area/LE  panel density ratio   0.100
+  XT rr  Top    side refined area x/c limits    1.000 1.000
+  XB rr  Bottom side refined area x/c limits    1.000 1.000
+  Z oom
+  U nzoom
+  H ardcopy
+
+Change what ? (<cr> if nothing else)   c>  
+ XFOIL   c>  
+ You are working with the buffer airfoil
+
+.GDES   c>  
+ Current gap =  0.00000
+
+Enter new gap   r>  
+Enter blending distance/c (0..1)   r>   Max thickness =     0.119398  at x =   0.296
+ Max camber    =     0.017117  at x =   0.313
+
+.GDES   c>  
+ Current airfoil nodes set from buffer airfoil nodes ( 160 )
+
+.GDES   c>  
+ XFOIL   c>  
+ XFOIL   c>  
+ You are working with the buffer airfoil
+
+.GDES   c>   Enabling camber,thickness plotting
+
+ Max thickness =   0.1194  at x =   0.297
+ Max camber    =   0.0171  at x =   0.311
+
+
+Enter new max thickness <ret> to skip   r>  
+Enter new max  camber   <ret> to skip   r>   Max thickness =     0.100000  at x =   0.296
+ Max camber    =     0.017119  at x =   0.313
+
+.GDES   c>  
+ Buffer airfoil is not identical to current airfoil
+
+ XFOIL   c>   HIGH command not recognized.  Type a "?" for list
+
+ XFOIL   c>   0.3  command not recognized.  Type a "?" for list
+
+ XFOIL   c>   0.4  command not recognized.  Type a "?" for list
+
+ XFOIL   c>   CADD command not recognized.  Type a "?" for list
+
+ XFOIL   c>  
+ XFOIL   c>  
+ XFOIL   c>  
+ XFOIL   c>   EXEC command not recognized.  Type a "?" for list
+
+ XFOIL   c>  
+ XFOIL   c>  
+ Sharp trailing edge
+
+ Paneling parameters used...
+   Number of panel nodes       160
+   Panel bunching parameter    0.800
+   TE/LE panel density ratio   0.800
+   Refined-area/LE panel density ratio    0.100
+   Top    side refined area x/c limits  1.000 1.000
+   Bottom side refined area x/c limits  1.000 1.000
+
+ XFOIL   c>  
+ Enter airfoil name or <return> for default:  TestDir/JMxfoil/AirfoilMix.dat                  
+
+ XFOIL   c>  
+ Output file exists.  Overwrite?  Y
+
+ XFOIL   c>  
