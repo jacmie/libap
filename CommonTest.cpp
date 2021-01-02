@@ -36,7 +36,13 @@ int main(int argc, char *argv[])
 	//OK
 	
 	// *** JMmath ***
-	//OK
+	
+	clog << endl << "*** JMmath ***" << endl << endl;
+
+	double A, B, R;
+	Circle(2.0, 1.0, 0.0, 5.0, -1.0, 2.0, A, B, R);
+	clog << "A\t" << "B\t" << "R" << endl;
+	clog << A << "\t" << B << "\t" << R*R << endl;
 	
 	// *** JMconvert ***
 	//OK

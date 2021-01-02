@@ -56,6 +56,20 @@ void Parabola(double &A, double &B, double &C,
     C = y1 - x1*yprim + 2*A*x1*x3 - A*x1*x1;
 }
 
+void Circle(double x1, double y1, double x2, double y2, double x3, double y3, double &A, double &B, double &R)
+{
+	double dX2 = x2 - x1;
+	double dX3 = x3 - x1;
+	double dY2 = y2 - y1;
+	double dY3 = y3 - y1;
+	double C2 = x2*x2 + y2*y2 - x1*x1 - y1*y1;
+	double C3 = x3*x3 + y3*y3 - x1*x1 - y1*y1;
+
+	A = 0.5*(C3 - C2*dY3/dY2) / (dX3 - dX2*dY3/dY2);
+	B = 0.5*(C2 - 2*A*dX2) / dY2;
+	R = sqrt((A - x1)*(A - x1) + (B - y1)*(B - y1));
+}
+
 double LeastSquares(double x1, double y1, double z1, double x2, double y2, double z2)
 {
 	return sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) + (z1-z2)*(z1-z2) );
