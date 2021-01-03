@@ -5,8 +5,8 @@ using namespace std;
 
 void RotatePointRad(double &x, double &y, double AngRad);
 void RotatePointDeg(double &x, double &y, double AngDeg);
-void RotatePointRefRad(double &x, double &y, double AngRad, double Ref);
-void RotatePointRefDeg(double &x, double &y, double AngDeg, double Ref);
+void RotatePointRefRad(double &x, double &y, double AngRad, double xRef, double yRef);
+void RotatePointRefDeg(double &x, double &y, double AngDeg, double xRef, double yRef);
 
 void LinearFunction(double x1, double y1, double x2, double y2, double &A, double &B);
 void LinearFunction(double &A, double &B, double x1, double y1, double fiDeg);

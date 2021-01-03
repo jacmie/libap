@@ -7,8 +7,8 @@ void RotatePointRad(double &x, double &y, double AngRad)
 {
 	double r = sqrt( x*x + y*y );
 	
-	x += r * cos(AngRad);
-    y += r * sin(AngRad);
+	x = r * cos(AngRad);
+    y = r * sin(AngRad);
 }
 
 void RotatePointDeg(double &x, double &y, double AngDeg)
@@ -16,22 +16,24 @@ void RotatePointDeg(double &x, double &y, double AngDeg)
 	RotatePointRad(x, y, AngDeg*M_PI/180);
 }
 
-void RotatePointRefRad(double &x, double &y, double AngRad, double Ref)
+void RotatePointRefRad(double &x, double &y, double AngRad, double xRef, double yRef=0)
 {
-	x -= Ref;
-	
+	x -= xRef;
+	y -= yRef;
+
 	double xx = y*sin(AngRad) + x*cos(AngRad);
 	double yy = y*cos(AngRad) - x*sin(AngRad);
 	
 	x = xx;
 	y = yy;
 	
-	x += Ref;
+	x += xRef;
+    y += yRef;
 }
 
-void RotatePointRefDeg(double &x, double &y, double AngDeg, double Ref)
+void RotatePointRefDeg(double &x, double &y, double AngDeg, double xRef, double yRef=0)
 {
-	RotatePointRefRad(x, y, AngDeg*M_PI/180, Ref);
+	RotatePointRefRad(x, y, AngDeg*M_PI/180, xRef, yRef);
 }
 
 void LinearFunction(double x1, double y1, double x2, double y2, double &A, double &B)
