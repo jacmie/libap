@@ -196,24 +196,35 @@ int main(int argc, char *argv[])
 	
 	clog << endl << "*** BezierAirfoil ***" << endl << endl;
 	
-	BEZIERAIRFOIL Airfoil;
-	
-	Airfoil.Init(40, 60);
-	Airfoil.Spline0.Init(4, 60);
-	Airfoil.Spline1.Init(3, 40);
-	Airfoil.Spline2.Init(3, 40);
-	Airfoil.Spline3.Init(4, 60);
-	
-	Airfoil.FixPoints();
-	Airfoil.MaxTh(0.3, 0.05);
-	Airfoil.MinTh(0.3, -0.05);
-	Airfoil.RearUpConvexityPoint(0.8, 0.01, 0.6, 0.05);
-	Airfoil.RearDownConvexityPoint(0.6, -0.05, 0.8, -0.01);
+	BEZIER_AIRFOIL Airfoil2b;
+	clog << "Init1" << endl;
+    Airfoil2b.Init2b(6, 60);
+    clog << "Init2" << endl;
+    Airfoil2b.Init2b(6, 60, 7, 50);
+    clog << "Init3" << endl;
+
+    BEZIER_AIRFOIL Airfoil4b;
+    Airfoil4b.Init4b(4, 60, 3, 40);
+    clog << "Init2" << endl;
+	Airfoil4b.Init4b(4, 60, 3, 30, 3, 40, 5, 50);
+
+	clog << "InitEnd" << endl;
+
+	Airfoil2b.FixPoints();
+    Airfoil4b.FixPoints();
+
+	Airfoil2b.MaxTh(0.3, 0.05);
+	Airfoil2b.MinTh(0.3, -0.05);
+    Airfoil4b.MaxTh(0.3, 0.05);
+	Airfoil4b.MinTh(0.3, -0.05);
+//	Airfoil.RearUpConvexityPoint(0.8, 0.01, 0.6, 0.05);
+/*	Airfoil.RearDownConvexityPoint(0.6, -0.05, 0.8, -0.01);
 	Airfoil.ComputeFrontUpConvexityPoint();
 	Airfoil.ComputeFrontDownConvexityPoint();
 	
+    Airfoil.PrintOutPoints("TestDir/JMbezierAirfoil/BezierAiroil.xls", "Bla");
 	Airfoil.PrintOutVertex("TestDir/JMbezierAirfoil/BezierAiroil.xls", "Bla");
-	
+	*/
 	// *** JMGnuPlotPipe ***
 
 	clog << endl << "*** JMGnuPlotPipe ***" << endl << endl;

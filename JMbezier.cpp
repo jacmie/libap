@@ -7,12 +7,12 @@ BEZIER::BEZIER()
 {
 }
 
-BEZIER::BEZIER(int nmax, int umax)
+BEZIER::BEZIER(unsigned int nmax, unsigned int umax)
 {
 	Init(nmax, umax);
 }
 
-void BEZIER::Init(int nmax, int umax)
+void BEZIER::Init(unsigned int nmax, unsigned int umax)
 {
 	npt  = nmax;
     n    = nmax - 1;
@@ -44,7 +44,7 @@ void BEZIER::Vertex(double t, double &X, double &Y, double &Z)
 {
     X = Y = Z = 0;
         
-    for(int k=0; k<npt; k++)
+    for(unsigned int k=0; k<npt; k++)
     {
         X += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k][0];
         Y += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k][1];
@@ -57,7 +57,7 @@ void BEZIER::VertexSeq()
     double t = 0;
     double du = 1/double(u-1);
     
-    for(int x=0; x<u; x++)
+    for(unsigned int x=0; x<u; x++)
     {
         Vertex(t, V[x][0], V[x][1], V[x][2]);
 		tV[x] = t;
@@ -65,7 +65,7 @@ void BEZIER::VertexSeq()
     }
 }
 
-double BEZIER::tVertex(int XYZ, double Value)
+double BEZIER::tVertex(unsigned int XYZ, double Value)
 {
     double min, max;
     PMinMax(XYZ, min, max);
@@ -85,20 +85,20 @@ double BEZIER::tVertex(int XYZ, double Value)
 		if(t == 0 || t == 1)
 			return t;
     
-        for(int i=0; i<iter; i++) //Newton-Rapson search
+        for(unsigned int i=0; i<iter; i++) //Newton-Rapson search
         {    
             f = fprim = 0;
         
             //*** f ***
     
-            for(int k=0; k<npt; k++)
+            for(unsigned int k=0; k<npt; k++)
                 f += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k][XYZ];
         
             f -= Value;
         
             //*** fprim ***
     
-            for(int k=0; k<npt; k++)
+            for(unsigned int k=0; k<npt; k++)
 				fprim += C[k]*P[k][XYZ]*( k*pow(t, k-1)*pow(1 - t, n - k) + pow(t, k)*(n - k)*pow(1 - t, n - k - 1) );
 			
 			if(fprim == 0)
@@ -152,11 +152,11 @@ double BEZIER::LengthXZ()
 	return Length(1, 0, 1);
 }
 
-void BEZIER::PMinMax(int XYZ, double &min, double &max)
+void BEZIER::PMinMax(unsigned int XYZ, double &min, double &max)
 {
     min = max = P[0][XYZ];
     
-    for(int k=0; k<npt; k++)
+    for(unsigned int k=0; k<npt; k++)
     {
         if(P[k][XYZ] < min)
             min = P[k][XYZ];
@@ -168,13 +168,13 @@ void BEZIER::PMinMax(int XYZ, double &min, double &max)
 
 void BEZIER::PrintPoints(ostream &out)
 {
-    for(int i=0; i<npt; i++)
+    for(unsigned int i=0; i<npt; i++)
         out << P[i][0] << "\t" << P[i][1] << "\t" << P[i][2] << endl;
 }
 
 void BEZIER::PrintVertex(ostream &out)
 {
-    for(int i=0; i<u; i++)
+    for(unsigned int i=0; i<u; i++)
         out << V[i][0] << "\t" << V[i][1] << "\t" << V[i][2] << endl;
 }
 
@@ -182,7 +182,7 @@ double BEZIER::Length(bool xflag, bool yflag, bool zflag)
 {
 	double L=0, dx=0, dy=0, dz=0;
 
-    for(int i=1; i<u; i++)
+    for(unsigned int i=1; i<u; i++)
 	{
 		if(xflag)
 			dx = V[i][0] - V[i-1][0];
@@ -211,11 +211,11 @@ void BEZIER::BinomialCoef()
     
     double Cc;
      
-    for(int k=1; k<n; k++)
+    for(unsigned int k=1; k<n; k++)
     {
         Cc = 1;
         
-        for(int i=1; i<=k; i++)
+        for(unsigned int i=1; i<=k; i++)
             Cc *=  double((n - (k - i)))/i;
            
         C[k] = int(Cc);

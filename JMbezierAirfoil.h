@@ -11,18 +11,30 @@
 #include "JMmath.h"
 #include "JMbezier.h"
 
-class BEZIERAIRFOIL
+class BEZIER_AIRFOIL
 {
 	public:
 	
-	BEZIER Spline0, Spline1, Spline2, Spline3;
+    unsigned int nBR, nBF, nTF, nTR;
+	BEZIER SplineBR; // Bottom Rear
+    BEZIER SplineBF; // Bottom Front
+    BEZIER SplineTF; // Top Front
+    BEZIER SplineTR; // Top Rear
 	
-	BEZIERAIRFOIL();
-	void Init(int vFront, int vRear);
+	BEZIER_AIRFOIL();
+    void Init2b(unsigned int nBF0, unsigned int vBF0);
+    void Init2b(unsigned int nBF0, unsigned int vBF0, unsigned int nTF0, unsigned int vTF0);
+    void Init4b(unsigned int nBR0, unsigned int vBR0, unsigned int nBF0, unsigned int vBF0);
+	void Init4b(unsigned int nBR0, unsigned int vBR0, unsigned int nBF0, unsigned int vBF0, unsigned int nTF0, unsigned int vTF0, unsigned int nTR0, unsigned int vTR0);
+
+    void LEpointB(double x, double y, double slope);
+    void LEpointT(double x, double y, double slope);
 	
-	void FixPoints();
-	void MaxTh(double x, double y);
-	void MinTh(double x, double y);
+	int  MaxTh(double x, double y);
+	int  MinTh(double x, double y);
+    
+    void FixPoints();
+
 	void FrontUpConvexityPoint(double x, double y);
 	void FrontDownConvexityPoint(double x, double y);
 	void RearUpConvexityPoint(double x1, double y1, double x2, double y2);

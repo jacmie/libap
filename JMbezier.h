@@ -11,8 +11,8 @@ class BEZIER
 {
     public:
     
-    int n, npt, u;
-    int iter;
+    unsigned int n, npt, u;
+    unsigned int iter;
     double eps, relax;
     
 	std::vector < std::vector <double> > P; // defining points
@@ -20,12 +20,12 @@ class BEZIER
 	std::vector <double> tV; 				// t of the vertexes
 
 	BEZIER();
-    BEZIER(int n, int umax);
+    BEZIER(unsigned int n, unsigned int umax);
     ~BEZIER();
-	void Init(int nmax, int umax);
+	void Init(unsigned int nmax, unsigned int umax);
     void Vertex(double t, double &X, double &Y, double &Z);
     void VertexSeq();
-    double tVertex(int XYZ, double Value);
+    double tVertex(unsigned int XYZ, double Value);
 	double Length();
 	double LengthX();
 	double LengthY();
@@ -33,7 +33,7 @@ class BEZIER
 	double LengthXY();
 	double LengthYZ();
 	double LengthXZ();
-	void PMinMax(int XYZ, double &min, double &max);
+	void PMinMax(unsigned int XYZ, double &min, double &max);
     void PrintPoints(std::ostream &out);
 	void PrintVertex(std::ostream &out);
 
