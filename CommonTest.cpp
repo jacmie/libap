@@ -39,9 +39,33 @@ int main(int argc, char *argv[])
 	
 	clog << endl << "*** JMmath ***" << endl << endl;
 
+    ofstream mout("TestDir/JMmath/Circle.xls");
+
+    unsigned int ndiv = 36;
+    double dFi = 360/(ndiv-1);
+    double Fi  = 0;
+    double x, y;
+
+    clog << "Id\t" << "Fi\t" << "x\t" << "y" << endl; 
+
+    for(unsigned int i=0; i<=ndiv; i++)
+    {    	
+        x = 1.0;
+        y = 0.0;
+
+		RotatePointRefDeg(x, y, Fi, 1.0, 1.0);
+            
+        clog << i << "\t" << fixed << setprecision(1) << Fi << setprecision(3) << "\t" << x << "\t" << y << endl; 	
+        mout << fixed << setprecision(6) << x << "\t" << y << endl;
+
+        Fi -= dFi;    
+	}
+
+    mout.close();
+
 	double A, B, R;
 	Circle(2.0, 1.0, 0.0, 5.0, -1.0, 2.0, A, B, R);
-	clog << "A\t" << "B\t" << "R" << endl;
+	clog << endl << "A\t" << "B\t" << "R" << endl;
 	clog << A << "\t" << B << "\t" << R*R << endl;
 	
 	// *** JMconvert ***
@@ -208,32 +232,49 @@ int main(int argc, char *argv[])
     clog << "Init2" << endl;
 	Airfoil4b.Init4b(4, 60, 3, 30, 3, 40, 5, 50);
 
-	clog << "InitEnd" << endl;
+	clog << "- Set LEcircle" << endl;
 
-	Airfoil2b.FixPoints();
-    Airfoil4b.FixPoints();
+    Airfoil2b.SetLEcircle(0.05, -0.02, 0.0, 0.0, 0.05, 0.02);
+    Airfoil4b.SetLEcircle(0.01, -0.05, 0.0, 0.0, 0.01, 0.05, 6);
 
-	Airfoil2b.MaxTh(0.3, 0.05);
-	Airfoil2b.MinTh(0.3, -0.05);
-    Airfoil4b.MaxTh(0.3, 0.05);
-	Airfoil4b.MinTh(0.3, -0.05);
+    clog << "- Set TE" << endl;
+
+    //Airfoil2b.SetTEpoint(1.0, 0.0);
+    Airfoil2b.SetTEpointB(1.0, -0.001, 0.02);
+    Airfoil2b.SetTEpointT(1.0, 0.001, -0.02);
+    Airfoil4b.SetTEpointB(1.0, -0.001, 0.01);
+    Airfoil4b.SetTEpointT(1.0, 0.001, -0.01);
+
+    clog << "- Set Min/Max Th" << endl;
+
+	Airfoil2b.SetMaxTh(0.3, 0.05);
+	Airfoil2b.SetMinTh(-0.3, -0.05);
+    Airfoil4b.SetMaxTh(0.3, 0.05);
+	Airfoil4b.SetMinTh(-0.3, -0.05);
+
+    Airfoil2b.InitAirfoilSplinePoints();
+
+    Airfoil2b.PrintOutPoints("TestDir/JMbezierAirfoil/BezierAiroilPoints.xls");
+
 //	Airfoil.RearUpConvexityPoint(0.8, 0.01, 0.6, 0.05);
 /*	Airfoil.RearDownConvexityPoint(0.6, -0.05, 0.8, -0.01);
 	Airfoil.ComputeFrontUpConvexityPoint();
 	Airfoil.ComputeFrontDownConvexityPoint();
-	
-    Airfoil.PrintOutPoints("TestDir/JMbezierAirfoil/BezierAiroil.xls", "Bla");
-	Airfoil.PrintOutVertex("TestDir/JMbezierAirfoil/BezierAiroil.xls", "Bla");
 	*/
+    //Airfoil.PrintOutPoints("TestDir/JMbezierAirfoil/BezierAiroil.xls", "Bla");
+	Airfoil2b.PrintOutVertex("TestDir/JMbezierAirfoil/BezierAiroilVertex.xls", "Bla");
+	
 	// *** JMGnuPlotPipe ***
 
 	clog << endl << "*** JMGnuPlotPipe ***" << endl << endl;
 	
 	GNUPLOT GnuPlot;
 	GnuPlot.NrOfDataCloumns = 2;
+//  GnuPlot.Plot2D("TestDir/JMmath/Circle.xls");
 //	GnuPlot.Plot2D("TestDir/JMbezier/Bezier.xls");
 	GnuPlot.NrOfDataCloumns = 1;
-	GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil.xls");
+    GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroilPoints.xls");
+	GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroilVertex.xls");
 /*	
 	GnuPlot.Plot3D("TestDir/JMgnuplot/GnuValey.dat");
 	

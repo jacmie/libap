@@ -16,22 +16,26 @@ void RotatePointDeg(double &x, double &y, double AngDeg)
 	RotatePointRad(x, y, AngDeg*M_PI/180);
 }
 
-void RotatePointRefRad(double &x, double &y, double AngRad, double xRef, double yRef=0)
+void RotatePointRefRad(double &x, double &y, double AngRad, double xRef, double yRef)
 {
 	x -= xRef;
 	y -= yRef;
 
-	double xx = y*sin(AngRad) + x*cos(AngRad);
-	double yy = y*cos(AngRad) - x*sin(AngRad);
+    RotatePointRad(x, y, AngRad);
+
+    /*
+	double xx =  y*sin(AngRad) + x*cos(AngRad);
+	double yy = -y*cos(AngRad) - x*sin(AngRad);
 	
 	x = xx;
 	y = yy;
-	
+	*/
+
 	x += xRef;
     y += yRef;
 }
 
-void RotatePointRefDeg(double &x, double &y, double AngDeg, double xRef, double yRef=0)
+void RotatePointRefDeg(double &x, double &y, double AngDeg, double xRef, double yRef)
 {
 	RotatePointRefRad(x, y, AngDeg*M_PI/180, xRef, yRef);
 }

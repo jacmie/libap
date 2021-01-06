@@ -15,7 +15,10 @@ class BEZIER_AIRFOIL
 {
 	public:
 	
-    unsigned int nBR, nBF, nTF, nTR;
+    unsigned int nBR, nBF, nTF, nTR, nCirc;
+    double LEcircX, LEcircY, LEcircR;
+    double sBR, sBF, sTF, sTR; // slope tan(A)
+    double MinThX, MinThY, MaxThX, MaxThY;
 	BEZIER SplineBR; // Bottom Rear
     BEZIER SplineBF; // Bottom Front
     BEZIER SplineTF; // Top Front
@@ -27,12 +30,20 @@ class BEZIER_AIRFOIL
     void Init4b(unsigned int nBR0, unsigned int vBR0, unsigned int nBF0, unsigned int vBF0);
 	void Init4b(unsigned int nBR0, unsigned int vBR0, unsigned int nBF0, unsigned int vBF0, unsigned int nTF0, unsigned int vTF0, unsigned int nTR0, unsigned int vTR0);
 
-    void LEpointB(double x, double y, double slope);
-    void LEpointT(double x, double y, double slope);
-	
-	int  MaxTh(double x, double y);
-	int  MinTh(double x, double y);
+	void SetLEcircle(double x1, double y1, double x2, double y2, double x3, double y3, unsigned int nCircle=0);    
+    void SetLEpoint(double x, double y);
+    void SetLEpointB(double x, double y);
+    void SetLEpointT(double x, double y);
     
+    void SetTEpoint(double x, double y, double slope=0);
+    void SetTEpointB(double x, double y, double slope=0);
+    void SetTEpointT(double x, double y, double slope=0);
+
+    void SetMaxTh(double x, double y);
+	void SetMinTh(double x, double y);
+
+    void InitAirfoilSplinePoints();
+
     void FixPoints();
 
 	void FrontUpConvexityPoint(double x, double y);
@@ -42,6 +53,8 @@ class BEZIER_AIRFOIL
 	void ComputeFrontUpConvexityPoint();
 	void ComputeFrontDownConvexityPoint();
 	void MakeVertexSeq();
+    
+    void PrintOutPoints(string AirfoilFile);
 	void PrintOutVertex(std::string AirfoilFile, std::string AirfoilName);
 };
 
