@@ -7,6 +7,11 @@ template <class REAL>
 BEZIER_POINT<REAL>::BEZIER_POINT()
 {
     Set(0.0);
+
+    brackets  = 0;
+    comas     = 0;
+    separator = 12;
+    no_print_xyz = 4;
 }
 
 template <class REAL> 
@@ -58,6 +63,61 @@ REAL BEZIER_POINT<REAL>::Get(unsigned int XYZ)
     if(XYZ == 1) return y;
     if(XYZ == 2) return z;
     return XYZ;
+}
+
+template <class REAL>
+ostream& operator << (std::ostream &out, const BEZIER_POINT <REAL> &BP)
+{
+    if(BP.brackets)
+        out << "{";  
+    
+    if(BP.separator)
+    {
+        if(BP.no_print_xyz != 0)
+        {
+            out << setw(BP.separator) << BP.x;
+            if(BP.comas)
+                out << ",";
+        }
+        
+        if(BP.no_print_xyz != 1)
+        {
+            out << setw(BP.separator) << BP.y;
+            if(BP.comas && BP.no_print_xyz != 2)
+                out << ",";
+        }
+
+        if(BP.no_print_xyz != 2)
+            out << setw(BP.separator) << BP.z;
+    }
+
+    else
+    {    
+        if(BP.no_print_xyz != 0)
+        {
+            out << BP.x;
+            if(BP.comas)
+                out << ",";
+            out << "\t";
+        }
+        
+        if(BP.no_print_xyz != 1)
+        {
+            out << BP.y;
+            if(BP.comas && BP.no_print_xyz != 2)
+                out << ",";
+            if(BP.no_print_xyz != 2)
+                out << "\t";
+        }
+
+        if(BP.no_print_xyz != 2)
+            out << BP.z; 
+    }
+
+    if(BP.brackets)
+        out << "}";
+
+    return out;
 }
 
 template <class REAL> 
@@ -237,14 +297,14 @@ template <class REAL>
 void BEZIER<REAL>::PrintPoints(ostream &out)
 {
     for(unsigned int i=0; i<npt; i++)
-        out << P[i].x << "\t" << P[i].y << "\t" << P[i].z << endl;
+        out << P[i] << endl;
 }
 
 template <class REAL> 
 void BEZIER<REAL>::PrintVertex(ostream &out)
 {
     for(unsigned int i=0; i<u; i++)
-        out << V[i].x << "\t" << V[i].y << "\t" << V[i].z << endl;
+        out << V[i] << endl;
 }
 
 template <class REAL> 

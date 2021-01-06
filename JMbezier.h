@@ -27,6 +27,12 @@ template <class REAL> class BEZIER_POINT
     void Get(std::vector <REAL> &vec);
 
     REAL Get(unsigned int XYZ);
+
+    //Print format atributes
+    bool brackets;
+    bool comas;
+    unsigned int separator;
+    unsigned int no_print_xyz;
 };
 
 template <class REAL> class BEZIER
