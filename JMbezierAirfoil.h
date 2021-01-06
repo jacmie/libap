@@ -19,10 +19,10 @@ class BEZIER_AIRFOIL
     double LEcircX, LEcircY, LEcircR;
     double sBR, sBF, sTF, sTR; // slope tan(A)
     double MinThX, MinThY, MaxThX, MaxThY;
-	BEZIER SplineBR; // Bottom Rear
-    BEZIER SplineBF; // Bottom Front
-    BEZIER SplineTF; // Top Front
-    BEZIER SplineTR; // Top Rear
+	BEZIER <double> SplineBR; // Bottom Rear
+    BEZIER <double> SplineBF; // Bottom Front
+    BEZIER <double> SplineTF; // Top Front
+    BEZIER <double> SplineTR; // Top Rear
 	
 	BEZIER_AIRFOIL();
     void Init2b(unsigned int nBF0, unsigned int vBF0);

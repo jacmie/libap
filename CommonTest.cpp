@@ -165,23 +165,23 @@ int main(int argc, char *argv[])
     int n = 4;  //points -> degrees of freedom n-1 
     int u = 30; //vertex on spline
     
-    BEZIER Bez(n, u);
+    BEZIER <double> Bez(n, u);
     
-    Bez.P[0][0] = 0.0;
-	Bez.P[0][1] = 1.0;
-    Bez.P[0][2] = 0.0;
+    Bez.P[0].x = 0.0;
+	Bez.P[0].y = 1.0;
+    Bez.P[0].z = 0.0;
   
-    Bez.P[1][0] = 2;
-    Bez.P[1][1] = 1;
-    Bez.P[1][2] = 0.5;
+    Bez.P[1].x = 2;
+    Bez.P[1].y = 1;
+    Bez.P[1].z = 0.5;
     
-    Bez.P[2][0] = 0;
-    Bez.P[2][1] = 0.0;
-    Bez.P[2][2] = 1;
+    Bez.P[2].x = 0;
+    Bez.P[2].y = 0.0;
+    Bez.P[2].z = 1;
     
-    Bez.P[3][0] = 2;
-    Bez.P[3][1] = 0;
-    Bez.P[3][2] = 0.5;
+    Bez.P[3].x = 2;
+    Bez.P[3].y = 0;
+    Bez.P[3].z = 0.5;
 
 	clog << "P:" << endl;
     Bez.PrintPoints(clog);

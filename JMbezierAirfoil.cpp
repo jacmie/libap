@@ -58,10 +58,10 @@ void BEZIER_AIRFOIL::Init4b(unsigned int nBR0, unsigned int vBR0, unsigned int n
 	SplineTR.Init(nTR, vTR0);
 
     // All points z coordinates 0
-    for(unsigned int p=0; p<SplineBR.P.size(); p++) SplineBR.P[p][2] = 0.0;
-	for(unsigned int p=0; p<SplineBF.P.size(); p++) SplineBF.P[p][2] = 0.0;
-	for(unsigned int p=0; p<SplineTF.P.size(); p++) SplineTF.P[p][2] = 0.0;
-	for(unsigned int p=0; p<SplineTR.P.size(); p++) SplineTR.P[p][2] = 0.0;
+    for(unsigned int p=0; p<SplineBR.P.size(); p++) SplineBR.P[p].z = 0.0;
+	for(unsigned int p=0; p<SplineBF.P.size(); p++) SplineBF.P[p].z = 0.0;
+	for(unsigned int p=0; p<SplineTF.P.size(); p++) SplineTF.P[p].z = 0.0;
+	for(unsigned int p=0; p<SplineTR.P.size(); p++) SplineTR.P[p].z = 0.0;
 
     if(vBR0 == 0) nBR = 0; 
     if(vTR0 == 0) nTR = 0;
@@ -117,14 +117,14 @@ void BEZIER_AIRFOIL::SetLEpoint(double x, double y)
 
 void BEZIER_AIRFOIL::SetLEpointB(double x, double y)
 {
-    SplineBF.P[nBF-1][0] = x;
-    SplineBF.P[nBF-1][1] = y;
+    SplineBF.P[nBF-1].x = x;
+    SplineBF.P[nBF-1].y = y;
 }
 
 void BEZIER_AIRFOIL::SetLEpointT(double x, double y)
 {
-    SplineTF.P[0][0] = x;
-    SplineTF.P[0][1] = y;
+    SplineTF.P[0].x = x;
+    SplineTF.P[0].y = y;
 }
 
 void BEZIER_AIRFOIL::SetTEpoint(double x, double y, double slope)
@@ -137,14 +137,14 @@ void BEZIER_AIRFOIL::SetTEpointB(double x, double y, double slope)
 {
     if(nBR != 0 && nTR != 0)
     {
-        SplineBR.P[0][0] = x;
-        SplineBR.P[0][1] = y;
+        SplineBR.P[0].x = x;
+        SplineBR.P[0].y = y;
     }
 
     else
     {
-        SplineBF.P[0][0] = x;
-        SplineBF.P[0][1] = y;
+        SplineBF.P[0].x = x;
+        SplineBF.P[0].y = y;
     }
 
     sBR = slope;
@@ -154,14 +154,14 @@ void BEZIER_AIRFOIL::SetTEpointT(double x, double y, double slope)
 {
     if(nBR != 0 && nTR != 0)
     {
-        SplineTR.P[nTR-1][0] = x;
-        SplineTR.P[nTR-1][1] = y;
+        SplineTR.P[nTR-1].x = x;
+        SplineTR.P[nTR-1].y = y;
     }
 
     else
     {
-        SplineTF.P[nTF-1][0] = x;
-        SplineTF.P[nTF-1][1] = y;
+        SplineTF.P[nTF-1].x = x;
+        SplineTF.P[nTF-1].y = y;
     }
     
     sTR = slope;
@@ -171,11 +171,11 @@ void BEZIER_AIRFOIL::SetMaxTh(double x, double y)
 {	
     if(nTF != 0 && nTR != 0)
     {
-	    SplineTF.P[nTF-1][0] = x;
-	    SplineTR.P[0][0] = x;
+	    SplineTF.P[nTF-1].x = x;
+	    SplineTR.P[0].x = x;
 	
-	    SplineTF.P[nTF-1][1] = y;
-	    SplineTR.P[0][1] = y;
+	    SplineTF.P[nTF-1].y = y;
+	    SplineTR.P[0].y = y;
     }
 
     MaxThX = x;
@@ -186,11 +186,11 @@ void BEZIER_AIRFOIL::SetMinTh(double x, double y)
 {	
     if(nBF != 0 && nBR != 0)
     {
-        SplineBR.P[nBR-1][0] = x;
-	    SplineBF.P[0][0] = x;
+        SplineBR.P[nBR-1].x = x;
+	    SplineBF.P[0].x = x;
 	
-    	SplineBR.P[nBR-1][1] = y;
-    	SplineBF.P[0][1] = y;
+    	SplineBR.P[nBR-1].y = y;
+    	SplineBF.P[0].y = y;
     }
 
     MinThX = x;
@@ -199,32 +199,32 @@ void BEZIER_AIRFOIL::SetMinTh(double x, double y)
 
 void BEZIER_AIRFOIL::FrontUpConvexityPoint(double x, double y)
 {	
-	SplineTF.P[1][0] = 0.0;
-	SplineTF.P[1][1] = y;
+	SplineTF.P[1].x = 0.0;
+	SplineTF.P[1].y = y;
 }
 
 void BEZIER_AIRFOIL::FrontDownConvexityPoint(double x, double y)
 {	
-	SplineBF.P[1][0] = x;
-	SplineBF.P[1][1] = y;
+	SplineBF.P[1].x = x;
+	SplineBF.P[1].y = y;
 }
 
 void BEZIER_AIRFOIL::RearUpConvexityPoint(double x1, double y1, double x2, double y2)
 {	
-	SplineBR.P[1][0] = x1;
-	SplineBR.P[1][1] = y1;
+	SplineBR.P[1].x = x1;
+	SplineBR.P[1].y = y1;
 	
-    SplineBR.P[2][0] = x2;
-	SplineBR.P[2][1] = y2;
+    SplineBR.P[2].x = x2;
+	SplineBR.P[2].y = y2;
 }
 
 void BEZIER_AIRFOIL::RearDownConvexityPoint(double x1, double y1, double x2, double y2)
 {	
-	SplineTR.P[1][0] = x1;
-	SplineTR.P[1][1] = y1;
+	SplineTR.P[1].x = x1;
+	SplineTR.P[1].y = y1;
 	
-    SplineTR.P[2][0] = x2;
-    SplineTR.P[2][1] = y2;
+    SplineTR.P[2].x = x2;
+    SplineTR.P[2].y = y2;
 	
 	double A, B;
 	LinearFunction(x1, y1, x2, y2, A, B);
@@ -260,14 +260,14 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
 
     if(nBR == 0 || nTR == 0) //Single spline on Top/Bottom
     {
-        clog << SplineBF.P[0][0] << "\t" << SplineBF.P[0][1] << "\t" << MinThX << "\t" << 0.0 << endl;
+        clog << SplineBF.P[0].x << "\t" << SplineBF.P[0].y << "\t" << MinThX << "\t" << 0.0 << endl;
 
-        LinearFunction(SplineBF.P[0][0], SplineBF.P[0][1], MinThX, 0.0, A, B);
+        LinearFunction(SplineBF.P[0].x, SplineBF.P[0].y, MinThX, 0.0, A, B);
         TE_Fi = atan(A);
 
-        clog << SplineBF.P[nBF-1][0] << "\t" << SplineBF.P[nBF-1][1] << "\t" << MinThX << "\t" << 0.0 << endl;
+        clog << SplineBF.P[nBF-1].x << "\t" << SplineBF.P[nBF-1].y << "\t" << MinThX << "\t" << 0.0 << endl;
 
-        LinearFunction(SplineBF.P[nBF-1][0], SplineBF.P[nBF-1][1], MinThX, 0.0, A, B);
+        LinearFunction(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, MinThX, 0.0, A, B);
         LE_Fi = atan(A);
 
         clog << nBF << "\t" << TE_Fi*180/M_PI << "\t" << LE_Fi*180/M_PI << endl;
@@ -281,41 +281,41 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
     	{    	
             Fi -= dFi;
 	
-            x = SplineBF.P[0][0];
-            y = SplineBF.P[0][1];
+            x = SplineBF.P[0].x;
+            y = SplineBF.P[0].y;
 
-		    RotatePointRefRad(x, y, Fi, SplineBF.P[nBF-1][0] + 0.5*SplineBF.P[0][0], 0);
+		    RotatePointRefRad(x, y, Fi, SplineBF.P[nBF-1].x + 0.5*SplineBF.P[0].x, 0);
             
-    		SplineBF.P[i][0] = x;
-    		SplineBF.P[i][1] = y*(-MinThY)/(SplineBF.P[nBF-1][0] + 0.5*SplineBF.P[0][0]);
+    		SplineBF.P[i].x = x;
+    		SplineBF.P[i].y = y*(-MinThY)/(SplineBF.P[nBF-1].x + 0.5*SplineBF.P[0].x);
 
-            clog << fixed << setprecision(1) << Fi*180/M_PI << setprecision(3) << "\t" << SplineBF.P[i][0] << "\t" << SplineBF.P[i][1] << endl; 		    
+            clog << fixed << setprecision(1) << Fi*180/M_PI << setprecision(3) << "\t" << SplineBF.P[i].x << "\t" << SplineBF.P[i].y << endl; 		    
 	    }
         
         if(sBF == 0)
-            SplineBF.P[nBF-2][0] = SplineBF.P[nBF-1][0]; //x
+            SplineBF.P[nBF-2].x = SplineBF.P[nBF-1].x; //x
         else
         {
-            B = SplineBF.P[nBF-1][1] - sBF*SplineBF.P[nBF-1][0];
-            SplineBF.P[nBF-2][1] = sBF*SplineBF.P[nBF-2][0] + B; //y
+            B = SplineBF.P[nBF-1].y - sBF*SplineBF.P[nBF-1].x;
+            SplineBF.P[nBF-2].y = sBF*SplineBF.P[nBF-2].x + B; //y
         }
 
         if(sBR != 0)
         {
-            B = SplineBF.P[0][1] - sBR*SplineBF.P[0][0];
-            SplineBF.P[1][1] = sBR*SplineBF.P[1][0] + B; //y
+            B = SplineBF.P[0].y - sBR*SplineBF.P[0].x;
+            SplineBF.P[1].y = sBR*SplineBF.P[1].x + B; //y
         }
 
         clog << endl;
 
-        clog << SplineTF.P[0][0] << "\t" << SplineTF.P[0][1] << "\t" << MaxThX << "\t" << 0.0 << endl;
+        clog << SplineTF.P[0].x << "\t" << SplineTF.P[0].y << "\t" << MaxThX << "\t" << 0.0 << endl;
 
-        LinearFunction(SplineTF.P[0][0], SplineTF.P[0][1], MaxThX, 0.0, A, B);
+        LinearFunction(SplineTF.P[0].x, SplineTF.P[0].y, MaxThX, 0.0, A, B);
         LE_Fi = atan(A);
 
-        clog << SplineTF.P[nTF-1][0] << "\t" << SplineTF.P[nTF-1][1] << "\t" << MaxThX << "\t" << 0.0 << endl;
+        clog << SplineTF.P[nTF-1].x << "\t" << SplineTF.P[nTF-1].y << "\t" << MaxThX << "\t" << 0.0 << endl;
 
-        LinearFunction(SplineTF.P[nTF-1][0], SplineTF.P[nTF-1][1], MaxThX, 0.0, A, B);
+        LinearFunction(SplineTF.P[nTF-1].x, SplineTF.P[nTF-1].y, MaxThX, 0.0, A, B);
         TE_Fi = atan(A);
 
         clog << nTF << "\t" << LE_Fi*180/M_PI << "\t" << TE_Fi*180/M_PI << endl;
@@ -329,29 +329,29 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
     	{    	
             Fi -= dFi;
 	
-            x = SplineTF.P[0][0];
-            y = SplineTF.P[0][1];
+            x = SplineTF.P[0].x;
+            y = SplineTF.P[0].y;
 
-		    RotatePointRefRad(x, y, Fi, SplineTF.P[0][0] + 0.5*SplineTF.P[nTF-1][0], 0);
+		    RotatePointRefRad(x, y, Fi, SplineTF.P[0].x + 0.5*SplineTF.P[nTF-1].x, 0);
             
-    		SplineTF.P[i][0] = x;
-    		SplineTF.P[i][1] = y*MaxThY/(SplineTF.P[0][0] + 0.5*SplineTF.P[nTF-1][0]);
+    		SplineTF.P[i].x = x;
+    		SplineTF.P[i].y = y*MaxThY/(SplineTF.P[0].x + 0.5*SplineTF.P[nTF-1].x);
 
-            clog << fixed << setprecision(1) << Fi*180/M_PI << setprecision(3) << "\t" << SplineTF.P[i][0] << "\t" << SplineTF.P[i][1] << endl; 		    
+            clog << fixed << setprecision(1) << Fi*180/M_PI << setprecision(3) << "\t" << SplineTF.P[i].x << "\t" << SplineTF.P[i].y << endl; 		    
 	    }
         
         if(sTF == 0)
-            SplineTF.P[1][0] = SplineTF.P[0][0]; //x
+            SplineTF.P[1].x = SplineTF.P[0].x; //x
         else
         {
-            B = SplineTF.P[0][1] - sTF*SplineTF.P[0][0];
-            SplineTF.P[1][1] = sTF*SplineTF.P[1][0] + B; //y
+            B = SplineTF.P[0].y - sTF*SplineTF.P[0].x;
+            SplineTF.P[1].y = sTF*SplineTF.P[1].x + B; //y
         }
 
         if(sTR != 0)
         {
-            B = SplineTF.P[nTF-1][1] - sTR*SplineTF.P[nTF-1][0];
-            SplineTF.P[nTF-2][1] = sTR*SplineTF.P[nTF-2][0] + B; //y
+            B = SplineTF.P[nTF-1].y - sTR*SplineTF.P[nTF-1].x;
+            SplineTF.P[nTF-2].y = sTR*SplineTF.P[nTF-2].x + B; //y
         }
 	}
 
@@ -379,22 +379,22 @@ void BEZIER_AIRFOIL::PrintOutPoints(string AirfoilFile)
     if(nBR)
     {
 	    for(unsigned int i=0; i<SplineBR.P.size(); i++)
-            out << nBR << "\t" << SplineBR.P[i][0] << "    " << SplineBR.P[i][1] << endl;
+            out << nBR << "\t" << SplineBR.P[i].x << "    " << SplineBR.P[i].y << endl;
         out << endl;
 	}
 
 	for(unsigned int i=0; i<SplineBF.P.size(); i++)
-        out << SplineBF.P[i][0] << "    " << SplineBF.P[i][1] << endl;
+        out << SplineBF.P[i].x << "    " << SplineBF.P[i].y << endl;
     out << endl;
 	
 	for(unsigned int i=0; i<SplineTF.P.size(); i++)
-        out << SplineTF.P[i][0] << "    " << SplineTF.P[i][1] << endl;
+        out << SplineTF.P[i].x << "    " << SplineTF.P[i].y << endl;
 	out << endl;
 
     if(nTR)
     {
 	    for(unsigned int i=0; i<SplineTR.P.size(); i++)
-            out << SplineTR.P[i][0] << "    " << SplineTR.P[i][1] << endl;
+            out << SplineTR.P[i].x << "    " << SplineTR.P[i].y << endl;
 	}
 
 	out.close();
@@ -411,19 +411,19 @@ void BEZIER_AIRFOIL::PrintOutVertex(string AirfoilFile, string AirfoilName)
     if(nBR)
     {
     	for(unsigned int i=0; i<SplineBR.V.size()-1; i++)
-            out << SplineBR.V[i][0] << "    " << SplineBR.V[i][1] << endl;
+            out << SplineBR.V[i].x << "    " << SplineBR.V[i].y << endl;
 	}
 
 	for(unsigned int i=0; i<SplineBF.V.size()-1; i++)
-        out << SplineBF.V[i][0] << "    " << SplineBF.V[i][1] << endl;
+        out << SplineBF.V[i].x << "    " << SplineBF.V[i].y << endl;
 	
 	for(unsigned int i=0; i<SplineTF.V.size()-1; i++)
-        out << SplineTF.V[i][0] << "    " << SplineTF.V[i][1] << endl;
+        out << SplineTF.V[i].x << "    " << SplineTF.V[i].y << endl;
 	
     if(nTR)
     {
     	for(unsigned int i=0; i<SplineTR.V.size(); i++)
-            out << SplineTR.V[i][0] << "    " << SplineTR.V[i][1] << endl;
+            out << SplineTR.V[i].x << "    " << SplineTR.V[i].y << endl;
     }
 		
 	out.close();
