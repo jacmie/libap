@@ -52,7 +52,7 @@ class BEZIER_AIRFOIL
 	void RearDownConvexityPoint(double x1, double y1, double x2, double y2);
 	void ComputeFrontUpConvexityPoint();
 	void ComputeFrontDownConvexityPoint();
-	void MakeVertexSeq();
+	void MakeVertexesSeq();
     
     void PrintOutPoints(string AirfoilFile);
 	void PrintOutVertex(std::string AirfoilFile, std::string AirfoilName);

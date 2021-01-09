@@ -170,7 +170,7 @@ void BEZIER<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
 }
 
 template <class REAL> 
-void BEZIER<REAL>::VertexSeq()
+void BEZIER<REAL>::VertexesSeq()
 {
     REAL t = 0;
     REAL du = 1/REAL(u-1);
@@ -293,6 +293,30 @@ void BEZIER<REAL>::PMinMax(unsigned int XYZ, REAL &min, REAL &max)
     }
 }
 
+template <class REAL>
+void BEZIER<REAL>::PrintPointsFormat(bool brackets, bool comas, unsigned int separator, unsigned int no_print_xyz)
+{
+    for(unsigned int i=0; i<npt; i++)
+	{
+        P[i].brackets = brackets;
+		P[i].comas = comas;
+		P[i].separator = separator;
+		P[i].no_print_xyz = no_print_xyz;
+	}
+}
+
+template <class REAL>
+void BEZIER<REAL>::PrintVertexesFormat(bool brackets, bool comas, unsigned int separator, unsigned int no_print_xyz)
+{
+    for(unsigned int i=0; i<u; i++)
+	{
+        V[i].brackets = brackets;
+		V[i].comas = comas;
+		V[i].separator = separator;
+		V[i].no_print_xyz = no_print_xyz;
+	}
+}
+
 template <class REAL> 
 void BEZIER<REAL>::PrintPoints(ostream &out)
 {
@@ -301,7 +325,7 @@ void BEZIER<REAL>::PrintPoints(ostream &out)
 }
 
 template <class REAL> 
-void BEZIER<REAL>::PrintVertex(ostream &out)
+void BEZIER<REAL>::PrintVertexes(ostream &out)
 {
     for(unsigned int i=0; i<u; i++)
         out << V[i] << endl;
