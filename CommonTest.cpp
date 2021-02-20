@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
         clog << i << "\t" << fixed << setprecision(1) << Fi << setprecision(3) << "\t" << x << "\t" << y << endl; 	
         mout << fixed << setprecision(6) << x << "\t" << y << endl;
 
-        Fi -= dFi;    
+        Fi += dFi;    
 	}
 
     mout.close();
@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 
 	BEZIER_AIRFOIL Airfoil4b;
     Airfoil4b.Init4b(4, 60, 3, 40);
-	Airfoil4b.Init4b(4, 60, 3, 30, 3, 40, 4, 50);
+	//Airfoil4b.Init4b(4, 60, 3, 30, 3, 40, 4, 50);
 
 	clog << "- Set LEcircle" << endl;
     Airfoil2b.SetLEcircle(0.05, -0.02, 0.0, 0.0, 0.05, 0.02);
@@ -281,13 +281,13 @@ int main(int argc, char *argv[])
 	
 	GNUPLOT GnuPlot;
 	GnuPlot.NrOfDataCloumns = 2;
-//  GnuPlot.Plot2D("TestDir/JMmath/Circle.xls");
+//    GnuPlot.Plot2D("TestDir/JMmath/Circle.xls");
 //	GnuPlot.Plot2D("TestDir/JMbezier/Bezier.xls");
 	//GnuPlot.NrOfDataCloumns = 1;
     //GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bPoints.xls");
-	//GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bVertex.xls");
+	GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bVertex.xls");
     //GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bPoints.xls");
-	GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bVertex.xls");
+	//GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bVertex.xls");
 /*	
 	GnuPlot.Plot3D("TestDir/JMgnuplot/GnuValey.dat");
 	

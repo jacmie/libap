@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void RotatePointRad(double &x, double &y, double AngRad)
+void SetRotatePointRad(double &x, double &y, double AngRad)
 {
 	double r = sqrt( x*x + y*y );
 	
@@ -11,9 +11,9 @@ void RotatePointRad(double &x, double &y, double AngRad)
     y = r * sin(AngRad);
 }
 
-void RotatePointDeg(double &x, double &y, double AngDeg)
+void SetRotatePointDeg(double &x, double &y, double AngDeg)
 {
-	RotatePointRad(x, y, AngDeg*M_PI/180);
+	SetRotatePointRad(x, y, AngDeg*M_PI/180);
 }
 
 void RotatePointRefRad(double &x, double &y, double AngRad, double xRef, double yRef)
@@ -21,15 +21,13 @@ void RotatePointRefRad(double &x, double &y, double AngRad, double xRef, double 
 	x -= xRef;
 	y -= yRef;
 
-    RotatePointRad(x, y, AngRad);
+    //RotatePointRad(x, y, AngRad);
 
-    /*
-	double xx =  y*sin(AngRad) + x*cos(AngRad);
-	double yy = -y*cos(AngRad) - x*sin(AngRad);
+	double xx = x*cos(AngRad) - y*sin(AngRad);
+	double yy = x*sin(AngRad) + y*cos(AngRad);
 	
 	x = xx;
-	y = yy;
-	*/
+	y = yy;	
 
 	x += xRef;
     y += yRef;

@@ -3,8 +3,8 @@
 
 using namespace std;
 
-void RotatePointRad(double &x, double &y, double AngRad);
-void RotatePointDeg(double &x, double &y, double AngDeg);
+void SetRotatePointRad(double &x, double &y, double AngRad);
+void SetRotatePointDeg(double &x, double &y, double AngDeg);
 void RotatePointRefRad(double &x, double &y, double AngRad, double xRef, double yRef);
 void RotatePointRefDeg(double &x, double &y, double AngDeg, double xRef, double yRef);
 
