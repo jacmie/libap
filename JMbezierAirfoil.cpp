@@ -252,20 +252,24 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
     if(nBR == 0 || nTR == 0) //Single spline on Top/Bottom
     {
 		// === Bottom surface ===
-		//clog << " === Bottom surface === " << endl;
+		clog << " === Bottom surface === " << endl;
 		 
         LinearFunction(SplineBF.P[0].x, SplineBF.P[0].y, MinThX, 0.0, A, B);
         TE_Fi = atan(A);
-		//clog << "TE_Fi: " << TE_Fi*180/M_PI << endl;
+		clog << "TE_Fi: " << TE_Fi*180/M_PI << endl;
 
         LinearFunction(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, MinThX, 0.0, A, B);
         LE_Fi = atan(A);
-		//clog << "LE_Fi: " << LE_Fi*180/M_PI << endl;
+		clog << "LE_Fi: " << LE_Fi*180/M_PI << endl;
 
 	    dFi = (M_PI + TE_Fi - LE_Fi)/(nBF-1);
-    	Fi  = TE_Fi;
+    	Fi  = 0;//TE_Fi;
     
-        for(unsigned int i=1; i<nBF; i++)
+		clog << "TE_Fi: " << TE_Fi*180/M_PI << "\t\tFii: " << (M_PI + TE_Fi - LE_Fi)*180/M_PI << "\tdFi: " << dFi*180/M_PI << "\tFi0: " << Fi*180/M_PI << endl;
+		
+		clog << 0 << "\t" << Fi*180/M_PI << "\t" << SplineBR.P[0].x << "\t" << SplineBR.P[0].y << endl << endl;
+        
+		for(unsigned int i=1; i<nBF-1; i++)
     	{    	
             Fi -= dFi;
 	
@@ -275,11 +279,11 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
 		    RotatePointRefRad(x, y, Fi, SplineBF.P[nBF-1].x + 0.5*SplineBF.P[0].x, 0);
             
     		SplineBF.P[i].x = x;
-    		SplineBF.P[i].y = y*(-MinThY)/(SplineBF.P[nBF-1].x + 0.5*SplineBF.P[0].x);
+    		SplineBF.P[i].y = MinThY;//y*(-MinThY)/(SplineBF.P[nBF-1].x + 0.5*SplineBF.P[0].x);
 	    }
         
 		// --- LE/TE points correction from Slopes ---
-
+/*
         if(sBF == 0)
             SplineBF.P[nBF-2].x = SplineBF.P[nBF-1].x; //x
         else
@@ -293,9 +297,9 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
             B = SplineBF.P[0].y - sBR*SplineBF.P[0].x;
             SplineBF.P[1].y = sBR*SplineBF.P[1].x + B; //y
         }
-
+*/
 		// === Top surface ===
-		//clog << " === Top surface === " << endl;
+		clog << " === Top surface === " << endl;
 
         LinearFunction(SplineTF.P[0].x, SplineTF.P[0].y, MaxThX, 0.0, A, B);
         LE_Fi = atan(A);
@@ -304,9 +308,13 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
         TE_Fi = atan(A);
 
 	    dFi = (M_PI + LE_Fi - TE_Fi)/(nTF-1);
-    	Fi  = M_PI + LE_Fi;
+    	Fi  = 0;//M_PI + LE_Fi;
     
-        for(unsigned int i=1; i<nTF; i++)
+		clog << "TE_Fi: " << TE_Fi*180/M_PI << "\t\tFii: " << (M_PI - TE_Fi + LE_Fi)*180/M_PI << "\tdFi: " << dFi*180/M_PI << "\tFi0: " << Fi*180/M_PI << endl;
+		
+		clog << 0 << "\t" << Fi*180/M_PI << "\t" << SplineBR.P[0].x << "\t" << SplineBR.P[0].y << endl << endl;
+        
+        for(unsigned int i=1; i<nTF-1; i++)
     	{    	
             Fi -= dFi;
 	
@@ -316,11 +324,11 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
 		    RotatePointRefRad(x, y, Fi, SplineTF.P[0].x + 0.5*SplineTF.P[nTF-1].x, 0);
             
     		SplineTF.P[i].x = x;
-    		SplineTF.P[i].y = y*MaxThY/(SplineTF.P[0].x + 0.5*SplineTF.P[nTF-1].x);
+    		SplineTF.P[i].y = MaxThY;//y*MaxThY/(SplineTF.P[0].x + 0.5*SplineTF.P[nTF-1].x);
 	    }
         
 		// --- LE/TE points correction from Slopes ---
-
+/*
         if(sTF == 0)
             SplineTF.P[1].x = SplineTF.P[0].x; //x
         else
@@ -333,7 +341,7 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
         {
             B = SplineTF.P[nTF-1].y - sTR*SplineTF.P[nTF-1].x;
             SplineTF.P[nTF-2].y = sTR*SplineTF.P[nTF-2].x + B; //y
-        }
+        }*/
 	}
 
     else
