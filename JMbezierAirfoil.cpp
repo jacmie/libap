@@ -242,12 +242,7 @@ void BEZIER_AIRFOIL::ComputeFrontDownConvexityPoint()
 
 void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
 {
-    double A, B, TE_Fi, LE_Fi, dFi, Fi, x, y;
-
-    if(nCirc != 0)
-    {
-        
-    }
+    double A, B, TE_Fi, LE_Fi, dFi, Fi;
 
     if(nBR == 0 || nTR == 0) //Single spline on Top/Bottom
     {
@@ -256,32 +251,12 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
 		 
         LinearFunction(SplineBF.P[0].x, SplineBF.P[0].y, MinThX, 0.0, A, B);
         TE_Fi = atan(A);
-		clog << "TE_Fi: " << TE_Fi*180/M_PI << endl;
-
         LinearFunction(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, MinThX, 0.0, A, B);
         LE_Fi = atan(A);
-		clog << "LE_Fi: " << LE_Fi*180/M_PI << endl;
-
-	    dFi = (M_PI + TE_Fi - LE_Fi)/(nBF-1);
-    	Fi  = 0;//TE_Fi;
-    
-		clog << "TE_Fi: " << TE_Fi*180/M_PI << "\t\tFii: " << (M_PI + TE_Fi - LE_Fi)*180/M_PI << "\tdFi: " << dFi*180/M_PI << "\tFi0: " << Fi*180/M_PI << endl;
+	    dFi   = (M_PI + TE_Fi - LE_Fi)/(nBF-1);
+    	Fi    = 0;
+		SetBezierPoints(Fi, dFi, MinThY, nBF, 0, SplineBF, SplineBF.P[nBF-1].x + 0.5*SplineBF.P[0].x);
 		
-		clog << 0 << "\t" << Fi*180/M_PI << "\t" << SplineBR.P[0].x << "\t" << SplineBR.P[0].y << endl << endl;
-        
-		for(unsigned int i=1; i<nBF-1; i++)
-    	{    	
-            Fi -= dFi;
-	
-            x = SplineBF.P[0].x;
-            y = SplineBF.P[0].y;
-
-		    RotatePointRefRad(x, y, Fi, SplineBF.P[nBF-1].x + 0.5*SplineBF.P[0].x, 0);
-            
-    		SplineBF.P[i].x = x;
-    		SplineBF.P[i].y = MinThY;//y*(-MinThY)/(SplineBF.P[nBF-1].x + 0.5*SplineBF.P[0].x);
-	    }
-        
 		// --- LE/TE points correction from Slopes ---
 /*
         if(sBF == 0)
@@ -303,30 +278,12 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
 
         LinearFunction(SplineTF.P[0].x, SplineTF.P[0].y, MaxThX, 0.0, A, B);
         LE_Fi = atan(A);
-
         LinearFunction(SplineTF.P[nTF-1].x, SplineTF.P[nTF-1].y, MaxThX, 0.0, A, B);
         TE_Fi = atan(A);
-
-	    dFi = (M_PI + LE_Fi - TE_Fi)/(nTF-1);
-    	Fi  = 0;//M_PI + LE_Fi;
-    
-		clog << "TE_Fi: " << TE_Fi*180/M_PI << "\t\tFii: " << (M_PI - TE_Fi + LE_Fi)*180/M_PI << "\tdFi: " << dFi*180/M_PI << "\tFi0: " << Fi*180/M_PI << endl;
+	    dFi   = (M_PI + LE_Fi - TE_Fi)/(nTF-1);
+    	Fi    = 0;
+		SetBezierPoints(Fi, dFi, MaxThY, nTF, 0, SplineTF, SplineTF.P[0].x + 0.5*SplineTF.P[nTF-1].x);
 		
-		clog << 0 << "\t" << Fi*180/M_PI << "\t" << SplineBR.P[0].x << "\t" << SplineBR.P[0].y << endl << endl;
-        
-        for(unsigned int i=1; i<nTF-1; i++)
-    	{    	
-            Fi -= dFi;
-	
-            x = SplineTF.P[0].x;
-            y = SplineTF.P[0].y;
-
-		    RotatePointRefRad(x, y, Fi, SplineTF.P[0].x + 0.5*SplineTF.P[nTF-1].x, 0);
-            
-    		SplineTF.P[i].x = x;
-    		SplineTF.P[i].y = MaxThY;//y*MaxThY/(SplineTF.P[0].x + 0.5*SplineTF.P[nTF-1].x);
-	    }
-        
 		// --- LE/TE points correction from Slopes ---
 /*
         if(sTF == 0)
@@ -346,151 +303,58 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
 
     else
     {
-		clog << setprecision(2);
-
 		// === Bottom Rear surface ===
-		clog << " === Bottom Rear surface === " << endl;
-		 
         LinearFunction(SplineBR.P[0].x, SplineBR.P[0].y, MinThX, 0.0, A, B);
         TE_Fi = atan(A);
-		clog << "TE_Fi: " << TE_Fi*180/M_PI << endl;
-
-        //LinearFunction(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, MinThX, 0.0, A, B);
-        //LE_Fi = atan(A);
-
-	    dFi = (0.5*M_PI + TE_Fi)/(nBR-1);
-    	Fi  = 0;//TE_Fi;
-
-		clog << "TE_Fi: " << TE_Fi*180/M_PI << "\t\tFii: " << (0.5*M_PI + TE_Fi)*180/M_PI << "\tdFi: " << dFi*180/M_PI << "\tFi0: " << Fi*180/M_PI << endl;
-		
-		clog << 0 << "\t" << Fi*180/M_PI << "\t" << SplineBR.P[0].x << "\t" << SplineBR.P[0].y << endl << endl;
-    
-        for(unsigned int i=1; i<nBR; i++)
-    	{    	
-            Fi -= dFi;
-	
-            x = SplineBR.P[0].x;
-            y = SplineBR.P[0].y;
-
-		    RotatePointRefRad(x, y, Fi, MinThX, 0);
-            
-    		SplineBR.P[i].x = x;///*(SplineBR.P[0].x - MinThX)*//(-MinThY);
-    		//SplineBR.P[i].y = y*(-MinThY)/(SplineBR.P[0].x - MinThX); // with scaling to MinTh
-    		SplineBR.P[i].y = MinThY; // with scaling to MinTh
-
-			clog << i << "\t" << (Fi + TE_Fi)*180/M_PI << "\t" << SplineBR.P[i].x << "\t" << SplineBR.P[i].y << endl;
-	    }
-		
-		clog << endl;
+	    dFi   = (0.5*M_PI + TE_Fi)/(nBR-1);
+    	Fi    = 0;
+		SetBezierPoints(Fi, dFi, MinThY, nBR, 0, SplineBR, MinThX);
 		
 		// === Bottom Front surface ===
-		clog << " === Bottom Front surface === " << endl;
-		 
-        //LinearFunction(SplineBF.P[0].x, SplineBF.P[0].y, MinThX, 0.0, A, B);
-        //TE_Fi = atan(A);
-
         LinearFunction(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, MinThX, 0.0, A, B);
         LE_Fi = atan(A);
-		clog << "LE_Fi: " << LE_Fi*180/M_PI << endl;
+	    dFi   = -(0.5*M_PI - LE_Fi)/(nBF-1);
+    	Fi    = -M_PI/2;
+		SetBezierPoints(Fi, dFi, MinThY, nBF, nBF-1, SplineBF, MinThX);
+		
+		// === LE with Circle ===
+    	if(nCirc != 0)
+    	{
+			clog << " === LE with Circle === " << endl;
+			//clog <<        
+    	}
 
-	    dFi = (0.5*M_PI - LE_Fi)/(nBF-1);
-    	Fi  = -M_PI/2;
-		
-		clog << "LE_Fi: " << LE_Fi*180/M_PI << "\tFii: " << (0.5*M_PI - LE_Fi)*180/M_PI << "\tdFi: " << dFi*180/M_PI << "\tFi0: " << Fi*180/M_PI << endl;
-		
-		clog << 0 << "\t" << Fi*180/M_PI << "\t" << SplineBF.P[0].x << "\t" << SplineBF.P[0].y << endl;
-		clog << 0 << "\t" << Fi*180/M_PI << "\t" << SplineBF.P[nBF-1].x << "\t" << SplineBF.P[nBF-1].y << endl << endl;
-    
-        for(unsigned int i=1; i<nBF-i; i++)
-    	{    	
-            Fi += dFi;
-	
-            //x = MinThX;
-            //y = -sqrt(SplineBF.P[nBF-1].x*SplineBF.P[nBF-1].x + SplineBF.P[nBF-1].y*SplineBF.P[nBF-1].y);
-            
-			x = SplineBF.P[nBF-1].x;
-            y = SplineBF.P[nBF-1].y;
-
-		    clog << i << "\t" << Fi*180/M_PI << "\t" << x << "\t" << y << "\t" << MinThX << "\t" << 0 << "\t" << MinThX - SplineBF.P[nBF-1].x << endl;
-		    RotatePointRefRad(x, y, Fi, MinThX, 0);
-			
-			/*x = LeastSquares(x, y, 0, MinThX, 0, 0);
-		    y = 0;
-			RotatePointRefRad(x, y, Fi, MinThX, 0);*/
-            
-    		SplineBF.P[i].x = x;
-    		SplineBF.P[i].y = MinThY;//y*(MinThY)/(+MinThX - SplineBF.P[nBF-1].x);
-			
-			clog << i << "\t" << Fi*180/M_PI << "\t" << SplineBF.P[i].x << "\t" << SplineBF.P[i].y << endl;
-			clog << endl;
-	    }
-		
-		clog << endl;
-		
 		// === Top Front surface ===
-		clog << " === Top Front surface === " << endl;
-		 
-        //LinearFunction(SplineTF.P[0].x, SplineTF.P[0].y, MinThX, 0.0, A, B);
-        //TE_Fi = atan(A);
-
         LinearFunction(SplineTF.P[0].x, SplineTF.P[0].y, MaxThX, 0.0, A, B);
         LE_Fi = atan(A);
-
-	    dFi = (0.5*M_PI + LE_Fi)/(nTF-1);
-    	Fi  = 0;//M_PI - LE_Fi;
-		
-		clog << "LE_Fi: " << LE_Fi*180/M_PI << "\tFii: " << (0.5*M_PI + LE_Fi)*180/M_PI << "\tdFi: " << dFi*180/M_PI << "\tFi0:" << Fi*180/M_PI << endl;
-		
-		clog << 0 << "\t" << Fi*180/M_PI << "\t" << SplineTF.P[0].x << "\t" << SplineTF.P[0].y << endl << endl;
-    
-        for(unsigned int i=1; i<nTF; i++)
-    	{    	
-            Fi -= dFi;
-	
-            x = SplineTF.P[0].x;
-            y = SplineTF.P[0].y;
-
-		    //clog << x << "\t" << y << "\t" << Fi << "\t" << MaxThX << "\t" << 0 << endl;
-		    RotatePointRefRad(x, y, Fi, MaxThX, 0);
-            
-    		SplineTF.P[i].x = x;
-    		SplineTF.P[i].y = MaxThY;//y*MaxThY/(MaxThX - SplineTF.P[0].x);
-			
-			clog << i << "\t" << (Fi + LE_Fi)*180/M_PI << "\t" << SplineTF.P[i].x << "\t" << SplineTF.P[i].y << endl;
-	    }
-
-		clog << endl;
+	    dFi   = (0.5*M_PI + LE_Fi)/(nTF-1);
+    	Fi    = 0;
+		SetBezierPoints(Fi, dFi, MaxThY, nTF, 0, SplineTF, MaxThX);
 		
 		// === Top Rear surface ===
-		clog << " === Top Rear surface === " << endl;
-		 
         LinearFunction(SplineTR.P[nTR-1].x, SplineTR.P[nTR-1].y, MaxThX, 0.0, A, B);
         TE_Fi = atan(A);
+	    dFi   = (0.5*M_PI - TE_Fi)/(nTR-1);
+    	Fi    = 0.5*M_PI;
+		SetBezierPoints(Fi, dFi, MaxThY, nTR, nTR-1, SplineTR, MaxThX);
+    }
+}
 
-	    dFi = (0.5*M_PI - TE_Fi)/(nTR-1);
-    	Fi  = 0.5*M_PI;
+void BEZIER_AIRFOIL::SetBezierPoints(double Fi, double dFi, double MinMax, unsigned int N, unsigned int refN, BEZIER <double> &Spline, double RefX)
+{
+	double x, y;
 
-		clog << "LE_Fi: " << TE_Fi*180/M_PI << "\t\tFii: " << (0.5*M_PI + TE_Fi)*180/M_PI << "\tdFi: " << dFi*180/M_PI << "\tFi0: " << Fi*180/M_PI << endl;
-		
-		clog << 0 << "\t" << Fi*180/M_PI << "\t" << SplineTR.P[0].x << "\t" << SplineTR.P[0].y << endl << endl;
+	for(unsigned int i=1; i<N-1; i++)
+	{    	
+        Fi -= dFi;
+
+        x = Spline.P[refN].x;
+        y = Spline.P[refN].y;
+
+	    RotatePointRefRad(x, y, Fi, RefX, 0);
         
-		for(unsigned int i=1; i<nTR-1; i++)
-    	{    	
-            Fi -= dFi;
-	
-            x = SplineTR.P[nTR-1].x;
-            y = SplineTR.P[nTR-1].y;
-
-		    //clog << x << "\t" << y << "\t" << Fi*180/M_PI << "\t" << MaxThX << "\t" << 0 << endl;
-		    RotatePointRefRad(x, y, Fi, MaxThX, 0);
-            
-    		SplineTR.P[i].x = x;
-    		SplineTR.P[i].y = MaxThY;//y*MaxThY/(SplineTR.P[nTR-1].x - MaxThX);
-			
-			clog << i << "\t" << Fi*180/M_PI << "\t" << SplineTR.P[i].x << "\t" << SplineTR.P[i].y << endl;
-	    }
-
-		clog << endl;
+		Spline.P[i].x = x;
+		Spline.P[i].y = MinMax;
     }
 }
 

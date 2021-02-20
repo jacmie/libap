@@ -56,6 +56,10 @@ class BEZIER_AIRFOIL
     
     void PrintOutPoints(string AirfoilFile);
 	void PrintOutVertex(std::string AirfoilFile, std::string AirfoilName);
+
+	private:
+
+	void SetBezierPoints(double Fi, double dFi, double MinMax, unsigned int N, unsigned int refN, BEZIER <double> &Spline, double RefX);
 };
 
 #endif
