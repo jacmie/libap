@@ -47,12 +47,6 @@ class BEZIER_AIRFOIL
 
     void FixPoints();
 
-	void FrontUpConvexityPoint(double x, double y);
-	void FrontDownConvexityPoint(double x, double y);
-	void RearUpConvexityPoint(double x1, double y1, double x2, double y2);
-	void RearDownConvexityPoint(double x1, double y1, double x2, double y2);
-	void ComputeFrontUpConvexityPoint();
-	void ComputeFrontDownConvexityPoint();
 	void MakeVertexesSeq();
     
     void PrintOutPoints(string AirfoilFile);
