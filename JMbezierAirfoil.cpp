@@ -312,13 +312,14 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
         TE_Fi = atan(A);
 	    dFi   = (0.5*M_PI + TE_Fi)/(nBR-1);
     	Fi    = 0;
+		clog << dFi << "\t" << Fi*180/M_PI << endl;
 		SetBezierPoints(Fi, dFi, MinThY, nBR, 0, SplineBR, MinThX);
 		
 		// === Bottom Front surface ===
         LinearFunction(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, MinThX, 0.0, A, B);
         LE_Fi = atan(A);
-	    dFi   = -(0.5*M_PI - LE_Fi)/(nBF-1);
-    	Fi    = -M_PI/2;
+	    dFi   = (0.5*M_PI - LE_Fi)/(nBF-1);
+    	Fi    = M_PI/2 - LE_Fi;
 		clog << dFi << "\t" << Fi*180/M_PI << endl;
 		SetBezierPoints(Fi, dFi, MinThY, nBF, nBF-1, SplineBF, MinThX);
 		
@@ -384,7 +385,8 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
         LinearFunction(SplineTR.P[nTR-1].x, SplineTR.P[nTR-1].y, MaxThX, 0.0, A, B);
         TE_Fi = atan(A);
 	    dFi   = (0.5*M_PI - TE_Fi)/(nTR-1);
-    	Fi    = 0.5*M_PI;
+    	Fi    = 0.5*M_PI - TE_Fi;
+		clog << dFi << "\t" << Fi*180/M_PI << endl;
 		SetBezierPoints(Fi, dFi, MaxThY, nTR, nTR-1, SplineTR, MaxThX);
 		
 		// --- LE/TE points correction from Slopes ---

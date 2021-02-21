@@ -285,8 +285,8 @@ int main(int argc, char *argv[])
 	//GnuPlot.Plot2D("TestDir/JMmath/Circle.xls");
 	//GnuPlot.Plot2D("TestDir/JMbezier/Bezier.xls");
 	//GnuPlot.NrOfDataCloumns = 1;
-    //GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bPoints.xls");
-	//GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bVertex.xls");
+    GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bPoints.xls");
+	GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bVertex.xls");
     GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bPoints.xls");
 	GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bVertex.xls");
 /*	
