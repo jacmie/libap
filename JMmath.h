@@ -16,6 +16,7 @@ void Parabola(double &A, double &B, double &C,
               double x3, double yprim);
 
 void Circle(double x1, double y1, double x2, double y2, double x3, double y3, double &A, double &B, double &R);
+void Arc2Bezeir(double x1, double y1, double &x2, double &y2, double &x3, double &y3, double x4, double y4, double xCirc, double yCirc);
 
 double LeastSquares(double x1, double y1, double z1, double x2, double y2, double z2);
 

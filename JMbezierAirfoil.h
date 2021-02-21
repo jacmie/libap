@@ -15,14 +15,15 @@ class BEZIER_AIRFOIL
 {
 	public:
 	
-    unsigned int nBR, nBF, nTF, nTR, nCirc;
-    double LEcircX, LEcircY, LEcircR;
+    unsigned int nBR, nBF, nTF, nTR, vCirc;
+    double LEcircX, LEcircY, LEcircR, BcircX, BcircY;
     double sBR, sBF, sTF, sTR; // slope tan(A)
     double MinThX, MinThY, MaxThX, MaxThY;
 	BEZIER <double> SplineBR; // Bottom Rear
     BEZIER <double> SplineBF; // Bottom Front
     BEZIER <double> SplineTF; // Top Front
     BEZIER <double> SplineTR; // Top Rear
+    BEZIER <double> SplineLE; // LE circle
 	
 	BEZIER_AIRFOIL();
     void Init2b(unsigned int nBF0, unsigned int vBF0);

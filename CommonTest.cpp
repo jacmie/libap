@@ -229,39 +229,39 @@ int main(int argc, char *argv[])
 	//Airfoil4b.Init4b(4, 60, 3, 30, 3, 40, 4, 50);
 
 	clog << "- Set LEcircle" << endl;
-    Airfoil2b.SetLEcircle(0.05, -0.02, 0.0, 0.0, 0.05, 0.02);
+    Airfoil2b.SetLEcircle(0.01, -0.02, 0.0, 0.0, 0.01, 0.02);
     clog << "LEcircX: " << Airfoil2b.LEcircX << "\tLEcircY: " << Airfoil2b.LEcircY << "\tLEcircR: " << Airfoil2b.LEcircR << endl;
-    Airfoil4b.SetLEcircle(0.05, -0.02, 0.0, 0.0, 0.05, 0.02, 6);
+    Airfoil4b.SetLEcircle(0.01, -0.02, 0.0, 0.0, 0.01, 0.02, 11);
     clog << "LEcircX: " << Airfoil4b.LEcircX << "\tLEcircY: " << Airfoil4b.LEcircY << "\tLEcircR: " << Airfoil4b.LEcircR << endl;
-    
+   /* 
 	Airfoil4b.SplineBR.PrintPoints(clog);
     Airfoil4b.SplineBF.PrintPoints(clog);
     Airfoil4b.SplineTF.PrintPoints(clog);
     Airfoil4b.SplineTR.PrintPoints(clog);
-
+*/
     clog << "- Set TE" << endl;
     //Airfoil2b.SetTEpoint(1.0, 0.0);
     Airfoil2b.SetTEpointB(1.0, -0.001, 0.02);
     Airfoil2b.SetTEpointT(1.0, 0.001, -0.02);
     Airfoil4b.SetTEpointB(1.0, -0.001, 0.02);
     Airfoil4b.SetTEpointT(1.0, 0.001, -0.02);
-    
+  /*  
 	Airfoil4b.SplineBR.PrintPoints(clog);
     Airfoil4b.SplineBF.PrintPoints(clog);
     Airfoil4b.SplineTF.PrintPoints(clog);
     Airfoil4b.SplineTR.PrintPoints(clog);
-	
+*/	
     clog << "- Set Min/Max Th" << endl;
 	Airfoil2b.SetMaxTh(0.3, 0.05);
 	Airfoil2b.SetMinTh(0.3, -0.05);
     Airfoil4b.SetMaxTh(0.3, 0.05);
 	Airfoil4b.SetMinTh(0.3, -0.05);
-	
+/*	
 	Airfoil4b.SplineBR.PrintPoints(clog);
     Airfoil4b.SplineBF.PrintPoints(clog);
     Airfoil4b.SplineTF.PrintPoints(clog);
     Airfoil4b.SplineTR.PrintPoints(clog);
-
+*/
     Airfoil2b.PrintOutPoints("TestDir/JMbezierAirfoil/BezierAiroilPoints.xls");
 	
 	clog << "- Init Splines" << endl << endl;
@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
 	//GnuPlot.NrOfDataCloumns = 1;
 //    GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bPoints.xls");
 	GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bVertex.xls");
-    //GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bPoints.xls");
+    GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bPoints.xls");
 	GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bVertex.xls");
 /*	
 	GnuPlot.Plot3D("TestDir/JMgnuplot/GnuValey.dat");

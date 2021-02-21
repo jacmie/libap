@@ -63,16 +63,16 @@ void BEZIER_AIRFOIL::Init4b(unsigned int nBR0, unsigned int vBR0, unsigned int n
     if(vTR0 == 0) nTR = 0;
 }
 
-void BEZIER_AIRFOIL::SetLEcircle(double x1, double y1, double x2, double y2, double x3, double y3, unsigned int nCircle)
+void BEZIER_AIRFOIL::SetLEcircle(double x1, double y1, double x2, double y2, double x3, double y3, unsigned int vCircle)
 {
-	double A, B;
- 
-    nCirc = nCircle;
+    vCirc = vCircle;
     Circle(x1, y1, x2, y2, x3, y3, LEcircX, LEcircY, LEcircR);
 
-    if(nCirc == 0)
+	double A, B;
+    	
+    if(vCirc == 0)
     {
-    	LinearFunction(x2, y2, LEcircX, LEcircY, A, B);	
+		LinearFunction(x2, y2, LEcircX, LEcircY, A, B);	
         
 		if(A == 0)
             sBF = sTF = 0;
@@ -84,23 +84,71 @@ void BEZIER_AIRFOIL::SetLEcircle(double x1, double y1, double x2, double y2, dou
 
     else
     {
-        LinearFunction(x1, y1, LEcircX, LEcircY, A, B);	
-        
+		clog << "LE_Circle" << endl;
+
+		SplineLE.Init(4, vCirc);
+    	for(unsigned int p=0; p<SplineLE.P.size(); p++) 
+			SplineLE.P[p].z = 0.0;
+       
+		clog << endl << "BF" << endl;
+		LinearFunction(x1, y1, LEcircX, LEcircY, A, B);	
+       	clog << A << "\t" << atan(A)*180/M_PI << "\t" << B << endl;
+		clog << x1 << "\t" << A*x1 + B << "\t" << LEcircX << "\t" << LEcircY << endl;
+		clog << LEcircX << "\t" << A*LEcircX + B << endl;
+
 		if(A == 0)
             sBF = 0;
         else
             sBF = -1/A;
-        
+       
+		clog << x1 << "\t" << A*x1 + B << endl;
+		clog << -B/A << "\t" << 0.0 << endl;
+
 		SetLEpointB(x1, y1);
 
+		clog << endl << "TF" << endl;
         LinearFunction(x3, y3, LEcircX, LEcircY, A, B);	
+       	clog << A << "\t" << atan(A)*180/M_PI << "\t" << B << endl;
+		clog << x3 << "\t" << A*x3 + B << "\t" << LEcircX << "\t" << LEcircY << endl;
+		clog << LEcircX << "\t" << A*LEcircX + B << endl;
         
 		if(A == 0)
             sTF = 0;
         else
             sTF = -1/A;
         
+		clog << x1 << "\t" << A*x1 + B << "\t" << LEcircX << "\t" << LEcircY << endl;
+		clog << -B/A << "\t" << 0.0 << endl;
+		
 		SetLEpointT(x3, y3);
+/*
+		//====================
+		
+		clog << endl;				
+		clog << "L1 = " << LeastSquares(x1, y1, 0.0, LEcircX, LEcircY, 0.0) << endl;
+		clog << "L2 = " << LeastSquares(x2, y2, 0.0, LEcircX, LEcircY, 0.0) << endl;
+		clog << "L3 = " << LeastSquares(x3, y3, 0.0, LEcircX, LEcircY, 0.0) << endl;
+
+		double A1, B1, A2, B2;
+
+		clog << endl;
+		LinearFunction(A1, B1, x1, y1, atan(sBF)*180/M_PI);
+       	clog << A1 << "\t" << atan(A1)*180/M_PI << "\t" << B1 << endl;
+		clog << x1 << "\t" << A1*x1 + B1 << endl;
+		clog << -B1/A1 << "\t" << 0.0 << endl;
+		
+		LinearFunction(A2, B2, x3, y3, atan(sTF)*180/M_PI);
+       	clog << A2 << "\t" << atan(A2)*180/M_PI << "\t" << B2 << endl;
+		clog << x3 << "\t" << A2*x3 + B2 << endl;
+		clog << -B2/A2 << "\t" << 0.0 << endl;
+
+		BcircX = (B2 - B1)/(A1 - A2);
+		BcircY = A1*BcircX + B1;
+
+		clog << endl;
+		clog << BcircX << "\t" << BcircY << endl;
+		clog << endl;
+*/
     }
 }
 
@@ -273,6 +321,26 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
             SplineBF.P[1].y = sBR*SplineBF.P[1].x + B; //y
         }
 */
+		// === LE with Circle ===
+    	if(vCirc != 0)
+    	{
+			double x2, y2, x3, y3;
+
+			Arc2Bezeir(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, x2, y2, x3, y3, SplineTF.P[0].x, SplineTF.P[0].y, LEcircX, LEcircY);
+			
+			SplineLE.P[0].x = SplineBF.P[nBF-1].x;
+			SplineLE.P[0].y = SplineBF.P[nBF-1].y;
+			
+			SplineLE.P[1].x = x2;
+			SplineLE.P[1].y = y2;
+			
+			SplineLE.P[2].x = x3;
+			SplineLE.P[2].y = y3;
+			
+			SplineLE.P[3].x = SplineTF.P[0].x;
+			SplineLE.P[3].y = SplineTF.P[0].y;
+    	}
+		
 		// === Top surface ===
 		clog << " === Top surface === " << endl;
 
@@ -318,10 +386,23 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
 		SetBezierPoints(Fi, dFi, MinThY, nBF, nBF-1, SplineBF, MinThX);
 		
 		// === LE with Circle ===
-    	if(nCirc != 0)
+    	if(vCirc != 0)
     	{
-			clog << " === LE with Circle === " << endl;
-			//clog <<        
+			double x2, y2, x3, y3;
+
+			Arc2Bezeir(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, x2, y2, x3, y3, SplineTF.P[0].x, SplineTF.P[0].y, LEcircX, LEcircY);
+			
+			SplineLE.P[0].x = SplineBF.P[nBF-1].x;
+			SplineLE.P[0].y = SplineBF.P[nBF-1].y;
+			
+			SplineLE.P[1].x = x2;
+			SplineLE.P[1].y = y2;
+			
+			SplineLE.P[2].x = x3;
+			SplineLE.P[2].y = y3;
+			
+			SplineLE.P[3].x = SplineTF.P[0].x;
+			SplineLE.P[3].y = SplineTF.P[0].y;
     	}
 
 		// === Top Front surface ===
@@ -364,6 +445,9 @@ void BEZIER_AIRFOIL::MakeVertexesSeq()
 	SplineBF.VertexesSeq();
 	SplineTF.VertexesSeq();
 	SplineTR.VertexesSeq();
+    
+	if(vCirc != 0)
+		SplineLE.VertexesSeq();
 }
 
 void BEZIER_AIRFOIL::PrintOutPoints(string AirfoilFile)
@@ -383,6 +467,16 @@ void BEZIER_AIRFOIL::PrintOutPoints(string AirfoilFile)
     SplineBF.PrintPoints(out);
     out << endl;
     
+	if(vCirc != 0)
+	{
+		out << LEcircX << "\t" << LEcircY << endl;
+		out << endl;
+		
+		SplineLE.PrintPointsFormat(0, 0, 12, 2);
+    	SplineLE.PrintPoints(out);
+		out << endl;
+	}
+
 	SplineTF.PrintPointsFormat(0, 0, 12, 2);
     SplineTF.PrintPoints(out);
 	out << endl;
@@ -414,6 +508,12 @@ void BEZIER_AIRFOIL::PrintOutVertex(string AirfoilFile, string AirfoilName)
 
 	SplineBF.PrintVertexesFormat(0, 0, 12, 2);
     SplineBF.PrintVertexes(out);
+	
+	if(vCirc != 0)
+	{
+		SplineLE.PrintVertexesFormat(0, 0, 12, 2);
+    	SplineLE.PrintVertexes(out);
+	}
 	
 	SplineTF.PrintVertexesFormat(0, 0, 12, 2);
     SplineTF.PrintVertexes(out);

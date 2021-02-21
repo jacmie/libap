@@ -74,6 +74,33 @@ void Circle(double x1, double y1, double x2, double y2, double x3, double y3, do
 	R = sqrt((A - x1)*(A - x1) + (B - y1)*(B - y1));
 }
 
+void Arc2Bezeir(double x1, double y1, double &x2, double &y2, double &x3, double &y3, double x4, double y4, double xCirc, double yCirc)
+{
+	/*
+	Sources:
+	https://stackoverflow.com/questions/734076/how-to-best-approximate-a-geometrical-arc-with-a-bezier-curve
+	https://hansmuller-flex.blogspot.com/2011/10/more-about-approximating-circular-arcs.html?showComment=1498749617507#c2109832351939371205
+	file:///tmp/mozilla_JM0/11812-Article%20Text-33790-1-10-20150414.pdf
+	*/
+
+	//For arcs < 90deg
+	
+	double ax, ay, bx, by, q1, q2, k2;
+
+	ax = x1 - xCirc;
+	ay = y1 - yCirc;
+	bx = x4 - xCirc;
+	by = y4 - yCirc;
+	q1 = ax*ax + ay*ay;
+	q2 = q1 + ax*bx + ay*by;
+	k2 = (4/3) * (sqrt(2*q1*q2) - q2) / (ax*by - ay*bx);
+
+	x2 = xCirc + ax - k2*ay;
+	y2 = yCirc + ay + k2*ax;
+	x3 = xCirc + bx + k2*by;                                
+	y3 = yCirc + by - k2*bx;
+}
+
 double LeastSquares(double x1, double y1, double z1, double x2, double y2, double z2)
 {
 	return sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) + (z1-z2)*(z1-z2) );
