@@ -5,6 +5,7 @@
 #include "JMxfoil.h"
 #include "JMairfoilTransform.h"
 #include "JMbezier.h"
+#include "JMbspline.h"
 #include "JMbezierAirfoil.h"
 #include "JMdiscretization.h"
 #include "JMGnuPlotPipe.h"
@@ -20,7 +21,7 @@ CONSOLE con;
 
 int main(int argc, char *argv[])
 {
-	//+++ CONVETIONS +++
+	//+++ CONVENTIONS +++
 	/*
 	
 	Errors:
@@ -216,6 +217,82 @@ int main(int argc, char *argv[])
     
     out.close();
 	
+	clog << endl << "*** JMbspline ***" << endl << endl;
+	
+    n = 8;  //points -> degrees of freedom n-1 
+    u = 30; //vertex on spline
+    
+    B_SPLINE <double> Bs(n, u);
+  /*  
+    Bs.P[0].x = 0.0;
+	Bs.P[0].y = 0.0;
+    Bs.P[0].z = 0;
+  
+    Bs.P[1].x = 0.5;
+    Bs.P[1].y = 1.0;
+    Bs.P[1].z = 0;
+    
+    Bs.P[2].x = 1.0;
+    Bs.P[2].y = 0.0;
+    Bs.P[2].z = 0;
+    
+    Bs.P[3].x = 1.5;
+    Bs.P[3].y = 1.0;
+    Bs.P[3].z = 0;
+    
+	Bs.P[4].x = 2.0;
+	Bs.P[4].y = 0.0;
+    Bs.P[4].z = 0;
+  
+    Bs.P[5].x = 2.5;
+    Bs.P[5].y = 1.0;
+    Bs.P[5].z = 0;
+    
+    Bs.P[6].x = 3.0;
+    Bs.P[6].y = 0.0;
+    Bs.P[6].z = 0;
+    
+    Bs.P[7].x = 3.5;
+    Bs.P[7].y = 1.0;
+    Bs.P[7].z = 0;
+*/
+	/*
+	clog << "P:" << endl;
+    Bez.PrintPoints(clog);
+    clog << endl;
+    
+	// --- Bezier vertexes ---
+    
+	clog << "V:" << endl;
+    Bez.VertexesSeq();
+	Bez.PrintVertexes(clog);	
+    clog << endl;
+    
+    // --- Write results ---
+    
+    ofstream out("TestDir/JMbezier/Bezier.xls");
+    out << fixed << setprecision(6);
+	Bez.PrintPoints(out);
+    Bez.PrintVertexes(out);
+    
+	// --- Curve Length ---
+	clog << "L = " << Bez.Length() << endl << endl;
+
+	// --- Point t & point from X ---
+	
+    double X, Y, Z;
+    
+    clog << "t(X=1.4) = " << Bez.tVertex(0, 1.4) << "% coef." << endl; //X
+    Bez.Vertex(Bez.tVertex(0, 1.4), X, Y, Z);
+    clog << "X\t" << "Y\t" << "Z" << endl;
+    clog << X << "\t" << Y << "\t" << Z << endl;
+    //out << endl << X << "\t" << Y << "\t" << Z << endl;
+    
+    out.close();
+	*/
+
+	exit(1);
+	
 	// *** BezierAirfoil ***
 	
 	clog << endl << "*** BezierAirfoil ***" << endl << endl;
@@ -283,12 +360,12 @@ int main(int argc, char *argv[])
 	GNUPLOT GnuPlot;
 	GnuPlot.NrOfDataCloumns = 2;
 	//GnuPlot.Plot2D("TestDir/JMmath/Circle.xls");
-	//GnuPlot.Plot2D("TestDir/JMbezier/Bezier.xls");
+	GnuPlot.Plot2D("TestDir/JMbezier/Bezier.xls");
 	//GnuPlot.NrOfDataCloumns = 1;
-    GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bPoints.xls");
-	GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bVertex.xls");
-    GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bPoints.xls");
-	GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bVertex.xls");
+    //GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bPoints.xls");
+	//GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bVertex.xls");
+    //GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bPoints.xls");
+	//GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil4bVertex.xls");
 /*	
 	GnuPlot.Plot3D("TestDir/JMgnuplot/GnuValey.dat");
 	

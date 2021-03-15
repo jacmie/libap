@@ -6,8 +6,10 @@
 SOURCES = 	CommonTest.cpp\
 			JMairfoilTransform.cpp\
 			JMmath.cpp\
+            JMbezierPoint.cpp\
 			JMbezier.cpp\
 			JMbezierAirfoil.cpp\
+            JMbspline.cpp\
 			JMconvert.cpp\
 			JMdiscretization.cpp\
 			JMGnuPlotPipe.cpp\
