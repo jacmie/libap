@@ -40,12 +40,13 @@ template <class REAL> class B_SPLINE : public BEZIER <REAL>
     void PrintPoints(std::ostream &out);
 	void PrintVertexes(std::ostream &out);
     */
-    private:
+    //private:
     
 	std::vector < std::vector <REAL> > N;
 
+	double deBoor(int k, double x);
     void BasisFunctions(REAL t);
-    BEZIER_POINT <REAL> GetVertex(REAL t);
+    void GetVertex(REAL t);
     /*
 	REAL Length(bool xflag, bool yflag, bool zflag);
 

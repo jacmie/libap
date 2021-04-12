@@ -219,27 +219,27 @@ int main(int argc, char *argv[])
 	
 	clog << endl << "*** JMbspline ***" << endl << endl;
 	
-    n = 8;  //points -> degrees of freedom n-1 
+    n = 4;  //points -> degrees of freedom n-1 
     u = 30; //vertex on spline
     
     B_SPLINE <double> Bs(n, u);
-  /*  
-    Bs.P[0].x = 0.0;
+    
+    Bs.P[0].x = 1.0;
 	Bs.P[0].y = 0.0;
     Bs.P[0].z = 0;
   
-    Bs.P[1].x = 0.5;
-    Bs.P[1].y = 1.0;
+    Bs.P[1].x = 2.0;
+    Bs.P[1].y = -1.0;
     Bs.P[1].z = 0;
     
-    Bs.P[2].x = 1.0;
-    Bs.P[2].y = 0.0;
+    Bs.P[2].x = 3.0;
+    Bs.P[2].y = 3.0;
     Bs.P[2].z = 0;
     
-    Bs.P[3].x = 1.5;
-    Bs.P[3].y = 1.0;
+    Bs.P[3].x = 4.0;
+    Bs.P[3].y = 2.0;
     Bs.P[3].z = 0;
-    
+    /* 
 	Bs.P[4].x = 2.0;
 	Bs.P[4].y = 0.0;
     Bs.P[4].z = 0;
@@ -255,15 +255,31 @@ int main(int argc, char *argv[])
     Bs.P[7].x = 3.5;
     Bs.P[7].y = 1.0;
     Bs.P[7].z = 0;
-*/
-	/*
+	*/
+	
 	clog << "P:" << endl;
-    Bez.PrintPoints(clog);
+    Bs.PrintPoints(clog);
     clog << endl;
-    
+
 	// --- Bezier vertexes ---
     
 	clog << "V:" << endl;
+
+	ofstream bso("TestDir/JMbspline/Bspline.xls");
+
+	double dd = 1.0/19;
+
+	for(int v=0; v<20; v++)
+	{
+		//Bs.deBoor(3, 0.75); //interval nr, t pos
+		bso << v << "\t" << Bs.deBoor(3, v*dd) << endl; //interval nr, t pos
+	}
+
+	bso.close();
+
+	//Bs.GetVertex(0.25);
+	
+	/*
     Bez.VertexesSeq();
 	Bez.PrintVertexes(clog);	
     clog << endl;

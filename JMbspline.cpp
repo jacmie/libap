@@ -26,26 +26,46 @@ void B_SPLINE<REAL>::Init(unsigned int nmax, unsigned int umax)
 	degree = 2;
 	order  = degree + 1;
 
-    unsigned int k = npt + degree + 1; // ok ????
-	k = 5;
+	P.resize(npt);
+   
+	// --- K ---
+	
+	unsigned int k = npt + degree + 1;
    	clog << "k = " << k << endl;
 
-	K.resize(k);
-
-    //if(UNIFORM)
+    REAL increment = 1.0/(k - 1);
+    
+	if(1/*UNIFORM*/)
 	{
-        REAL increment = 1.0/(k - 1);
+        for(unsigned int d=0; d<order; d++)
+		{
+			K.push_back(0.0);
+			//clog << K[d] << endl;
+		}
 
-		K[0] = 0;
+		//clog << endl;
 
-        for(unsigned int d=1; d<K.size(); d++)
-    		K[d] += K[d-1] + increment;
-
+        for(unsigned int d=order; d<k-order; d++)
+		{
+    		K.push_back(d*increment);
+			//clog << K[d] << endl;
+		}
+		
+		//clog << endl;
+        
+		for(unsigned int d=k-order; d<k; d++)
+		{
+    		K.push_back(1.0);
+			//clog << K[d] << endl;
+		}
+		
+		//clog << endl;
 	}
 
     //if(QUASI_UNIFORM)
     {
-/*        REAL increment = 1.0;
+		/*
+		REAL increment = 1.0;
 
         for(unsigned int d=0; d<degree; d++)
     		K[d] = 0.0;
@@ -61,19 +81,15 @@ void B_SPLINE<REAL>::Init(unsigned int nmax, unsigned int umax)
 		clog << p << "\t" << K[p] << endl;
 	clog << endl;
 
+	/*
 	double dd = 1.0/4;
-
-	ofstream out("BasisFun.xls");
 
 	for(unsigned int i=0; i<5; i++)
 	{
 		clog << "t = " << i*dd;
-		out << i*dd << endl;
 		BasisFunctions(i*dd);
 		clog << endl;
-	}
-
-	out.close();
+	}*/
 
 	/*
 	P.resize(npt);
@@ -174,13 +190,7 @@ void B_SPLINE<REAL>::BasisFunctions(REAL t)
 			
 			clog << "N[i][p] = " << N[i][p-1] << "*(" << u << " - " << u_i << ")/(" << u_ip << " - " << u_i << ") + " 
 				 << N[i+1][p-1] << "*(" << u_ip1 << " - " << u << ")/(" << u_ip1 << " - " << u_i1 << ")" << endl;
-			/*
-			clog << N[i+1][p-1] << "*(" << u_ip1 << " - " << u << ")/(" << u_ip1 << " - " << u_i1 << ")" << endl;
-			clog << N[i+1][p-1] << "*(" << u_ip1 << " - u)/(" << u_ip1 << " - " << u_i1 << ")" << endl;
-			clog << N[i+1][p-1] << "*(" << u_ip1 << " - u)/(" << u_ip1 - u_i1 << ")" << endl;
-			clog << N[i+1][p-1]/(u_ip1 - u_i1) << "*(" << u_ip1 << " - u)" << endl;
-			clog << N[i+1][p-1]*u_ip1/(u_ip1 - u_i1) << " - " << N[i+1][p-1]/(u_ip1 - u_i1) << "*u" << endl;
-			*/	
+			
 			clog << "N" << i << p << " = " << N[i][p-1]/(u_ip - u_i) << "*u" << - N[i][p-1]*u_i/(u_ip - u_i) << " + " 
 				 << N[i+1][p-1]*u_ip1/(u_ip1 - u_i1) << " - " << N[i+1][p-1]/(u_ip1 - u_i1) << "*u = " << N[i][p] << endl << endl;
    	 	}
@@ -188,10 +198,136 @@ void B_SPLINE<REAL>::BasisFunctions(REAL t)
 }
 
 template <class REAL> 
-BEZIER_POINT <REAL> B_SPLINE<REAL>::GetVertex(REAL t)
+double B_SPLINE<REAL>::deBoor(int k, double x)
 {
-	BEZIER_POINT <REAL> v;
+    /*Evaluates S(x).
+
+    Arguments
+    ---------
+    k: Index of knot interval that contains x.
+    x: Position.
+    t: Array of knot positions, needs to be padded as described above.
+    c: Array of control points.
+    p: Degree of B-spline.
+    
+	*/
+
+	/*
+    d = [c[j + k - p] for j in range(0, p + 1)]
+
+    for r in range(1, p + 1):
+	{
+		for j in range(p, r - 1, -1):
+		{
+            alpha = (x - t[j + k - p]) / (t[j + 1 + k - r] - t[j + k - p])
+            d[j] = (1.0 - alpha) * d[j - 1] + alpha * d[j]
+		}
+	}
+	*/
+    
+    /*Evaluates S(x).
+
+    Arguments
+    ---------
+    k: Index of knot interval that contains x.
+    x: Position.
+    
+	*/
 	
+	clog << endl;
+	
+	for(unsigned int p=0; p<P.size(); p++)
+	{
+		clog << "P" << p << " = " << P[p].y << endl;  
+	}
+
+	// --- Set range ---
+	
+//	unsigned int k;
+
+	for(k=0; k<K.size()-1; k++)
+	{
+		if( K[k] <= x && x<K[k+1] )
+			break;
+	}
+	
+	clog << endl << "t = " << x << " -> k = " << k << endl; 
+	clog << endl;
+	
+	// --- Compute ---
+
+	clog << "r = " << 0 << endl << endl;
+
+	vector <REAL> d; 
+
+	for(unsigned int j=0; j<degree+1; j++) 
+	{
+		d.push_back( P[j + k - degree].y );
+		clog << j << "\t" << j + k - degree << "\t" << d[j] << endl;
+	}
+
+	clog << endl;
+
+	double alpha;
+	
+    for(unsigned int r=1; r<degree+1; r++)
+	{
+		clog << "r = " << r << endl;
+
+		for(unsigned int j=degree; j>r-1; j--)
+		{
+			clog << "\t" << j << "\t";
+
+			//int jk_d = j + k - degree;
+
+			clog << K[j + k - degree] << "\t" << K[j + 1 + k - r] << endl;
+
+            alpha = (x - K[j + k - degree]) / (K[j + 1 + k - r] - K[j + k - degree]);
+            
+			clog << "\t\t" << "alpha = (x - K[j + k - degree]) / (K[j + 1 + k - r] - K[j + k - degree])" << endl;
+			clog << "\t\t" << alpha << " = (" << x << " - " << K[j + k - degree] << ") / (" << K[j + 1 + k - r] << " - " << K[j + k - degree] << ")" << endl;
+        
+			d[j] = (1.0 - alpha)*d[j-1] + alpha*d[j];
+
+			clog << "\t\t" << d[j] << endl << endl;
+		}
+		clog << endl;
+	}
+
+	clog << d[degree] << endl;
+    
+	return d[degree];
+}
+
+template <class REAL> 
+void B_SPLINE<REAL>::GetVertex(REAL t)
+{
+	clog << "t = " << t << endl << endl; 
+	
+	//BasisFunctions(t);
+
+	REAL Psum=0;
+
+	for(unsigned int p=0; p<P.size(); p++)
+	{
+		clog << "P" << p << " = " << P[p].y << endl;  
+
+		for(unsigned int i=0; i<N.size(); i++)
+		{
+			for(unsigned int j=0; j<N[i].size(); j++)
+			{
+				clog << "N_" << i << j << " = " << N[i][j] << endl;
+	
+				Psum += N[i][j]*P[p].y;
+				clog << N[i][j]*P[p].y << "\t" << Psum << endl;
+			}
+
+			clog << endl;
+		}	
+	}	
+
+//	BEZIER_POINT <REAL> v;
+/*	
 	unsigned int k;
 
 	for(k=0; k<K.size()-1; k++)
@@ -199,17 +335,15 @@ BEZIER_POINT <REAL> B_SPLINE<REAL>::GetVertex(REAL t)
 		if( K[k] <= t && t<K[k+1] )
 			break;
 	}
-		
+	
+	clog << "t = " << t << " -> k = " << k << endl; 
 
 	for(unsigned int p=0; p<P.size(); p++)
 	{
-		for(unsigned int d=0; d<=degree; d++)
-		{
-			clog << d << "\t" << k << "\t" << N[d][k]*P[p].x << endl;
-		}
+		clog << P[p].y << endl;
 	}	
-
-	return v;
+*/
+//	return v;
 }
 
 /*
