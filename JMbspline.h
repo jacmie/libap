@@ -13,7 +13,7 @@ template <class REAL> class B_SPLINE : public BEZIER <REAL>
     unsigned int iter;
     REAL eps, relax;
 
-	std::vector < BEZIER_POINT <REAL> > P;  // defining points
+	std::vector < BEZIER_POINT <REAL> > P;  // poles
 	std::vector < BEZIER_POINT <REAL> > V;  // vertexes
 	std::vector <REAL> tV; 				    // t of the vertexes
     
@@ -44,7 +44,8 @@ template <class REAL> class B_SPLINE : public BEZIER <REAL>
     
 	std::vector < std::vector <REAL> > N;
 
-    void BasisFunctions(std::ofstream &out, REAL t);
+    void BasisFunctions(REAL t);
+    BEZIER_POINT <REAL> GetVertex(REAL t);
     /*
 	REAL Length(bool xflag, bool yflag, bool zflag);
 

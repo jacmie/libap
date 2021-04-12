@@ -69,7 +69,7 @@ void B_SPLINE<REAL>::Init(unsigned int nmax, unsigned int umax)
 	{
 		clog << "t = " << i*dd;
 		out << i*dd << endl;
-		BasisFunctions(out, i*dd);
+		BasisFunctions(i*dd);
 		clog << endl;
 	}
 
@@ -91,7 +91,7 @@ void B_SPLINE<REAL>::Init(unsigned int nmax, unsigned int umax)
 }
 
 template <class REAL> 
-void B_SPLINE<REAL>::BasisFunctions(ofstream &out, REAL t)
+void B_SPLINE<REAL>::BasisFunctions(REAL t)
 {
 	clog << endl << "=== Basis Functions ===" << endl;
 	clog << setprecision(2);
@@ -109,12 +109,15 @@ void B_SPLINE<REAL>::BasisFunctions(ofstream &out, REAL t)
 		clog << K[i] << "\t" << t << "\t" << K[i+1] << "\t";
 
     	if(K[i] <= t && t < K[i+1])
+		{
         	N[i][0] = 1;
+		}
     	else
+		{
         	N[i][0] = 0;
+		}
 
-		clog << i << "\t" << N[i][0] << endl;
-		out << i << "\t" << N[i][0] << endl;
+		clog << i << "\tN" << i << "0 = " << N[i][0] << endl;
 	}
 
 /*
@@ -135,14 +138,18 @@ void B_SPLINE<REAL>::BasisFunctions(ofstream &out, REAL t)
 	double u_ip1;
 	double u_i1;
 
+	unsigned int kk = K.size() - 1;
+	
 	for(unsigned int p=1; p<=degree; p++)
 	{
 		clog << endl << "--- p = " << p << " ---" << endl;
 		clog << "i\t" << "i+1\t" << "i+p\t" << "i+p+1\t" << "p-1\t";
 		clog << "u\t" << "u_i\t" << "u_i+1\t" << "u_i+p\t" << "u_i+p+1\t" << "\t";
 		clog << "N[i][p-1]\t" << "N[i+1][p-1]" << endl;
+
+		kk--;
 		
-		for(unsigned int i=0; i<K.size()-1; i++)
+		for(unsigned int i=0; i<kk; i++)
     	{
 			u_i   = K[i];
 			u_ip  = K[i+p];
@@ -158,15 +165,51 @@ void B_SPLINE<REAL>::BasisFunctions(ofstream &out, REAL t)
 			N[i][p] = N[i][p-1]*(u - u_i)/(u_ip - u_i) + N[i+1][p-1]*(u_ip1 - u)/(u_ip1 - u_i1);
 
 			clog << "\t" << N[i][p] << endl;
-			out << N[i][p] << endl;
+			
+			clog << "N" << i << p << " = N" << i << p-1 << "*(u - u" << i << ")/(u" << i+p << " - u" << i << ") + " 
+				 << "N" << i+1 << p-1 << "*(u" << i+p+1 << " - u" << ")/(u" << i+p+1 << " - u" << i+1 << ")" << endl;
 			
 			clog << "N[i][p] = N[i][p-1]*(" << u << " - " << u_i << ")/(" << u_ip << " - " << u_i << ") + " 
-				 << "N[i+1][p-1]*(" << u_ip1 << " - " << u << ")/(" << u_ip1 << " - " << u_i1 << ")" << endl << endl;
-				
+				 << "N[i+1][p-1]*(" << u_ip1 << " - " << u << ")/(" << u_ip1 << " - " << u_i1 << ")" << endl;
+			
+			clog << "N[i][p] = " << N[i][p-1] << "*(" << u << " - " << u_i << ")/(" << u_ip << " - " << u_i << ") + " 
+				 << N[i+1][p-1] << "*(" << u_ip1 << " - " << u << ")/(" << u_ip1 << " - " << u_i1 << ")" << endl;
+			/*
+			clog << N[i+1][p-1] << "*(" << u_ip1 << " - " << u << ")/(" << u_ip1 << " - " << u_i1 << ")" << endl;
+			clog << N[i+1][p-1] << "*(" << u_ip1 << " - u)/(" << u_ip1 << " - " << u_i1 << ")" << endl;
+			clog << N[i+1][p-1] << "*(" << u_ip1 << " - u)/(" << u_ip1 - u_i1 << ")" << endl;
+			clog << N[i+1][p-1]/(u_ip1 - u_i1) << "*(" << u_ip1 << " - u)" << endl;
+			clog << N[i+1][p-1]*u_ip1/(u_ip1 - u_i1) << " - " << N[i+1][p-1]/(u_ip1 - u_i1) << "*u" << endl;
+			*/	
+			clog << "N" << i << p << " = " << N[i][p-1]/(u_ip - u_i) << "*u" << - N[i][p-1]*u_i/(u_ip - u_i) << " + " 
+				 << N[i+1][p-1]*u_ip1/(u_ip1 - u_i1) << " - " << N[i+1][p-1]/(u_ip1 - u_i1) << "*u = " << N[i][p] << endl << endl;
    	 	}
-
-		out << endl;
 	}
+}
+
+template <class REAL> 
+BEZIER_POINT <REAL> B_SPLINE<REAL>::GetVertex(REAL t)
+{
+	BEZIER_POINT <REAL> v;
+	
+	unsigned int k;
+
+	for(k=0; k<K.size()-1; k++)
+	{
+		if( K[k] <= t && t<K[k+1] )
+			break;
+	}
+		
+
+	for(unsigned int p=0; p<P.size(); p++)
+	{
+		for(unsigned int d=0; d<=degree; d++)
+		{
+			clog << d << "\t" << k << "\t" << N[d][k]*P[p].x << endl;
+		}
+	}	
+
+	return v;
 }
 
 /*

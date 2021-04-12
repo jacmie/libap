@@ -25,7 +25,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 DIRS_INC  = -I/local/include/
 STAT_LIBS = -L. -L/usr/local/lib $(FLTK_LIBS) -lJMcommon
-FLTK_LIBS = -lfltk -lfltk_forms -lfltk_gl -lfltk_images -lfltk_jpeg
+FLTK_LIBS = -lfltk -lfltk_forms -lfltk_images -lfltk_jpeg
 #-lfltk_png  -lfltk_z
 
 #-----------------------  system depend options  --------------------------
@@ -34,7 +34,8 @@ OSTYPE = $(shell uname -s)
 
 ifeq ($(OSTYPE),Linux)
   SYSTEM   = -D_LINUX_ -DLinux -DLNX
-  DYN_LIBS = -L/usr/X11R6/lib -lX11 -lXext -lXft -lXpm -ldl -lfontconfig -lXcursor -lXfixes -lXinerama -lXrender
+  DYN_LIBS = -L/usr/X11R6/lib -lX11 -lXft -lXpm -ldl -lfontconfig -lXrender
+#  DYN_LIBS = -L/usr/X11R6/lib -lX11 -lXext -lXft -lXpm -ldl -lfontconfig -lXcursor -lXfixes -lXinerama -lXrender
   PIC      = -fPIC
   INSTALL_DIR = /usr/local/
 else
@@ -59,7 +60,7 @@ libJMcommon.a: $(OBJECTS)
 
 CommonTest: $(OBJECTS)
 	@echo --- make: $@
-	g++ -static-libgcc -static-libstdc++ -Wl,-Bstatic $(STAT_LIBS) -Wl,-Bdynamic $(DYN_LIBS) -o $@
+	g++ -Wl,-Bstatic $(STAT_LIBS) -Wl,-Bdynamic $(DYN_LIBS) -o $@
 	rm -f CommonTest.o
 	
 clean:
