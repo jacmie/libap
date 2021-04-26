@@ -211,18 +211,21 @@ int main(int argc, char *argv[])
     
     clog << "t(X=1.4) = " << Bez.tVertex(0, 1.4) << "% coef." << endl; //X
     Bez.Vertex(Bez.tVertex(0, 1.4), X, Y, Z);
-    clog << "X\t" << "Y\t" << "Z" << endl;
+   
+	clog << endl << "X\t" << "Y\t" << "Z" << endl;
     clog << X << "\t" << Y << "\t" << Z << endl;
-    //out << endl << X << "\t" << Y << "\t" << Z << endl;
     
     out.close();
 	
+	// *** JMbspline ***
+	
 	clog << endl << "*** JMbspline ***" << endl << endl;
 	
-    n = 4;  //points -> degrees of freedom n-1 
-    u = 30; //vertex on spline
+    unsigned int poles = 5;
+    unsigned int degree = 2;
+    unsigned int vertex = 300;
     
-    B_SPLINE <double> Bs(n, u);
+    B_SPLINE <double> Bs(poles, degree, vertex, 1);
     
     Bs.P[0].x = 1.0;
 	Bs.P[0].y = 0.0;
@@ -239,11 +242,12 @@ int main(int argc, char *argv[])
     Bs.P[3].x = 4.0;
     Bs.P[3].y = 2.0;
     Bs.P[3].z = 0;
-    /* 
-	Bs.P[4].x = 2.0;
-	Bs.P[4].y = 0.0;
+     
+	Bs.P[4].x = 5.0;
+	Bs.P[4].y = 1.0;
     Bs.P[4].z = 0;
-  
+ 	
+	/* 
     Bs.P[5].x = 2.5;
     Bs.P[5].y = 1.0;
     Bs.P[5].z = 0;
@@ -256,7 +260,7 @@ int main(int argc, char *argv[])
     Bs.P[7].y = 1.0;
     Bs.P[7].z = 0;
 	*/
-	
+/*	
 	clog << "P:" << endl;
     Bs.PrintPoints(clog);
     clog << endl;
@@ -267,16 +271,18 @@ int main(int argc, char *argv[])
 
 	ofstream bso("TestDir/JMbspline/Bspline.xls");
 
+    u = 30; //vertex on spline
 	double dd = 1.0/19;
 
 	for(int v=0; v<20; v++)
 	{
-		//Bs.deBoor(3, 0.75); //interval nr, t pos
+		Bs.deBoor(3, 0.75); //interval nr, t pos
 		bso << v << "\t" << Bs.deBoor(3, v*dd) << endl; //interval nr, t pos
+    	Bs.PrintPoints(clog);
 	}
 
 	bso.close();
-
+*/
 	//Bs.GetVertex(0.25);
 	
 	/*
@@ -306,7 +312,10 @@ int main(int argc, char *argv[])
     
     out.close();
 	*/
-
+/*	GNUPLOT GnuPlott;
+	GnuPlott.NrOfDataCloumns = 2;
+	GnuPlott.Plot2D("TestDir/JMbspline/Bspline.xls");
+*/
 	exit(1);
 	
 	// *** BezierAirfoil ***

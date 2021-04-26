@@ -8,106 +8,80 @@ B_SPLINE<REAL>::B_SPLINE()
 }
 
 template <class REAL> 
-B_SPLINE<REAL>::B_SPLINE(unsigned int nmax, unsigned int umax)
+B_SPLINE<REAL>::B_SPLINE(unsigned int poles_nr, unsigned int curve_degree, unsigned int vertexes_nr, unsigned int type)
 {
-	Init(nmax, umax);
+	Init(poles_nr, curve_degree, vertexes_nr, type);
 }
 
 template <class REAL> 
-void B_SPLINE<REAL>::Init(unsigned int nmax, unsigned int umax)
+void B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsigned int vertexes_nr, unsigned int type)
 {
-	npt  = nmax;
-    n    = nmax - 1;
-    u    = umax;
+	npt  = poles_nr;
+    n    = poles_nr - 1;
+    u    = vertexes_nr;
     eps  = 1e-6;
     iter = 50;
     relax = 1;
 
-	degree = 2;
+	degree = curve_degree;
 	order  = degree + 1;
 
 	P.resize(npt);
    
-	// --- K ---
+	// --- Knots ---
 	
 	unsigned int k = npt + degree + 1;
-   	clog << "k = " << k << endl;
 
-    REAL increment = 1.0/(k - 1);
-    
-	if(1/*UNIFORM*/)
+	if(type == UNIFORM) // (closed)
 	{
-        for(unsigned int d=0; d<order; d++)
-		{
-			K.push_back(0.0);
-			//clog << K[d] << endl;
-		}
-
-		//clog << endl;
-
-        for(unsigned int d=order; d<k-order; d++)
-		{
-    		K.push_back(d*increment);
-			//clog << K[d] << endl;
-		}
-		
-		//clog << endl;
+		REAL increment = 1.0/(k - 1);
         
-		for(unsigned int d=k-order; d<k; d++)
+        for(unsigned int i=0; i<k; i++)
+    		K.push_back(i*increment);
+	}
+    
+	if(type == QUASI_UNIFORM) // (opened)
+	{
+		REAL increment = 1.0/(k -2*degree);
+        
+		for(unsigned int i=0; i<order; i++)
+			K.push_back(0.0);
+
+        for(unsigned int i=order; i<k-order; i++)
 		{
-    		K.push_back(1.0);
-			//clog << K[d] << endl;
+    		K.push_back((i - degree)*increment);
 		}
-		
-		//clog << endl;
+
+		for(unsigned int i=k-order; i<k; i++)
+    		K.push_back(1.0);
 	}
 
-    //if(QUASI_UNIFORM)
+    if(type == PEACEWISE) 
     {
-		/*
-		REAL increment = 1.0;
-
-        for(unsigned int d=0; d<degree; d++)
-    		K[d] = 0.0;
+    	REAL increment = 1.0/(k - 2*degree)*degree;
         
-        for(unsigned int d=degree; d<k-degree; d++)
-    		K[d] += K[d-1] + increment;
-
-	    for(unsigned int d=k-degree; d<k; d++)
-    		K[d] = K[k-degree-1] + increment;*/
+		for(unsigned int i=0; i<order; i++)
+			K.push_back(0.0);
+        
+        for(unsigned int i=order; i<k-degree; i+=degree)
+		{
+			unsigned int j=i; 
+				
+        	for(unsigned int m=0; m<degree; m++, i++)
+    			K.push_back((j - degree)*increment);
+		}
+		
+	    for(unsigned int i=k-order; i<k; i++)
+    		K.push_back(1.0);
     }
 	
-	for(unsigned int p=0; p<K.size(); p++)
+	/*for(unsigned int p=0; p<K.size(); p++)
 		clog << p << "\t" << K[p] << endl;
-	clog << endl;
-
-	/*
-	double dd = 1.0/4;
-
-	for(unsigned int i=0; i<5; i++)
-	{
-		clog << "t = " << i*dd;
-		BasisFunctions(i*dd);
-		clog << endl;
-	}*/
-
-	/*
-	P.resize(npt);
-	for(unsigned int p=0; p<P.size(); p++)
-		P[p].Set(0.0);
-	
-	V.resize(u);
-	for(unsigned int v=0; v<V.size(); v++)
-		V[v].Set(0.0);
-
-	tV.assign(u, 0.0);
-	*/
-
-	clog << "END" << endl;
+	clog << endl;*/
 }
 
 template <class REAL> 
-void B_SPLINE<REAL>::BasisFunctions(REAL t)
+void B_SPLINE<REAL>::BasisFunctions(REAL t) // only for tests
 {
 	clog << endl << "=== Basis Functions ===" << endl;
 	clog << setprecision(2);
@@ -304,8 +278,6 @@ void B_SPLINE<REAL>::GetVertex(REAL t)
 {
 	clog << "t = " << t << endl << endl; 
 	
-	//BasisFunctions(t);
-
 	REAL Psum=0;
 
 	for(unsigned int p=0; p<P.size(); p++)

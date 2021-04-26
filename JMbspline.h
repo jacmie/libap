@@ -3,7 +3,7 @@
 
 #include "JMbezier.h"
 
-//#include 
+enum bspline_type {UNIFORM, QUASI_UNIFORM, PEACEWISE};
 
 template <class REAL> class B_SPLINE : public BEZIER <REAL>
 {
@@ -21,8 +21,8 @@ template <class REAL> class B_SPLINE : public BEZIER <REAL>
     std::vector < unsigned int > M;         // multiplicities
 
 	B_SPLINE();
-    B_SPLINE(unsigned int n, unsigned int umax);
-	void Init(unsigned int nmax, unsigned int umax);
+    B_SPLINE(unsigned int poles_nr, unsigned int curve_degree, unsigned int vertexes_nr, unsigned int type=QUASI_UNIFORM);
+	void Init(unsigned int poles_nr, unsigned int curve_degree, unsigned int vertexes_nr, unsigned int type=QUASI_UNIFORM);
     /*void Vertex(REAL t, REAL &X, REAL &Y, REAL &Z);
     void VertexesSeq();
     REAL tVertex(unsigned int XYZ, REAL Value);
