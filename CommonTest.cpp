@@ -221,11 +221,17 @@ int main(int argc, char *argv[])
 	
 	clog << endl << "*** JMbspline ***" << endl << endl;
 	
-    unsigned int poles = 5;
+    unsigned int poles  = 5;
     unsigned int degree = 2;
+    unsigned int type   = QUASI_UNIFORM;
     unsigned int vertex = 300;
     
-    B_SPLINE <double> Bs(poles, degree, vertex, 1);
+    clog << "poles  = " << poles  << endl;
+    clog << "degree = " << degree << endl;
+    clog << "vertex = " << vertex << endl;
+    clog << "type   = " << type   << endl << endl;
+    
+	B_SPLINE <double> Bs(poles, degree, vertex, type);
     
     Bs.P[0].x = 1.0;
 	Bs.P[0].y = 0.0;
@@ -260,7 +266,7 @@ int main(int argc, char *argv[])
     Bs.P[7].y = 1.0;
     Bs.P[7].z = 0;
 	*/
-/*	
+	
 	clog << "P:" << endl;
     Bs.PrintPoints(clog);
     clog << endl;
@@ -271,18 +277,21 @@ int main(int argc, char *argv[])
 
 	ofstream bso("TestDir/JMbspline/Bspline.xls");
 
-    u = 30; //vertex on spline
+    Bs.PrintPoints(bso);
+    
+	u = 30; //vertex on spline
 	double dd = 1.0/19;
 
 	for(int v=0; v<20; v++)
 	{
-		Bs.deBoor(3, 0.75); //interval nr, t pos
-		bso << v << "\t" << Bs.deBoor(3, v*dd) << endl; //interval nr, t pos
-    	Bs.PrintPoints(clog);
+		//Bs.deBoor(0.75); //interval nr, t pos
+		Bs.deBoor(bso, v*dd); //interval nr, t pos
+		//bso << v*dd << "\t" << Bs.deBoor(v*dd) << endl; //interval nr, t pos
+    	//Bs.PrintPoints(clog);
 	}
 
 	bso.close();
-*/
+
 	//Bs.GetVertex(0.25);
 	
 	/*

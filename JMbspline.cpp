@@ -19,14 +19,14 @@ void B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
 	npt  = poles_nr;
     n    = poles_nr - 1;
     u    = vertexes_nr;
-    eps  = 1e-6;
-    iter = 50;
-    relax = 1;
+    B_SPLINE::eps  = 1e-6;
+    B_SPLINE::iter = 50;
+    B_SPLINE::relax = 1;
 
 	degree = curve_degree;
 	order  = degree + 1;
 
-	P.resize(npt);
+	B_SPLINE::P.resize(npt);
    
 	// --- Knots ---
 	
@@ -75,9 +75,9 @@ void B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
     		K.push_back(1.0);
     }
 	
-	/*for(unsigned int p=0; p<K.size(); p++)
+	for(unsigned int p=0; p<K.size(); p++)
 		clog << p << "\t" << K[p] << endl;
-	clog << endl;*/
+	clog << endl;
 }
 
 template <class REAL> 
@@ -172,7 +172,7 @@ void B_SPLINE<REAL>::BasisFunctions(REAL t) // only for tests
 }
 
 template <class REAL> 
-double B_SPLINE<REAL>::deBoor(int k, double x)
+double B_SPLINE<REAL>::deBoor(std::ofstream &out, double x)
 {
     /*Evaluates S(x).
 
@@ -210,14 +210,14 @@ double B_SPLINE<REAL>::deBoor(int k, double x)
 	
 	clog << endl;
 	
-	for(unsigned int p=0; p<P.size(); p++)
+	for(unsigned int p=0; p<B_SPLINE::P.size(); p++)
 	{
-		clog << "P" << p << " = " << P[p].y << endl;  
+		clog << "P" << p << " = " << B_SPLINE::P[p].y << endl;  
 	}
 
 	// --- Set range ---
 	
-//	unsigned int k;
+	unsigned int k;
 
 	for(k=0; k<K.size()-1; k++)
 	{
@@ -233,15 +233,50 @@ double B_SPLINE<REAL>::deBoor(int k, double x)
 	clog << "r = " << 0 << endl << endl;
 
 	vector <REAL> d; 
+	
+	out << x << "\t";
 
+	// x
+	
 	for(unsigned int j=0; j<degree+1; j++) 
 	{
-		d.push_back( P[j + k - degree].y );
+		d.push_back( B_SPLINE::P[j + k - degree].x );
 		clog << j << "\t" << j + k - degree << "\t" << d[j] << endl;
 	}
 
 	clog << endl;
 
+	out << deBoor2(k, x, d) << "\t";
+
+	// y
+	
+	d.resize(0); 
+	
+	for(unsigned int j=0; j<degree+1; j++) 
+	{
+		d.push_back( B_SPLINE::P[j + k - degree].y );
+		clog << j << "\t" << j + k - degree << "\t" << d[j] << endl;
+	}
+
+	clog << endl;
+
+	out << deBoor2(k, x, d) << "\t";
+	
+	// z
+	
+	d.resize(0); 
+	
+	for(unsigned int j=0; j<degree+1; j++) 
+	{
+		d.push_back( B_SPLINE::P[j + k - degree].z );
+		clog << j << "\t" << j + k - degree << "\t" << d[j] << endl;
+	}
+
+	clog << endl;
+
+	out << deBoor2(k, x, d) << endl;
+	
+	/*
 	double alpha;
 	
     for(unsigned int r=1; r<degree+1; r++)
@@ -267,7 +302,52 @@ double B_SPLINE<REAL>::deBoor(int k, double x)
 		}
 		clog << endl;
 	}
+	
+	clog << d[degree] << endl;
+    
+	return d[degree];*/
+	return 1;
+}
 
+template <class REAL> 
+double B_SPLINE<REAL>::deBoor2(unsigned int k, double x, vector <REAL> d)
+{
+	clog << "r = " << 0 << endl << endl;
+/*
+	for(unsigned int j=0; j<degree+1; j++) 
+	{
+		d.push_back( B_SPLINE::P[j + k - degree].y );
+		clog << j << "\t" << j + k - degree << "\t" << d[j] << endl;
+	}
+
+	clog << endl;
+*/
+	double alpha;
+	
+    for(unsigned int r=1; r<degree+1; r++)
+	{
+		clog << "r = " << r << endl;
+
+		for(unsigned int j=degree; j>r-1; j--)
+		{
+			clog << "\t" << j << "\t";
+
+			//int jk_d = j + k - degree;
+
+			clog << K[j + k - degree] << "\t" << K[j + 1 + k - r] << endl;
+
+            alpha = (x - K[j + k - degree]) / (K[j + 1 + k - r] - K[j + k - degree]);
+            
+			clog << "\t\t" << "alpha = (x - K[j + k - degree]) / (K[j + 1 + k - r] - K[j + k - degree])" << endl;
+			clog << "\t\t" << alpha << " = (" << x << " - " << K[j + k - degree] << ") / (" << K[j + 1 + k - r] << " - " << K[j + k - degree] << ")" << endl;
+        
+			d[j] = (1.0 - alpha)*d[j-1] + alpha*d[j];
+
+			clog << "\t\t" << d[j] << endl << endl;
+		}
+		clog << endl;
+	}
+	
 	clog << d[degree] << endl;
     
 	return d[degree];
@@ -278,11 +358,13 @@ void B_SPLINE<REAL>::GetVertex(REAL t)
 {
 	clog << "t = " << t << endl << endl; 
 	
-	REAL Psum=0;
+	REAL Psum_x=0;
+	REAL Psum_y=0;
+	REAL Psum_z=0;
 
-	for(unsigned int p=0; p<P.size(); p++)
+	for(unsigned int p=0; p<B_SPLINE::P.size(); p++)
 	{
-		clog << "P" << p << " = " << P[p].y << endl;  
+		clog << "P" << p << " = " << B_SPLINE::P[p].y << endl;  
 
 		for(unsigned int i=0; i<N.size(); i++)
 		{
@@ -290,8 +372,13 @@ void B_SPLINE<REAL>::GetVertex(REAL t)
 			{
 				clog << "N_" << i << j << " = " << N[i][j] << endl;
 	
-				Psum += N[i][j]*P[p].y;
-				clog << N[i][j]*P[p].y << "\t" << Psum << endl;
+				Psum_x += N[i][j]*B_SPLINE::P[p].x;
+				Psum_y += N[i][j]*B_SPLINE::P[p].y;
+				Psum_z += N[i][j]*B_SPLINE::P[p].z;
+
+				clog << N[i][j]*B_SPLINE::P[p].x << "\t" << Psum_x << endl;
+				clog << N[i][j]*B_SPLINE::P[p].y << "\t" << Psum_y << endl;
+				clog << N[i][j]*B_SPLINE::P[p].z << "\t" << Psum_z << endl;
 			}
 
 			clog << endl;
@@ -310,7 +397,7 @@ void B_SPLINE<REAL>::GetVertex(REAL t)
 	
 	clog << "t = " << t << " -> k = " << k << endl; 
 
-	for(unsigned int p=0; p<P.size(); p++)
+	for(unsigned int p=0; p<B_SPLINE::P.size(); p++)
 	{
 		clog << P[p].y << endl;
 	}	

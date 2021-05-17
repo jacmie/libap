@@ -39,7 +39,6 @@ template <class REAL> class BEZIER
 {
     public:
     
-    unsigned int n, npt, u;
     unsigned int iter;
     REAL eps, relax;
 

@@ -134,24 +134,21 @@ BEZIER<REAL>::BEZIER(unsigned int nmax, unsigned int umax)
 template <class REAL> 
 void BEZIER<REAL>::Init(unsigned int nmax, unsigned int umax)
 {
-	npt  = nmax;
-    n    = nmax - 1;
-    u    = umax;
-    eps  = 1e-6;
-    iter = 50;
+    eps   = 1e-6;
+    iter  = 50;
     relax = 1;
 	
-	C.assign(npt, 0.0);
+	C.assign(nmax, 0.0);
 
-	P.resize(npt);
+	P.resize(nmax);
 	for(unsigned int p=0; p<P.size(); p++)
 		P[p].Set(0.0);
 	
-	V.resize(u);
+	V.resize(umax);
 	for(unsigned int v=0; v<V.size(); v++)
 		V[v].Set(0.0);
 
-	tV.assign(u, 0.0);
+	tV.assign(umax, 0.0);
 
     BinomialCoef();
 }
@@ -161,11 +158,11 @@ void BEZIER<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
 {
     X = Y = Z = 0;
         
-    for(unsigned int k=0; k<npt; k++)
+    for(unsigned int k=0; k<P.size(); k++)
     {
-        X += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k].x;
-        Y += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k].y;
-        Z += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k].z;
+        X += C[k]*pow(t, k)*pow(1 - t, P.size() - 1 - k)*P[k].x;
+        Y += C[k]*pow(t, k)*pow(1 - t, P.size() - 1 - k)*P[k].y;
+        Z += C[k]*pow(t, k)*pow(1 - t, P.size() - 1 - k)*P[k].z;
     }
 }
 
@@ -173,9 +170,9 @@ template <class REAL>
 void BEZIER<REAL>::VertexesSeq()
 {
     REAL t = 0;
-    REAL du = 1/REAL(u-1);
+    REAL du = 1/REAL(V.size()-1);
     
-    for(unsigned int x=0; x<u; x++)
+    for(unsigned int x=0; x<V.size(); x++)
     {
         Vertex(t, V[x].x, V[x].y, V[x].z);
 		tV[x] = t;
@@ -210,15 +207,15 @@ REAL BEZIER<REAL>::tVertex(unsigned int XYZ, REAL Value)
         
             //*** f ***
     
-            for(unsigned int k=0; k<npt; k++)
-                f += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k].Get(XYZ);
+            for(unsigned int k=0; k<P.size(); k++)
+                f += C[k]*pow(t, k)*pow(1 - t, P.size() - 1 - k)*P[k].Get(XYZ);
         
             f -= Value;
         
             //*** fprim ***
     
-            for(unsigned int k=0; k<npt; k++)
-				fprim += C[k]*P[k].Get(XYZ)*( k*pow(t, k-1)*pow(1 - t, n - k) + pow(t, k)*(n - k)*pow(1 - t, n - k - 1) );
+            for(unsigned int k=0; k<P.size(); k++)
+				fprim += C[k]*P[k].Get(XYZ)*( k*pow(t, k-1)*pow(1 - t, P.size() - 1 - k) + pow(t, k)*(P.size() - 1 - k)*pow(1 - t, P.size() - 1 - k - 1) );
 			
 			if(fprim == 0)
 			{
@@ -283,7 +280,7 @@ void BEZIER<REAL>::PMinMax(unsigned int XYZ, REAL &min, REAL &max)
 {
     min = max = P[0].Get(XYZ);
     
-    for(unsigned int k=0; k<npt; k++)
+    for(unsigned int k=0; k<P.size(); k++)
     {
         if(P[k].Get(XYZ) < min)
             min = P[k].Get(XYZ);
@@ -296,7 +293,7 @@ void BEZIER<REAL>::PMinMax(unsigned int XYZ, REAL &min, REAL &max)
 template <class REAL>
 void BEZIER<REAL>::PrintPointsFormat(bool brackets, bool comas, unsigned int separator, unsigned int no_print_xyz)
 {
-    for(unsigned int i=0; i<npt; i++)
+    for(unsigned int i=0; i<P.size(); i++)
 	{
         P[i].brackets = brackets;
 		P[i].comas = comas;
@@ -308,7 +305,7 @@ void BEZIER<REAL>::PrintPointsFormat(bool brackets, bool comas, unsigned int sep
 template <class REAL>
 void BEZIER<REAL>::PrintVertexesFormat(bool brackets, bool comas, unsigned int separator, unsigned int no_print_xyz)
 {
-    for(unsigned int i=0; i<u; i++)
+    for(unsigned int i=0; i<V.size(); i++)
 	{
         V[i].brackets = brackets;
 		V[i].comas = comas;
@@ -320,14 +317,14 @@ void BEZIER<REAL>::PrintVertexesFormat(bool brackets, bool comas, unsigned int s
 template <class REAL> 
 void BEZIER<REAL>::PrintPoints(ostream &out)
 {
-    for(unsigned int i=0; i<npt; i++)
+    for(unsigned int i=0; i<P.size(); i++)
         out << P[i] << endl;
 }
 
 template <class REAL> 
 void BEZIER<REAL>::PrintVertexes(ostream &out)
 {
-    for(unsigned int i=0; i<u; i++)
+    for(unsigned int i=0; i<V.size(); i++)
         out << V[i] << endl;
 }
 
@@ -336,7 +333,7 @@ REAL BEZIER<REAL>::Length(bool xflag, bool yflag, bool zflag)
 {
 	REAL L=0, dx=0, dy=0, dz=0;
 
-    for(unsigned int i=1; i<u; i++)
+    for(unsigned int i=1; i<V.size(); i++)
 	{
 		if(xflag)
 			dx = V[i].x - V[i-1].x;
@@ -362,16 +359,16 @@ REAL BEZIER<REAL>::Length(bool xflag, bool yflag, bool zflag)
 template <class REAL> 
 void BEZIER<REAL>::BinomialCoef()
 {
-    C[0] = C[n] = 1;
+    C[0] = C[P.size() - 1] = 1;
     
     REAL Cc;
      
-    for(unsigned int k=1; k<n; k++)
+    for(unsigned int k=1; k<P.size() - 1; k++)
     {
         Cc = 1;
         
         for(unsigned int i=1; i<=k; i++)
-            Cc *=  REAL((n - (k - i)))/i;
+            Cc *=  REAL((P.size() - 1 - (k - i)))/i;
            
         C[k] = int(Cc);
     }

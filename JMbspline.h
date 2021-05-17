@@ -9,14 +9,11 @@ template <class REAL> class B_SPLINE : public BEZIER <REAL>
 {
     public:
 
-    unsigned int n, npt, u, order, degree;
-    unsigned int iter;
-    REAL eps, relax;
+    unsigned int n, npt, u;
+    unsigned int order, degree;
+    //unsigned int iter;
+    //REAL eps, relax;
 
-	std::vector < BEZIER_POINT <REAL> > P;  // poles
-	std::vector < BEZIER_POINT <REAL> > V;  // vertexes
-	std::vector <REAL> tV; 				    // t of the vertexes
-    
     std::vector < REAL > K;                 // knots (0,2,3,6)
     std::vector < unsigned int > M;         // multiplicities
 
@@ -44,8 +41,10 @@ template <class REAL> class B_SPLINE : public BEZIER <REAL>
     
 	std::vector < std::vector <REAL> > N;
 
-	double deBoor(int k, double x);
-    void BasisFunctions(REAL t);
+	double deBoor(std::ofstream &out, double x);
+	double deBoor2(unsigned int k, double x, std::vector <REAL> d);
+    
+	void BasisFunctions(REAL t);
     void GetVertex(REAL t);
     /*
 	REAL Length(bool xflag, bool yflag, bool zflag);
