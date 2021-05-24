@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     int n = 4;  //points -> degrees of freedom n-1 
     int u = 30; //vertex on spline
     
-    BEZIER <double> Bez(n, u);
+    BEZIER <double> Bez(n);
     
     Bez.P[0].x = 0.0;
 	Bez.P[0].y = 1.0;
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 	// --- Bezier vertexes ---
     
 	clog << "V:" << endl;
-    Bez.VertexesSeq();
+    Bez.VertexesSeq(u);
 	Bez.PrintVertexes(clog);	
     clog << endl;
     
@@ -201,9 +201,17 @@ int main(int argc, char *argv[])
     out << fixed << setprecision(6);
 	Bez.PrintPoints(out);
     Bez.PrintVertexes(out);
+    out.close();
     
 	// --- Curve Length ---
+	
 	clog << "L = " << Bez.Length() << endl << endl;
+	
+	// --- P coordinate Min, Max ---
+	
+	double Min, Max;
+	Bez.PMinMax(0, Min, Max);
+	clog << "Min/Max (X):\t" << Min << "\t" << Max << endl << endl;
 
 	// --- Point t & point from X ---
 	
@@ -215,57 +223,57 @@ int main(int argc, char *argv[])
 	clog << endl << "X\t" << "Y\t" << "Z" << endl;
     clog << X << "\t" << Y << "\t" << Z << endl;
     
-    out.close();
-	
 	// *** JMbspline ***
 	
 	clog << endl << "*** JMbspline ***" << endl << endl;
 	
-    unsigned int poles  = 5;
+    unsigned int poles  = 9;
     unsigned int degree = 2;
-    unsigned int type   = QUASI_UNIFORM;
-    unsigned int vertex = 300;
+    unsigned int type   = 1;//QUASI_UNIFORM;
+    unsigned int vertex = 22;
     
     clog << "poles  = " << poles  << endl;
     clog << "degree = " << degree << endl;
     clog << "vertex = " << vertex << endl;
     clog << "type   = " << type   << endl << endl;
     
-	B_SPLINE <double> Bs(poles, degree, vertex, type);
+	B_SPLINE <double> Bs(poles, degree, type);
     
     Bs.P[0].x = 1.0;
-	Bs.P[0].y = 0.0;
-    Bs.P[0].z = 0;
+	Bs.P[0].y = 2.0;
+    Bs.P[0].z = 1.0;
   
-    Bs.P[1].x = 2.0;
-    Bs.P[1].y = -1.0;
-    Bs.P[1].z = 0;
+    Bs.P[1].x = 0.0;
+    Bs.P[1].y = 2.0;
+    Bs.P[1].z = 1.0;
     
-    Bs.P[2].x = 3.0;
-    Bs.P[2].y = 3.0;
-    Bs.P[2].z = 0;
+    Bs.P[2].x = 0.0;
+    Bs.P[2].y = 1.0;
+    Bs.P[2].z = 0.5;
     
-    Bs.P[3].x = 4.0;
-    Bs.P[3].y = 2.0;
-    Bs.P[3].z = 0;
+    Bs.P[3].x = 0.0;
+    Bs.P[3].y = 0.0;
+    Bs.P[3].z = 0.0;
      
-	Bs.P[4].x = 5.0;
-	Bs.P[4].y = 1.0;
-    Bs.P[4].z = 0;
+	Bs.P[4].x = 1.0;
+	Bs.P[4].y = 0.0;
+    Bs.P[4].z = 0.0;
  	
-	/* 
-    Bs.P[5].x = 2.5;
-    Bs.P[5].y = 1.0;
-    Bs.P[5].z = 0;
+    Bs.P[5].x = 2.0;
+    Bs.P[5].y = 0.0;
+    Bs.P[5].z = 0.0;
     
-    Bs.P[6].x = 3.0;
-    Bs.P[6].y = 0.0;
-    Bs.P[6].z = 0;
+    Bs.P[6].x = 2.0;
+    Bs.P[6].y = 1.0;
+    Bs.P[6].z = 0.5;
     
-    Bs.P[7].x = 3.5;
-    Bs.P[7].y = 1.0;
-    Bs.P[7].z = 0;
-	*/
+    Bs.P[7].x = 2.0;
+    Bs.P[7].y = 2.0;
+    Bs.P[7].z = 1.0;
+	
+    Bs.P[8].x = 1.0;
+    Bs.P[8].y = 2.0;
+    Bs.P[8].z = 1.0;
 	
 	clog << "P:" << endl;
     Bs.PrintPoints(clog);
@@ -274,43 +282,29 @@ int main(int argc, char *argv[])
 	// --- Bezier vertexes ---
     
 	clog << "V:" << endl;
-
-	ofstream bso("TestDir/JMbspline/Bspline.xls");
-
-    Bs.PrintPoints(bso);
-    
-	u = 30; //vertex on spline
-	double dd = 1.0/19;
-
-	for(int v=0; v<20; v++)
-	{
-		//Bs.deBoor(0.75); //interval nr, t pos
-		Bs.deBoor(bso, v*dd); //interval nr, t pos
-		//bso << v*dd << "\t" << Bs.deBoor(v*dd) << endl; //interval nr, t pos
-    	//Bs.PrintPoints(clog);
-	}
-
-	bso.close();
-
-	//Bs.GetVertex(0.25);
-	
-	/*
-    Bez.VertexesSeq();
-	Bez.PrintVertexes(clog);	
+    Bs.VertexesSeq(vertex);
+	Bs.PrintVertexes(clog);	
     clog << endl;
-    
+
     // --- Write results ---
     
-    ofstream out("TestDir/JMbezier/Bezier.xls");
-    out << fixed << setprecision(6);
-	Bez.PrintPoints(out);
-    Bez.PrintVertexes(out);
-    
+	ofstream bsout("TestDir/JMbspline/Bspline.xls");
+    bsout << fixed << setprecision(6);
+	//Bs.PrintPoints(bsout);
+    Bs.PrintVertexes(bsout);
+    bsout.close();
+	
 	// --- Curve Length ---
-	clog << "L = " << Bez.Length() << endl << endl;
+	
+	clog << "L = " << Bs.Length() << endl << endl;
+	
+	// --- P coordinate Min, Max ---
+	
+	Bs.PMinMax(0, Min, Max);
+	clog << "Min/Max (X):\t" << Min << "\t" << Max << endl << endl;
 
 	// --- Point t & point from X ---
-	
+	/*	
     double X, Y, Z;
     
     clog << "t(X=1.4) = " << Bez.tVertex(0, 1.4) << "% coef." << endl; //X
@@ -318,13 +312,12 @@ int main(int argc, char *argv[])
     clog << "X\t" << "Y\t" << "Z" << endl;
     clog << X << "\t" << Y << "\t" << Z << endl;
     //out << endl << X << "\t" << Y << "\t" << Z << endl;
-    
-    out.close();
-	*/
-/*	GNUPLOT GnuPlott;
+    */
+	
+	GNUPLOT GnuPlott;
 	GnuPlott.NrOfDataCloumns = 2;
 	GnuPlott.Plot2D("TestDir/JMbspline/Bspline.xls");
-*/
+
 	exit(1);
 	
 	// *** BezierAirfoil ***

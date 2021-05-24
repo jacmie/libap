@@ -47,11 +47,16 @@ void BEZIER_AIRFOIL::Init4b(unsigned int nBR0, unsigned int vBR0, unsigned int n
     nBF = nBF0;
     nTF = nTF0;
     nTR = nTR0;
+    
+	vBR = vBR0;
+    vBF = vBF0;
+    vTF = vTF0;
+    vTR = vTR0;
 
-	SplineBR.Init(nBR, vBR0);
-	SplineBF.Init(nBF, vBF0);
-	SplineTF.Init(nTF, vTF0);
-	SplineTR.Init(nTR, vTR0);
+	SplineBR.Init(nBR);
+	SplineBF.Init(nBF);
+	SplineTF.Init(nTF);
+	SplineTR.Init(nTR);
 
     // All points z coordinates 0
     for(unsigned int p=0; p<SplineBR.P.size(); p++) SplineBR.P[p].z = 0.0;
@@ -84,7 +89,7 @@ void BEZIER_AIRFOIL::SetLEcircle(double x1, double y1, double x2, double y2, dou
 
     else
     {
-		SplineLE.Init(4, vCirc);
+		SplineLE.Init(4);
     	for(unsigned int p=0; p<SplineLE.P.size(); p++) 
 			SplineLE.P[p].z = 0.0;
        
@@ -446,13 +451,13 @@ void BEZIER_AIRFOIL::SetBezierPoints(double Fi, double dFi, double MinMax, unsig
 
 void BEZIER_AIRFOIL::MakeVertexesSeq()
 {
-	SplineBR.VertexesSeq();
-	SplineBF.VertexesSeq();
-	SplineTF.VertexesSeq();
-	SplineTR.VertexesSeq();
+	SplineBR.VertexesSeq(vBR);
+	SplineBF.VertexesSeq(vBF);
+	SplineTF.VertexesSeq(vTF);
+	SplineTR.VertexesSeq(vTR);
     
 	if(vCirc != 0)
-		SplineLE.VertexesSeq();
+		SplineLE.VertexesSeq(vCirc);
 }
 
 void BEZIER_AIRFOIL::PrintOutPoints(string AirfoilFile)

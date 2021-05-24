@@ -47,10 +47,10 @@ template <class REAL> class BEZIER
 	std::vector <REAL> tV; 				    // t of the vertexes
 
 	BEZIER();
-    BEZIER(unsigned int n, unsigned int umax);
-	void Init(unsigned int nmax, unsigned int umax);
-    void Vertex(REAL t, REAL &X, REAL &Y, REAL &Z);
-    void VertexesSeq();
+    BEZIER(unsigned int n);
+	void Init(unsigned int nmax);
+    virtual int  Vertex(REAL t, REAL &X, REAL &Y, REAL &Z);
+    virtual void VertexesSeq(unsigned int v_nr);
     REAL tVertex(unsigned int XYZ, REAL Value);
 	REAL Length();
 	REAL LengthX();

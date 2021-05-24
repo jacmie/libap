@@ -126,13 +126,13 @@ BEZIER<REAL>::BEZIER()
 }
 
 template <class REAL> 
-BEZIER<REAL>::BEZIER(unsigned int nmax, unsigned int umax)
+BEZIER<REAL>::BEZIER(unsigned int nmax)
 {
-	Init(nmax, umax);
+	Init(nmax);
 }
 
 template <class REAL> 
-void BEZIER<REAL>::Init(unsigned int nmax, unsigned int umax)
+void BEZIER<REAL>::Init(unsigned int nmax)
 {
     eps   = 1e-6;
     iter  = 50;
@@ -144,19 +144,19 @@ void BEZIER<REAL>::Init(unsigned int nmax, unsigned int umax)
 	for(unsigned int p=0; p<P.size(); p++)
 		P[p].Set(0.0);
 	
-	V.resize(umax);
-	for(unsigned int v=0; v<V.size(); v++)
-		V[v].Set(0.0);
-
-	tV.assign(umax, 0.0);
-
     BinomialCoef();
 }
 
 template <class REAL> 
-void BEZIER<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
+int BEZIER<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
 {
-    X = Y = Z = 0;
+	if(t < 0 || t > 1)
+	{
+		clog << "Position = " << t << " is not in the interval t<0,1> !!!" << endl;
+		return 1;
+	}
+    
+	X = Y = Z = 0;
         
     for(unsigned int k=0; k<P.size(); k++)
     {
@@ -164,11 +164,19 @@ void BEZIER<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
         Y += C[k]*pow(t, k)*pow(1 - t, P.size() - 1 - k)*P[k].y;
         Z += C[k]*pow(t, k)*pow(1 - t, P.size() - 1 - k)*P[k].z;
     }
+
+	return 0;
 }
 
 template <class REAL> 
-void BEZIER<REAL>::VertexesSeq()
+void BEZIER<REAL>::VertexesSeq(unsigned int v_nr)
 {
+	V.resize(v_nr);
+	for(unsigned int v=0; v<V.size(); v++)
+		V[v].Set(0.0);
+
+	tV.assign(v_nr, 0.0);
+
     REAL t = 0;
     REAL du = 1/REAL(V.size()-1);
     

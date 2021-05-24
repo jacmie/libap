@@ -15,7 +15,7 @@ class BEZIER_AIRFOIL
 {
 	public:
 	
-    unsigned int nBR, nBF, nTF, nTR, vCirc;
+    unsigned int nBR, nBF, nTF, nTR, vBR, vBF, vTF, vTR, vCirc;
     double LEcircX, LEcircY, LEcircR, BcircX, BcircY;
     double sBR, sBF, sTF, sTR; // slope tan(A)
     double MinThX, MinThY, MaxThX, MaxThY;
