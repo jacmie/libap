@@ -57,7 +57,7 @@ bool B_SPLINE<REAL>::CheckMinPolesNr(unsigned int poles_nr, unsigned int degree)
 }
 
 template <class REAL> 
-bool B_SPLINE<REAL>::ComputeKnotsNr(unsigned int degree, unsigned int type, unsigned int poles_nr, unsigned int &k_nr)
+bool B_SPLINE<REAL>::KnotsNrWithoutMults(unsigned int degree, unsigned int type, unsigned int poles_nr, unsigned int &k_nr)
 {
 	// example: knots = poles + degree + 1 = 10 + 3 + 1 = 14
 
@@ -145,15 +145,15 @@ bool B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
 	clog << poles_nr << "\t" << degree << endl << endl;
 
 	unsigned int k = poles_nr + degree + 1;
-	unsigned int k_nr;
+	unsigned int k_noMults;
 	
-	if( ComputeKnotsNr(degree, type, poles_nr, k_nr) )
+	if( KnotsNrWithoutMults(degree, type, poles_nr, k_noMults) )
 	{
 		return 1;
 	}
 
 	clog << "k    = " << k << endl;
-	clog << "k_nr = " << k_nr << endl << endl;
+	clog << "k_nr = " << k_noMults << endl << endl;
 
 	if(type == UNIFORM) // (closed)
 	{
@@ -179,11 +179,7 @@ bool B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
 
     if(type == PEACEWISE) 
     {
-		unsigned int div = (k - 2*order)/degree + 1;
-    	//REAL increment = 1.0/div;
-    	REAL increment = 1.0/(k_nr - 1);
-   
-    	clog << k << "\t" << k_nr - 1 << "\t" << increment << endl << endl;
+    	REAL increment = 1.0/(k_noMults - 1);
 
 		for(unsigned int i=0; i<order; i++)
 		{
@@ -201,8 +197,6 @@ bool B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
         	for(unsigned int m=0; m<degree; m++, i++)
 			{
     			K.push_back(j*increment);
-    			//K.push_back((j - degree)*increment);
-				//clog << i << "\t" << K[i] << endl;
 				clog << "\t" << order + i << "\t" << j << "\t" << j*increment << endl;
 			}
 
@@ -232,20 +226,28 @@ int B_SPLINE<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
 {
 	// === Index of knot interval k that contains position t ===
 
-	if(t < 0 || t > 1)
+	/*if(t < 0 || t > 1)
 	{
 		clog << "Position = " << t << " is not in the interval t<0,1> !!!" << endl;
 		return 1;
+	}*/
+	
+	if(t <= 0.0)
+	{
+		X = B_SPLINE::P[0].x;
+		Y = B_SPLINE::P[0].y;
+		Z = B_SPLINE::P[0].z;
+		return 0;
 	}
 	
-	if(t == 1)
+	if(t >= 1.0)
 	{
 		X = B_SPLINE::P[B_SPLINE::P.size() - 1].x;
 		Y = B_SPLINE::P[B_SPLINE::P.size() - 1].y;
 		Z = B_SPLINE::P[B_SPLINE::P.size() - 1].z;
 		return 0;
 	}
-
+	
 	unsigned int k;
 
 	for(k=0; k<K.size()-1; k++)
@@ -257,10 +259,17 @@ int B_SPLINE<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
 	// === Compute ===
 
 	// --- X ---
-	
+
+	//clog << "BLA" << endl;
+
 	vector <REAL> d; 
-	for(unsigned int j=0; j<degree+1; j++) 
+	for(unsigned int j=0; j<degree+1; j++)
+	{
 		d.push_back( B_SPLINE::P[j + k - degree].x );
+	}
+	
+	//clog << "BLA END" << endl;
+
 	X = deBoor(k, t, d);
 
 	// --- Y ---
@@ -326,7 +335,7 @@ void B_SPLINE<REAL>::VertexesSeq(unsigned int v_nr)
 
 	B_SPLINE::tV.assign(v_nr, 0.0);
     
-	REAL t = 0;
+	REAL t  = 0;
     REAL du = 1/REAL(B_SPLINE::V.size()-1);
 	
     for(unsigned int x=0; x<B_SPLINE::V.size(); x++)

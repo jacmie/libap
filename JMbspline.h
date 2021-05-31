@@ -19,7 +19,7 @@ template <class REAL> class B_SPLINE : public BEZIER <REAL>
 	void SetMinDegree(unsigned int val);
 	bool CheckMinDegree(unsigned int degree);
 	bool CheckMinPolesNr(unsigned int poles_nr, unsigned int degree);
-	bool ComputeKnotsNr(unsigned int degree, unsigned int peacewise_flag, unsigned int poles_nr, unsigned int &k_nr);
+	bool KnotsNrWithoutMults(unsigned int degree, unsigned int type, unsigned int poles_nr, unsigned int &k_nr);
 	bool Init(unsigned int poles_nr, unsigned int curve_degree, unsigned int type=QUASI_UNIFORM);
     int  Vertex(REAL t, REAL &X, REAL &Y, REAL &Z);
 	void VertexesSeq(unsigned int v_nr);
