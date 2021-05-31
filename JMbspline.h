@@ -7,14 +7,20 @@ enum bspline_type {UNIFORM, QUASI_UNIFORM, PEACEWISE};
 
 template <class REAL> class B_SPLINE : public BEZIER <REAL>
 {
-    public:
+	unsigned int min_degree;
+    
+	public:
 
     unsigned int degree;
     std::vector < REAL > K;
 
 	B_SPLINE();
     B_SPLINE(unsigned int poles_nr, unsigned int curve_degree, unsigned int type=QUASI_UNIFORM);
-	void Init(unsigned int poles_nr, unsigned int curve_degree, unsigned int type=QUASI_UNIFORM);
+	void SetMinDegree(unsigned int val);
+	bool CheckMinDegree(unsigned int degree);
+	bool CheckMinPolesNr(unsigned int poles_nr, unsigned int degree);
+	bool ComputeKnotsNr(unsigned int degree, unsigned int peacewise_flag, unsigned int poles_nr, unsigned int &k_nr);
+	bool Init(unsigned int poles_nr, unsigned int curve_degree, unsigned int type=QUASI_UNIFORM);
     int  Vertex(REAL t, REAL &X, REAL &Y, REAL &Z);
 	void VertexesSeq(unsigned int v_nr);
     

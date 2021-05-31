@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
 	
     unsigned int poles  = 9;
     unsigned int degree = 2;
-    unsigned int type   = 1;//QUASI_UNIFORM;
+    unsigned int type   = 2;//QUASI_UNIFORM;
     unsigned int vertex = 22;
     
     clog << "poles  = " << poles  << endl;
@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
     clog << "type   = " << type   << endl << endl;
     
 	B_SPLINE <double> Bs(poles, degree, type);
-    
+   /* 
     Bs.P[0].x = 1.0;
 	Bs.P[0].y = 2.0;
     Bs.P[0].z = 1.0;
@@ -304,7 +304,7 @@ int main(int argc, char *argv[])
 	clog << "Min/Max (X):\t" << Min << "\t" << Max << endl << endl;
 
 	// --- Point t & point from X ---
-	/*	
+	/ *	
     double X, Y, Z;
     
     clog << "t(X=1.4) = " << Bez.tVertex(0, 1.4) << "% coef." << endl; //X
@@ -312,12 +312,12 @@ int main(int argc, char *argv[])
     clog << "X\t" << "Y\t" << "Z" << endl;
     clog << X << "\t" << Y << "\t" << Z << endl;
     //out << endl << X << "\t" << Y << "\t" << Z << endl;
-    */
+    * /
 	
 	GNUPLOT GnuPlott;
 	GnuPlott.NrOfDataCloumns = 2;
 	GnuPlott.Plot2D("TestDir/JMbspline/Bspline.xls");
-
+*/
 	exit(1);
 	
 	// *** BezierAirfoil ***

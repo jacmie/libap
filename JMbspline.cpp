@@ -5,21 +5,136 @@ using namespace std;
 template <class REAL> 
 B_SPLINE<REAL>::B_SPLINE()
 {
+	min_degree		= 1; // Line
+    
+	B_SPLINE::eps   = 1e-6;
+    B_SPLINE::iter  = 50;
+    B_SPLINE::relax = 1;
 }
 
 template <class REAL> 
 B_SPLINE<REAL>::B_SPLINE(unsigned int poles_nr, unsigned int curve_degree, unsigned int type)
 {
+	min_degree		= 1; // Line
+    
+	B_SPLINE::eps   = 1e-6;
+    B_SPLINE::iter  = 50;
+    B_SPLINE::relax = 1;
+	
 	Init(poles_nr, curve_degree, type);
 }
 
 template <class REAL> 
-void B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsigned int type)
+void B_SPLINE<REAL>::SetMinDegree(unsigned int val)
 {
-    B_SPLINE::eps  = 1e-6;
-    B_SPLINE::iter = 50;
-    B_SPLINE::relax = 1;
+	min_degree = val;
+}
 
+template <class REAL> 
+bool B_SPLINE<REAL>::CheckMinDegree(unsigned int degree)
+{
+	if(degree < min_degree)
+	{
+		clog << "Condition: Degree >= " << " " << min_degree << endl;
+		clog << "Minimum Degree reached: " << degree << "!!!" << endl;
+		return 1;
+	}
+
+	return 0;
+}
+
+template <class REAL> 
+bool B_SPLINE<REAL>::CheckMinPolesNr(unsigned int poles_nr, unsigned int degree)
+{
+	if(poles_nr < degree + 1)
+	{
+		clog << "Condition: PolesNr >= Degree + 1" << endl;
+		clog << "Minimum PolesNr reached: " << poles_nr << "!!!" << endl;
+		return 1;
+	}
+
+	return 0;
+}
+
+template <class REAL> 
+bool B_SPLINE<REAL>::ComputeKnotsNr(unsigned int degree, unsigned int type, unsigned int poles_nr, unsigned int &k_nr)
+{
+	// example: knots = poles + degree + 1 = 10 + 3 + 1 = 14
+
+	if( CheckMinDegree(degree) )
+	{
+		return 1;
+	}
+
+	if( CheckMinPolesNr(poles_nr, degree) )
+	{
+		return 1;
+	}
+	
+	int KnotsNr;
+
+	if(type == UNIFORM) // Closed Uniform 
+	{
+		KnotsNr = poles_nr + degree + 1;
+
+		k_nr = KnotsNr;
+	}
+
+	else if(type == QUASI_UNIFORM) // Open Uniform 
+	{
+		KnotsNr = (poles_nr + degree + 1) - 2*degree;
+
+		if(KnotsNr < 0)
+		{
+			clog << "Knots number negative!!!" << endl;
+			clog << "PolesNr = " << poles_nr << endl;
+			clog << "Degree  = " << degree << endl;
+			clog << "Knots   = " << KnotsNr << endl;
+			return 1;
+		}
+
+		k_nr = KnotsNr;
+	}
+	
+	else if(type == PEACEWISE) // Peacewise
+	{
+		KnotsNr = (poles_nr + degree + 1) - 2*(degree + 1);	// Substruct Start/End knots 
+		
+		if(0 != KnotsNr % degree)							//Check if it devides without Rest
+		{
+			clog << "Knots does not devide equally for Peacewise Spline!!!" << endl; 
+			return 1;
+		}
+
+		KnotsNr /= degree;									// Devide for Inner knots
+		clog << KnotsNr << endl;
+		KnotsNr += 2;										// Add Start/End knots
+		clog << KnotsNr << endl;
+			
+		if(KnotsNr < 0)
+		{
+			clog << "Knots number negative!!!" << endl;
+			clog << "PolesNr = " << poles_nr << endl;
+			clog << "Degree  = " << degree << endl;
+			clog << "Knots   = " << KnotsNr << endl;
+			return 1;
+		}
+		
+		k_nr = KnotsNr;
+	}
+
+	else
+	{
+		clog << "Unrecognized Bspline type!!!" << endl;
+		return 1;
+	}
+
+	return 0;
+}
+
+template <class REAL> 
+bool B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsigned int type)
+{
 	degree = curve_degree;
 	unsigned int order = degree + 1;
 
@@ -27,7 +142,18 @@ void B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
    
 	// --- Knots ---
 	
+	clog << poles_nr << "\t" << degree << endl << endl;
+
 	unsigned int k = poles_nr + degree + 1;
+	unsigned int k_nr;
+	
+	if( ComputeKnotsNr(degree, type, poles_nr, k_nr) )
+	{
+		return 1;
+	}
+
+	clog << "k    = " << k << endl;
+	clog << "k_nr = " << k_nr << endl << endl;
 
 	if(type == UNIFORM) // (closed)
 	{
@@ -39,15 +165,13 @@ void B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
     
 	if(type == QUASI_UNIFORM) // (opened)
 	{
-		REAL increment = 1.0/(k -2*degree);
-        
+		REAL increment = 1.0/(k - 2*degree - 1);
+     
 		for(unsigned int i=0; i<order; i++)
 			K.push_back(0.0);
 
-        for(unsigned int i=order; i<k-order; i++)
-		{
+		for(unsigned int i=order; i<k-order; i++)
     		K.push_back((i - degree)*increment);
-		}
 
 		for(unsigned int i=k-order; i<k; i++)
     		K.push_back(1.0);
@@ -55,26 +179,52 @@ void B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
 
     if(type == PEACEWISE) 
     {
-    	REAL increment = 1.0/(k - 2*degree)*degree;
-        
+		unsigned int div = (k - 2*order)/degree + 1;
+    	//REAL increment = 1.0/div;
+    	REAL increment = 1.0/(k_nr - 1);
+   
+    	clog << k << "\t" << k_nr - 1 << "\t" << increment << endl << endl;
+
 		for(unsigned int i=0; i<order; i++)
-			K.push_back(0.0);
-        
-        for(unsigned int i=order; i<k-degree; i+=degree)
 		{
-			unsigned int j=i; 
+			K.push_back(0.0);
+			clog << i << "\t" << K[i] << endl;
+		}
+
+		clog << endl;
+
+		unsigned int j=1;
+
+        for(unsigned int i=0; i<k-2*order; j++)
+		{
 				
         	for(unsigned int m=0; m<degree; m++, i++)
-    			K.push_back((j - degree)*increment);
+			{
+    			K.push_back(j*increment);
+    			//K.push_back((j - degree)*increment);
+				//clog << i << "\t" << K[i] << endl;
+				clog << "\t" << order + i << "\t" << j << "\t" << j*increment << endl;
+			}
+
+			clog << endl;
 		}
 		
-	    for(unsigned int i=k-order; i<k; i++)
+		clog << endl;
+	    
+		for(unsigned int i=k-order; i<k; i++)
+		{
     		K.push_back(1.0);
+			clog << i << "\t" << K[i] << endl;
+		}
+		
+		clog << endl;
     }
 	
 	for(unsigned int p=0; p<K.size(); p++)
 		clog << p << "\t" << K[p] << endl;
 	clog << endl;
+
+	return 0;
 }
 
 template <class REAL> 
