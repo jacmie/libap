@@ -107,9 +107,7 @@ bool B_SPLINE<REAL>::KnotsNrWithoutMults(unsigned int degree, unsigned int type,
 		}
 
 		KnotsNr /= degree;									// Devide for Inner knots
-		clog << KnotsNr << endl;
 		KnotsNr += 2;										// Add Start/End knots
-		clog << KnotsNr << endl;
 			
 		if(KnotsNr < 0)
 		{
@@ -141,8 +139,6 @@ bool B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
 	B_SPLINE::P.resize(poles_nr);
    
 	// --- Knots ---
-	
-	clog << poles_nr << "\t" << degree << endl << endl;
 
 	unsigned int k = poles_nr + degree + 1;
 	unsigned int k_noMults;
@@ -152,16 +148,13 @@ bool B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
 		return 1;
 	}
 
-	clog << "k    = " << k << endl;
-	clog << "k_nr = " << k_noMults << endl << endl;
-
-	if(type == UNIFORM) // (closed)
+	/*if(type == UNIFORM) // (closed)
 	{
 		REAL increment = 1.0/(k - 1);
         
         for(unsigned int i=0; i<k; i++)
     		K.push_back(i*increment);
-	}
+	}*/
     
 	if(type == QUASI_UNIFORM) // (opened)
 	{
@@ -182,41 +175,19 @@ bool B_SPLINE<REAL>::Init(unsigned int poles_nr, unsigned int curve_degree, unsi
     	REAL increment = 1.0/(k_noMults - 1);
 
 		for(unsigned int i=0; i<order; i++)
-		{
 			K.push_back(0.0);
-			clog << i << "\t" << K[i] << endl;
-		}
-
-		clog << endl;
 
 		unsigned int j=1;
 
         for(unsigned int i=0; i<k-2*order; j++)
 		{
-				
         	for(unsigned int m=0; m<degree; m++, i++)
-			{
     			K.push_back(j*increment);
-				clog << "\t" << order + i << "\t" << j << "\t" << j*increment << endl;
-			}
-
-			clog << endl;
 		}
 		
-		clog << endl;
-	    
 		for(unsigned int i=k-order; i<k; i++)
-		{
     		K.push_back(1.0);
-			clog << i << "\t" << K[i] << endl;
-		}
-		
-		clog << endl;
     }
-	
-	for(unsigned int p=0; p<K.size(); p++)
-		clog << p << "\t" << K[p] << endl;
-	clog << endl;
 
 	return 0;
 }
@@ -229,28 +200,8 @@ void B_SPLINE<REAL>::deBoorData(unsigned int k, unsigned int xyz, std::vector <R
 
 	for(unsigned int j=0; j<degree+1; j++)
 	{
-		clog << j << "\t" << k << "\t" << degree << endl;
-		
 		jk_d = j + k - degree;
-		clog << "jk_d = " << jk_d << endl;
-		
-		/*if(jk_d < 0)
-			jk_d += (B_SPLINE::P.size() );
-		
-		if(jk_d >= int(B_SPLINE::P.size() ))
-			jk_d -= (B_SPLINE::P.size() );*/
-		
-		if(jk_d < 0)
-			jk_d += (B_SPLINE::P.size() + 1);
-		
-		if(jk_d >= int(B_SPLINE::P.size() - 1))
-			jk_d -= (B_SPLINE::P.size() - 1);
-		
-		clog << "jk_d = " << jk_d << endl;
-		//d.push_back( B_SPLINE::P[jk_d].x );
 		d.push_back( B_SPLINE::P[jk_d].Get(xyz) );
-
-		clog << endl;
 	}
 }
 
@@ -263,49 +214,27 @@ double B_SPLINE<REAL>::deBoor(unsigned int k, double x, vector <REAL> d)
 	
     for(unsigned int r=1; r<degree+1; r++)
 	{
-		clog << "r = " << r << endl;
+		//clog << "r = " << r << endl;
 
 		for(unsigned int j=degree; j>r-1; j--)
 		{
-			//clog << "\t" << j << "\t";
-
-			//int jk_d = j + k - degree;
-
-			//clog << K[j + k - degree] << "\t" << K[j + 1 + k - r] << endl;
-
 			int jk_d  = j + k - degree; 
 			int j1k_r = j + 1 + k - r;
 
-			if(jk_d < 0)
-				jk_d += (K.size() + 1);
-			
-			//if(jk_d >= int(K.size()))
-			//	jk_d -= K.size();
-
-			if(j1k_r < 0)
-				j1k_r += (K.size() + 1);
-		
-			//if(j1k_r >= int(K.size()))
-			//	j1k_r -= K.size();
-			
-			clog << K.size() << endl;
-
-			clog << "\t\t" << "alpha = (x - K[j + k - degree]) / (K[j + 1 + k - r] - K[j + k - degree])" << endl;
-			clog << "\t\t" << "alpha = (x - K[" << jk_d << "]) / (K[" << j1k_r << "] - K[" << jk_d << "])" << endl;
-			clog << "\t\t" << alpha << " = (" << x << " - " << K[jk_d] << ") / (" << K[j1k_r] << " - " << K[jk_d] << ")" << endl;
+			//clog << "\t\t" << "alpha = (x - K[j + k - degree]) / (K[j + 1 + k - r] - K[j + k - degree])" << endl;
+			//clog << "\t\t" << "alpha = (x - K[" << jk_d << "]) / (K[" << j1k_r << "] - K[" << jk_d << "])" << endl;
+			//clog << "\t\t" << alpha << " = (" << x << " - " << K[jk_d] << ") / (" << K[j1k_r] << " - " << K[jk_d] << ")" << endl;
         
             alpha = (x - K[jk_d]) / (K[j1k_r] - K[jk_d]);
             
 			d[j] = (1.0 - alpha)*d[j-1] + alpha*d[j];
 
-			clog << "\t\td[j] = " << d[j] << endl << endl;
+			//clog << "\t\td[j] = " << d[j] << endl << endl;
 		}
 
-		clog << endl;
+		//clog << endl;
 	}
 	
-	clog << d[degree] << endl;
-    
 	return d[degree];
 }
 
@@ -319,7 +248,7 @@ int B_SPLINE<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
 		clog << "Position = " << t << " is not in the interval t<0,1> !!!" << endl;
 		return 1;
 	}*/
-/*	
+	
 	if(t <= 0.0)
 	{
 		X = B_SPLINE::P[0].x;
@@ -335,7 +264,7 @@ int B_SPLINE<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
 		Z = B_SPLINE::P[B_SPLINE::P.size() - 1].z;
 		return 0;
 	}
-*/	
+	
 	unsigned int k;
 
 	for(k=0; k<K.size()-1; k++)
@@ -348,77 +277,20 @@ int B_SPLINE<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
 
 	// --- X ---
 
-	clog << "BLA" << endl;
-	clog << "P_size = " << B_SPLINE::P.size() << endl << endl;
-
-	//int jk_d;
-	
 	vector <REAL> d; 
-	
 	deBoorData(k, 0, d);
-	/*
-	for(unsigned int j=0; j<degree+1; j++)
-	{
-		clog << j << "\t" << k << "\t" << degree << endl;
-		
-		jk_d = j + k - degree;
-		clog << "jk_d = " << jk_d << endl;
-		
-		if(jk_d < 0)
-			jk_d += (B_SPLINE::P.size() + 1);
-		
-		if(jk_d >= int(B_SPLINE::P.size() - 1))
-			jk_d -= (B_SPLINE::P.size() - 1);
-
-		clog << "jk_d = " << jk_d << endl;
-		//d.push_back( B_SPLINE::P[j + k - degree].x );
-		d.push_back( B_SPLINE::P[jk_d].x );
-
-		clog << endl;
-	}
-	*/
-	clog << "BLA END" << endl;
-
 	X = deBoor(k, t, d);
 
 	// --- Y ---
 	
 	d.resize(0); 
 	deBoorData(k, 1, d);
-	/*
-	for(unsigned int j=0; j<degree+1; j++)
-	{
-		jk_d = j + k - degree;
-		
-		if( jk_d < 0)
-			jk_d += (B_SPLINE::P.size() + 1);
-		
-		if(jk_d >= int(B_SPLINE::P.size() - 1))
-			jk_d -= (B_SPLINE::P.size() - 1);
-	
-		d.push_back( B_SPLINE::P[jk_d].y );
-	}
-	*/
 	Y = deBoor(k, t, d);
 	
 	// --- Z ---
 	
 	d.resize(0); 
 	deBoorData(k, 2, d);
-	/*
-	for(unsigned int j=0; j<degree+1; j++) 
-	{
-		jk_d = j + k - degree;
-		
-		if( jk_d < 0)
-			jk_d += (B_SPLINE::P.size() + 1);
-		
-		if(jk_d >= int(B_SPLINE::P.size() - 1))
-			jk_d -= (B_SPLINE::P.size() - 1);
-	
-		d.push_back( B_SPLINE::P[jk_d].z );
-	}
-*/
 	Z = deBoor(k, t, d);
 	
 	return 0;

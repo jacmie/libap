@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
 	
     unsigned int poles  = 9;
     unsigned int degree = 2;
-    unsigned int type   = 0;//QUASI_UNIFORM;
+    unsigned int type   = PEACEWISE; //QUASI_UNIFORM;
     unsigned int vertex = 222;
     
     clog << "poles  = " << poles  << endl;
@@ -238,8 +238,6 @@ int main(int argc, char *argv[])
     clog << "type   = " << type   << endl << endl;
     
 	B_SPLINE <double> Bs(poles, degree, type);
-   
-	clog << "Psize: " << Bs.P.size() << endl;
 
     Bs.P[0].x = 1.0;
 	Bs.P[0].y = 2.0;
