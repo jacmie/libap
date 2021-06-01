@@ -75,16 +75,31 @@ int main(int argc, char *argv[])
 	//*** JMdiscretization ***
 	
 	clog << endl << "*** JMdiscretization ***" << endl << endl;
-	
+
+	ofstream discret_out("TestDir/Discretization/Discretization.xls");
+
 	double *Yy = new double [10];
 	
-	Discretization(10, 2, 1, 1, Yy);
+	vector <double> Distro;
+
+	Discretization <double> (20, 2, 1.0, 1.0, Distro);
 	
-	for(int i=0; i<10; i++)
-		clog << i << "\t" << fixed << setprecision(4) << Yy[i] << endl;
-	
+	for(int i=0; i<20; i++)
+	{
+		clog << i << "\t" << fixed << setprecision(4) << Distro[i] << endl;
+		discret_out << fixed << setprecision(4) << Distro[i] << "\t" << 1 << endl;
+	}
+
 	delete [] Yy;
 	
+	discret_out.close();
+	
+	GNUPLOT GnuPlotDiscret;
+	GnuPlotDiscret.NrOfDataCloumns = 1;
+	GnuPlotDiscret.Plot2D("TestDir/Discretization/Discretization.xls");
+	
+	exit(1);
+
 	//+++ ADVANCED FUNCTIONS +++
 	
 	// *** JMxfoil ***
@@ -318,8 +333,6 @@ int main(int argc, char *argv[])
 	GnuPlott.NrOfDataCloumns = 2;
 	GnuPlott.Plot2D("TestDir/JMbspline/Bspline.xls");
 
-	exit(1);
-	
 	// *** BezierAirfoil ***
 	
 	clog << endl << "*** BezierAirfoil ***" << endl << endl;
