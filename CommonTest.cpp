@@ -78,27 +78,20 @@ int main(int argc, char *argv[])
 
 	ofstream discret_out("TestDir/Discretization/Discretization.xls");
 
-	double *Yy = new double [10];
-	
 	vector <double> Distro;
-
-	Discretization <double> (40, 2, 1.0, 1.0, Distro);
+	Discretization <double> (40, 2.0, Distro, 1, 7);
 	
 	for(unsigned int i=0; i<Distro.size(); i++)
 	{
 		clog << i << "\t" << fixed << setprecision(4) << Distro[i] << endl;
 		discret_out << fixed << setprecision(4) << Distro[i] << "\t" << 1 << endl;
 	}
-
-	delete [] Yy;
 	
 	discret_out.close();
 	
 	GNUPLOT GnuPlotDiscret;
 	GnuPlotDiscret.NrOfDataCloumns = 1;
 	GnuPlotDiscret.Plot2D("TestDir/Discretization/Discretization.xls");
-	
-	exit(1);
 
 	//+++ ADVANCED FUNCTIONS +++
 	

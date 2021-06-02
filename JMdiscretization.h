@@ -6,11 +6,9 @@
 
 #include <iostream>
 
-enum discretization_type {LEFT, CENTER, RIGHT, LINEAR};
-
 void Discretization(int n, int paneling_type, double factor, double maxVal, double *Val);
 
 template <class REAL> 
-void Discretization(int n, int paneling_type, REAL factor, REAL maxVal, std::vector <REAL> &Val);
+bool Discretization(unsigned int n, REAL factor, std::vector <REAL> &Val, bool paneling_type=0, REAL maxVal=1.0);
 
 #endif

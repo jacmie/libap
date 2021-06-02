@@ -30,61 +30,66 @@ void Discretization(int n, int paneling_type, double factor, double maxVal, doub
 }
 
 template <class REAL> 
-void Discretization(int n, int paneling_type, REAL factor, REAL maxVal, std::vector <REAL> &Val)
+bool Discretization(unsigned int n, REAL factor, std::vector <REAL> &Val, bool paneling_type, REAL maxVal)
 {
-    REAL di = 1.0/(n-1);
-    REAL CosPart, LinearPart;
-	
-	REAL dL, Scale = 1;
-	REAL dL1, dL2;
-
-    for(int i=0; i<n; i++)
-    {															//Wing Span Paneling
-		LinearPart = di*i;							  	      	//*  *  *  *  *  *
-	
-		//dL = i/(n - 1.0);
-		
-		dL = pow(i/(n - 1.0), Scale) / pow((n - 1.0)/(n - 1.0), Scale);
-		//Val.push_back(dL);		
-    }
-   
-	clog << "n = " << n << endl;
-	clog << "r = " << n%2 << endl;
-
-	unsigned int r = n%2;
-	
-	n *= 0.5;
-//	n += r;
-	
-	if(r)
-		n += 1;
-	
-	clog << "n = " << n << endl;
-
-	for(int i=0; i<n-r; i++)
-    {
-		if(r)
-			dL = pow(i/(n - 1.0), Scale) / pow((n - 1.0)/(n - 1.0), Scale);
-		else
-			dL = pow(i/(n - 0.5), Scale) / pow((n - 0.5)/(n - 0.5), Scale);
-		
-		Val.push_back(dL - 1.0);		
-    }
-	
-	for(int i=0; i<n; i++)
-    {
-		clog << n - i - 1 << endl;
-		Val.push_back( - Val[n - i - 1] );		
-
-		clog << endl;
-    }
-	
-	for(unsigned int i=0; i<Val.size(); i++)
+	if(factor <= 0)
 	{
-		Val[i] += 1; 
-		Val[i] *= 0.5*maxVal; 
+		clog << "Factor has to be bigger than 0!!!" << endl;
+		return 1;
 	}
+
+	if(paneling_type == 0) // One side
+	{
+    	for(unsigned int i=0; i<n; i++)
+		{
+			Val.push_back( maxVal*pow(i/(n - 1.0), factor) );		
+    	}
+	}
+
+	else // Central
+	{
+		REAL dL;
+		unsigned int r = n%2;
+	
+		n *= 0.5;
+		if(r)
+			n += 1;
+
+		// --- Generate Left part ---
+
+		for(unsigned int i=0; i<n-r; i++)
+	    {
+			if(r)
+			{
+				dL = pow(i/(n - 1.0), factor);
+			}
+		
+			else
+			{
+				dL = pow(i/(n - 0.5), factor);
+			}
+		
+			Val.push_back(dL - 1.0);		
+   	 	}
+	
+		// --- Copy Left to Right part ---
+		 
+		for(unsigned int i=0; i<n; i++)
+    	{
+			Val.push_back( -Val[n - i - 1] );		
+    	}
+	
+		// --- Translate & Scale --- 
+
+		for(unsigned int i=0; i<Val.size(); i++)
+		{
+			Val[i] += 1; 
+			Val[i] *= 0.5*maxVal; 
+		}
+	}
+
+	return 0;
 }
 
-template void Discretization <float> (int n, int paneling_type, float factor, float maxVal, std::vector <float> &Val);
-template void Discretization <double> (int n, int paneling_type, double factor, double maxVal, std::vector <double> &Val);
+template bool Discretization <float> (unsigned int n, float factor, std::vector <float> &Val, bool paneling_type, float maxVal);
+template bool Discretization <double> (unsigned int n, double factor, std::vector <double> &Val, bool paneling_type, double maxVal);
