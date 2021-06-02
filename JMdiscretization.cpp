@@ -35,7 +35,7 @@ void Discretization(int n, int paneling_type, REAL factor, REAL maxVal, std::vec
     REAL di = 1.0/(n-1);
     REAL CosPart, LinearPart;
 	
-	REAL dL, Scale = 1.5;
+	REAL dL, Scale = 1;
 	REAL dL1, dL2;
 
     for(int i=0; i<n; i++)
@@ -45,42 +45,45 @@ void Discretization(int n, int paneling_type, REAL factor, REAL maxVal, std::vec
 		//dL = i/(n - 1.0);
 		
 		dL = pow(i/(n - 1.0), Scale) / pow((n - 1.0)/(n - 1.0), Scale);
-/*
-		switch (paneling_type)
-		{
-			case 0:
-				CosPart =      1 - cos(           0.5*M_PI*dL);  	//** *  *   *   * (left)
-				break;
-			default:
-			case 1:
-				CosPart = 0.5*(1 - cos(               M_PI*dL)); 	//** *  *  * * ** (center)
-				break;
-        	case 2:
-				CosPart =          cos(0.5*M_PI - 0.5*M_PI*dL);  	//*   *   *  * ** (right)
-				break;
-		}
-*/		
-		//Val.push_back( maxVal*( factor*CosPart + (1-factor)*LinearPart ) );		
-		//Val.push_back( maxVal*CosPart );		
-		Val.push_back( maxVal*dL );		
+		//Val.push_back(dL);		
+    }
+   
+	clog << "n = " << n << endl;
+	clog << "r = " << n%2 << endl;
+
+	unsigned int r = n%2;
+	
+	n *= 0.5;
+//	n += r;
+	
+	if(r)
+		n += 1;
+	
+	clog << "n = " << n << endl;
+
+	for(int i=0; i<n-r; i++)
+    {
+		if(r)
+			dL = pow(i/(n - 1.0), Scale) / pow((n - 1.0)/(n - 1.0), Scale);
+		else
+			dL = pow(i/(n - 0.5), Scale) / pow((n - 0.5)/(n - 0.5), Scale);
+		
+		Val.push_back(dL - 1.0);		
+    }
+	
+	for(int i=0; i<n; i++)
+    {
+		clog << n - i - 1 << endl;
+		Val.push_back( - Val[n - i - 1] );		
 
 		clog << endl;
     }
-   /* 
-	for(int i=0; i<n; i++)
-    {
-		dL1 = pow(i/(n - 1.0), Scale) / pow((n - 1.0)/(n - 1.0), Scale);
-		
-		Val.push_back( maxVal*dL );		
-
-		clog << endl;
-		
-		dL2 = pow(i/(n - 1.0), 1/Scale) / pow((n - 1.0)/(n - 1.0), 1/Scale);
-		
-		Val.push_back( maxVal*(dL1 + dL2)*0.5 );		
-
-		clog << endl;
-    }*/
+	
+	for(unsigned int i=0; i<Val.size(); i++)
+	{
+		Val[i] += 1; 
+		Val[i] *= 0.5*maxVal; 
+	}
 }
 
 template void Discretization <float> (int n, int paneling_type, float factor, float maxVal, std::vector <float> &Val);

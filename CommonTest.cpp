@@ -82,9 +82,9 @@ int main(int argc, char *argv[])
 	
 	vector <double> Distro;
 
-	Discretization <double> (20, 2, 1.0, 1.0, Distro);
+	Discretization <double> (40, 2, 1.0, 1.0, Distro);
 	
-	for(int i=0; i<20; i++)
+	for(unsigned int i=0; i<Distro.size(); i++)
 	{
 		clog << i << "\t" << fixed << setprecision(4) << Distro[i] << endl;
 		discret_out << fixed << setprecision(4) << Distro[i] << "\t" << 1 << endl;
