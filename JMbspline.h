@@ -24,7 +24,7 @@ template <class REAL> class B_SPLINE : public BEZIER <REAL>
     int  Vertex(REAL t, REAL &X, REAL &Y, REAL &Z);
 	void VertexesSeq(unsigned int v_nr);
     
-	//REAL tVertex(unsigned int XYZ, REAL Value);
+	//REAL tVertex(unsigned int XYZ, REAL Value); // Not as easy as in Bezier, may be aproximated in future with finite difference
     
 	private:
     

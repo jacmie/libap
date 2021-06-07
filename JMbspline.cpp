@@ -316,61 +316,6 @@ void B_SPLINE<REAL>::VertexesSeq(unsigned int v_nr)
     }
 }
 
-/*
-template <class REAL> 
-REAL BEZIER<REAL>::tVertex(unsigned int XYZ, REAL Value)
-{
-    REAL min, max;
-    PMinMax(XYZ, min, max);
-    
-    if(Value<min || Value>max)
-    {
-        clog << "!!!\tmin < X < max\t\t";
-        clog << min << " < " << Value << " < " << max << endl;
-        return 999;
-    }
-    
-    else
-    {
-		REAL f, fprim;
-        REAL t = (Value - min)/(max - min);
-        
-		if(t == 0 || t == 1)
-			return t;
-    
-        for(unsigned int i=0; i<iter; i++) //Newton-Rapson search
-        {    
-            f = fprim = 0;
-        
-            // *** f ***
-    
-            for(unsigned int k=0; k<npt; k++)
-                f += C[k]*pow(t, k)*pow(1 - t, n - k)*P[k].Get(XYZ);
-        
-            f -= Value;
-        
-            // *** fprim ***
-    
-            for(unsigned int k=0; k<npt; k++)
-				fprim += C[k]*P[k].Get(XYZ)*( k*pow(t, k-1)*pow(1 - t, n - k) + pow(t, k)*(n - k)*pow(1 - t, n - k - 1) );
-			
-			if(fprim == 0)
-			{
-				clog << "Can't devide by fprim = 0!" << endl;
-				return 999;
-			}
-			
-            t -= relax*f/fprim; 
-        
-            if(fabs(f)<=eps)
-                break;
-        }
-		
-        return t;
-    }
-}
-*/
-
 template <class REAL> 
 void B_SPLINE<REAL>::BasisFunctions(REAL t) // only for tests
 {

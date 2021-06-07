@@ -51,7 +51,7 @@ template <class REAL> class BEZIER
 	void Init(unsigned int nmax);
     virtual int  Vertex(REAL t, REAL &X, REAL &Y, REAL &Z);
     virtual void VertexesSeq(unsigned int v_nr);
-    REAL tVertex(unsigned int XYZ, REAL Value);
+    virtual REAL tVertex(unsigned int XYZ, REAL Value);
 	REAL Length();
 	REAL LengthX();
 	REAL LengthY();
