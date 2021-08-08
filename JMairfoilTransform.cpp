@@ -108,7 +108,7 @@ void AIRFOIL_TRANSFORM::Transformations()
 	for(int i=0; i<NrOfCord; i++)
 	{
 		// 1. rotation about Y axis (Alfa)
-		RotatePointRefRad(x[i], z[i], rotation*M_PI/180, ref, 0);
+		RotatePointRefRad(rotation*M_PI/180, ref, 0, x[i], z[i]);
 		
 		// 2. scaling
 		x[i] *= scale;
@@ -139,7 +139,7 @@ void AIRFOIL_TRANSFORM::Transformations()
 				katN = -M_PI/2;
 		}
 			
-		RotatePointRefRad(y[i], z[i], katN, y[i],0);
+		RotatePointRefRad(katN, y[i], 0, y[i], z[i]);
 		
 		// 5. X, Y, Z translations  
         x[i] += trans_x; 

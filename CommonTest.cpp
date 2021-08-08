@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
         x = 1.0;
         y = 0.0;
 
-		RotatePointRefDeg(x, y, Fi, 1.0, 1.0);
+		RotatePointRefDeg(Fi, 1.0, 1.0, x, y);
             
         clog << i << "\t" << fixed << setprecision(1) << Fi << setprecision(3) << "\t" << x << "\t" << y << endl; 	
         mout << fixed << setprecision(6) << x << "\t" << y << endl;

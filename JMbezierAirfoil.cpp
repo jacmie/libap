@@ -439,7 +439,7 @@ void BEZIER_AIRFOIL::SetBezierPoints(double Fi, double dFi, double MinMax, unsig
 
 		clog << x << "\t" << y << "\t";
 
-	    RotatePointRefRad(x, y, Fi, RefX, 0);
+	    RotatePointRefRad(Fi, RefX, 0, x, y);
 	
 		clog << Fi*180/M_PI << "\t" << RefX << "\t" << x << "\t" << y << endl;
         

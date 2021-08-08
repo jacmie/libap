@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void SetRotatePointRad(double &x, double &y, double AngRad)
+void SetRotatePointRad(double AngRad, double &x, double &y)
 {
 	double r = sqrt( x*x + y*y );
 	
@@ -11,17 +11,15 @@ void SetRotatePointRad(double &x, double &y, double AngRad)
     y = r * sin(AngRad);
 }
 
-void SetRotatePointDeg(double &x, double &y, double AngDeg)
+void SetRotatePointDeg(double AngDeg, double &x, double &y)
 {
-	SetRotatePointRad(x, y, AngDeg*M_PI/180);
+	SetRotatePointRad(AngDeg*M_PI/180, x, y);
 }
 
-void RotatePointRefRad(double &x, double &y, double AngRad, double xRef, double yRef)
+void RotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y)
 {
 	x -= xRef;
 	y -= yRef;
-
-    //RotatePointRad(x, y, AngRad);
 
 	double xx = x*cos(AngRad) - y*sin(AngRad);
 	double yy = x*sin(AngRad) + y*cos(AngRad);
@@ -33,9 +31,9 @@ void RotatePointRefRad(double &x, double &y, double AngRad, double xRef, double 
     y += yRef;
 }
 
-void RotatePointRefDeg(double &x, double &y, double AngDeg, double xRef, double yRef)
+void RotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y)
 {
-	RotatePointRefRad(x, y, AngDeg*M_PI/180, xRef, yRef);
+	RotatePointRefRad(AngDeg*M_PI/180, xRef, yRef, x, y);
 }
 
 void LinearFunction(double x1, double y1, double x2, double y2, double &A, double &B)
@@ -44,16 +42,23 @@ void LinearFunction(double x1, double y1, double x2, double y2, double &A, doubl
 	B = y1 - A*x1;
 }
 
-void LinearFunction(double &A, double &B, double x1, double y1, double fiDeg)
+void LinearFunction(double x1, double y1, double fiDeg, double &A, double &B)
 {
     A = tan(fiDeg*M_PI/180);
     B = y1 - A*x1;
 }
 
-void Parabola(double &A, double &B, double &C, 
-              double x1, double y1,
-              double x2, double y2,
-              double x3, double yprim)
+bool LinesCrossing(double A1, double B1, double A2, double B2, double &x, double &y)
+{
+    if(A1 == A2) return 1;
+
+    x = (B2 - B1)/(A1 - A2);
+    y = A1*x + B1;
+
+    return 0;
+}
+
+void Parabola(double x1, double y1, double x2, double y2, double x3, double yprim, double &A, double &B, double &C)
 {
     A = (y2 - y1 + x1*yprim - x2*yprim) / (x2*x2 - x1*x1 + 2*x1*x3 - 2*x2*x3);
     B = yprim - 2*A*x3;
