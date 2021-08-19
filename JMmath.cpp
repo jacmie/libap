@@ -36,16 +36,24 @@ void RotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, doubl
 	RotatePointRefRad(AngDeg*M_PI/180, xRef, yRef, x, y);
 }
 
-void LinearFunction(double x1, double y1, double x2, double y2, double &A, double &B)
+bool LinearFunction(double x1, double y1, double x2, double y2, double &A, double &B)
 {
+    if(x2 - x1 == 0) return 1;
+
 	A = (y2 - y1)/(x2 - x1);
 	B = y1 - A*x1;
+
+    return 0;
 }
 
-void LinearFunction(double x1, double y1, double fiDeg, double &A, double &B)
+bool LinearFunction(double x1, double y1, double fiDeg, double &A, double &B)
 {
+    if(fmod(fiDeg+90., 180.) == 0) return 1;  
+
     A = tan(fiDeg*M_PI/180);
     B = y1 - A*x1;
+
+    return 0;
 }
 
 bool LinesCrossing(double A1, double B1, double A2, double B2, double &x, double &y)

@@ -8,8 +8,8 @@ void SetRotatePointDeg(double AngDeg, double &x, double &y);
 void RotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y);
 void RotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y);
 
-void LinearFunction(double x1, double y1, double x2, double y2, double &A, double &B);
-void LinearFunction(double x1, double y1, double fiDeg, double &A, double &B);
+bool LinearFunction(double x1, double y1, double x2, double y2, double &A, double &B);
+bool LinearFunction(double x1, double y1, double fiDeg, double &A, double &B);
 bool LinesCrossing(double A1, double B1, double A2, double B2, double &x, double &y);
 void Parabola(double x1, double y1, double x2, double y2, double x3, double yprim, double &A, double &B, double &C);
 
