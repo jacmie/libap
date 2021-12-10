@@ -5,6 +5,10 @@ using namespace std;
 
 void SetRotatePointRad(double AngRad, double &x, double &y);
 void SetRotatePointDeg(double AngDeg, double &x, double &y);
+void SetRotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y);
+void SetRotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y);
+void RotatePointRad(double AngRad, double &x, double &y);
+void RotatePointDeg(double AngDeg, double &x, double &y);
 void RotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y);
 void RotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y);
 
@@ -14,7 +18,7 @@ bool LinesCrossing(double A1, double B1, double A2, double B2, double &x, double
 void Parabola(double x1, double y1, double x2, double y2, double x3, double yprim, double &A, double &B, double &C);
 
 void Circle(double x1, double y1, double x2, double y2, double x3, double y3, double &A, double &B, double &R);
-void Arc2Bezeir(double x1, double y1, double &x2, double &y2, double &x3, double &y3, double x4, double y4, double xCirc, double yCirc);
+void Arc2Bezier(double x1, double y1, double &x2, double &y2, double &x3, double &y3, double x4, double y4, double xCirc, double yCirc);
 
 double LeastSquares(double x1, double y1, double z1, double x2, double y2, double z2);
 

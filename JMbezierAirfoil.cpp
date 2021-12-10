@@ -253,7 +253,7 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
     	{
 			double x2, y2, x3, y3;
 
-			Arc2Bezeir(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, x2, y2, x3, y3, SplineTF.P[0].x, SplineTF.P[0].y, LEcircX, LEcircY);
+			Arc2Bezier(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, x2, y2, x3, y3, SplineTF.P[0].x, SplineTF.P[0].y, LEcircX, LEcircY);
 			
 			SplineLE.P[0].x = SplineBF.P[nBF-1].x;
 			SplineLE.P[0].y = SplineBF.P[nBF-1].y;
@@ -363,7 +363,7 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
     	{
 			double x2, y2, x3, y3;
 
-			Arc2Bezeir(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, x2, y2, x3, y3, SplineTF.P[0].x, SplineTF.P[0].y, LEcircX, LEcircY);
+			Arc2Bezier(SplineBF.P[nBF-1].x, SplineBF.P[nBF-1].y, x2, y2, x3, y3, SplineTF.P[0].x, SplineTF.P[0].y, LEcircX, LEcircY);
 			
 			SplineLE.P[0].x = SplineBF.P[nBF-1].x;
 			SplineLE.P[0].y = SplineBF.P[nBF-1].y;

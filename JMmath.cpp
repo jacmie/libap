@@ -16,6 +16,36 @@ void SetRotatePointDeg(double AngDeg, double &x, double &y)
 	SetRotatePointRad(AngDeg*M_PI/180, x, y);
 }
 
+void SetRotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y)
+{
+    x -= xRef;
+    y -= yRef;
+
+    SetRotatePointRad(AngRad, x, y);
+
+    x += xRef;
+    y += yRef;
+}
+
+void SetRotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y)
+{
+    SetRotatePointRefRad(AngDeg*M_PI/180, xRef, yRef, x, y);
+}
+
+void RotatePointRad(double AngRad, double &x, double &y)
+{
+	double xx = x*cos(AngRad) - y*sin(AngRad);
+	double yy = x*sin(AngRad) + y*cos(AngRad);
+	
+	x = xx;
+	y = yy;
+}
+
+void RotatePointDeg(double AngDeg, double &x, double &y)
+{
+	RotatePointRad(AngDeg*M_PI/180, x, y);
+}
+
 void RotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y)
 {
 	x -= xRef;
@@ -87,7 +117,7 @@ void Circle(double x1, double y1, double x2, double y2, double x3, double y3, do
 	R = sqrt((A - x1)*(A - x1) + (B - y1)*(B - y1));
 }
 
-void Arc2Bezeir(double x1, double y1, double &x2, double &y2, double &x3, double &y3, double x4, double y4, double xCirc, double yCirc)
+bool Arc2Bezier(double x1, double y1, double &x2, double &y2, double &x3, double &y3, double x4, double y4, double xCirc, double yCirc)
 {
 	/*
 	Sources:
@@ -104,6 +134,9 @@ void Arc2Bezeir(double x1, double y1, double &x2, double &y2, double &x3, double
 	ay = y1 - yCirc;
 	bx = x4 - xCirc;
 	by = y4 - yCirc;
+
+    if(ax*by - ay*bx == 0) return 1;
+
 	q1 = ax*ax + ay*ay;
 	q2 = q1 + ax*bx + ay*by;
 	k2 = (4/3) * (sqrt(2*q1*q2) - q2) / (ax*by - ay*bx);
@@ -112,6 +145,8 @@ void Arc2Bezeir(double x1, double y1, double &x2, double &y2, double &x3, double
 	y2 = yCirc + ay + k2*ax;
 	x3 = xCirc + bx + k2*by;                                
 	y3 = yCirc + by - k2*bx;
+
+    return 0;
 }
 
 double LeastSquares(double x1, double y1, double z1, double x2, double y2, double z2)
