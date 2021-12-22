@@ -4,9 +4,18 @@
 #include <string.h>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 
 #include "JMconvert.h"
+
+struct OUT_VARIABLE
+{  
+	unsigned int LineNr;
+	unsigned int WordNr;
+    std::string Word;
+    //std::string Value;
+};
 
 struct VARIABLE
 {  
@@ -21,8 +30,11 @@ class SUBSTITUTE
     char Prompt, EndPrompt;
     bool EndFlag;
 	std::vector <VARIABLE> Var;
+	std::vector <OUT_VARIABLE> OutVar;
 
-    public:
+	unsigned int AllLinesNr = 0;
+    
+	public:
         
     SUBSTITUTE();
     //SUBSTITUTE(std::string InFile, std::string OutFile);
@@ -30,6 +42,7 @@ class SUBSTITUTE
 	void AddVariable(std::string Name, std::string Value);
 	void AddVariable(std::string Name, double Value);
 	int  Insert();
+    int  Derieve();
 };
 
 #endif

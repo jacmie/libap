@@ -136,3 +136,217 @@ int SUBSTITUTE::Insert()
 	return 0;
 }
 
+int SUBSTITUTE::Derieve()
+{
+    //*** Clean Marks ***
+    
+    for(unsigned int i=0; i<Var.size(); i++)
+    {
+        if(Var[i].Name[0] == Prompt)
+        {
+            for(unsigned int x=0; x<Var.size()-1; x++)
+                Var[i].Name[x] = Var[i].Name[x+1];
+        }
+        
+        clog << Var[i].Name << "\t" << Var[i].Value << endl;
+    }
+   
+	clog << endl;
+
+    //*** Find Position of the Variables ***
+    
+	int  len, pos;
+    string line, word;
+	unsigned int line_nr=0;
+	unsigned int word_nr;
+	OUT_VARIABLE SingleVar;
+
+    ifstream in(InPut);
+	
+	if(!in)
+		return 1;
+	
+    ifstream in2(OutPut);
+    
+    if(!in2)
+        return 2;
+    
+    while(!in.eof())
+    {
+		getline(in, line);
+
+		stringstream ss;
+		ss.str(line);
+		ss << "\n";
+
+		//clog << ss.str() << endl;
+
+		pos = 0;
+		word_nr = 0;
+		
+		while(!ss.eof()) //till the end of the line
+		{
+			ss >> word;
+			word_nr++;
+			
+			if(word[0] == Prompt) 
+			{
+				clog << "Found Var!!!!!!!!!!!!!!!" << endl;
+				clog << "Line: " << line_nr << "\tWord: " << word_nr << "\t" << word << endl;
+
+				SingleVar.LineNr = line_nr;
+				SingleVar.WordNr = word_nr;
+				SingleVar.Word   = word;
+
+				OutVar.push_back(SingleVar);
+			}
+
+			/*pos = line.find_first_of(Prompt, pos);
+			
+			/*
+			if(pos == -1)
+			{
+				out << line << endl;
+				break;
+			}
+			
+			else
+			{*/
+			/*	out << line.substr(0, pos);
+				
+				for(unsigned int i=0; i<Var.size(); i++)
+				{
+					len = strlen(Var[i].Name.c_str());
+					
+					if(EndFlag == 0 && !strcmp(line.substr(pos+1, len).c_str(), Var[i].Name.c_str())) //empty space separator
+					{
+						//con << EndFlag << endl;
+						
+						out << Var[i].Value;
+						
+						line = line.substr(pos + 1 + len);
+						pos  = 0;
+						break;
+					}
+					
+					if(EndFlag == 1 && !strcmp(line.substr(pos+1, len).c_str(), Var[i].Name.c_str()) && line[pos+len+1] == EndPrompt) //end mark present
+					{
+						//con << "EndFlag=" << EndFlag << "\t" << line.substr(pos+1, len) << "\t" << line[pos + 1 + len] << endl;
+					
+						out << Var[i].Value;
+						
+						line = line.substr(pos + 1 + len + 1);
+						pos  = 0;
+						break;
+					}
+				}*/
+			//}
+		}
+		
+		line_nr++;
+    }
+ 
+	// *** Strip from Marks ***
+	
+	clog << endl;
+	
+	for(unsigned int i=0; i<OutVar.size(); i++)
+	{
+		if(OutVar[i].Word[0] == Prompt) OutVar[i].Word = OutVar[i].Word.substr(1); 
+		else
+		{
+			clog << "Wrong Variable Start Mark!!!" << endl;
+			return 3;
+		}
+		
+		clog << OutVar[i].Word << "\t"; 
+		
+		unsigned int Size = OutVar[i].Word.size();
+
+		if(EndPrompt != ' ' && EndPrompt != 9 && EndPrompt != 10 && EndPrompt != 11 && EndPrompt != 12 && EndPrompt != 13) // Ommit if EndPrompt is a whitespace
+		{
+			if(OutVar[i].Word[Size-1] == EndPrompt) OutVar[i].Word = OutVar[i].Word.substr(0, Size-1); 
+			else
+			{
+				clog << "Wrong Variable End Mark!!!" << endl;
+				return 3;
+			}
+		}
+		clog << OutVar[i].Word << endl; 
+	}
+
+	// *** Compare ***
+
+	clog << endl;
+
+	vector <unsigned int> List;
+	List.resize( Var.size() );
+
+	for(unsigned int i=0; i<Var.size(); i++)
+	{
+		unsigned int Match = 0;
+
+		for(unsigned int j=0; j<OutVar.size(); j++)	
+		{
+			if( 0 == Var[i].Name.compare(OutVar[j].Word) ) 
+			{
+				List[i] = j;
+				Match++;
+			
+				clog << i << "\t" << Var[i].Name << endl;
+			}
+		}
+
+		if(Match == 0)
+		{
+			clog << "No Output Varible: " << Var[i].Name << "!!!" << endl;
+			return 4;
+		}
+
+		if(Match > 1)
+		{
+			clog << "Too many Output Varibles: " << Var[i].Name << "!!!" << endl;
+			return 5;
+		}
+	}
+
+	clog << endl << "List" << endl;
+
+	for(unsigned int i=0; i<List.size(); i++)
+	{
+		clog << List[i] << endl;
+	}
+
+	// *** Derieve ***
+
+	for(unsigned int i=0; i<Var.size(); i++)
+	{
+		in2.clear();
+		in2.seekg (0, ios::beg);
+
+		for(unsigned int j=0; j<=OutVar[List[i]].LineNr; j++)	
+		{
+			
+			getline(in2, line);
+		}
+
+		clog << line << endl;
+		
+		stringstream ss;
+		ss.str(line);
+		
+		for(unsigned int j=0; j<OutVar[List[i]].WordNr-1; j++)	
+		{
+			ss >> word;
+		}
+
+		ss >> Var[i].Value;
+
+		clog << Var[i].Name << "\t" << Var[i].Value << endl << endl;
+	}
+
+    in2.close();
+    in.close();
+		
+	return 0;
+}

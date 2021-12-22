@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 	
 	GNUPLOT GnuPlotDiscret;
 	GnuPlotDiscret.NrOfDataCloumns = 1;
-	GnuPlotDiscret.Plot2D("TestDir/Discretization/Discretization.xls");
+	//GnuPlotDiscret.Plot2D("TestDir/Discretization/Discretization.xls");
 
 	//+++ ADVANCED FUNCTIONS +++
 	
@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
 	
 	GNUPLOT GnuPlott;
 	GnuPlott.NrOfDataCloumns = 2;
-	GnuPlott.Plot2D("TestDir/JMbspline/Bspline.xls");
+	//GnuPlott.Plot2D("TestDir/JMbspline/Bspline.xls");
 
 	// *** BezierAirfoil ***
 	
@@ -393,7 +393,7 @@ int main(int argc, char *argv[])
 	GNUPLOT GnuPlot;
 	GnuPlot.NrOfDataCloumns = 2;
 	//GnuPlot.Plot2D("TestDir/JMmath/Circle.xls");
-	GnuPlot.Plot2D("TestDir/JMbezier/Bezier.xls");
+	//GnuPlot.Plot2D("TestDir/JMbezier/Bezier.xls");
 	//GnuPlot.NrOfDataCloumns = 1;
     //GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bPoints.xls");
 	//GnuPlot.Plot2D("TestDir/JMbezierAirfoil/BezierAiroil2bVertex.xls");
@@ -421,6 +421,8 @@ int main(int argc, char *argv[])
 
 	clog << endl << "*** JMsubstitute ***" << endl << endl;
 
+	// === Insert ===
+	
 	//SUBSTITUTE Sub("TestDir/JMsubstitute/Sub.txt", "TestDir/JMsubstitute/SubOut.txt", '%');
 	SUBSTITUTE Sub("TestDir/JMsubstitute/Sub2.txt", "TestDir/JMsubstitute/SubOut.txt", '@', '&');
 	
@@ -432,6 +434,17 @@ int main(int argc, char *argv[])
     
     Sub.Insert();
 	
+	// === Derieve ===
+	
+	SUBSTITUTE SubD("TestDir/JMsubstitute/XfoilDataTemplate.dat", "TestDir/JMsubstitute/XfoilData.dat", '@', '&');
+	
+	SubD.AddVariable("CL", 0);
+	SubD.AddVariable("AoA", 0);
+	SubD.AddVariable("CD", 0);
+	SubD.AddVariable("CM", 0);
+
+	SubD.Derieve();
+
 	// *** Filters ***
 	
 	clog << endl << "*** JMfilter ***" << endl << endl;
