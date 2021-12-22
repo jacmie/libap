@@ -438,12 +438,17 @@ int main(int argc, char *argv[])
 	
 	SUBSTITUTE SubD("TestDir/JMsubstitute/XfoilDataTemplate.dat", "TestDir/JMsubstitute/XfoilData.dat", '@', '&');
 	
-	SubD.AddVariable("CL", 0);
-	SubD.AddVariable("AoA", 0);
-	SubD.AddVariable("CD", 0);
-	SubD.AddVariable("CM", 0);
+	SubD.AddVariable("@CL", 0);
+	SubD.AddVariable("@AoA&", 0);
+	SubD.AddVariable("@CD", 0);
+	SubD.AddVariable("CM&", 0);
 
 	SubD.Derieve();
+
+	for(unsigned int i=0; i<SubD.Var.size(); i++)
+	{
+		clog << SubD.Var[i].Name << "\t" << SubD.Var[i].Value << endl;
+	}
 
 	// *** Filters ***
 	
