@@ -32,22 +32,38 @@ SUBSTITUTE::SUBSTITUTE(string InFile, string OutFile, char Mark, char EndMark)
 		EndFlag = 1;
 }
 
-void SUBSTITUTE::AddVariable(std::string Name, std::string Value)
+int SUBSTITUTE::AddVariable(std::string Name, std::string Value)
 {
+    if(Name.length() == 0)
+    {
+        clog << "Name length equal to 0!!! The Variable NOT added!!!" << endl;
+        return 1;
+    }
+
+    if(Value.length() == 0)
+    {
+        clog << "Value length equal to 0!!! The Variable NOT added!!!" << endl;
+        return 1;
+    }
+
 	VARIABLE TempVar;
 	TempVar.Name  = Name;
 	TempVar.Value = Value;
 
 	Var.push_back(TempVar);
+
+    return 0;
 }
 
-void SUBSTITUTE::AddVariable(std::string Name, double Value)
+int SUBSTITUTE::AddVariable(std::string Name, double Value)
 {
-	VARIABLE TempVar;
+	/*VARIABLE TempVar;
 	TempVar.Name  = Name;
 	TempVar.Value = d2Str(Value);
 
-	Var.push_back(TempVar);
+	Var.push_back(TempVar);*/
+    
+    return AddVariable(Name, d2Str(Value));
 }
 
 int SUBSTITUTE::StripFromMarks(std::string &ToStrip)
@@ -160,7 +176,7 @@ int SUBSTITUTE::Insert()
 	return 0;
 }
 
-int SUBSTITUTE::Derieve()
+int SUBSTITUTE::Extract()
 {
     //*** Clean Marks ***
     
@@ -259,7 +275,7 @@ int SUBSTITUTE::Derieve()
 		}
 	}
 
-	// *** Derieve ***
+	// *** Extract ***
 
 	for(unsigned int i=0; i<Var.size(); i++)
 	{

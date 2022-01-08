@@ -40,11 +40,11 @@ class SUBSTITUTE
     SUBSTITUTE();
     //SUBSTITUTE(std::string InFile, std::string OutFile);
     SUBSTITUTE(std::string InFile, std::string OutFile, char Mark = '@', char EndMark = ' ');
-	void AddVariable(std::string Name, std::string Value);
-	void AddVariable(std::string Name, double Value);
+	int  AddVariable(std::string Name, std::string Value);
+	int  AddVariable(std::string Name, double Value);
 	int  StripFromMarks(std::string &ToStrip);
 	int  Insert();
-    int  Derieve();
+    int  Extract();
 };
 
 #endif

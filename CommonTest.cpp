@@ -431,7 +431,10 @@ int main(int argc, char *argv[])
 	Sub.AddVariable("uno", 333);
 	Sub.AddVariable("due", "444");
 	Sub.AddVariable("tre", "555");
+    Sub.AddVariable("ff", "");
     
+    clog << endl;
+
     Sub.Insert();
 	
 	// === Derieve ===
@@ -442,8 +445,11 @@ int main(int argc, char *argv[])
 	SubD.AddVariable("@AoA&", 0);
 	SubD.AddVariable("@CD", 0);
 	SubD.AddVariable("CM&", 0);
+    SubD.AddVariable("", 0);
 
-	SubD.Derieve();
+    clog << endl;
+
+	SubD.Extract();
 
 	for(unsigned int i=0; i<SubD.Var.size(); i++)
 	{
