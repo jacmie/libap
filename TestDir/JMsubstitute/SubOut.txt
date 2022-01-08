@@ -1,3 +1,4 @@
+ABC
 # *****************************************
 # *                                       *
 # *  Automatically generated config file  *
@@ -18,8 +19,6 @@ The geometry is defined in the axis system defined as follows:
 	axis z - up.
 The geometry should be defined to satisfy positive X coordinates for all aircraft body.
 */
-
-
 #######################
 /*
 Version section ("begin_version")
@@ -27,13 +26,9 @@ Version section ("begin_version")
    End of version section ("end")
  */
 #######################
-
-
 begin_version
 3
 end
-
-
 #######################
 /*
 Main section ("begin")
@@ -54,17 +49,13 @@ Main section ("begin")
 The end of main section ("end")
 */
 #######################
-
-
 begin
-
 *****
 Bla
 1
 0
 0
 end
-
 #######################
 /*
 WING Section ("begin_wing*")
@@ -80,8 +71,6 @@ WING Section ("begin_wing*")
    End of wing section ("end")
  */
 #######################
-
-
 begin_wing0
 0
 FromModules
@@ -96,7 +85,6 @@ Root	1	444	0.5	1	111	0	CLARKY.DAT
 Line	1	444	0	0	222	0.2	5	0	CLARKY.DAT
 Linear 333
 end_wing
-
 #######################
 /*
 FUSELAGE 555("begin_fuselage")
@@ -111,13 +99,10 @@ FUSELAGE 555("begin_fuselage")
 End of fuselage section ("end")
 */
 #######################
-
-
 begin_fuselage
 0
 0
 end_fuselage
-
 #######################
 /*
 CONNECTIONS section ("begin_connections")
@@ -135,9 +120,6 @@ CONNECTIONS section ("begin_connections")
 End ("end")
 */
 #######################
-
-
 begin_connections
 0
 end
-

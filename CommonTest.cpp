@@ -425,18 +425,28 @@ int main(int argc, char *argv[])
 	
 	//SUBSTITUTE Sub("TestDir/JMsubstitute/Sub.txt", "TestDir/JMsubstitute/SubOut.txt", '%');
 	SUBSTITUTE Sub("TestDir/JMsubstitute/Sub2.txt", "TestDir/JMsubstitute/SubOut.txt", '@', '&');
-	
+
+    clog << endl;
+
 	Sub.AddVariable("0", 111);
 	Sub.AddVariable("1", 222);
 	Sub.AddVariable("uno", 333);
 	Sub.AddVariable("due", "444");
 	Sub.AddVariable("tre", "555");
     Sub.AddVariable("ff", "");
-    
+    Sub.AddVariable("mod", "modify");
+	Sub.AddVariable("naca", 2412);
+
+    for(unsigned int i=0; i<Sub.Var.size(); i++)   
+    {
+        clog << Sub.Var[i].Name << "\t" << Sub.Var[i].Value << endl;
+    }
     clog << endl;
 
     Sub.Insert();
 	
+    clog << endl;
+
 	// === Derieve ===
 	
 	SUBSTITUTE SubD("TestDir/JMsubstitute/XfoilDataTemplate.dat", "TestDir/JMsubstitute/XfoilData.dat", '@', '&');

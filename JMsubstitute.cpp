@@ -113,21 +113,27 @@ int SUBSTITUTE::Insert()
     ifstream in(InPut);
 	
 	if(!in)
+    {
+        clog << "Can't open Input file!!!" << endl;
 		return 1;
+    }
 	
     ofstream out(OutPut);
     
     if(!out)
+    {
+        clog << "Can't write Output file!!!" << endl;
         return 2;
-    
+    }
+
     while(!in.eof())
     {
 		getline(in, line);
 		
 		pos = 0;
 		
-		while(1) //till the end of the line
-		{
+        for(unsigned int l=0; l<line.length(); l++)
+		{ 
 			pos = line.find_first_of(Prompt, pos);
 				
 			if(pos == -1)
@@ -140,16 +146,18 @@ int SUBSTITUTE::Insert()
 			{
 				out << line.substr(0, pos);
 				
-				for(unsigned int i=0; i<Var.size(); i++)
+                unsigned int i;
+
+				for(i=0; i<Var.size(); i++)
 				{
 					len = strlen(Var[i].Name.c_str());
 					
 					if(EndFlag == 0 && !strcmp(line.substr(pos+1, len).c_str(), Var[i].Name.c_str())) //empty space separator
 					{
-						//con << EndFlag << endl;
-						
 						out << Var[i].Value;
-						
+
+						if( (pos + 1 + len + 1) == int(line.length()) )  out << endl;
+
 						line = line.substr(pos + 1 + len);
 						pos  = 0;
 						break;
@@ -157,15 +165,21 @@ int SUBSTITUTE::Insert()
 					
 					if(EndFlag == 1 && !strcmp(line.substr(pos+1, len).c_str(), Var[i].Name.c_str()) && line[pos+len+1] == EndPrompt) //end mark present
 					{
-						//con << "EndFlag=" << EndFlag << "\t" << line.substr(pos+1, len) << "\t" << line[pos + 1 + len] << endl;
-					
 						out << Var[i].Value;
 						
+                        if( (pos + 1 + len + 1) == int(line.length()) )  out << endl;
+
 						line = line.substr(pos + 1 + len + 1);
 						pos  = 0;
 						break;
 					}
 				}
+
+                if(i == Var.size()) // No Variable after Prompt
+                {
+                    out << Prompt;
+                    line = line.substr(pos + 1);
+                }   
 			}
 		}
     }
