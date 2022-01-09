@@ -408,14 +408,37 @@ int main(int argc, char *argv[])
 */	
 	// *** JMparallel ***
 	
-	#ifdef WIN32
 	clog << endl << "*** JMparallel ***" << endl << endl;
-	
+
+#ifdef WIN32
+
 	Call((char *)"Notepad");
 	Pipe((char *)"Xfoil.exe", (char *)"", (char *)"TestDir\\Xfoil.log", (char *)"NACA0012", (char *)"w"); //NOT GOOD
-	CreateProcess(1, (char *)"TestDir\\Xfoil.exe", (char *)"");
-	CreateProcess(1, (char *)"GnuPlot\\pgnuplot.exe", (char *)"");
-	#endif
+
+//	CreateProcess(1, (char *)"TestDir\\Xfoil.exe", (char *)"");
+//	CreateProcess(1, (char *)"GnuPlot\\pgnuplot.exe", (char *)"");
+
+#else
+
+	//Pipe((char*)"./TestDir/JMxfoil/Xfoil", (char *)"./TestDir/JMexternalExe/XfoilCommands.txt", (char *)"./TestDir/JMexternalExe/Xfoil.log", (char *)"NACA0012", (char *)"w");
+	//Pipe((char*)"./TestDir/JMxfoil/Xfoil", (char *)"", (char *)"./TestDir/JMexternalExe/Xfoil.log", (char *)"NACA0012\nquit\n", (char *)"w");
+
+	std::vector <std::string> Arg;
+	Arg.push_back("./TestDir/JMexternalExe/Sq");
+	Arg.push_back("2.3");
+	Arg.push_back("4.1");
+	CreateProcess(Arg);
+	
+	Arg.resize(0);
+	Arg.push_back("/bin/sh");											// Full Path!
+	Arg.push_back("/home/JM/C++/JMcommon/TestDir/JMexternalExe/Sq.sh");	// Full Path!
+	Arg.push_back("2.3");
+	Arg.push_back("4.1");
+	CreateProcess(Arg);	
+    
+	exit(0);
+
+#endif
 	
 	// *** JMsubstite ***
 

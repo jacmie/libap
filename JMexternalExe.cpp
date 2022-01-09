@@ -2,10 +2,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef WIN32
-#include <windows.h>
+#include <vector>
+
+#ifdef WIN32 
+	#include <windows.h>
+	#include <direct.h>
+	#include <io.h>
+#else
+	#include <unistd.h>
+	#include <pwd.h>
+	#include <sys/wait.h>
 #endif
-//#include <FL/fl_ask.H>
 
 using namespace std;
 
@@ -25,13 +32,13 @@ int Pipe(char *Program, char *input, char *log, char *buffer, char *mode)
 
     strcpy(Command, Program);
     
-    if(string(input) != " ")
+    if(string(input) != "")
     {
         strcat(Command, " < ");
         strcat(Command, input);
     }
     
-    if(string(log) != " ")
+    if(string(log) != "")
     {
         strcat(Command, " > ");
         strcat(Command, log);
@@ -68,11 +75,12 @@ int Pipe(char *Program, char *input, char *log, char *buffer, char *mode)
 	return 1;
 }
 
-#ifdef WIN32
-
-int CreateProcess(bool Wait, char *Proc, char *Arg)
+int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 {
     int ProcResult;
+
+#ifdef WIN32
+
     DWORD exitCode;
     STARTUPINFO si;
 	PROCESS_INFORMATION pi;
@@ -86,9 +94,9 @@ int CreateProcess(bool Wait, char *Proc, char *Arg)
 		si.cb = sizeof(si);
 	   
 	ZeroMemory( &pi, sizeof(pi) );
-		
-    ProcResult = CreateProcess( Proc/*"D:/Dropbox/C++/Programiki/Procesy/Process.exe"*/,    //The program
-                        Arg,                                              //Parameters to program
+
+    ProcResult = CreateProcess( Arg[0]/*"D:/Dropbox/C++/Programiki/Procesy/Process.exe"*/,    //The program
+                        Arg,                                              	//Parameters to program
                         NULL,                                               //Security parametr to controll subprogram
                         NULL,                                               //Security parametr to controll subprogram
                         FALSE,                                              //Dziedziczenie wskaznika i praw od procesu macierzystego
@@ -100,8 +108,7 @@ int CreateProcess(bool Wait, char *Proc, char *Arg)
                         
     if(!ProcResult)
     {
-		//fl_message("Unable to execute!\nProcess: %s\nArgs: %s", Proc, Arg);
-	    //cout << "Unable to execute." << endl << endl;
+	    clog << "Process failed!!!" << endl << endl;
         return 1;
     }
            
@@ -118,23 +125,98 @@ int CreateProcess(bool Wait, char *Proc, char *Arg)
         if (!ProcResult)
         {
             // Could not get exit code.
-			//fl_message("Executed command but couldn't get exit code!");
-            //cout << "Executed command but couldn't get exit code.\nCommand=%s\n" << endl;
+            clog << "Executed command but couldn't get exit code.\nCommand=%s\n" << endl;
             return 2;
         }
     }
 
-    return 0;
-}
+/* 
+	STARTUPINFO		suInfo;		// Process startup information
+	PROCESS_INFORMATION	prInfo;		// Process information
 
-int CreateProcess(bool Wait, string Proc, string Arg)
-{
-	char *CstrProc = new char[Proc.length() + 1];
-	strcpy(CstrProc, Proc.c_str());
-	char *CstrArg = new char[Arg.length() + 1];
-	strcpy(CstrArg, Arg.c_str());
+	memset(&suInfo, 0, sizeof(suInfo));
+	suInfo.cb = sizeof(suInfo);
+	if( iHide )
+		{
+		suInfo.dwFlags = STARTF_USESHOWWINDOW; 
+		suInfo.wShowWindow = SW_HIDE; 
+		}
 	
-	return CreateProcess(Wait, CstrProc, CstrArg);
-}
+	string com = command;
+	for(int i=0; i<iarg; i++)
+		{
+		com += " \"";
+		com += argvv[i];
+		com += "\"";
+		}
+
+	ProcResult = CreateProcess(NULL, (char*)com.c_str(), NULL, NULL, FALSE,
+                  NORMAL_PRIORITY_CLASS, NULL, NULL, &suInfo, &prInfo);
+
+	if( iWait )
+		{          
+		DWORD ExitCode = 0;
+		do
+			{
+			if( GetExitCodeProcess( prInfo.hProcess, &ExitCode ) == 0 )break;
+			if( iFun )Idle();
+			MiliSleep( 20 );
+			}
+		while( ExitCode == STILL_ACTIVE );
+		}
+*/
+
+#else
+
+	int Pid = fork();
+	int status;
+	
+	if(Pid == -1) 
+	{
+		clog << "Couldn't run child process!!!" << endl;
+		return 1;
+	}
+
+	if (Pid == 0) 
+	{
+		execv(Arg[0], Arg);
+
+		clog << "Process failed!!!" << endl;
+		return(127); // Command can not be found or executed
+	}
+		
+	if( Wait )
+	{          
+		while( waitpid( Pid, &status, WNOHANG ) == Pid )
+		{
+			usleep( 20000 ); // 2ms
+		}
+	}
+
+	else
+	{
+		signal(SIGCHLD, SIG_IGN);
+	}
+
+	ProcResult = 1;
 
 #endif
+
+    return ProcResult;
+}
+
+int CreateProcess(std::vector <std::string> Arg, bool Wait=1)
+{
+    char *ArgPtr[Arg.size() + 2];
+    
+    for(unsigned int i=0; i<Arg.size(); i++)	// Assign Args, Arg[0] = Proc name
+    {
+        ArgPtr[i] = new char [Arg[i].length()];
+        strcpy(ArgPtr[i], Arg[i].c_str());
+    }
+	
+	ArgPtr[Arg.size()] = NULL;					// Last Arg NULL
+	
+	return CreateProcess(Arg.size(), ArgPtr, Wait);
+}
+
