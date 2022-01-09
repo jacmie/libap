@@ -32,7 +32,8 @@ XFOIL::XFOIL()
 	Ma = 0;
 	XfoilIter = 40;
 	
-	global_pipe_command = "./Xfoil > Xfoil.log";
+	//global_pipe_command = "./Xfoil > Xfoil.log";
+    global_pipe_command = "Xfoil > Xfoil.log";
 }
 
 void XFOIL::PrintParams(ostream &out)

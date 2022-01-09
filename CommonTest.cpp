@@ -424,12 +424,12 @@ int main(int argc, char *argv[])
 	Pipe((char*)"./TestDir/JMxfoil/Xfoil", (char *)"", (char *)"./TestDir/JMexternalExe/Xfoil.log", (char *)"NACA0012\nquit\n", (char *)"w");
 
 	std::vector <std::string> Arg;
-	Arg.push_back("./TestDir/JMexternalExe/Sq");
+    Arg.push_back("/usr/local/bin/Sq");                                 // Full Path!
 	Arg.push_back("2.3");
 	Arg.push_back("4.1");
 	CreateProcess(Arg);
 	
-	Arg.resize(0);
+    Arg.resize(0);
 	Arg.push_back("/bin/sh");											// Full Path!
 	Arg.push_back("/home/JM/C++/JMcommon/TestDir/JMexternalExe/Sq.sh");	// Full Path!
 	Arg.push_back("2.3");

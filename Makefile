@@ -41,7 +41,7 @@ ifeq ($(OSTYPE),Linux)
 else
   SYSTEM   = -DWIN32 -mwindows
   DYN_LIBS = -mwindows  -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm
-  INSTALL_DIR = /local/
+  INSTALL_DIR = /usr/local/
 endif
 
 #-------------------------------  Targets  --------------------------------
@@ -71,3 +71,11 @@ install:
 	mkdir $(INSTALL_DIR)include/JMcommon
 	cp -f *.h $(INSTALL_DIR)include/JMcommon
 	cp -f libJMcommon.a $(INSTALL_DIR)lib/libJMcommon.a
+ifeq ($(OSTYPE),Linux)
+	cp -f ./TestDir/JMxfoil/Xfoil  /usr/local/bin/Xfoil
+	cp -f ./TestDir/JMexternalExe/Sq  /usr/local/bin/Sq
+else
+	cp -f ./TestDir/JMxfoil/Xfoil.exe  /usr/local/bin/Xfoil.exe
+	cp -f ./TestDir/JMexternalExe/Sq.exe  /usr/local/bin/Sq.exe
+endif
+
