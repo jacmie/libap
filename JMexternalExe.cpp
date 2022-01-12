@@ -179,7 +179,8 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 
 	if (Pid == 0) 
 	{
-		execv(Arg[0], Arg);
+        execv(Arg[0], Arg);     // Needs full Path of the executable
+		execvp(Arg[0], Arg);    // Searches for executable in System Variables, example: ls -l
 
 		clog << "Process failed!!!" << endl;
 		exit(127); // Command can not be found or executed
