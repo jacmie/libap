@@ -182,7 +182,7 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 		execv(Arg[0], Arg);
 
 		clog << "Process failed!!!" << endl;
-		return(127); // Command can not be found or executed
+		exit(127); // Command can not be found or executed
 	}
 		
 	if( Wait )
