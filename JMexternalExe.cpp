@@ -177,6 +177,8 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 		return 1;
 	}
 
+    // *** Child ***
+
 	if (Pid == 0) 
 	{
         execv(Arg[0], Arg);     // Needs full Path of the executable
@@ -186,19 +188,28 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 		exit(127); // Command can not be found or executed
 	}
 		
+    // *** Parent ***
+    
 	if( Wait )
 	{          
-		while( waitpid( Pid, &status, WNOHANG ) == Pid )
+        //clog << "Before Loop:\t" << Pid << "\t" << status << "\t" << waitpid( Pid, &status, WNOHANG ) << endl;
+
+		while( waitpid( Pid, &status, WNOHANG ) == 0 /*Pid*/ )
 		{
+            //clog << "In loop:\t" << Pid << "\t" << status << "\t" << waitpid( Pid, &status, WNOHANG ) << endl;
 			usleep( 20000 ); // 2ms
 		}
+
+        //clog << "After Loop\t" << Pid << "\t" << status << "\t" << waitpid( Pid, &status, WNOHANG ) << endl;
+
+        //clog << "Wait END" << endl << endl;
 	}
 
 	else
 	{
 		signal(SIGCHLD, SIG_IGN);
 	}
-
+    
 	ProcResult = 1;
 
 #endif
