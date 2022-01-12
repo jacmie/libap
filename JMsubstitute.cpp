@@ -239,12 +239,15 @@ int SUBSTITUTE::Extract()
 			if(word[0] == Prompt) 
 			{
 				//clog << "Line: " << line_nr << "\tWord: " << word_nr << "\t" << word << endl;
+                //clog << "#" << line << "#" << endl;
 
 				SingleVar.LineNr = line_nr;
 				SingleVar.WordNr = word_nr;
 				SingleVar.Word   = word;
-
+                
 				OutVar.push_back(SingleVar);
+            
+                word = "";
 			}
 		}
 		

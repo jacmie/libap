@@ -422,7 +422,7 @@ int main(int argc, char *argv[])
 
 	//Pipe((char*)"./TestDir/JMxfoil/Xfoil", (char *)"./TestDir/JMexternalExe/XfoilCommands.txt", (char *)"./TestDir/JMexternalExe/Xfoil.log", (char *)"NACA0012", (char *)"w");
 	Pipe((char*)"./TestDir/JMxfoil/Xfoil", (char *)"", (char *)"./TestDir/JMexternalExe/Xfoil.log", (char *)"NACA0012\nquit\n", (char *)"w");
-
+/*
 	std::vector <std::string> Arg;
     Arg.push_back("Sq");                                // Global directory
 	Arg.push_back("2.3");
@@ -435,7 +435,7 @@ int main(int argc, char *argv[])
 	Arg.push_back("2.3");
 	Arg.push_back("4.1");
 	CreateProcess(Arg);
-
+*/
 #endif
 	
 	// *** JMsubstite ***
@@ -477,6 +477,9 @@ int main(int argc, char *argv[])
 	SubD.AddVariable("@CD", 0);
 	SubD.AddVariable("CM&", 0);
     SubD.AddVariable("", 0);
+
+    //SUBSTITUTE SubD("/home/JM/C++/Core/FlowTree/FT_Projects/SqTemplate.dat", "/home/JM/C++/Core/FlowTree/FT_Projects/SqOut.dat", '@', '&');
+	//SubD.AddVariable("SqRes", 0);
 
     clog << endl;
 
