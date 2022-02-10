@@ -1,5 +1,5 @@
-#ifndef _SUBSTITUTE_H_
-#define _SUBSTITUTE_H_
+#ifndef SUBSTITUTE_H
+#define SUBSTITUTE_H
 
 #include <string.h>
 #include <iostream>
