@@ -23,7 +23,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 #--------------------------  Static libraries  ----------------------------
 
-DIRS_INC  = -I/local/include/
+DIRS_INC  = -I/usr/local/include/
 STAT_LIBS = -L. -L/usr/local/lib $(FLTK_LIBS) -lJMcommon
 FLTK_LIBS = -lfltk -lfltk_forms -lfltk_images -lfltk_jpeg
 #-lfltk_png  -lfltk_z

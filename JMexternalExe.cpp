@@ -95,8 +95,14 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 	   
 	ZeroMemory( &pi, sizeof(pi) );
 
-    ProcResult = CreateProcess( Arg[0]/*"D:/Dropbox/C++/Programiki/Procesy/Process.exe"*/,    //The program
-                        Arg,                                              	//Parameters to program
+	std::string WinArg = "";
+	for(int i=0; i<ArgNr; i++)	// Assign Args, Arg[0] = Proc name
+    {
+		WinArg += string(Arg[i]) + " ";
+    }
+	
+    ProcResult = CreateProcess(Arg[0]/*"D:/Dropbox/C++/Programiki/Procesy/Process.exe"*/,    //The program
+                        &WinArg[0],                                              	//Parameters to program
                         NULL,                                               //Security parametr to controll subprogram
                         NULL,                                               //Security parametr to controll subprogram
                         FALSE,                                              //Dziedziczenie wskaznika i praw od procesu macierzystego
