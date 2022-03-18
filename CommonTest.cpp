@@ -8,6 +8,7 @@
 #include "JMbspline.h"
 #include "JMbezierAirfoil.h"
 #include "JMdiscretization.h"
+#include "JMfilesHandling.h"
 #include "JMGnuPlotPipe.h"
 #include "JMexternalExe.h"
 #include "JMsubstitute.h"
@@ -69,6 +70,21 @@ int main(int argc, char *argv[])
 	clog << endl << "A\t" << "B\t" << "R" << endl;
 	clog << A << "\t" << B << "\t" << R*R << endl;
 	
+    // *** JMfilesHandling ***
+
+	clog << endl << "*** JMfilesHandling ***" << endl << endl;
+
+    clog << "Catalogue exists: /TestDir\t" << DirExists("/TestDir") << endl;
+    clog << "Catalogue exists: ./TestDir\t" << DirExists("./TestDir") << endl;
+    clog << "File exists: ./TestDir/JMsubstitute/Sub.txt \t" << FileExists("./TestDir/JMsubstitute/Sub.txt") << endl;
+    clog << "File exists: ./TestDir/JMsubstitute/Sub2.txt \t" << FileExists("./TestDir/JMsubstitute/Sub2.txt") << endl;
+    clog << "File exists: ./TestDir/JMsubstitute/Sub3.txt \t" << FileExists("./TestDir/JMsubstitute/Sub3.txt") << endl;
+
+    std::string FilePath = Browse("All files \t*.{dat,txt}\nData files \t*.dat\nText files \t*.txt", 0);
+    clog << endl << FilePath << endl << endl; 
+
+    exit(1);
+
 	// *** JMconvert ***
 	//OK
 	
