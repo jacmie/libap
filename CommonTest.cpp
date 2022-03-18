@@ -88,7 +88,14 @@ int main(int argc, char *argv[])
 
 	clog << endl << "*** JMdialogs ***" << endl << endl;
 
-    JM_message("Hello World!!!");
+	fl_message_font(FL_HELVETICA, 12);
+
+    JM_alert("Alert!!!");
+    JM_message("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3!!!");
+    JM_choice("Asce3e3e  e3e3e3e 3e 33e 3e3e3er2r2ttt 222       2r2r2r2rr2r2r  2r2r 2r2tt2t2?1?", "Yes", "No", "Cancel");
+    JM_input("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Input Hello Worldr  rr22r2r2r 2r2r 22r 2 r2r 2r2r 2r222r 22ty2t2t 2r r2r2r 22r2r 2 r2rr  2r22!!!");
+    JM_password("Hello World!!!");
+
     exit(1);
 
 	// *** JMconvert ***
