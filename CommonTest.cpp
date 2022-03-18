@@ -7,6 +7,7 @@
 #include "JMbezier.h"
 #include "JMbspline.h"
 #include "JMbezierAirfoil.h"
+#include "JMdialogs.h"
 #include "JMdiscretization.h"
 #include "JMfilesHandling.h"
 #include "JMGnuPlotPipe.h"
@@ -80,9 +81,14 @@ int main(int argc, char *argv[])
     clog << "File exists: ./TestDir/JMsubstitute/Sub2.txt \t" << FileExists("./TestDir/JMsubstitute/Sub2.txt") << endl;
     clog << "File exists: ./TestDir/JMsubstitute/Sub3.txt \t" << FileExists("./TestDir/JMsubstitute/Sub3.txt") << endl;
 
-    std::string FilePath = Browse("All files \t*.{dat,txt}\nData files \t*.dat\nText files \t*.txt", 0);
-    clog << endl << FilePath << endl << endl; 
+    //std::string FilePath = Browse("All files \t*.{dat,txt}\nData files \t*.dat\nText files \t*.txt", 0);
+    //clog << endl << FilePath << endl << endl; 
 
+    // *** JMdialogs ***
+
+	clog << endl << "*** JMdialogs ***" << endl << endl;
+
+    JM_message("Hello World!!!");
     exit(1);
 
 	// *** JMconvert ***

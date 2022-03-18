@@ -11,6 +11,7 @@ SOURCES = 	CommonTest.cpp\
 			JMbezierAirfoil.cpp\
             JMbspline.cpp\
 			JMconvert.cpp\
+            JMdialogs.cpp\
 			JMdiscretization.cpp\
             JMfilesHandling.cpp\
 			JMGnuPlotPipe.cpp\
