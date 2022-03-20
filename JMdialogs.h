@@ -4,6 +4,7 @@
 // Implementation of fl_message, fl_ask, fl_choice, fl_input etc.
 
 #include <stdarg.h>
+#include <iostream>
 
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
@@ -15,17 +16,29 @@
 
 #include <FL/fl_ask.H>
 
+class DIALOG_WIN : public Fl_Window 
+{
+	public:
+ 
+	int *win_close;
+
+	DIALOG_WIN(int W, int H, const char *l=0);
+  	void hide();
+};
+
 class DIALOG_FORM
 {
 	public:
 
-	Fl_Window 	*message_form;
+	DIALOG_WIN 	*message_form;
 	Fl_Box 		*message;
 	Fl_Box 		*icon;
 	Fl_Button 	*button[3];
 	Fl_Input 	*input;
 
-	int ret_val;     // button return value: 0, 1, 2
+	int button_val[3] = {0, 1, 2};
+	int ret_val   = 0;  // button return value: 0 -> Canel, 1, 2
+	int win_close = 0;	// -1 -> Escape, -2 -> X close button, -3 -> blocked by another dialog window
 
 	public:
 
@@ -34,17 +47,12 @@ class DIALOG_FORM
 	void set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color color);
 	void set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color color, Fl_Boxtype boxtype);
 	
-	void show();
+	void resizeform();
 
 	private:
-
-	int win_closed;  // window close flag (-1 = Escape, -2 = close button)
 	
 	inline void button_cb_i(Fl_Button*, void*);
 	static void button_cb(Fl_Button*, void*);
-
-	inline void window_cb_i(Fl_Widget*, void*); 
-	static void window_cb(Fl_Widget*, void*); 
 };
 
 class DIALOGS
@@ -57,7 +65,7 @@ class DIALOGS
 
 	char avoidRecursion = 0;
 
-	DIALOG_FORM *message_win;
+	//DIALOG_FORM *message_win;
 
 	// --- Form ---
 
@@ -124,10 +132,6 @@ class DIALOGS
 	Fl_Fontsize fl_message_size_;
 	inline void fl_message_font(Fl_Font f, Fl_Fontsize s) {fl_message_font_ = f; fl_message_size_ = s;}
 	
-
-	
-	Fl_Window* makeform();
-	void resizeform();
 	int innards(const char* fmt, va_list ap, const char *b0, const char *b1, const char *b2);
 	const char* input_innards(const char* fmt, va_list ap, const char* defstr, uchar type);
 };
