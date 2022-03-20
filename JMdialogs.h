@@ -15,6 +15,7 @@
 #include <FL/fl_draw.H>
 
 #include <FL/fl_ask.H>
+#include <FL/Fl_XPM_Image.H>
 
 class DIALOG_WIN : public Fl_Window 
 {
@@ -28,27 +29,28 @@ class DIALOG_WIN : public Fl_Window
 
 class DIALOG_FORM
 {
-	public:
-
-	DIALOG_WIN 	*message_form;
+ 	char buffer[1024];
+	int button_val[3] = {0, 1, 2};
+	
 	Fl_Box 		*message;
 	Fl_Box 		*icon;
 	Fl_Button 	*button[3];
 	Fl_Input 	*input;
 
-	int button_val[3] = {0, 1, 2};
+	public:
+	
+	DIALOG_WIN 	*message_form;
 	int ret_val   = 0;  // button return value: 0 -> Canel, 1, 2
 	int win_close = 0;	// -1 -> Escape, -2 -> X close button, -3 -> blocked by another dialog window
 
-	public:
+	DIALOG_FORM(bool resize_flag);
 
-	DIALOG_FORM();
-
-	void set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color color);
-	void set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color color, Fl_Boxtype boxtype);
-	
+	void set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
+	void set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color color, Fl_Color downcolor, Fl_Boxtype boxtype);
+	void set_logo(Fl_Pixmap *imgxpm);
+	void set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 	void resizeform();
-
+	
 	private:
 	
 	inline void button_cb_i(Fl_Button*, void*);
@@ -65,13 +67,16 @@ class DIALOGS
 
 	char avoidRecursion = 0;
 
-	//DIALOG_FORM *message_win;
+	DIALOGS();
+	//void Adjustable() {adjust_size = 1;};
+	void resizable()  {resize_flag = 1;};
 
 	// --- Form ---
 
-	bool		resize_flag		= 0;
-	Fl_Color 	form_color		= FL_BACKGROUND_COLOR; 
-	Fl_Boxtype 	form_boxtype	= FL_FLAT_BOX;
+	bool 		adjust_size			= 0;
+	bool		resize_flag			= 0;
+	Fl_Color 	form_color			= FL_BACKGROUND_COLOR; 
+	Fl_Boxtype 	form_boxtype		= FL_FLAT_BOX;
 	
 	void resize(bool resize_flag);
 	void form(Fl_Color form_color, Fl_Boxtype form_boxtype);
@@ -100,7 +105,8 @@ class DIALOGS
 	Fl_Font 	buttons_font 		= FL_HELVETICA; 
 	Fl_Fontsize buttons_size		= 12; 
 	Fl_Color 	buttons_textcolor	= FL_BLACK; 
-	Fl_Color 	buttons_bgcolor		= FL_BACKGROUND_COLOR; 
+	Fl_Color 	buttons_upcolor		= FL_BACKGROUND_COLOR; 
+	Fl_Color 	buttons_downcolor	= FL_BACKGROUND_COLOR; 
 	Fl_Boxtype 	buttons_boxtype		= FL_GLEAM_THIN_UP_BOX;
 	
 	void buttons_text(Fl_Font font, Fl_Fontsize size);
@@ -108,13 +114,18 @@ class DIALOGS
 	void buttons_style(Fl_Boxtype type);
 	
 	// --- Icon ---
+
+	//Fl_XPM_Image *XpmImg;
+	Fl_Pixmap 	*logo;
+
+	Fl_Font 	icon_font 			= FL_TIMES_BOLD; 
+	Fl_Fontsize icon_size			= 34; 
+	Fl_Color 	icon_textcolor		= FL_DARK_BLUE; 
+	Fl_Color 	icon_bgcolor		= FL_WHITE; 
+	Fl_Boxtype 	icon_boxtype		= FL_THIN_UP_BOX;
 	
-	Fl_Font 	icon_font 		= FL_HELVETICA; 
-	Fl_Fontsize icon_size		= 12; 
-	Fl_Color 	icon_textcolor	= FL_BLACK; 
-	Fl_Color 	icon_bgcolor		= FL_BACKGROUND_COLOR; 
-	Fl_Boxtype 	icon_boxtype		= FL_GLEAM_THIN_UP_BOX;
-	
+	void ico_file(std::string icofile);
+	void ico_image(Fl_Pixmap *pixmap);
 	//icon(xpm);
 	//icon_text();
 	//icon_bg();

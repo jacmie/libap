@@ -16,16 +16,6 @@
 #include "JMfilter.h"
 
 #include "Logo.h"
-//static Fl_Pixmap Logo_pixmap(idata_OptoM1);
-
-//#include "IV_logo_gray_40.xpm"
-//#include "FlowTree_40.xpm"
-//static Fl_Pixmap FlowTree_40_pixmap(FlowTree_40);
-//Fl_RGB_Image FT_icon(&FlowTree_40_pixmap, Fl_Color(0));
-//Fl_Window::default_icon(&win_icon); 
-//FT_Window -> icon(&FT_icon);
-#include <FL/Fl_XPM_Image.H>
-
 
 using namespace std;
 
@@ -101,13 +91,17 @@ int main(int argc, char *argv[])
 	clog << endl << "*** JMdialogs ***" << endl << endl;
 
 	DIALOGS Dialog;
-
-	fl_message_font(FL_HELVETICA, 12);
-
-//	Fl_XPM_Image *ImgXpm = new Fl_XPM_Image ("./FlowTree_40.xpm" /*IcoFile.c_str()*/);
-	//icon->image(ImgXpm);
+	Dialog.resizable();
+	Dialog.ico_file("./FlowTree_40.xpm");
 
     Dialog.JM_alert("Alert!!!");
+	
+	//Dialog.message_style(FL_NO_BOX);
+	//Dialog.form_color = FL_BLUE;
+	Dialog.message_boxtype = FL_NO_BOX;
+	Dialog.message_textcolor = 92;
+	Dialog.ico_image(&OM_logo);
+	//Dialog.ico_file("./IV_logo_gray_40.xpm");
 //    Dialog.JM_message("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3!!!");
     clog << Dialog.JM_choice("Asce3e3e  e3e3e3e 3e 33e 3e3e3er2r2ttt 222       2r2r2r2rr2r2r  2r2r 2r2tt2t2?1?", "Cancel", "No", "Yes") << endl;
 /*    Dialog.JM_input("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Input Hello Worldr  rr22r2r2r 2r2r 22r 2 r2r 2r2r 2r222r 22ty2t2t 2r r2r2r 22r2r 2 r2rr  2r22!!!");

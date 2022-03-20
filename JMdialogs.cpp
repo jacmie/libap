@@ -25,7 +25,7 @@ void DIALOG_FORM::button_cb(Fl_Button *o, void *v)
   	((DIALOG_FORM*)(o->parent()->user_data()))->button_cb_i(o,v);
 }
 
-DIALOG_FORM::DIALOG_FORM() 
+DIALOG_FORM::DIALOG_FORM(bool resize_flag) 
 {
  	// make sure that the dialog does not become the child of some
  	// current group
@@ -36,19 +36,14 @@ DIALOG_FORM::DIALOG_FORM()
  	message_form->user_data((void*)(this));
 	message_form->win_close = &win_close;
  	
+	icon = new Fl_Box(10, 10, 50, 50);
+
 	message = new Fl_Box(65, 25, 335, 20);
 	message->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
  	
 	input = new Fl_Input(65, 37, 335, 23);
 	input->hide();
  	
-	icon = new Fl_Box(10, 10, 50, 50);
-  	icon->box(FL_THIN_UP_BOX);
-  	icon->labelfont(FL_TIMES_BOLD);
-  	icon->labelsize(34);
-  	icon->color(FL_WHITE);
-  	icon->labelcolor(FL_BLUE);
-
  	message_form->end(); // don't add the buttons automatically
  
 	// create the buttons (right to left)
@@ -67,21 +62,23 @@ DIALOG_FORM::DIALOG_FORM()
      		message_form->add(button[b]);
  	}
 
- 	message_form->begin();
- 	//message_form->resizable(new Fl_Box(65, 10, 110-65, 27));
- 	message_form->end();
+	if(resize_flag)
+	{
+ 		message_form->begin();
+ 		message_form->resizable(new Fl_Box(65, 10, 110-65, 27));
+ 		message_form->end();
+	}
+
  	message_form->set_modal();
 
 	Fl_Group::current(previously_current_group);
 }
 
-void DIALOG_FORM::set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color color) 
+void DIALOG_FORM::set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype) 
 {
- 	char buffer[1024];
-  
 	if (!strcmp(fmt,"%s")) 
 	{
-    	message->label(va_arg(ap, const char*));
+    	message->label( va_arg(ap, const char*) );
   	} 
 
 	else 
@@ -92,10 +89,12 @@ void DIALOG_FORM::set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Font
 
   	message->labelfont(font);
   	message->labelsize(size);
-  	message->labelcolor(color);
+  	message->labelcolor(textcolor);
+  	message->color(bgcolor);
+  	message->box(boxtype);
 }
 
-void DIALOG_FORM::set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color color, Fl_Boxtype boxtype) 
+void DIALOG_FORM::set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color upcolor, Fl_Color downcolor, Fl_Boxtype boxtype) 
 {
 	if(b0) 
 	{
@@ -131,11 +130,28 @@ void DIALOG_FORM::set_buttons(const char *b0, const char *b1, const char *b2, Fl
 
 	for (int b=0; b<3; b++) 
 	{
+
   		button[b]->labelfont(font);
   		button[b]->labelsize(size);
-  		button[b]->labelcolor(color);
+  		button[b]->labelcolor(textcolor);
+  		button[b]->color(upcolor);
+  		button[b]->down_color(downcolor);
 		button[b]->box(boxtype);
    	}
+}
+
+void DIALOG_FORM::set_logo(Fl_Pixmap *imgxpm)
+{
+	icon->image(imgxpm);
+}
+
+void DIALOG_FORM::set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype) 
+{
+  	icon->labelfont(font);
+  	icon->labelsize(size);
+  	icon->labelcolor(textcolor);
+  	icon->color(bgcolor);
+  	icon->box(boxtype);
 }
 
 void DIALOG_FORM::resizeform() 
@@ -215,21 +231,49 @@ void DIALOG_FORM::resizeform()
     }
 }
 
+DIALOGS::DIALOGS()
+{
+}
+
+void DIALOGS::ico_file(std::string icofile)
+{
+	Fl_XPM_Image *xpm_img = new Fl_XPM_Image(icofile.c_str());
+	clog << xpm_img << endl;
+	
+	logo = xpm_img;
+	clog << logo << endl;
+}
+
+void DIALOGS::ico_image(Fl_Pixmap *Pixmap)
+{
+	//static Fl_Pixmap FlowTree_40_pixmap(FlowTree_40);
+	//Fl_RGB_Image FT_icon(&FlowTree_40_pixmap, Fl_Color(0));
+	//Fl_Window::default_icon(&win_icon); 
+
+	//Fl_RGB_Image  IV_icon(&IV_logo_48_pixmap, Fl_Color(0));
+	//ImgXpm = new Fl_XPM_Image(IcoFile.c_str());
+	//Ico->image(SystemsData[Id].ImgXpm);
+	logo = Pixmap;
+}
+
 int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1, const char *b2)
 {
   	Fl::pushed(0); // stop dragging (STR #2159)
 
   	avoidRecursion = 1;
 	
-	DIALOG_FORM *message_win = new DIALOG_FORM();
-  	
-	message_win -> set_message(fmt, ap, message_font, message_size, message_textcolor);
-	message_win -> set_buttons(b0, b1, b2, buttons_font, buttons_size, buttons_textcolor, buttons_boxtype);
+	DIALOG_FORM *message_win = new DIALOG_FORM(resize_flag);
+  
+	message_win -> set_message(fmt, ap, message_font, message_size, message_textcolor, message_bgcolor, message_boxtype);
+	message_win -> set_buttons(b0, b1, b2, buttons_font, buttons_size, buttons_textcolor, buttons_upcolor, buttons_downcolor, buttons_boxtype);
+	message_win -> set_logo(logo);
+	message_win -> set_icon(icon_font, icon_size, icon_textcolor, icon_bgcolor, icon_boxtype); 
 /*  
 	const char* prev_icon_label = icon->label();
 	if (!prev_icon_label) icon->label(iconlabel);
 */
   	message_win -> resizeform();
+  	message_win -> message_form->redraw();
 /*
   	if (button[1]->visible() && !input->visible())	button[1]->take_focus();
   	if (enableHotspot)								message_form->hotspot(button[0]);
