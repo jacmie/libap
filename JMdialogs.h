@@ -45,7 +45,7 @@ class DIALOG_FORM
 
 	DIALOG_FORM(bool resize_flag);
 
-	//void set_logo(Fl_Pixmap *imgxpm);
+	void set_form(bool hotspot_flag, std::string form_label, Fl_Color bgcolor, Fl_Boxtype boxtype); 
 	void set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Pixmap *logo);
 	void set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 	void set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color color, Fl_Color downcolor, Fl_Boxtype boxtype);
@@ -61,23 +61,21 @@ class DIALOGS
 {
 	public:
 
-	const char *message_title_default;
-	int enableHotspot = 1;
-
 	char avoidRecursion = 0;
 
 	DIALOGS();
-	//void Adjustable() {adjust_size = 1;};
-	void resizable()  {resize_flag = 1;};
 
 	// --- Form ---
 
 	bool 		adjust_size			= 0;
 	bool		resize_flag			= 0;
-	Fl_Color 	form_color			= FL_BACKGROUND_COLOR; 
+	bool		hotspot_flag 		= 1;
+
+	Fl_Color 	form_bgcolor		= FL_BACKGROUND_COLOR; 
 	Fl_Boxtype 	form_boxtype		= FL_FLAT_BOX;
+	std::string	form_label			= "";
 	
-	void resize(bool resize_flag);
+	void resizable()  {resize_flag = 1;};
 	void form(Fl_Color form_color, Fl_Boxtype form_boxtype);
 	
 	// --- Icon ---

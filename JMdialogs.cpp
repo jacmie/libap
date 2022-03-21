@@ -75,6 +75,29 @@ DIALOG_FORM::DIALOG_FORM(bool resize_flag)
 	Fl_Group::current(previously_current_group);
 }
 
+void DIALOG_FORM::set_form(bool hotspot_flag, std::string form_label, Fl_Color bgcolor, Fl_Boxtype boxtype) 
+{
+  	if (hotspot_flag) message_form->hotspot(button[0]);
+
+   	message_form->label(form_label.c_str());
+  	message_form->color(bgcolor);
+  	message_form->box(boxtype);
+}
+
+void DIALOG_FORM::set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Pixmap *logo) 
+{
+  	icon->labelfont(font);
+  	icon->labelsize(size);
+  	icon->labelcolor(textcolor);
+  	icon->color(bgcolor);
+  	icon->box(boxtype);
+
+	if(textflag) icon->label(text);
+	else		 icon->label(0);
+
+	if(logoflag) icon->image(logo);
+}
+
 void DIALOG_FORM::set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype) 
 {
 	if (!strcmp(fmt,"%s")) 
@@ -93,25 +116,6 @@ void DIALOG_FORM::set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Font
   	message->labelcolor(textcolor);
   	message->color(bgcolor);
   	message->box(boxtype);
-}
-
-/*void DIALOG_FORM::set_logo(Fl_Pixmap *imgxpm)
-{
-	icon->image(imgxpm);
-}*/
-
-void DIALOG_FORM::set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Pixmap *logo) 
-{
-  	icon->labelfont(font);
-  	icon->labelsize(size);
-  	icon->labelcolor(textcolor);
-  	icon->color(bgcolor);
-  	icon->box(boxtype);
-
-	if(textflag) icon->label(text);
-	else		 icon->label(0);
-
-	if(logoflag) icon->image(logo);
 }
 
 void DIALOG_FORM::set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color upcolor, Fl_Color downcolor, Fl_Boxtype boxtype) 
@@ -147,6 +151,9 @@ void DIALOG_FORM::set_buttons(const char *b0, const char *b1, const char *b2, Fl
 	{
 		button[2]->hide();
 	}
+  	
+	if (button[1]->visible() && !input->visible())	button[1]->take_focus();
+  	if (b0 && Fl_Widget::label_shortcut(b0))		button[0]->shortcut(0);
 
 	for (int b=0; b<3; b++) 
 	{
@@ -278,38 +285,23 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
 	}
 	else icon_newtext = "";
 
+	message_win -> set_form(hotspot_flag, form_label, form_bgcolor, form_boxtype);
 	message_win -> set_icon(icon_font, icon_size, icon_textcolor, icon_bgcolor, icon_boxtype, icon_textflag, icon_newtext.c_str(), icon_logoflag, logo); 
 	message_win -> set_message(fmt, ap, message_font, message_size, message_textcolor, message_bgcolor, message_boxtype);
 	message_win -> set_buttons(b0, b1, b2, buttons_font, buttons_size, buttons_textcolor, buttons_upcolor, buttons_downcolor, buttons_boxtype);
   	message_win -> resizeform();
   	message_win -> message_form->redraw();
-/*
-  	if (button[1]->visible() && !input->visible())	button[1]->take_focus();
-  	if (enableHotspot)								message_form->hotspot(button[0]);
-  	if (b0 && Fl_Widget::label_shortcut(b0))		button[0]->shortcut(0);
-
-  	// set default window title, if defined and a specific title is not set
-  	if (!message_form->label() && message_title_default)
-    	message_form->label(message_title_default);
-*/
-  	// deactivate Fl::grab(), because it is incompatible with modal windows
+  	
+	// deactivate Fl::grab(), because it is incompatible with modal windows
   	Fl_Window* g = Fl::grab();
-  	if (g) Fl::grab(0);
+  	if(g) Fl::grab(0);
   	Fl_Group *current_group = Fl_Group::current(); // make sure the dialog does not interfere with any active group
   	message_win->message_form->show();
   	Fl_Group::current(current_group);
-	clog << "0 innard" << endl;
-  	
-	while( message_win->message_form->shown() ) 
-	{
-		Fl::wait();
-	}
-	
+	while( message_win->message_form->shown() ) Fl::wait();
 	if(g) Fl::grab(g); // regrab the previous popup menu, if there was one
 
   	avoidRecursion = 0;
-
-	clog << "END innard: " << message_win->ret_val << endl;
 
   	return message_win->ret_val;
 }

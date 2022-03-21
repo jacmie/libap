@@ -97,11 +97,12 @@ int main(int argc, char *argv[])
 	
 	//Dialog.message_style(FL_NO_BOX);
 	//Dialog.form_color = FL_BLUE;
+	Dialog.form_label = "Kra_kra";
 	Dialog.message_boxtype = FL_NO_BOX;
 	Dialog.message_textcolor = 92;
 	Dialog.icon_image(&OM_logo);
 	//Dialog.ico_file("./IV_logo_gray_40.xpm");
-//    Dialog.JM_message("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3!!!");
+    Dialog.JM_message("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e  3e3e3e3e3e3e 3e3eee3!!!");
 	Dialog.icon_text("?!?");
 	Dialog.icon_file("./FlowTree_40.xpm", 1);
     clog << Dialog.JM_choice("Asce3e3e  e3e3e3e 3e 33e 3e3e3er2r2ttt 222       2r2r2r2rr2r2r  2r2r 2r2tt2t2?1?", "Cancel", "No", "Yes") << endl;
