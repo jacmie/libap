@@ -30,12 +30,12 @@ class DIALOG_WIN : public Fl_Window
 class DIALOG_FORM
 {
  	char buffer[1024];
-	int button_val[3] = {0, 1, 2};
+	int  button_val[3] = {0, 1, 2};
 	
-	Fl_Box 		*message;
 	Fl_Box 		*icon;
-	Fl_Button 	*button[3];
 	Fl_Input 	*input;
+	Fl_Box 		*message;
+	Fl_Button 	*button[3];
 
 	public:
 	
@@ -45,10 +45,10 @@ class DIALOG_FORM
 
 	DIALOG_FORM(bool resize_flag);
 
+	//void set_logo(Fl_Pixmap *imgxpm);
+	void set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Pixmap *logo);
 	void set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 	void set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color color, Fl_Color downcolor, Fl_Boxtype boxtype);
-	void set_logo(Fl_Pixmap *imgxpm);
-	void set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 	void resizeform();
 	
 	private:
@@ -61,7 +61,6 @@ class DIALOGS
 {
 	public:
 
-	const char *iconlabel = "?";
 	const char *message_title_default;
 	int enableHotspot = 1;
 
@@ -80,6 +79,25 @@ class DIALOGS
 	
 	void resize(bool resize_flag);
 	void form(Fl_Color form_color, Fl_Boxtype form_boxtype);
+	
+	// --- Icon ---
+
+	bool		icon_logoflag		= 0;
+	bool		icon_textflag		= 1;
+	std::string	icon_deftext		= "?";
+	std::string icon_newtext		= "";
+	Fl_Pixmap 	*logo;
+
+	Fl_Font 	icon_font 			= FL_TIMES_BOLD; 
+	Fl_Fontsize icon_size			= 34; 
+	Fl_Color 	icon_textcolor		= FL_DARK_BLUE; 
+	Fl_Color 	icon_bgcolor		= FL_WHITE; 
+	Fl_Boxtype 	icon_boxtype		= FL_THIN_UP_BOX;
+	
+	void icon_text(std::string icotext);
+	void icon_file(std::string icofile, bool textflag=0);
+	void icon_image(Fl_Pixmap *pixmap, bool textflag=0);
+	//icon_bg();
 	
 	// --- Message ---
 	
@@ -113,22 +131,6 @@ class DIALOGS
 	void buttons_color(Fl_Color font_color, Fl_Color bg_color);
 	void buttons_style(Fl_Boxtype type);
 	
-	// --- Icon ---
-
-	//Fl_XPM_Image *XpmImg;
-	Fl_Pixmap 	*logo;
-
-	Fl_Font 	icon_font 			= FL_TIMES_BOLD; 
-	Fl_Fontsize icon_size			= 34; 
-	Fl_Color 	icon_textcolor		= FL_DARK_BLUE; 
-	Fl_Color 	icon_bgcolor		= FL_WHITE; 
-	Fl_Boxtype 	icon_boxtype		= FL_THIN_UP_BOX;
-	
-	void ico_file(std::string icofile);
-	void ico_image(Fl_Pixmap *pixmap);
-	//icon(xpm);
-	//icon_text();
-	//icon_bg();
 
 	void JM_alert(const char *, ...);// __fl_attr((__format__ (__printf__, 1, 2)));
 	void JM_message(const char *, ...);// __fl_attr((__format__ (__printf__, 1, 2)));

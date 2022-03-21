@@ -37,12 +37,13 @@ DIALOG_FORM::DIALOG_FORM(bool resize_flag)
 	message_form->win_close = &win_close;
  	
 	icon = new Fl_Box(10, 10, 50, 50);
+	icon->align(FL_ALIGN_IMAGE_BACKDROP);
 
-	message = new Fl_Box(65, 25, 335, 20);
-	message->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
- 	
 	input = new Fl_Input(65, 37, 335, 23);
 	input->hide();
+ 	
+	message = new Fl_Box(65, 25, 335, 20);
+	message->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
  	
  	message_form->end(); // don't add the buttons automatically
  
@@ -94,6 +95,25 @@ void DIALOG_FORM::set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Font
   	message->box(boxtype);
 }
 
+/*void DIALOG_FORM::set_logo(Fl_Pixmap *imgxpm)
+{
+	icon->image(imgxpm);
+}*/
+
+void DIALOG_FORM::set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Pixmap *logo) 
+{
+  	icon->labelfont(font);
+  	icon->labelsize(size);
+  	icon->labelcolor(textcolor);
+  	icon->color(bgcolor);
+  	icon->box(boxtype);
+
+	if(textflag) icon->label(text);
+	else		 icon->label(0);
+
+	if(logoflag) icon->image(logo);
+}
+
 void DIALOG_FORM::set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color upcolor, Fl_Color downcolor, Fl_Boxtype boxtype) 
 {
 	if(b0) 
@@ -138,20 +158,6 @@ void DIALOG_FORM::set_buttons(const char *b0, const char *b1, const char *b2, Fl
   		button[b]->down_color(downcolor);
 		button[b]->box(boxtype);
    	}
-}
-
-void DIALOG_FORM::set_logo(Fl_Pixmap *imgxpm)
-{
-	icon->image(imgxpm);
-}
-
-void DIALOG_FORM::set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype) 
-{
-  	icon->labelfont(font);
-  	icon->labelsize(size);
-  	icon->labelcolor(textcolor);
-  	icon->color(bgcolor);
-  	icon->box(boxtype);
 }
 
 void DIALOG_FORM::resizeform() 
@@ -235,25 +241,26 @@ DIALOGS::DIALOGS()
 {
 }
 
-void DIALOGS::ico_file(std::string icofile)
+void DIALOGS::icon_text(std::string icotext)
 {
-	Fl_XPM_Image *xpm_img = new Fl_XPM_Image(icofile.c_str());
-	clog << xpm_img << endl;
-	
-	logo = xpm_img;
-	clog << logo << endl;
+	icon_textflag = 1;
+	icon_newtext  = icotext;
 }
 
-void DIALOGS::ico_image(Fl_Pixmap *Pixmap)
+void DIALOGS::icon_file(std::string icofile, bool textflag)
 {
-	//static Fl_Pixmap FlowTree_40_pixmap(FlowTree_40);
-	//Fl_RGB_Image FT_icon(&FlowTree_40_pixmap, Fl_Color(0));
-	//Fl_Window::default_icon(&win_icon); 
+	icon_logoflag = 1;
+	logo = new Fl_XPM_Image(icofile.c_str());
+	
+	icon_textflag = textflag;
+}
 
-	//Fl_RGB_Image  IV_icon(&IV_logo_48_pixmap, Fl_Color(0));
-	//ImgXpm = new Fl_XPM_Image(IcoFile.c_str());
-	//Ico->image(SystemsData[Id].ImgXpm);
+void DIALOGS::icon_image(Fl_Pixmap *Pixmap, bool textflag)
+{
+	icon_logoflag = 1;
 	logo = Pixmap;
+	
+	icon_textflag = textflag;
 }
 
 int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1, const char *b2)
@@ -264,14 +271,16 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
 	
 	DIALOG_FORM *message_win = new DIALOG_FORM(resize_flag);
   
+	if(icon_textflag)
+	{
+		if(icon_newtext.length() == 0)
+			icon_newtext = icon_deftext;
+	}
+	else icon_newtext = "";
+
+	message_win -> set_icon(icon_font, icon_size, icon_textcolor, icon_bgcolor, icon_boxtype, icon_textflag, icon_newtext.c_str(), icon_logoflag, logo); 
 	message_win -> set_message(fmt, ap, message_font, message_size, message_textcolor, message_bgcolor, message_boxtype);
 	message_win -> set_buttons(b0, b1, b2, buttons_font, buttons_size, buttons_textcolor, buttons_upcolor, buttons_downcolor, buttons_boxtype);
-	message_win -> set_logo(logo);
-	message_win -> set_icon(icon_font, icon_size, icon_textcolor, icon_bgcolor, icon_boxtype); 
-/*  
-	const char* prev_icon_label = icon->label();
-	if (!prev_icon_label) icon->label(iconlabel);
-*/
   	message_win -> resizeform();
   	message_win -> message_form->redraw();
 /*
@@ -297,8 +306,6 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
 	}
 	
 	if(g) Fl::grab(g); // regrab the previous popup menu, if there was one
-//  	icon->label(prev_icon_label);
-//  	message_form->label(0); // reset window title
 
   	avoidRecursion = 0;
 
@@ -329,10 +336,10 @@ void DIALOGS::JM_message(const char *fmt, ...)
 
     va_list ap;
     va_start(ap, fmt);
-    iconlabel = "i";
+    icon_deftext = "i";
     innards(fmt, ap, 0, fl_close, 0);
     va_end(ap);
-    iconlabel = "?";
+    icon_deftext = "?";
 }
 
 void DIALOGS::JM_alert(const char *fmt, ...) 
@@ -341,10 +348,10 @@ void DIALOGS::JM_alert(const char *fmt, ...)
 
   	va_list ap;
   	va_start(ap, fmt);
-  	iconlabel = "!";
+  	icon_deftext = "!";
   	innards(fmt, ap, 0, fl_close, 0);
   	va_end(ap);
-  	iconlabel = "?";
+  	icon_deftext = "?";
 }
 
 int DIALOGS::JM_choice(const char *fmt, const char *b0, const char *b1, const char *b2, ...) 
