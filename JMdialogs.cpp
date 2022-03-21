@@ -25,7 +25,7 @@ void DIALOG_FORM::button_cb(Fl_Button *o, void *v)
   	((DIALOG_FORM*)(o->parent()->user_data()))->button_cb_i(o,v);
 }
 
-DIALOG_FORM::DIALOG_FORM(bool resize_flag) 
+DIALOG_FORM::DIALOG_FORM() 
 {
  	// make sure that the dialog does not become the child of some
  	// current group
@@ -63,12 +63,9 @@ DIALOG_FORM::DIALOG_FORM(bool resize_flag)
      		message_form->add(button[b]);
  	}
 
-	if(resize_flag)
-	{
- 		message_form->begin();
- 		message_form->resizable(new Fl_Box(65, 10, 110-65, 27));
- 		message_form->end();
-	}
+ 	message_form->begin();
+ 	message_form->resizable(new Fl_Box(65, 10, 110-65, 27));
+	message_form->end();
 
  	message_form->set_modal();
 
@@ -167,7 +164,7 @@ void DIALOG_FORM::set_buttons(const char *b0, const char *b1, const char *b2, Fl
    	}
 }
 
-void DIALOG_FORM::resizeform() 
+void DIALOG_FORM::resizeform(bool adjust_size, bool resize_buttons) 
 {
   	int	i;
   	int	message_w, message_h;
@@ -176,19 +173,14 @@ void DIALOG_FORM::resizeform()
   	int	x, w, h, max_w, max_h=20;
 	const int icon_size = 50;
 
-  	//message_form->size(410, 103);
-
-  	//fl_font(message->labelfont(), message->labelsize());
   	message_w = message_h = 0;
- // 	fl_measure(message->label(), message_w, message_h);
+  	if(adjust_size) fl_measure(message->label(), message_w, message_h);
 
   	message_w += 10;
   	message_h += 10;
   
 	if (message_w < 340)	message_w = 340;
 	if (message_h < 30)		message_h = 30;
-
-  	//fl_font(button[0]->labelfont(), button[0]->labelsize());
 
   	memset(button_w, 0, sizeof(button_w));
   	memset(button_h, 0, sizeof(button_h));
@@ -198,13 +190,13 @@ void DIALOG_FORM::resizeform()
     	if(button[i]->visible())
     	{
       		fl_measure(button[i]->label(), button_w[i], button_h[i]);
-			/*
+			
       		if (i == 1) button_w[1] += 20;
 
       		button_w[i] += 30;
       		button_h[i] += 10;
 
-      		if (button_h[i] > max_h) max_h = button_h[i];*/
+      		if (button_h[i] > max_h) max_h = button_h[i];
     	}
 	}
 
@@ -233,13 +225,17 @@ void DIALOG_FORM::resizeform()
 	{
     	if(button_w[i])
     	{
-      		x -= 100;//button_w[i];
-      		//button[i]->resize(x, h - 10 - max_h, button_w[i] - 10, max_h);
-      		button[i]->resize(x, h - 10 - max_h, 80 /*button_w[i]-10*/, 20/*max_h*/);
-
-			//printf("button %d (%s) is %dx%d+%d,%d\n", i, button[i]->label(),
-			//button[i]->w(), button[i]->h(),
-			//button[i]->x(), button[i]->y());
+			if(resize_buttons) 	
+			{
+      			x -= button_w[i];
+				button[i]->resize(x, h - 10 - max_h, button_w[i] - 10, 20/*max_h*/);
+			}
+			
+			else
+			{
+	      		x -= 100;
+				button[i]->resize(x, h - 10 - max_h, 80 /*button_w[i]-10*/, 20/*max_h*/);
+			}
 		}
     }
 }
@@ -276,7 +272,7 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
 
   	avoidRecursion = 1;
 	
-	DIALOG_FORM *message_win = new DIALOG_FORM(resize_flag);
+	DIALOG_FORM *message_win = new DIALOG_FORM();
   
 	if(icon_textflag)
 	{
@@ -289,7 +285,7 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
 	message_win -> set_icon(icon_font, icon_size, icon_textcolor, icon_bgcolor, icon_boxtype, icon_textflag, icon_newtext.c_str(), icon_logoflag, logo); 
 	message_win -> set_message(fmt, ap, message_font, message_size, message_textcolor, message_bgcolor, message_boxtype);
 	message_win -> set_buttons(b0, b1, b2, buttons_font, buttons_size, buttons_textcolor, buttons_upcolor, buttons_downcolor, buttons_boxtype);
-  	message_win -> resizeform();
+  	message_win -> resizeform(adjust_size, resize_buttons);
   	message_win -> message_form->redraw();
   	
 	// deactivate Fl::grab(), because it is incompatible with modal windows

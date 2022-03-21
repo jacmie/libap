@@ -43,13 +43,13 @@ class DIALOG_FORM
 	int ret_val   = 0;  // button return value: 0 -> Canel, 1, 2
 	int win_close = 0;	// -1 -> Escape, -2 -> X close button, -3 -> blocked by another dialog window
 
-	DIALOG_FORM(bool resize_flag);
+	DIALOG_FORM();
 
 	void set_form(bool hotspot_flag, std::string form_label, Fl_Color bgcolor, Fl_Boxtype boxtype); 
 	void set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Pixmap *logo);
 	void set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 	void set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color color, Fl_Color downcolor, Fl_Boxtype boxtype);
-	void resizeform();
+	void resizeform(bool adjust_size, bool resize_buttons);
 	
 	private:
 	
@@ -68,14 +68,14 @@ class DIALOGS
 	// --- Form ---
 
 	bool 		adjust_size			= 0;
-	bool		resize_flag			= 0;
+	bool		resize_buttons		= 0;
 	bool		hotspot_flag 		= 1;
 
 	Fl_Color 	form_bgcolor		= FL_BACKGROUND_COLOR; 
 	Fl_Boxtype 	form_boxtype		= FL_FLAT_BOX;
 	std::string	form_label			= "";
 	
-	void resizable()  {resize_flag = 1;};
+	//void resizable()  {resize_flag = 1;};
 	void form(Fl_Color form_color, Fl_Boxtype form_boxtype);
 	
 	// --- Icon ---

@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 	clog << endl << "*** JMdialogs ***" << endl << endl;
 
 	DIALOGS Dialog;
-	Dialog.resizable();
+	//Dialog.resizable();
 
     Dialog.JM_alert("Alert!!!");
 	
