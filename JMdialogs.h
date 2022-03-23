@@ -47,10 +47,12 @@ class DIALOG_FORM
 
 	void set_form(bool hotspot_flag, std::string form_label, Fl_Color bgcolor, Fl_Boxtype boxtype); 
 	void set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Pixmap *logo);
+	void set_input(bool	flag, const char *defstr, uchar type, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 	void set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 	void set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color color, Fl_Color downcolor, Fl_Boxtype boxtype);
 	void resizeform(bool adjust_size, bool resize_buttons);
-	
+	std::string get_userinput();
+
 	private:
 	
 	inline void button_cb_i(Fl_Button*, void*);
@@ -59,24 +61,17 @@ class DIALOG_FORM
 
 class DIALOGS
 {
-	public:
-
 	char avoidRecursion = 0;
-
-	DIALOGS();
 
 	// --- Form ---
 
-	bool 		adjust_size			= 0;
+	bool 		adjust_size			= 1;
 	bool		resize_buttons		= 0;
 	bool		hotspot_flag 		= 1;
 
+	std::string	form_label			= "";
 	Fl_Color 	form_bgcolor		= FL_BACKGROUND_COLOR; 
 	Fl_Boxtype 	form_boxtype		= FL_FLAT_BOX;
-	std::string	form_label			= "";
-	
-	//void resizable()  {resize_flag = 1;};
-	void form(Fl_Color form_color, Fl_Boxtype form_boxtype);
 	
 	// --- Icon ---
 
@@ -85,18 +80,25 @@ class DIALOGS
 	std::string	icon_deftext		= "?";
 	std::string icon_newtext		= "";
 	Fl_Pixmap 	*logo;
-
+	
 	Fl_Font 	icon_font 			= FL_TIMES_BOLD; 
 	Fl_Fontsize icon_size			= 34; 
 	Fl_Color 	icon_textcolor		= FL_DARK_BLUE; 
 	Fl_Color 	icon_bgcolor		= FL_WHITE; 
 	Fl_Boxtype 	icon_boxtype		= FL_THIN_UP_BOX;
 	
-	void icon_text(std::string icotext);
-	void icon_file(std::string icofile, bool textflag=0);
-	void icon_image(Fl_Pixmap *pixmap, bool textflag=0);
-	//icon_bg();
+	// --- Input ---
+
+	bool		input_flag			= 0;
+	uchar  		input_type			= FL_SECRET_INPUT;
+	std::string input_defstr		= "";
 	
+	Fl_Font 	input_font 			= FL_HELVETICA; 
+	Fl_Fontsize input_size			= 12; 
+	Fl_Color 	input_textcolor		= FL_BLACK;
+	Fl_Color 	input_bgcolor		= FL_WHITE;
+	Fl_Boxtype 	input_boxtype		= FL_THIN_DOWN_BOX;
+
 	// --- Message ---
 	
 	Fl_Font 	message_font 		= FL_HELVETICA; 
@@ -104,10 +106,6 @@ class DIALOGS
 	Fl_Color 	message_textcolor	= FL_BLACK;
 	Fl_Color 	message_bgcolor		= FL_BACKGROUND_COLOR;
 	Fl_Boxtype 	message_boxtype		= FL_FLAT_BOX;
-	
-	void message_text(Fl_Font font, Fl_Fontsize size);
-	void message_color(Fl_Color font_color, Fl_Color bg_color);
-	void message_style(Fl_Boxtype type);
 	
 	// --- Buttons ---
 	
@@ -125,17 +123,44 @@ class DIALOGS
 	Fl_Color 	buttons_downcolor	= FL_BACKGROUND_COLOR; 
 	Fl_Boxtype 	buttons_boxtype		= FL_GLEAM_THIN_UP_BOX;
 	
+	public:
+
+	DIALOGS();
+	
+	void resizebuttons_on();
+	void resizebuttons_off();
+	void hotspot_on();
+	void hotspot_off();
+
+	void form_title(std::string formlabel);
+	void form_color(Fl_Color formcolor, Fl_Boxtype formboxtype);
+	
+	void icon_text(std::string icotext);
+	void icon_file(std::string icofile, bool textflag=0);
+	void icon_image(Fl_Pixmap *pixmap, bool textflag=0);
+	
+	void icon_text(Fl_Font font, Fl_Fontsize size);
+	void icon_color(Fl_Color font_color, Fl_Color bg_color);
+	void icon_style(Fl_Boxtype type);
+
+	void input_text(Fl_Font font, Fl_Fontsize size);
+	void input_color(Fl_Color font_color, Fl_Color bg_color);
+	void input_style(Fl_Boxtype type);
+	
+	void message_text(Fl_Font font, Fl_Fontsize size);
+	void message_color(Fl_Color font_color, Fl_Color bg_color);
+	void message_style(Fl_Boxtype type);
+	
 	void buttons_text(Fl_Font font, Fl_Fontsize size);
-	void buttons_color(Fl_Color font_color, Fl_Color bg_color);
+	void buttons_color(Fl_Color font_color, Fl_Color bg_color, Fl_Color down_color);
 	void buttons_style(Fl_Boxtype type);
 	
-
-	void JM_alert(const char *, ...);// __fl_attr((__format__ (__printf__, 1, 2)));
-	void JM_message(const char *, ...);// __fl_attr((__format__ (__printf__, 1, 2)));
-	int JM_choice(const char *q,const char *b0,const char *b1,const char *b2, ...);// __fl_attr((__format__ (__printf__, 1, 5)));
-	const char *JM_input(const char *label, const char *deflt = 0, ...);// __fl_attr((__format__ (__printf__, 1, 3)));
-	const char *JM_password(const char *label, const char *deflt = 0, ...);// __fl_attr((__format__ (__printf__, 1, 3)));
-	int JM_choice_n(const char *q,const char *b0,const char *b1,const char *b2, ...);// __fl_attr((__format__ (__printf__, 1, 5)));
+	void alert(const char *, ...);
+	void message(const char *, ...);
+	int  choice(const char *q,const char *b0,const char *b1,const char *b2, ...);
+	const char *input(const char *label, const char *deflt = 0, ...);
+	const char *password(const char *label, const char *deflt = 0, ...);
+	int choice_n(const char *q,const char *b0,const char *b1,const char *b2, ...);
 	
 	private:
 	

@@ -95,6 +95,25 @@ void DIALOG_FORM::set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, F
 	if(logoflag) icon->image(logo);
 }
 
+void DIALOG_FORM::set_input(bool flag, const char *defstr, uchar type, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype)
+{
+	input->type(type);
+  	input->value(defstr);
+  	input->take_focus();
+  	
+	input->labelfont(font);
+  	input->labelsize(size);
+  	input->labelcolor(textcolor);
+  	input->color(bgcolor);
+  	input->box(boxtype);
+	
+	if(flag)
+	{
+  		message->position(65, 10); // move
+  		input->show();
+	}
+}
+
 void DIALOG_FORM::set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype) 
 {
 	if (!strcmp(fmt,"%s")) 
@@ -240,8 +259,44 @@ void DIALOG_FORM::resizeform(bool adjust_size, bool resize_buttons)
     }
 }
 
+std::string DIALOG_FORM::get_userinput()
+{
+	return input->value();
+}
+
 DIALOGS::DIALOGS()
 {
+}
+
+void DIALOGS::resizebuttons_on() 
+{
+	resize_buttons = 1;
+}
+
+void DIALOGS::resizebuttons_off() 
+{
+	resize_buttons = 0;
+}
+
+void DIALOGS::hotspot_on()
+{
+	hotspot_flag = 1;
+}
+
+void DIALOGS::hotspot_off()
+{
+	hotspot_flag = 0;
+}
+
+void DIALOGS::form_title(std::string formlabel)
+{
+	form_label = formlabel;
+}
+
+void DIALOGS::form_color(Fl_Color formcolor, Fl_Boxtype formboxtype)
+{
+	form_bgcolor = formcolor; 
+	form_boxtype = formboxtype;
 }
 
 void DIALOGS::icon_text(std::string icotext)
@@ -266,6 +321,75 @@ void DIALOGS::icon_image(Fl_Pixmap *Pixmap, bool textflag)
 	icon_textflag = textflag;
 }
 
+void DIALOGS::icon_text(Fl_Font font, Fl_Fontsize size)
+{
+	icon_font = font; 
+	icon_size = size; 
+}
+
+void DIALOGS::icon_color(Fl_Color font_color, Fl_Color bg_color)
+{
+	icon_textcolor = font_color; 
+	icon_bgcolor   = bg_color; 
+}
+
+void DIALOGS::icon_style(Fl_Boxtype type)
+{
+	icon_boxtype = type;
+}
+	
+void DIALOGS::input_text(Fl_Font font, Fl_Fontsize size)
+{
+	input_font = font; 
+	input_size = size; 
+}
+
+void DIALOGS::input_color(Fl_Color font_color, Fl_Color bg_color)
+{
+	input_textcolor	= font_color;
+	input_bgcolor	= bg_color;
+}
+
+void DIALOGS::input_style(Fl_Boxtype type)
+{
+	input_boxtype = type;
+}
+
+void DIALOGS::message_text(Fl_Font font, Fl_Fontsize size)
+{
+	message_font = font; 
+	message_size = size; 
+}
+
+void DIALOGS::message_color(Fl_Color font_color, Fl_Color bg_color)
+{
+	message_textcolor = font_color;
+	message_bgcolor	  = bg_color;
+}
+
+void DIALOGS::message_style(Fl_Boxtype type)
+{
+	message_boxtype	= type;
+}
+
+void DIALOGS::buttons_text(Fl_Font font, Fl_Fontsize size)
+{
+	buttons_font = font; 
+	buttons_size = size; 
+}
+
+void DIALOGS::buttons_color(Fl_Color font_color, Fl_Color bg_color, Fl_Color down_color)
+{
+	buttons_textcolor	= font_color; 
+	buttons_upcolor		= bg_color; 
+	buttons_downcolor	= down_color; 
+}
+
+void DIALOGS::buttons_style(Fl_Boxtype type)
+{
+	buttons_boxtype	= type;
+}
+
 int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1, const char *b2)
 {
   	Fl::pushed(0); // stop dragging (STR #2159)
@@ -284,10 +408,11 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
 	message_win -> set_form(hotspot_flag, form_label, form_bgcolor, form_boxtype);
 	message_win -> set_icon(icon_font, icon_size, icon_textcolor, icon_bgcolor, icon_boxtype, icon_textflag, icon_newtext.c_str(), icon_logoflag, logo); 
 	message_win -> set_message(fmt, ap, message_font, message_size, message_textcolor, message_bgcolor, message_boxtype);
+	message_win -> set_input(input_flag, input_defstr.c_str(), input_type, input_font, input_size, input_textcolor, input_bgcolor, input_boxtype);
 	message_win -> set_buttons(b0, b1, b2, buttons_font, buttons_size, buttons_textcolor, buttons_upcolor, buttons_downcolor, buttons_boxtype);
   	message_win -> resizeform(adjust_size, resize_buttons);
   	message_win -> message_form->redraw();
-  	
+
 	// deactivate Fl::grab(), because it is incompatible with modal windows
   	Fl_Window* g = Fl::grab();
   	if(g) Fl::grab(0);
@@ -295,6 +420,7 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
   	message_win->message_form->show();
   	Fl_Group::current(current_group);
 	while( message_win->message_form->shown() ) Fl::wait();
+	if(input_flag) input_defstr = message_win->get_userinput();
 	if(g) Fl::grab(g); // regrab the previous popup menu, if there was one
 
   	avoidRecursion = 0;
@@ -304,21 +430,15 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
 
 const char* DIALOGS::input_innards(const char* fmt, va_list ap, const char* defstr, uchar type) 
 {
-  	/*makeform();
-  	message_form->size(410, 103);
-  	message->position(65, 10);
-  	input->type(type);
-  	input->show();
-  	input->value(defstr);
-  	input->take_focus();
+	input_type		= type;
+	input_defstr	= defstr;
 
   	int r = innards(fmt, ap, fl_cancel, fl_ok, 0);
-  	input->hide();
-  	message->position(65,25);
-  	return r ? input->value() : 0;*/
+  	
+	return r ? input_defstr.c_str() : 0;
 }
 
-void DIALOGS::JM_message(const char *fmt, ...) 
+void DIALOGS::message(const char *fmt, ...) 
 {
     if(avoidRecursion) return;
 
@@ -330,7 +450,7 @@ void DIALOGS::JM_message(const char *fmt, ...)
     icon_deftext = "?";
 }
 
-void DIALOGS::JM_alert(const char *fmt, ...) 
+void DIALOGS::alert(const char *fmt, ...) 
 {
   	if(avoidRecursion) return;
 
@@ -342,7 +462,7 @@ void DIALOGS::JM_alert(const char *fmt, ...)
   	icon_deftext = "?";
 }
 
-int DIALOGS::JM_choice(const char *fmt, const char *b0, const char *b1, const char *b2, ...) 
+int DIALOGS::choice(const char *fmt, const char *b0, const char *b1, const char *b2, ...) 
 {
   	if (avoidRecursion) return 0;
 
@@ -354,7 +474,7 @@ int DIALOGS::JM_choice(const char *fmt, const char *b0, const char *b1, const ch
 	return r;
 }
 
-int DIALOGS::JM_choice_n(const char *fmt, const char *b0, const char *b1, const char *b2, ...) 
+int DIALOGS::choice_n(const char *fmt, const char *b0, const char *b1, const char *b2, ...) 
 {
   	if (avoidRecursion) return -3;
 
@@ -368,20 +488,26 @@ int DIALOGS::JM_choice_n(const char *fmt, const char *b0, const char *b1, const 
   	return r;
 }
 
-const char* DIALOGS::JM_input(const char *fmt, const char *defstr, ...) 
+const char* DIALOGS::input(const char *fmt, const char *defstr, ...) 
 {
-  	if (avoidRecursion) return 0;
+	input_flag = 1;
+  	
+	if (avoidRecursion) return 0;
 
   	va_list ap;  
 	va_start(ap, defstr);
   	const char* r = input_innards(fmt, ap, defstr, FL_NORMAL_INPUT);
   	va_end(ap);
+	
+	input_flag = 0;
   
 	return r;
 }
 
-const char* DIALOGS::JM_password(const char *fmt, const char *defstr, ...) 
+const char* DIALOGS::password(const char *fmt, const char *defstr, ...) 
 {
+	input_flag = 1;
+
   	if (avoidRecursion) return 0;
 
   	va_list ap;
@@ -389,6 +515,8 @@ const char* DIALOGS::JM_password(const char *fmt, const char *defstr, ...)
   	const char* r = input_innards(fmt, ap, defstr, FL_SECRET_INPUT);
   	va_end(ap);
   
+	input_flag = 0;
+	
 	return r;
 }
 
