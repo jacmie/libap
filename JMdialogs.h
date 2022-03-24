@@ -138,20 +138,20 @@ class DIALOGS
 	void icon_label(std::string icolabel);
 	void icon_file(std::string icofile, bool textflag=0);
 	void icon_image(Fl_Pixmap *pixmap, bool textflag=0);
-	void icon_font(Fl_Font font, Fl_Fontsize size);
-	void icon_color(Fl_Color font_color, Fl_Color bg_color);
+	void icon_font(Fl_Font font, Fl_Fontsize size=12);
+	void icon_color(Fl_Color font_color, Fl_Color bg_color=FL_BACKGROUND_COLOR);
 	void icon_box(Fl_Boxtype type);
 
-	void input_font(Fl_Font font, Fl_Fontsize size);
-	void input_color(Fl_Color font_color, Fl_Color bg_color);
+	void input_font(Fl_Font font, Fl_Fontsize size=12);
+	void input_color(Fl_Color font_color, Fl_Color bg_color=FL_BACKGROUND_COLOR);
 	void input_box(Fl_Boxtype type);
 	
-	void message_font(Fl_Font font, Fl_Fontsize size);
-	void message_color(Fl_Color font_color, Fl_Color bg_color);
+	void message_font(Fl_Font font, Fl_Fontsize size=12);
+	void message_color(Fl_Color font_color, Fl_Color bg_color=FL_BACKGROUND_COLOR);
 	void message_box(Fl_Boxtype type);
 	
-	void buttons_font(Fl_Font font, Fl_Fontsize size);
-	void buttons_color(Fl_Color font_color, Fl_Color bg_color, Fl_Color down_color);
+	void buttons_font(Fl_Font font, Fl_Fontsize size=12);
+	void buttons_color(Fl_Color font_color, Fl_Color bg_color=FL_BACKGROUND_COLOR, Fl_Color down_color=FL_BACKGROUND_COLOR);
 	void buttons_box(Fl_Boxtype type);
 	
 	void alert(const char *, ...);

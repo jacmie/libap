@@ -101,9 +101,9 @@ void DIALOG_FORM::set_input(bool flag, const char *defstr, uchar type, Fl_Font f
   	input->value(defstr);
   	input->take_focus();
   	
-	input->labelfont(font);
-  	input->labelsize(size);
-  	input->labelcolor(textcolor);
+	input->textfont(font);
+  	input->textsize(size);
+  	input->textcolor(textcolor);
   	input->color(bgcolor);
   	input->box(boxtype);
 	
