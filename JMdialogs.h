@@ -50,7 +50,7 @@ class DIALOG_FORM
 	void set_input(bool	flag, const char *defstr, uchar type, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 	void set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 	void set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color color, Fl_Color downcolor, Fl_Boxtype boxtype);
-	void resizeform(bool adjust_size, bool resize_buttons);
+	void resizeform(bool resize_buttons);
 	std::string get_userinput();
 
 	private:
@@ -65,11 +65,10 @@ class DIALOGS
 
 	// --- Form ---
 
-	bool 		adjust_size			= 1;
 	bool		resize_buttons		= 0;
 	bool		hotspot_flag 		= 1;
 
-	std::string	form_label			= "";
+	std::string	form_title			= "";
 	Fl_Color 	form_bgcolor		= FL_BACKGROUND_COLOR; 
 	Fl_Boxtype 	form_boxtype		= FL_FLAT_BOX;
 	
@@ -81,7 +80,7 @@ class DIALOGS
 	std::string icon_newtext		= "";
 	Fl_Pixmap 	*logo;
 	
-	Fl_Font 	icon_font 			= FL_TIMES_BOLD; 
+	Fl_Font 	icon_font_style		= FL_TIMES_BOLD; 
 	Fl_Fontsize icon_size			= 34; 
 	Fl_Color 	icon_textcolor		= FL_DARK_BLUE; 
 	Fl_Color 	icon_bgcolor		= FL_WHITE; 
@@ -93,7 +92,7 @@ class DIALOGS
 	uchar  		input_type			= FL_SECRET_INPUT;
 	std::string input_defstr		= "";
 	
-	Fl_Font 	input_font 			= FL_HELVETICA; 
+	Fl_Font 	input_font_style	= FL_HELVETICA; 
 	Fl_Fontsize input_size			= 12; 
 	Fl_Color 	input_textcolor		= FL_BLACK;
 	Fl_Color 	input_bgcolor		= FL_WHITE;
@@ -101,7 +100,7 @@ class DIALOGS
 
 	// --- Message ---
 	
-	Fl_Font 	message_font 		= FL_HELVETICA; 
+	Fl_Font 	message_font_style	= FL_HELVETICA; 
 	Fl_Fontsize message_size		= 12; 
 	Fl_Color 	message_textcolor	= FL_BLACK;
 	Fl_Color 	message_bgcolor		= FL_BACKGROUND_COLOR;
@@ -116,7 +115,7 @@ class DIALOGS
 	const char* fl_cancel;
 	const char* fl_close;*/
 	
-	Fl_Font 	buttons_font 		= FL_HELVETICA; 
+	Fl_Font 	buttons_font_style	= FL_HELVETICA; 
 	Fl_Fontsize buttons_size		= 12; 
 	Fl_Color 	buttons_textcolor	= FL_BLACK; 
 	Fl_Color 	buttons_upcolor		= FL_BACKGROUND_COLOR; 
@@ -132,28 +131,28 @@ class DIALOGS
 	void hotspot_on();
 	void hotspot_off();
 
-	void form_title(std::string formlabel);
-	void form_color(Fl_Color formcolor, Fl_Boxtype formboxtype);
+	void form_label(std::string formtitle);
+	void form_color(Fl_Color formcolor);
+	void form_box(Fl_Boxtype formboxtype);
 	
-	void icon_text(std::string icotext);
+	void icon_label(std::string icolabel);
 	void icon_file(std::string icofile, bool textflag=0);
 	void icon_image(Fl_Pixmap *pixmap, bool textflag=0);
-	
-	void icon_text(Fl_Font font, Fl_Fontsize size);
+	void icon_font(Fl_Font font, Fl_Fontsize size);
 	void icon_color(Fl_Color font_color, Fl_Color bg_color);
-	void icon_style(Fl_Boxtype type);
+	void icon_box(Fl_Boxtype type);
 
-	void input_text(Fl_Font font, Fl_Fontsize size);
+	void input_font(Fl_Font font, Fl_Fontsize size);
 	void input_color(Fl_Color font_color, Fl_Color bg_color);
-	void input_style(Fl_Boxtype type);
+	void input_box(Fl_Boxtype type);
 	
-	void message_text(Fl_Font font, Fl_Fontsize size);
+	void message_font(Fl_Font font, Fl_Fontsize size);
 	void message_color(Fl_Color font_color, Fl_Color bg_color);
-	void message_style(Fl_Boxtype type);
+	void message_box(Fl_Boxtype type);
 	
-	void buttons_text(Fl_Font font, Fl_Fontsize size);
+	void buttons_font(Fl_Font font, Fl_Fontsize size);
 	void buttons_color(Fl_Color font_color, Fl_Color bg_color, Fl_Color down_color);
-	void buttons_style(Fl_Boxtype type);
+	void buttons_box(Fl_Boxtype type);
 	
 	void alert(const char *, ...);
 	void message(const char *, ...);
@@ -163,11 +162,11 @@ class DIALOGS
 	int choice_n(const char *q,const char *b0,const char *b1,const char *b2, ...);
 	
 	private:
-	
+/*	
 	Fl_Font fl_message_font_;
 	Fl_Fontsize fl_message_size_;
 	inline void fl_message_font(Fl_Font f, Fl_Fontsize s) {fl_message_font_ = f; fl_message_size_ = s;}
-	
+*/	
 	int innards(const char* fmt, va_list ap, const char *b0, const char *b1, const char *b2);
 	const char* input_innards(const char* fmt, va_list ap, const char* defstr, uchar type);
 };

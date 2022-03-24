@@ -183,7 +183,7 @@ void DIALOG_FORM::set_buttons(const char *b0, const char *b1, const char *b2, Fl
    	}
 }
 
-void DIALOG_FORM::resizeform(bool adjust_size, bool resize_buttons) 
+void DIALOG_FORM::resizeform(bool resize_buttons) 
 {
   	int	i;
   	int	message_w, message_h;
@@ -193,7 +193,7 @@ void DIALOG_FORM::resizeform(bool adjust_size, bool resize_buttons)
 	const int icon_size = 50;
 
   	message_w = message_h = 0;
-  	if(adjust_size) fl_measure(message->label(), message_w, message_h);
+  	fl_measure(message->label(), message_w, message_h);
 
   	message_w += 10;
   	message_h += 10;
@@ -288,21 +288,25 @@ void DIALOGS::hotspot_off()
 	hotspot_flag = 0;
 }
 
-void DIALOGS::form_title(std::string formlabel)
+void DIALOGS::form_label(std::string formlabel)
 {
-	form_label = formlabel;
+	form_title = formlabel;
 }
 
-void DIALOGS::form_color(Fl_Color formcolor, Fl_Boxtype formboxtype)
+void DIALOGS::form_color(Fl_Color formcolor)
 {
 	form_bgcolor = formcolor; 
+}
+
+void DIALOGS::form_box(Fl_Boxtype formboxtype)
+{
 	form_boxtype = formboxtype;
 }
 
-void DIALOGS::icon_text(std::string icotext)
+void DIALOGS::icon_label(std::string icolabel)
 {
 	icon_textflag = 1;
-	icon_newtext  = icotext;
+	icon_newtext  = icolabel;
 }
 
 void DIALOGS::icon_file(std::string icofile, bool textflag)
@@ -321,9 +325,9 @@ void DIALOGS::icon_image(Fl_Pixmap *Pixmap, bool textflag)
 	icon_textflag = textflag;
 }
 
-void DIALOGS::icon_text(Fl_Font font, Fl_Fontsize size)
+void DIALOGS::icon_font(Fl_Font font, Fl_Fontsize size)
 {
-	icon_font = font; 
+	icon_font_style = font; 
 	icon_size = size; 
 }
 
@@ -333,14 +337,14 @@ void DIALOGS::icon_color(Fl_Color font_color, Fl_Color bg_color)
 	icon_bgcolor   = bg_color; 
 }
 
-void DIALOGS::icon_style(Fl_Boxtype type)
+void DIALOGS::icon_box(Fl_Boxtype type)
 {
 	icon_boxtype = type;
 }
 	
-void DIALOGS::input_text(Fl_Font font, Fl_Fontsize size)
+void DIALOGS::input_font(Fl_Font font, Fl_Fontsize size)
 {
-	input_font = font; 
+	input_font_style = font; 
 	input_size = size; 
 }
 
@@ -350,14 +354,14 @@ void DIALOGS::input_color(Fl_Color font_color, Fl_Color bg_color)
 	input_bgcolor	= bg_color;
 }
 
-void DIALOGS::input_style(Fl_Boxtype type)
+void DIALOGS::input_box(Fl_Boxtype type)
 {
 	input_boxtype = type;
 }
 
-void DIALOGS::message_text(Fl_Font font, Fl_Fontsize size)
+void DIALOGS::message_font(Fl_Font font, Fl_Fontsize size)
 {
-	message_font = font; 
+	message_font_style = font; 
 	message_size = size; 
 }
 
@@ -367,14 +371,14 @@ void DIALOGS::message_color(Fl_Color font_color, Fl_Color bg_color)
 	message_bgcolor	  = bg_color;
 }
 
-void DIALOGS::message_style(Fl_Boxtype type)
+void DIALOGS::message_box(Fl_Boxtype type)
 {
 	message_boxtype	= type;
 }
 
-void DIALOGS::buttons_text(Fl_Font font, Fl_Fontsize size)
+void DIALOGS::buttons_font(Fl_Font font, Fl_Fontsize size)
 {
-	buttons_font = font; 
+	buttons_font_style = font; 
 	buttons_size = size; 
 }
 
@@ -385,7 +389,7 @@ void DIALOGS::buttons_color(Fl_Color font_color, Fl_Color bg_color, Fl_Color dow
 	buttons_downcolor	= down_color; 
 }
 
-void DIALOGS::buttons_style(Fl_Boxtype type)
+void DIALOGS::buttons_box(Fl_Boxtype type)
 {
 	buttons_boxtype	= type;
 }
@@ -405,12 +409,12 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
 	}
 	else icon_newtext = "";
 
-	message_win -> set_form(hotspot_flag, form_label, form_bgcolor, form_boxtype);
-	message_win -> set_icon(icon_font, icon_size, icon_textcolor, icon_bgcolor, icon_boxtype, icon_textflag, icon_newtext.c_str(), icon_logoflag, logo); 
-	message_win -> set_message(fmt, ap, message_font, message_size, message_textcolor, message_bgcolor, message_boxtype);
-	message_win -> set_input(input_flag, input_defstr.c_str(), input_type, input_font, input_size, input_textcolor, input_bgcolor, input_boxtype);
-	message_win -> set_buttons(b0, b1, b2, buttons_font, buttons_size, buttons_textcolor, buttons_upcolor, buttons_downcolor, buttons_boxtype);
-  	message_win -> resizeform(adjust_size, resize_buttons);
+	message_win -> set_form(hotspot_flag, form_title, form_bgcolor, form_boxtype);
+	message_win -> set_icon(icon_font_style, icon_size, icon_textcolor, icon_bgcolor, icon_boxtype, icon_textflag, icon_newtext.c_str(), icon_logoflag, logo); 
+	message_win -> set_message(fmt, ap, message_font_style, message_size, message_textcolor, message_bgcolor, message_boxtype);
+	message_win -> set_input(input_flag, input_defstr.c_str(), input_type, input_font_style, input_size, input_textcolor, input_bgcolor, input_boxtype);
+	message_win -> set_buttons(b0, b1, b2, buttons_font_style, buttons_size, buttons_textcolor, buttons_upcolor, buttons_downcolor, buttons_boxtype);
+  	message_win -> resizeform(resize_buttons);
   	message_win -> message_form->redraw();
 
 	// deactivate Fl::grab(), because it is incompatible with modal windows
