@@ -63,8 +63,10 @@ class DIALOGS
 {
 	char avoidRecursion = 0;
 
-	// --- Form ---
+    bool        print_logs          = 1;
 
+	// --- Form ---
+    
 	bool		resize_buttons		= 0;
 	bool		hotspot_flag 		= 1;
 
@@ -125,7 +127,10 @@ class DIALOGS
 	public:
 
 	DIALOGS();
-	
+
+	void logs_on();
+	void logs_off();
+
 	void resizebuttons_on();
 	void resizebuttons_off();
 	void hotspot_on();

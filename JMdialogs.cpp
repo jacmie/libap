@@ -268,6 +268,16 @@ DIALOGS::DIALOGS()
 {
 }
 
+void DIALOGS::logs_on()
+{
+    print_logs = 1;
+}
+
+void DIALOGS::logs_off()
+{
+    print_logs = 0;
+}
+
 void DIALOGS::resizebuttons_on() 
 {
 	resize_buttons = 1;
@@ -444,11 +454,28 @@ const char* DIALOGS::input_innards(const char* fmt, va_list ap, const char* defs
 
 void DIALOGS::message(const char *fmt, ...) 
 {
+    
     if(avoidRecursion) return;
 
     va_list ap;
     va_start(ap, fmt);
     icon_deftext = "i";
+
+    if(print_logs)
+    {
+        if (!strcmp(fmt,"%s")) 
+	    {
+    	    clog << va_arg(ap, const char*) << endl;
+  	    } 
+
+	    else 
+	    {
+            char buffer[1024];
+    	    ::vsnprintf(buffer, 1024, fmt, ap);
+     	    clog << buffer << endl;
+  	    }
+    }
+
     innards(fmt, ap, 0, fl_close, 0);
     va_end(ap);
     icon_deftext = "?";
@@ -461,6 +488,22 @@ void DIALOGS::alert(const char *fmt, ...)
   	va_list ap;
   	va_start(ap, fmt);
   	icon_deftext = "!";
+
+    if(print_logs)
+    {
+        if (!strcmp(fmt,"%s")) 
+	    {
+    	    clog << va_arg(ap, const char*) << endl;
+  	    } 
+
+	    else 
+	    {
+            char buffer[1024];
+    	    ::vsnprintf(buffer, 1024, fmt, ap);
+     	    clog << buffer << endl;
+  	    }
+    }
+
   	innards(fmt, ap, 0, fl_close, 0);
   	va_end(ap);
   	icon_deftext = "?";

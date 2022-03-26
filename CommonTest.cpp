@@ -92,8 +92,6 @@ int main(int argc, char *argv[])
     clog << CheckPermissions("./TestDir/JMsubstitute/XfoilData.dat", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
     clog << CheckPermissions("./TestDir/JMsubstitute/Sub.txt", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
 
-    exit(1);
-
     //std::string FilePath = Browse("All files \t*.{dat,txt}\nData files \t*.dat\nText files \t*.txt", 0);
     //clog << endl << FilePath << endl << endl; 
 
