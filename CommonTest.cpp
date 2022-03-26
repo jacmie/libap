@@ -119,8 +119,6 @@ int main(int argc, char *argv[])
 	Dialog.form_color(FL_BLUE);
     clog << Dialog.password("Hello World!!!", "BLOB") << endl;
 
-    exit(1);
-
 	// *** JMconvert ***
 	//OK
 	

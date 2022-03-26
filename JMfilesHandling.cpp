@@ -102,13 +102,15 @@ int GetUserGroups(std::vector <gid_t> &Groups)
 
 int CheckPermissions(std::string Path, std::vector <bool> &Results)
 {
+    DIALOGS Dialog;
+
 	// === Get the File info ===
 	
 	struct stat Info;
 
 	if( -1 == stat(Path.c_str(), &Info) )
 	{
-		clog << "File Permissions couldn't be checked!!!" << endl;
+        Dialog.message("File Permissions couldn't be checked!!!");
 		return 1;
 	}
 
@@ -117,7 +119,7 @@ int CheckPermissions(std::string Path, std::vector <bool> &Results)
 
 	if( pw == NULL || gr == NULL )
 	{
-		clog << "File Permissions couldn't be checked!!!" << endl;
+        Dialog.message("File Permissions couldn't be checked!!!");
 		return 1;
 	}
 
@@ -242,7 +244,7 @@ int CheckPermissions(std::string Path, std::vector <bool> &Results)
 	
     if(Results.size() < 3)
 	{
-		clog << "Permissions results table too small!!!" << endl;
+        Dialog.message("Permissions results table too small!!!");
 		return 1; 
 	}
 
