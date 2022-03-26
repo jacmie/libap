@@ -4,14 +4,18 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-//#include <filesystem>
+
+#include <pwd.h>
+#include <grp.h>
+#include <sys/stat.h>
+#include <filesystem>
 
 #include <FL/Fl_Native_File_Chooser.H>
 
 #include <boost/algorithm/string/predicate.hpp>
 
-bool DirExists(std::string DirName);
-bool FileExists(std::string FileName);
 std::string Browse(const char *Filt, int DialogType);
+int  GetUserGroups(std::vector <gid_t> &Groups);
+int  CheckPermissions(std::string Path, std::vector <bool> &Results);
 
 #endif
