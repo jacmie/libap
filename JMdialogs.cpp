@@ -489,6 +489,20 @@ int DIALOGS::choice(const char *fmt, const char *b0, const char *b1, const char 
 	return r;
 }
 
+int DIALOGS::choice_s(const char *fmt, ...) // simple
+{
+  	if (avoidRecursion) return 0;
+
+  	va_list ap;
+  	va_start(ap, fmt);
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
+    va_end(ap);
+
+  	int r = innards(buffer, fl_cancel, fl_yes, 0);
+  	  
+	return r;
+}
+
 int DIALOGS::choice_n(const char *fmt, const char *b0, const char *b1, const char *b2, ...) 
 {
   	if (avoidRecursion) return -3;

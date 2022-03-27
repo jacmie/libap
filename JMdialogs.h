@@ -162,10 +162,11 @@ class DIALOGS
 	
 	void alert(const char *, ...);
 	void message(const char *, ...);
-	int  choice(const char *q,const char *b0,const char *b1,const char *b2, ...);
+	int  choice(const char *q, const char *b0, const char *b1, const char *b2, ...);
+    int  choice_s(const char *q, ...); // simple
+    int  choice_n(const char *q, const char *b0, const char *b1, const char *b2, ...);
 	const char *input(const char *label, const char *deflt = 0, ...);
 	const char *password(const char *label, const char *deflt = 0, ...);
-	int choice_n(const char *q,const char *b0,const char *b1,const char *b2, ...);
 	
 	private:
 

@@ -114,6 +114,7 @@ int main(int argc, char *argv[])
 	
 	Dialog.icon_label("?!?");
 	Dialog.icon_file("./FlowTree_40.xpm", 1);
+    clog << Dialog.choice_s("Simple %s/%s:", "Yes", "No") << endl;
 	clog << Dialog.choice("%s Asce3e3e %s e3e3e3e 3e 33e 3e3e3er2r2ttt 222       2r2r2r2rr2r2r  2r2r 2r2tt2t2?1?", "Cancel", "No", "Yes", "Terefere", "RERERE") << endl;
 	
 	Dialog.icon_file("./IV_logo_gray_40.xpm");
