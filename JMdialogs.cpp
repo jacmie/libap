@@ -114,18 +114,9 @@ void DIALOG_FORM::set_input(bool flag, const char *defstr, uchar type, Fl_Font f
 	}
 }
 
-void DIALOG_FORM::set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype) 
+void DIALOG_FORM::set_message(const char* fmt, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype) 
 {
-	if (!strcmp(fmt,"%s")) 
-	{
-    	message->label( va_arg(ap, const char*) );
-  	} 
-
-	else 
-	{
-    	::vsnprintf(buffer, 1024, fmt, ap);
-    	message->label(buffer);
-  	}
+    message->label(fmt);
 
   	message->labelfont(font);
   	message->labelsize(size);
@@ -404,7 +395,7 @@ void DIALOGS::buttons_box(Fl_Boxtype type)
 	buttons_boxtype	= type;
 }
 
-int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1, const char *b2)
+int DIALOGS::innards(const char* fmt, const char *b0, const char *b1, const char *b2)
 {
   	Fl::pushed(0); // stop dragging (STR #2159)
 
@@ -421,7 +412,7 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
 
 	message_win -> set_form(hotspot_flag, form_title, form_bgcolor, form_boxtype);
 	message_win -> set_icon(icon_font_style, icon_size, icon_textcolor, icon_bgcolor, icon_boxtype, icon_textflag, icon_newtext.c_str(), icon_logoflag, logo); 
-	message_win -> set_message(fmt, ap, message_font_style, message_size, message_textcolor, message_bgcolor, message_boxtype);
+	message_win -> set_message(fmt, message_font_style, message_size, message_textcolor, message_bgcolor, message_boxtype);
 	message_win -> set_input(input_flag, input_defstr.c_str(), input_type, input_font_style, input_size, input_textcolor, input_bgcolor, input_boxtype);
 	message_win -> set_buttons(b0, b1, b2, buttons_font_style, buttons_size, buttons_textcolor, buttons_upcolor, buttons_downcolor, buttons_boxtype);
   	message_win -> resizeform(resize_buttons);
@@ -442,42 +433,29 @@ int DIALOGS::innards(const char* fmt, va_list ap, const char *b0, const char *b1
   	return message_win->ret_val;
 }
 
-const char* DIALOGS::input_innards(const char* fmt, va_list ap, const char* defstr, uchar type) 
+const char* DIALOGS::input_innards(const char* fmt, const char* defstr, uchar type) 
 {
 	input_type		= type;
 	input_defstr	= defstr;
 
-  	int r = innards(fmt, ap, fl_cancel, fl_ok, 0);
+  	int r = innards(fmt, fl_cancel, fl_ok, 0);
   	
 	return r ? input_defstr.c_str() : 0;
 }
 
 void DIALOGS::message(const char *fmt, ...) 
 {
-    
     if(avoidRecursion) return;
 
     va_list ap;
     va_start(ap, fmt);
-    icon_deftext = "i";
-
-    if(print_logs)
-    {
-        if (!strcmp(fmt,"%s")) 
-	    {
-    	    clog << va_arg(ap, const char*) << endl;
-  	    } 
-
-	    else 
-	    {
-            char buffer[1024];
-    	    ::vsnprintf(buffer, 1024, fmt, ap);
-     	    clog << buffer << endl;
-  	    }
-    }
-
-    innards(fmt, ap, 0, fl_close, 0);
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
+
+    if(print_logs) clog << buffer << endl;
+
+    icon_deftext = "i";
+    innards(buffer, 0, fl_close, 0);
     icon_deftext = "?";
 }
 
@@ -487,25 +465,13 @@ void DIALOGS::alert(const char *fmt, ...)
 
   	va_list ap;
   	va_start(ap, fmt);
-  	icon_deftext = "!";
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
+    va_end(ap);
 
-    if(print_logs)
-    {
-        if (!strcmp(fmt,"%s")) 
-	    {
-    	    clog << va_arg(ap, const char*) << endl;
-  	    } 
+    if(print_logs) clog << buffer << endl;
 
-	    else 
-	    {
-            char buffer[1024];
-    	    ::vsnprintf(buffer, 1024, fmt, ap);
-     	    clog << buffer << endl;
-  	    }
-    }
-
-  	innards(fmt, ap, 0, fl_close, 0);
-  	va_end(ap);
+    icon_deftext = "!";
+  	innards(buffer, 0, fl_close, 0);  	
   	icon_deftext = "?";
 }
 
@@ -515,9 +481,11 @@ int DIALOGS::choice(const char *fmt, const char *b0, const char *b1, const char 
 
   	va_list ap;
   	va_start(ap, b2);
-  	int r = innards(fmt, ap, b0, b1, b2);
-  	va_end(ap);
-  
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
+    va_end(ap);
+
+  	int r = innards(buffer, b0, b1, b2);
+  	  
 	return r;
 }
 
@@ -527,8 +495,11 @@ int DIALOGS::choice_n(const char *fmt, const char *b0, const char *b1, const cha
 
   	va_list ap;
   	va_start(ap, b2);
-  	int r = innards(fmt, ap, b0, b1, b2);
-  	va_end(ap);
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
+    va_end(ap);
+
+  	int r = innards(buffer, b0, b1, b2);
+  	
 /*
   	if (win_closed != 0 && r == 0) return win_closed;
 */
@@ -543,9 +514,11 @@ const char* DIALOGS::input(const char *fmt, const char *defstr, ...)
 
   	va_list ap;  
 	va_start(ap, defstr);
-  	const char* r = input_innards(fmt, ap, defstr, FL_NORMAL_INPUT);
-  	va_end(ap);
-	
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
+    va_end(ap);
+
+  	const char* r = input_innards(buffer, defstr, FL_NORMAL_INPUT);
+  		
 	input_flag = 0;
   
 	return r;
@@ -559,9 +532,11 @@ const char* DIALOGS::password(const char *fmt, const char *defstr, ...)
 
   	va_list ap;
   	va_start(ap, defstr);
-  	const char* r = input_innards(fmt, ap, defstr, FL_SECRET_INPUT);
-  	va_end(ap);
-  
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
+    va_end(ap);
+
+  	const char* r = input_innards(buffer, defstr, FL_SECRET_INPUT);
+  	  
 	input_flag = 0;
 	
 	return r;

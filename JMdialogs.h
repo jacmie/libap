@@ -29,7 +29,6 @@ class DIALOG_WIN : public Fl_Window
 
 class DIALOG_FORM
 {
- 	char buffer[1024];
 	int  button_val[3] = {0, 1, 2};
 	
 	Fl_Box 		*icon;
@@ -48,7 +47,7 @@ class DIALOG_FORM
 	void set_form(bool hotspot_flag, std::string form_label, Fl_Color bgcolor, Fl_Boxtype boxtype); 
 	void set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Pixmap *logo);
 	void set_input(bool	flag, const char *defstr, uchar type, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
-	void set_message(const char* fmt, va_list ap, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
+	void set_message(const char* fmt, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 	void set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color color, Fl_Color downcolor, Fl_Boxtype boxtype);
 	void resizeform(bool resize_buttons);
 	std::string get_userinput();
@@ -61,6 +60,8 @@ class DIALOG_FORM
 
 class DIALOGS
 {
+   	char buffer[1024];
+
 	char avoidRecursion = 0;
 
     bool        print_logs          = 1;
@@ -167,13 +168,9 @@ class DIALOGS
 	int choice_n(const char *q,const char *b0,const char *b1,const char *b2, ...);
 	
 	private:
-/*	
-	Fl_Font fl_message_font_;
-	Fl_Fontsize fl_message_size_;
-	inline void fl_message_font(Fl_Font f, Fl_Fontsize s) {fl_message_font_ = f; fl_message_size_ = s;}
-*/	
-	int innards(const char* fmt, va_list ap, const char *b0, const char *b1, const char *b2);
-	const char* input_innards(const char* fmt, va_list ap, const char* defstr, uchar type);
+
+	int innards(const char* fmt, const char *b0, const char *b1, const char *b2);
+	const char* input_innards(const char* fmt, const char* defstr, uchar type);
 };
 
 #endif

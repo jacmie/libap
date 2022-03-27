@@ -101,24 +101,27 @@ int main(int argc, char *argv[])
 
 	DIALOGS Dialog;
 
-    Dialog.alert("Alert!!!");
+    Dialog.alert("%s", "bala");
+    //Dialog.alert("Alert ps!!!");
+    Dialog.alert("Alert %s_%i!!!", "Blab", 989);
+    
 	
 	Dialog.form_label("Kra_kra");
 	Dialog.message_box(FL_NO_BOX);
 	Dialog.message_color(FL_BLACK, 92);
 	Dialog.icon_image(&OM_logo);
-    Dialog.message("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e\n3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e 3e3eee3!!!");
+    Dialog.message("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 %f 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e\n3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e 3e3eee3!!!", 2.222222222);
 	
 	Dialog.icon_label("?!?");
 	Dialog.icon_file("./FlowTree_40.xpm", 1);
-	clog << Dialog.choice("Asce3e3e  e3e3e3e 3e 33e 3e3e3er2r2ttt 222       2r2r2r2rr2r2r  2r2r 2r2tt2t2?1?", "Cancel", "No", "Yes") << endl;
+	clog << Dialog.choice("%s Asce3e3e %s e3e3e3e 3e 33e 3e3e3er2r2ttt 222       2r2r2r2rr2r2r  2r2r 2r2tt2t2?1?", "Cancel", "No", "Yes", "Terefere", "RERERE") << endl;
 	
 	Dialog.icon_file("./IV_logo_gray_40.xpm");
     clog << Dialog.input("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3eee  3e3e3e3e3e3e 3e3eee3\n2r222r 22ty2t2t 2r r2r2r 22r2r 2 r2rr  2r22!!!", "BLAB") << endl; 
 	
 	Dialog.form_color(FL_BLUE);
     clog << Dialog.password("Hello World!!!", "BLOB") << endl;
-
+exit(1);
 	// *** JMconvert ***
 	//OK
 	
