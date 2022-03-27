@@ -89,8 +89,9 @@ int main(int argc, char *argv[])
     std::vector <bool> PermResults;
     PermResults.resize(3);
     
-    clog << CheckPermissions("./TestDir/JMsubstitute/XfoilData.dat", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
-    clog << CheckPermissions("./TestDir/JMsubstitute/Sub.txt", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
+    clog << "/home/JM/.lickey\t" << CheckPermissions("/home/JM/.lickey", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
+    clog << "./TestDir/JMsubstitute/XfoilData.dat\t" << CheckPermissions("./TestDir/JMsubstitute/XfoilData.dat", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
+    clog << "./TestDir/JMsubstitute/Sub.txt\t" << CheckPermissions("./TestDir/JMsubstitute/Sub.txt", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
 
     //std::string FilePath = Browse("All files \t*.{dat,txt}\nData files \t*.dat\nText files \t*.txt", 0);
     //clog << endl << FilePath << endl << endl; 
@@ -122,7 +123,7 @@ int main(int argc, char *argv[])
 	
 	Dialog.form_color(FL_BLUE);
     clog << Dialog.password("Hello World!!!", "BLOB") << endl;
-exit(1);
+
 	// *** JMconvert ***
 	//OK
 	

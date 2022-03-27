@@ -178,7 +178,7 @@ int CheckPermissions(std::string Path, std::vector <bool> &Results)
 	
 	if( (Perms & fs::perms::others_write) != fs::perms::none )
 	{
-		WritePermRes	= 1;
+		WritePermRes = 1;
 	}
 
 	else
