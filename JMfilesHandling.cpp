@@ -5,6 +5,8 @@ namespace fs = std::filesystem;
 
 std::string Browse(const char *Filt, int DialogType)
 {
+    DIALOGS Dialog;
+
     Fl_Native_File_Chooser *ch = new Fl_Native_File_Chooser();
     ch -> filter(Filt);
     ch -> type(DialogType);
@@ -46,7 +48,7 @@ std::string Browse(const char *Filt, int DialogType)
     	{
     		FileName += FilterExtension;
 		
-    		if( fs::exists(FileName) && fl_choice("File exists:\n%s\n\nDo you want to overwrite it?", "Yes", "No", 0, FileName.c_str()) )
+    		if( fs::exists(FileName) && Dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", FileName.c_str()) )
     		{
     			FileName = ""; //Canceled
     		}
@@ -60,7 +62,7 @@ std::string Browse(const char *Filt, int DialogType)
     	{
     		FileName += FilterExtension;
 		
-    		if( fs::exists(FileName) && fl_choice("File exists:\n%s\n\nDo you want to overwrite it?", "Yes", "No", 0, FileName.c_str()) )
+    		if( fs::exists(FileName) && Dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", FileName.c_str()) )
     		{
     			FileName = ""; //Canceled
     		}
@@ -68,7 +70,7 @@ std::string Browse(const char *Filt, int DialogType)
     		return FileName;
     	}
 	
-    	if( fs::exists(FileName) && fl_choice("File exists:\n%s\n\nDo you want to overwrite it?", "Yes", "No", 0, FileName.c_str()) )
+    	if( fs::exists(FileName) && Dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", FileName.c_str()) )
     	{
     		FileName = ""; //Canceled
     	}	
