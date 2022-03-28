@@ -3,10 +3,16 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-std::string Browse(const char *Filt, int DialogType)
+std::string Browse_FileExists(std::string FileName)
 {
     DIALOGS Dialog;
 
+    if( fs::exists(FileName) && !Dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", FileName.c_str()) ) FileName = ""; //Canceled
+    return FileName;
+}
+
+std::string Browse(const char *Filt, int DialogType)
+{
     Fl_Native_File_Chooser *ch = new Fl_Native_File_Chooser();
     ch -> filter(Filt);
     ch -> type(DialogType);
@@ -14,15 +20,8 @@ std::string Browse(const char *Filt, int DialogType)
 
     std::string FileName;
 
-    if(ch -> filename())
-    {
-    	FileName = ch -> filename();
-    }
-
-    else
-    {
-	    FileName = ""; //Canceled
-    }
+    if(ch -> filename())    FileName = ch -> filename();
+    else                    FileName = ""; //Canceled
 
     if(DialogType == 4 && FileName.length() > 0) // Check Extension while saving
     {
@@ -43,37 +42,11 @@ std::string Browse(const char *Filt, int DialogType)
     	// === Extract File Extension ===
 	
     	int Id = FileName.find_last_of('.');
-	
-    	if(Id<0) // No extension, add
-    	{
-    		FileName += FilterExtension;
-		
-    		if( fs::exists(FileName) && Dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", FileName.c_str()) )
-    		{
-    			FileName = ""; //Canceled
-    		}
-			
-    		return FileName;
-    	}
 
-    	std::string Extension = FileName.substr(Id);
+    	if(Id<0) return Browse_FileExists(FileName + FilterExtension); // No extension, add
+        if(Id>=0 && !boost::iequals(FileName.substr(Id), FilterExtension)) return Browse_FileExists(FileName + FilterExtension); // Extension different than in the filter, add
 
-    	if(!boost::iequals(Extension, FilterExtension)) // Extension different than in the filter, add
-    	{
-    		FileName += FilterExtension;
-		
-    		if( fs::exists(FileName) && Dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", FileName.c_str()) )
-    		{
-    			FileName = ""; //Canceled
-    		}
-
-    		return FileName;
-    	}
-	
-    	if( fs::exists(FileName) && Dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", FileName.c_str()) )
-    	{
-    		FileName = ""; //Canceled
-    	}	
+        return Browse_FileExists(FileName);
     }
 
     return FileName;

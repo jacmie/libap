@@ -498,7 +498,7 @@ int DIALOGS::choice_s(const char *fmt, ...) // simple
     vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
 
-  	int r = innards(buffer, fl_cancel, fl_yes, 0);
+  	int r = innards(buffer, fl_no, fl_yes, 0);
   	  
 	return r;
 }

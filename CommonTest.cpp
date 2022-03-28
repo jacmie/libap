@@ -94,7 +94,8 @@ int main(int argc, char *argv[])
     clog << "./TestDir/JMsubstitute/Sub.txt\t" << CheckPermissions("./TestDir/JMsubstitute/Sub.txt", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
 
     //std::string FilePath = Browse("All files \t*.{dat,txt}\nData files \t*.dat\nText files \t*.txt", 0);
-    //clog << endl << FilePath << endl << endl; 
+    //clog << Browse("Lickey \t*.lk", 4) << endl;
+    //clog << endl << FilePath << endl << endl;
 
     // *** JMdialogs ***
 
