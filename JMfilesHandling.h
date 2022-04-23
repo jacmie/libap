@@ -16,7 +16,7 @@
 
 #include "JMdialogs.h"
 
-std::string Browse(const char *Filt, int DialogType);
+std::string Browse(const char *Filt, int DialogType, bool AskOverwriteFlag=1);
 int  GetUserGroups(std::vector <gid_t> &Groups);
 int  CheckPermissions(std::string Path, std::vector <bool> &Results);
 

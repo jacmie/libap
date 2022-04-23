@@ -3,15 +3,15 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-std::string Browse_FileExists(std::string FileName)
+std::string Browse_FileExists(std::string FileName, bool AskOverwriteFlag)
 {
     DIALOGS Dialog;
 
-    if( fs::exists(FileName) && !Dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", FileName.c_str()) ) FileName = ""; //Canceled
+    if(AskOverwriteFlag && fs::exists(FileName) && !Dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", FileName.c_str()) ) FileName = ""; //Canceled
     return FileName;
 }
 
-std::string Browse(const char *Filt, int DialogType)
+std::string Browse(const char *Filt, int DialogType, bool AskOverwriteFlag)
 {
     Fl_Native_File_Chooser *ch = new Fl_Native_File_Chooser();
     ch -> filter(Filt);
@@ -43,10 +43,10 @@ std::string Browse(const char *Filt, int DialogType)
 	
     	int Id = FileName.find_last_of('.');
 
-    	if(Id<0) return Browse_FileExists(FileName + FilterExtension); // No extension, add
-        if(Id>=0 && !boost::iequals(FileName.substr(Id), FilterExtension)) return Browse_FileExists(FileName + FilterExtension); // Extension different than in the filter, add
+    	if(Id<0) return Browse_FileExists(FileName + FilterExtension, AskOverwriteFlag); // No extension, add
+        if(Id>=0 && !boost::iequals(FileName.substr(Id), FilterExtension)) return Browse_FileExists(FileName + FilterExtension, AskOverwriteFlag); // Extension different than in the filter, add
 
-        return Browse_FileExists(FileName);
+        return Browse_FileExists(FileName, AskOverwriteFlag);
     }
 
     return FileName;
