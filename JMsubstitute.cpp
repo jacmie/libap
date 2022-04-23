@@ -227,7 +227,6 @@ int SUBSTITUTE::Extract()
 
 		stringstream ss;
 		ss.str(line);
-		//ss << "\n";	// Add EOF removed by getline 
 
 		word_nr = 0;
 		

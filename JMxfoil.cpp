@@ -453,7 +453,7 @@ void DelFile(string File)
 		Str = "test -f \"" + File + "\" && rm -f \"" + File + "\"";
 	#endif
 	
-	system(Str.c_str());
+	clog << system(Str.c_str()) << endl;
 }
 
 void XFOIL::pPpar(FILE *pXfoil)

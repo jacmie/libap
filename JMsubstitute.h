@@ -9,18 +9,17 @@
 
 #include "JMconvert.h"
 
+struct VARIABLE
+{  
+    std::string Name;
+    std::string Value;
+};
+
 struct OUT_VARIABLE
 {  
 	unsigned int LineNr;
 	unsigned int WordNr;
     std::string Word;
-    //std::string Value;
-};
-
-struct VARIABLE
-{  
-    std::string Name;
-    std::string Value;
 };
 
 class SUBSTITUTE
@@ -38,7 +37,6 @@ class SUBSTITUTE
 	std::vector <VARIABLE> Var;
         
     SUBSTITUTE();
-    //SUBSTITUTE(std::string InFile, std::string OutFile);
     SUBSTITUTE(std::string InFile, std::string OutFile, char Mark = '@', char EndMark = ' ');
 	int  AddVariable(std::string Name, std::string Value);
 	int  AddVariable(std::string Name, double Value);

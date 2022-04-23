@@ -7,6 +7,8 @@
 
 using namespace std;
 
+// === int ===
+
 int Ch2int(char Ch)
 {
     return Ch - '0';
@@ -66,27 +68,74 @@ int Str2int(string str)
     return i;
 }
 
+// === float ===
+
+float Cstr2f(char *Cstr)
+{
+    return strtod(Cstr, NULL);
+}
+
+char *f2Cstr(float f)
+{
+   static char Cstr[32];
+   
+   stringstream ss;
+   ss.precision(8);
+   ss << f;
+   ss >> Cstr;
+   return Cstr;
+}
+
+char *f2Cstr(string format, float f)
+{
+   static char Cstr[32];
+   sprintf(Cstr, format.c_str(), f);
+   return Cstr;
+}
+
+float Str2f(string Str)
+{
+    return strtod(Str.c_str(), NULL);
+}
+
+string f2Str(float f)
+{
+   string Str;
+   stringstream ss;
+   ss.precision(8);
+   ss << f;
+   ss >> Str;
+   return Str;
+}
+
+string f2Str(string format, float f)
+{
+   static char Cstr[32];
+   sprintf(Cstr, format.c_str(), f);
+   return string(Cstr);
+}
+
+// === double ===
+
 double Cstr2d(char *Cstr)
 {
     return strtod(Cstr, NULL);
-	//return = atof(Cstr);
 }
 
 char *d2Cstr(double d)
 {
-   static char Cstr[15];
-   gcvt(d, 6, Cstr);
-   //sprintf(Cstr, "%f", d);
+   static char Cstr[32];
+   
+   stringstream ss;
+   ss.precision(16);
+   ss << d;
+   ss >> Cstr;
    return Cstr;
 }
 
 char *d2Cstr(string format, double d)
 {
-   //string Str;
-   //stringstream ss;
-   //ss << d;
-   //ss >> Str;
-   static char Cstr[15];
+   static char Cstr[32];
    sprintf(Cstr, format.c_str(), d);
    return Cstr;
 }
@@ -94,13 +143,13 @@ char *d2Cstr(string format, double d)
 double Str2d(string Str)
 {
     return strtod(Str.c_str(), NULL);
-	//return = atof(Str.c_str());
 }
 
 string d2Str(double d)
 {
    string Str;
    stringstream ss;
+   ss.precision(16);
    ss << d;
    ss >> Str;
    return Str;
@@ -108,11 +157,7 @@ string d2Str(double d)
 
 string d2Str(string format, double d)
 {
-   //string Str;
-   //stringstream ss;
-   //ss << d;
-   //ss >> Str;
-   static char Cstr[15];
+   static char Cstr[32];
    sprintf(Cstr, format.c_str(), d);
    return string(Cstr);
 }

@@ -153,7 +153,40 @@ int main(int argc, char *argv[])
     clog << Dialog.password("Hello World!!!", "BLOB") << endl;
 */
 	// *** JMconvert ***
-	//OK
+
+	clog << endl << "*** JMconvert ***" << endl << endl;
+
+    clog.precision(30);
+    clog.unsetf(std::ios::fixed);
+
+    char ChReal[] = {"0.125"};
+    //char ChReal[] = {"0.123456789123456789123456789"}; 
+    std::string StrReal = string(ChReal);
+
+    float fReal = 0.25;
+    //float fReal = 1350.1234567891234567912345678;
+     
+    clog << "Cstr2f\t" << "ch: " << ChReal  << "\tf : " << Cstr2f(ChReal)         << endl;
+    clog << "f2Cstr\t" << "f : " << fReal   << "\tch: " << f2Cstr("%.4f", fReal)  << endl;
+    clog << "f2Cstr\t" << "f : " << fReal   << "\tch: " << f2Cstr(fReal)          << endl;
+    clog << "Str2f \t" << "s : " << StrReal << "\tf : " << Str2f(StrReal)         << endl;
+    clog << "f2Str \t" << "f : " << fReal   << "\ts : " << f2Str(fReal)           << endl;    
+    clog << "f2Str \t" << "f : " << fReal   << "\ts : " << f2Str("%.4f", fReal)   << endl;
+    clog << endl;
+
+    //double dReal = 0.25;
+    double dReal = 1350.1234567891234567912345678; 
+
+	clog << "Cstr2d\t" << "ch: " << ChReal  << "\td : " << Cstr2d(ChReal)         << endl;
+    clog << "d2Cstr\t" << "d : " << dReal   << "\tch: " << d2Cstr("%.4f", dReal)  << endl;
+    clog << "d2Cstr\t" << "d : " << dReal   << "\tch: " << d2Cstr(dReal)          << endl;
+    clog << "Str2d \t" << "s : " << StrReal << "\td : " << Str2d(StrReal)         << endl;
+    clog << "d2Str \t" << "d : " << dReal   << "\ts : " << d2Str(dReal)           << endl;    
+    clog << "d2Str \t" << "d : " << dReal   << "\ts : " << d2Str("%.4f", dReal)   << endl;
+    clog << endl;
+
+    clog.precision(3);
+    exit(1);
 	
 	//*** JMdiscretization ***
 	

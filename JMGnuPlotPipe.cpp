@@ -104,5 +104,5 @@ int GNUPLOT::Plot3D(std::string DataFile)
 void GNUPLOT::PlotFromPlt(std::string PltFile)
 {
 	string Command = GnuPlotDir + " " + PltFile; 
-	system(Command.c_str());
+	clog << system(Command.c_str()) << endl;
 }

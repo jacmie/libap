@@ -52,8 +52,7 @@ int Pipe(char *Program, char *input, char *log, char *buffer, char *mode)
           
     if (( pipe = popen(Command, mode)) == NULL)
     {
-        cout << "Pipe error!!!" << endl;
-        system("pause");
+        clog << "Pipe error!!!" << endl;
         return -1;
     }
     
@@ -65,7 +64,11 @@ int Pipe(char *Program, char *input, char *log, char *buffer, char *mode)
     
     if(string(mode) == "r")
     {
-        fgets(buffer, sizeof(buffer), pipe);
+        if( NULL == fgets(buffer, sizeof(buffer), pipe) )
+        {
+            clog << "Couldn't get return value via the pipe!!!" << endl;
+            return -2;
+        }
     }
     
     fflush(pipe);
