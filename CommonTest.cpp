@@ -25,6 +25,34 @@ CONSOLE con;
 
 int main(int argc, char *argv[])
 {
+    // *** JMsubstite ***
+
+	clog << endl << "*** JMsubstitute ***" << endl << endl;
+
+	// === Derieve ===
+	
+	SUBSTITUTE SubGet("/home/jm/C++/Core/FlowTree/projects/tutorials/1_Basic/Tut-BasicTemplate.dat", "/home/jm/ramdisk/TutBasic.dat", '@', '&');
+	
+	SubGet.AddVariable("Out", 0);
+	/*SubD.AddVariable("@AoA&", 0);
+	SubD.AddVariable("@CD", 0);
+	SubD.AddVariable("CM&", 0);
+    SubD.AddVariable("", 0);*/
+
+    //SUBSTITUTE SubD("/home/JM/C++/Core/FlowTree/FT_Projects/SqTemplate.dat", "/home/JM/C++/Core/FlowTree/FT_Projects/SqOut.dat", '@', '&');
+	//SubD.AddVariable("SqRes", 0);
+
+    clog << endl;
+
+	SubGet.Extract();
+
+	for(unsigned int i=0; i<SubGet.Var.size(); i++)
+	{
+		clog << SubGet.Var[i].Name << "\t" << SubGet.Var[i].Value << endl;
+	}
+    
+    //exit(1);
+
 	//+++ CONVENTIONS +++
 	/*
 	
@@ -89,7 +117,6 @@ int main(int argc, char *argv[])
     std::vector <bool> PermResults;
     PermResults.resize(3);
     
-    clog << "/home/JM/.lickey\t" << CheckPermissions("/home/JM/.lickey", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
     clog << "./TestDir/JMsubstitute/XfoilData.dat\t" << CheckPermissions("./TestDir/JMsubstitute/XfoilData.dat", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
     clog << "./TestDir/JMsubstitute/Sub.txt\t" << CheckPermissions("./TestDir/JMsubstitute/Sub.txt", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
 
@@ -98,7 +125,7 @@ int main(int argc, char *argv[])
     //clog << endl << FilePath << endl << endl;
 
     // *** JMdialogs ***
-
+/*
 	clog << endl << "*** JMdialogs ***" << endl << endl;
 
 	DIALOGS Dialog;
@@ -124,7 +151,7 @@ int main(int argc, char *argv[])
 	
 	Dialog.form_color(FL_BLUE);
     clog << Dialog.password("Hello World!!!", "BLOB") << endl;
-
+*/
 	// *** JMconvert ***
 	//OK
 	
