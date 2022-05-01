@@ -1,25 +1,19 @@
 #include "JMsubstitute.h"
 
-#include "JMconsole.h"
-//extern CONSOLE con;
-
 using namespace std;
 
 SUBSTITUTE::SUBSTITUTE()
 {
 }
-/*
-SUBSTITUTE::SUBSTITUTE(string InFile, string OutFile)
-{
-    strcpy(InPut, InFile.c_str());
-    strcpy(OutPut, OutFile.c_str());
-    
-    Prompt 	  = '@';
-	EndPrompt = ' ';
-}*/
 
-SUBSTITUTE::SUBSTITUTE(string InFile, string OutFile, char Mark, char EndMark)
+SUBSTITUTE::SUBSTITUTE(std::string InFile, std::string OutFile, char Mark, char EndMark)
 {
+	Init(InFile, OutFile, Mark, EndMark);
+}
+
+void SUBSTITUTE::Init(std::string InFile, std::string OutFile, char Mark, char EndMark)
+{
+	clog << "... Sub Init ..." << endl;
     InPut	= InFile;
     OutPut	= OutFile;
     
@@ -30,6 +24,11 @@ SUBSTITUTE::SUBSTITUTE(string InFile, string OutFile, char Mark, char EndMark)
 		EndFlag = 0;
 	else
 		EndFlag = 1;
+	
+	Var.resize(0);
+	OutVar.resize(0);
+	
+	clog << "... Sub Init End ..." << endl;
 }
 
 int SUBSTITUTE::AddVariable(std::string Name, std::string Value)
@@ -193,6 +192,7 @@ int SUBSTITUTE::Insert()
 int SUBSTITUTE::Extract()
 {
     //*** Clean Marks ***
+    clog << "*** Clean Marks ***" << endl;
     
     for(unsigned int i=0; i<Var.size(); i++)
     {
@@ -206,24 +206,28 @@ int SUBSTITUTE::Extract()
     }
 
     //*** Find Position of the Variables ***
+    clog << "*** Find Position of the Variables ***" << endl;
     
     string line, word;
 	unsigned int line_nr=0, word_nr;
 	OUT_VARIABLE SingleVar;
 
+	clog << "--- Init Files ---" << endl;
+	clog << "InPut: " << InPut << endl;
     ifstream in(InPut);
+	clog << &in << endl;
+	if(!in) return 1;
 	
-	if(!in)
-		return 1;
-	
+	clog << "OutPut: " << OutPut << endl;
     ifstream in2(OutPut);
+	clog << &in2 << endl;
+    if(!in2) return 2;
     
-    if(!in2)
-        return 2;
-    
+	clog << "--- Loop ---" << endl;
     while(!in.eof())
     {
 		getline(in, line);
+		clog << line << endl;
 
 		stringstream ss;
 		ss.str(line);
@@ -254,6 +258,7 @@ int SUBSTITUTE::Extract()
     }
  
 	// *** Strip OutVar from Marks ***
+    clog << "*** Strip OutVar from Marks ***" << endl;
 	
 	for(unsigned int i=0; i<OutVar.size(); i++)
 	{
@@ -261,6 +266,7 @@ int SUBSTITUTE::Extract()
 	}
 
 	// *** Compare Var with OutVar ***
+    clog << "*** Compare Var with OutVar ***" << endl;
 
 	vector <unsigned int> List;
 	List.resize( Var.size() );
@@ -292,6 +298,7 @@ int SUBSTITUTE::Extract()
 	}
 
 	// *** Extract ***
+    clog << "*** Extracttttt ***" << endl;
 
 	for(unsigned int i=0; i<Var.size(); i++)
 	{
@@ -316,6 +323,7 @@ int SUBSTITUTE::Extract()
 
     in2.close();
     in.close();
+    clog << "*** Extract End ***" << endl;
 		
 	return 0;
 }

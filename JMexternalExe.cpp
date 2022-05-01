@@ -11,8 +11,11 @@
 #else
 	#include <unistd.h>
 	#include <pwd.h>
+	#include <spawn.h>
 	#include <sys/wait.h>
 #endif
+
+#include "JMdynArray.h"
 
 using namespace std;
 
@@ -180,6 +183,45 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 	int Pid = fork();
 	int status;
 	
+	switch (Pid) 
+	{
+  		case -1:
+		{
+			clog << "Couldn't run child process!!!" << endl;
+			return 1;
+    		
+			//perror("fork");
+    		//break;
+		}
+
+		case 0:
+		{
+			execvp(Arg[0], Arg);    // Searches for executable in System Variables, example: ls -l
+
+			clog << "Process failed!!!" << endl;
+			exit(127); // Command can not be found or executed
+    		
+			//execl("/bin/ls", "ls", (char *) 0);
+    		//perror("exec");
+    		//break;
+		}
+
+		default:
+		{
+    		clog << "Child id: " << Pid << endl;
+    		//printf("Child id: %i\n", pid);
+    		//fflush(NULL);
+    		
+			if (waitpid(Pid, &status, 0) != -1) printf("Child exited with status %i\n", status);
+			else perror("waitpid");
+    		
+   	 		break;
+		}
+  	}
+	/*
+	int Pid = fork();
+	int status;
+	
 	if(Pid == -1) 
 	{
 		clog << "Couldn't run child process!!!" << endl;
@@ -190,7 +232,7 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 
 	if (Pid == 0) 
 	{
-        execv(Arg[0], Arg);     // Needs full Path of the executable
+        //execv(Arg[0], Arg);     // Needs full Path of the executable
 		execvp(Arg[0], Arg);    // Searches for executable in System Variables, example: ls -l
 
 		clog << "Process failed!!!" << endl;
@@ -201,23 +243,23 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
     
 	if( Wait )
 	{          
-        //clog << "Before Loop:\t" << Pid << "\t" << status << "\t" << waitpid( Pid, &status, WNOHANG ) << endl;
+        clog << "Before Loop:\t" << Pid << "\t" << status << "\t" << waitpid( Pid, &status, WNOHANG ) << endl;
 
-		while( waitpid( Pid, &status, WNOHANG ) == 0 /*Pid*/ )
+		while( waitpid( Pid, &status, WNOHANG ) == 0 / *Pid* / )
 		{
-            //clog << "In loop:\t" << Pid << "\t" << status << "\t" << waitpid( Pid, &status, WNOHANG ) << endl;
+            clog << "In loop:\t" << Pid << "\t" << status << "\t" << waitpid( Pid, &status, WNOHANG ) << endl;
 			usleep( 20000 ); // 2ms
 		}
 
-        //clog << "After Loop\t" << Pid << "\t" << status << "\t" << waitpid( Pid, &status, WNOHANG ) << endl;
+        clog << "After Loop\t" << Pid << "\t" << status << "\t" << waitpid( Pid, &status, WNOHANG ) << endl;
 
-        //clog << "Wait END" << endl << endl;
+        clog << "Wait END" << endl << endl;
 	}
 
 	else
 	{
 		signal(SIGCHLD, SIG_IGN);
-	}
+	}*/
     
 	ProcResult = 1;
 
@@ -226,18 +268,145 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
     return ProcResult;
 }
 
+void test_fork_exec(void) 
+{
+  	pid_t pid;
+  	int status;
+  	puts("Testing fork/exec");
+  	fflush(NULL);
+  	pid = fork();
+  
+	switch (pid) 
+	{
+  		case -1:
+		{
+    		perror("fork");
+    		break;
+		}
+
+		case 0:
+		{
+    		execl("/bin/ls", "ls", (char *) 0);
+    		perror("exec");
+    		break;
+		}
+
+		default:
+		{
+    		printf("Child id: %i\n", pid);
+    		fflush(NULL);
+    		
+			if (waitpid(pid, &status, 0) != -1) printf("Child exited with status %i\n", status);
+			else perror("waitpid");
+    		
+   	 		break;
+		}
+  	}
+}
+
+void test_posix_spawn(void) 
+{
+  	/*pid_t pid;
+  	//char *argv[] = {"ls", (char *) 0};
+  	int status;
+  	puts("Testing posix_spawn");
+  	fflush(NULL);
+  	
+	//status = posix_spawn(&pid, "/bin/ls", NULL, NULL, argv, environ);
+  
+	if (status == 0) 
+	{
+    	printf("Child id: %i\n", pid);
+    	fflush(NULL);
+
+    	if (waitpid(pid, &status, 0) != -1) printf("Child exited with status %i\n", status);
+     	else perror("waitpid");
+  	} 
+	else printf("posix_spawn: %s\n", strerror(status));*/
+}
+
 int CreateProcess(std::vector <std::string> Arg, bool Wait=1)
 {
-    char *ArgPtr[Arg.size() + 2];
+	clog << "ssssssssssssssssssssssssss" << endl;
+    
+	unsigned int len = Arg[0].length();
+
+	for(unsigned int i=1; i<Arg.size(); i++)
+    {
+		if( len < Arg[i].size() ) len = Arg[i].length();
+    }
+
+	clog << "len: " << len << endl;
+	
+	clog << "CCCCCCCCCCCCCCCCCCCCCCCCCC" << endl;
+	
+	DYNAMIC_ARRAY_2D <char> ArgPtr(Arg.size()+2, len);
+
+	
+	clog << "aaaaaaaaaaaaaaaaaaaaaaaaaa" << endl;
+    //char **ArgPtr = new char *[Arg.size() + 2];
+    //ArgPtr = new ARRAY_TYPE *[Arg.size() + 2];
     
     for(unsigned int i=0; i<Arg.size(); i++)	// Assign Args, Arg[0] = Proc name
     {
-        ArgPtr[i] = new char [Arg[i].length()];
-        strcpy(ArgPtr[i], Arg[i].c_str());
+        //ArgPtr[i] = new char [Arg[i].length()];
+        strcpy(ArgPtr.Array2d[i], Arg[i].c_str());
     }
+		/*
+	if(ArgPtr == NULL)
+	{
+		clog << "Bad Arguments array allocation!!!" << endl;
+		return 0;
+	}
+	*/
+	ArgPtr.Array2d[Arg.size()] = NULL;					// Last Arg NULL*/
+	clog << "CCCCCCCCCCCCCCCCCCCCCCCCCC" << endl;
+    
+/*
+  	pid_t pid;
+  	//char *argv[] = {"ls", (char *) 0};
+  	int status;
+  	puts("Testing posix_spawn");
+  	fflush(NULL);
+  	
+	std::string WinArg = "";
+	for(unsigned int i=0; i<Arg.size(); i++)	// Assign Args, Arg[0] = Proc name
+    {
+		WinArg += Arg[i] + " ";
+    }
+  	char *argv = &WinArg[0];
 	
-	ArgPtr[Arg.size()] = NULL;					// Last Arg NULL
-	
-	return CreateProcess(Arg.size(), ArgPtr, Wait);
+	status = posix_spawn(&pid, Arg[0].c_str(), NULL, NULL, argv, environ);
+  
+	if (status == 0) 
+	{
+    	printf("Child id: %i\n", pid);
+    	fflush(NULL);
+
+    	if (waitpid(pid, &status, 0) != -1) printf("Child exited with status %i\n", status);
+     	else perror("waitpid");
+  	} 
+	else printf("posix_spawn: %s\n", strerror(status));
+*/
+	CreateProcess(Arg.size(), ArgPtr.Array2d, Wait);
+
+    ArgPtr.DelArray2d();
+/*		
+	if(ArgPtr == NULL)
+	{
+		clog << "No dynamic array of Args to delete!!!" << endl;
+		return 0;
+	}
+        
+	else 
+	{
+		for(unsigned int i=0; i<Arg.size(); i++)
+			delete [] ArgPtr[i];
+        
+		delete [] ArgPtr;
+	}
+*/
+	clog << "CCCCCCCCCCCCCCCCCCCCCCCCCC" << endl;
+	return 1;
 }
 

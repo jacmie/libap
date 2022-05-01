@@ -38,6 +38,7 @@ class SUBSTITUTE
         
     SUBSTITUTE();
     SUBSTITUTE(std::string InFile, std::string OutFile, char Mark = '@', char EndMark = ' ');
+    void Init(std::string InFile, std::string OutFile, char Mark = '@', char EndMark = ' ');
 	int  AddVariable(std::string Name, std::string Value);
 	int  AddVariable(std::string Name, double Value);
 	int  StripFromMarks(std::string &ToStrip);
