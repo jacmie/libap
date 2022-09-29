@@ -142,23 +142,11 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 	return 0; //success
 #else
   
-	clog << "***" << endl;
 	pid_t Pid;
   	int status;
 
-	clog << Arg[0] << endl;
-	for(int i=0; i<ArgNr; i++)
-	{
-		clog << Arg[i] << " ";
-	}
-	clog << endl;
-
 	status = posix_spawnp(&Pid, Arg[0], NULL, NULL, Arg, environ);
-	clog << "***1" << endl;
-	clog << "status " << status << endl;
 	if(status) return status;
-	clog << "***2" << endl;
-
 
 	/* Alternative
 	int Pid = fork();
@@ -189,79 +177,22 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 
 	else
 	{
-		clog << "***S" << endl;
 		signal(SIGCHLD, SIG_IGN);
 	}
     
-	clog << "***E" << endl;
 	return 0; // success
 #endif
 }
 
 int CreateProcess(std::vector <std::string> Arg, bool Wait=1)
 {
-	// --- Find the longest Argument ---
-/*	unsigned int len = Arg[0].length();
-
-	for(unsigned int i=1; i<Arg.size(); i++)
-    {
-		if( len < Arg[i].size() ) len = Arg[i].length();
-    }
-
-	// --- Declare Arguments Arrays ---
-	vector < vector <string> > Arr; 
-	 
-	DYNAMIC_ARRAY_2D <char> ArgPtr;
-	if( !ArgPtr.InitArray2d(Arg.size()+2, len) ) return 10;
-	
-   	// --- Assign Arguments --- 
-    for(unsigned int i=0; i<Arg.size(); i++)	// Assign Args, Arg[0] = Proc name
-    {
-        strcpy(ArgPtr.Array2d[i], Arg[i].c_str());
-    }
-	
-	ArgPtr.Array2d[Arg.size()] = NULL;			// Last Arg NULL
-*/
-	// === Run Process ===
-	//int Ret = CreateProcess(Arg.size(), ArgPtr.Array2d, Wait);
-
-	/*
-	vector <char*> p(Arg.size()+1);
-	
+	vector <char*> Ptr;
 	for (unsigned int i=0; i<Arg.size(); i++) 
 	{
-  		p[i] = &Arg[i][0];
-		clog << p[i] << " ";
+  		Ptr.push_back(&Arg[i][0]);
 	}
-  	p[Arg.size()] = 0;
-	
-	clog << endl;
-	for (unsigned int i=0; i<Arg.size(); i++) 
-	{
-		clog << &p[i] << " ";
-	}
-	clog << endl << Arg.size() << endl;*/
-	
-	vector <char*> p;
-	
-	for (unsigned int i=0; i<Arg.size(); i++) 
-	{
-  		p.push_back(&Arg[i][0]);
-		clog << p[i] << " ";
-	}
-  	p.push_back(0);
+  	Ptr.push_back(0);
 
-	int Ret = CreateProcess(Arg.size(), &p[0], Wait);
-	/*
-	for (unsigned int i=0; i<Arg.size(); i++) 
-	{
-		clog << &p[i] << " ";
-	}*/
-	clog << endl << "Proc END" << endl;
-
-	// --- Delete Arguments Arrays ---
-    //if( !ArgPtr.DelArray2d() ) return 20;
-
-	return Ret;
+	return CreateProcess(Arg.size(), &Ptr[0], Wait);
 }
 

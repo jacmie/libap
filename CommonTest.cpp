@@ -557,13 +557,11 @@ int main(int argc, char *argv[])
 	clog << "- Process - string" << endl;
 	std::vector <std::string> Arg;
     Arg.push_back("Sq");                                // Global directory
-    //Arg.push_back("/usr/local/bin/Sq");                                // Global directory
 	Arg.push_back("2.3");
 	Arg.push_back("4.1");
 	CreateProcess(Arg);
 	
     Arg.resize(0);
-	clog << endl;	
 	Arg.push_back("sh");    							// Global direcotry
 	Arg.push_back("./TestDir/JMexternalExe/Sq.sh");	    // Local directory, doesn't support home dir: '~' !!!
 	Arg.push_back("2.3");
@@ -571,7 +569,6 @@ int main(int argc, char *argv[])
 	CreateProcess(Arg);
 
 #endif
-exit(1);
 
 	// *** JMsubstite ***
 
