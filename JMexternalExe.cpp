@@ -153,7 +153,7 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 	}
 	clog << endl;
 
-	status = posix_spawn(&Pid, Arg[0], NULL, NULL, Arg, environ);
+	status = posix_spawnp(&Pid, Arg[0], NULL, NULL, Arg, environ);
 	clog << "***1" << endl;
 	clog << "status " << status << endl;
 	if(status) return status;
@@ -225,31 +225,39 @@ int CreateProcess(std::vector <std::string> Arg, bool Wait=1)
 	// === Run Process ===
 	//int Ret = CreateProcess(Arg.size(), ArgPtr.Array2d, Wait);
 
-	vector <char*> p(Arg.size());
+	/*
+	vector <char*> p(Arg.size()+1);
 	
-	//char *ptr = malloc(myCharVector.size()+1);
 	for (unsigned int i=0; i<Arg.size(); i++) 
 	{
   		p[i] = &Arg[i][0];
 		clog << p[i] << " ";
 	}
   	p[Arg.size()] = 0;
+	
 	clog << endl;
 	for (unsigned int i=0; i<Arg.size(); i++) 
 	{
 		clog << &p[i] << " ";
 	}
-	//p[Arg.size()] = 0;
-	clog << endl << Arg.size() << endl;
-
-	//= &Arg[0];
-	int Ret = CreateProcess(Arg.size(), &p[0], Wait);
+	clog << endl << Arg.size() << endl;*/
+	
+	vector <char*> p;
 	
 	for (unsigned int i=0; i<Arg.size(); i++) 
 	{
-		clog << &p[i] << " ";
+  		p.push_back(&Arg[i][0]);
+		clog << p[i] << " ";
 	}
-	clog << endl;
+  	p.push_back(0);
+
+	int Ret = CreateProcess(Arg.size(), &p[0], Wait);
+	/*
+	for (unsigned int i=0; i<Arg.size(); i++) 
+	{
+		clog << &p[i] << " ";
+	}*/
+	clog << endl << "Proc END" << endl;
 
 	// --- Delete Arguments Arrays ---
     //if( !ArgPtr.DelArray2d() ) return 20;

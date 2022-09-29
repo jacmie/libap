@@ -556,8 +556,8 @@ int main(int argc, char *argv[])
 
 	clog << "- Process - string" << endl;
 	std::vector <std::string> Arg;
-    //Arg.push_back("Sq");                                // Global directory
-    Arg.push_back("/usr/local/bin/Sq");                                // Global directory
+    Arg.push_back("Sq");                                // Global directory
+    //Arg.push_back("/usr/local/bin/Sq");                                // Global directory
 	Arg.push_back("2.3");
 	Arg.push_back("4.1");
 	CreateProcess(Arg);
