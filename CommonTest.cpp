@@ -186,7 +186,6 @@ int main(int argc, char *argv[])
     clog << endl;
 
     clog.precision(3);
-    exit(1);
 	
 	//*** JMdiscretization ***
 	
@@ -528,11 +527,14 @@ int main(int argc, char *argv[])
 
 #ifdef WIN32
 
+	clog << "- Call" << endl;
 	Call((char *)"Notepad");
+	clog << "- Pipe" << endl;
 	Pipe((char *)"TestDir\\JMxfoil\\Xfoil.exe", (char *)"", (char *)"TestDir\\JMexternalExe\\Xfoil.log", (char *)"NACA0012\nquit\n", (char *)"w");
 	
 	// Put to PATH: "C:/msys64/usr/local/bin/Sq.exe" !!!
 	
+	clog << "- Process - string" << endl;
 	std::vector <std::string> Arg;
     Arg.push_back("C:/msys64/usr/local/bin/Sq.exe");  	// Global directory
 	Arg.push_back("2.3");
@@ -548,17 +550,20 @@ int main(int argc, char *argv[])
 
 #else
 
+	clog << "- Pipe" << endl;
 	//Pipe((char*)"./TestDir/JMxfoil/Xfoil", (char *)"./TestDir/JMexternalExe/XfoilCommands.txt", (char *)"./TestDir/JMexternalExe/Xfoil.log", (char *)"NACA0012", (char *)"w");
 	Pipe((char*)"./TestDir/JMxfoil/Xfoil", (char *)"", (char *)"./TestDir/JMexternalExe/Xfoil.log", (char *)"NACA0012\nquit\n", (char *)"w");
 
+	clog << "- Process - string" << endl;
 	std::vector <std::string> Arg;
-    Arg.push_back("Sq");                                // Global directory
+    //Arg.push_back("Sq");                                // Global directory
+    Arg.push_back("/usr/local/bin/Sq");                                // Global directory
 	Arg.push_back("2.3");
 	Arg.push_back("4.1");
 	CreateProcess(Arg);
 	
     Arg.resize(0);
-	
+	clog << endl;	
 	Arg.push_back("sh");    							// Global direcotry
 	Arg.push_back("./TestDir/JMexternalExe/Sq.sh");	    // Local directory, doesn't support home dir: '~' !!!
 	Arg.push_back("2.3");
@@ -566,7 +571,8 @@ int main(int argc, char *argv[])
 	CreateProcess(Arg);
 
 #endif
-	
+exit(1);
+
 	// *** JMsubstite ***
 
 	clog << endl << "*** JMsubstitute ***" << endl << endl;
