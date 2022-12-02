@@ -99,26 +99,21 @@ int main(int argc, char *argv[])
     // *** JMfilesHandling ***
 
 	clog << endl << "*** JMfilesHandling ***" << endl << endl;
-
-    /*clog << "Catalogue exists: /TestDir\t" << DirExists("/TestDir") << endl;
-    clog << "Catalogue exists: ./TestDir\t" << DirExists("./TestDir") << endl;
-    clog << "File exists: ./TestDir/JMsubstitute/Sub.txt \t" << FileExists("./TestDir/JMsubstitute/Sub.txt") << endl;
-    clog << "File exists: ./TestDir/JMsubstitute/Sub2.txt \t" << FileExists("./TestDir/JMsubstitute/Sub2.txt") << endl;
-    clog << "File exists: ./TestDir/JMsubstitute/Sub3.txt \t" << FileExists("./TestDir/JMsubstitute/Sub3.txt") << endl;
-    */
-
+	
+#ifndef _WIN32
     clog << "Permissions:" << endl;
-/*
+
     std::vector <bool> PermResults;
     PermResults.resize(3);
     
     clog << "./TestDir/JMsubstitute/XfoilData.dat\t" << CheckPermissions("./TestDir/JMsubstitute/XfoilData.dat", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
     clog << "./TestDir/JMsubstitute/Sub.txt\t" << CheckPermissions("./TestDir/JMsubstitute/Sub.txt", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
-
+#endif
+	
     //std::string FilePath = Browse("All files \t*.{dat,txt}\nData files \t*.dat\nText files \t*.txt", 0);
     //clog << Browse("Lickey \t*.lk", 4) << endl;
     //clog << endl << FilePath << endl << endl;
-	*/
+	
     // *** JMdialogs ***
 
 	clog << endl << "*** JMdialogs ***" << endl << endl;
