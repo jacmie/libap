@@ -1,7 +1,5 @@
 #include "JMbezierPoint.h"
 
-using namespace std;
-
 template <class REAL> 
 BEZIER_POINT<REAL>::BEZIER_POINT()
 {

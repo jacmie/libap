@@ -1,30 +1,27 @@
-#include <cstdlib>
-#include <iostream>
-
-#include "JMconsole.h"
 #include "JMxfoil.h"
 #include "JMairfoilTransform.h"
 #include "JMbezier.h"
 #include "JMbspline.h"
 #include "JMbezierAirfoil.h"
-#include "JMdialogs.h"
 #include "JMdiscretization.h"
 #include "JMfilesHandling.h"
 #include "JMGnuPlotPipe.h"
 #include "JMexternalExe.h"
 #include "JMsubstitute.h"
 #include "JMfilter.h"
+#include "JMdialogs.h"
 
 #include "Logo.h"
 
-using namespace std;
-
-#ifdef WIN32
-CONSOLE con;
+#ifdef _WIN32
+	#include "JMconsole.h"
+	CONSOLE con;
 #endif
 
 int main(int argc, char *argv[])
 {
+	using namespace std;
+	
     // *** JMsubstite ***
 
 	clog << endl << "*** JMsubstitute ***" << endl << endl;
@@ -33,7 +30,7 @@ int main(int argc, char *argv[])
 	
 	SUBSTITUTE SubGet("/home/jm/C++/Core/FlowTree/projects/tutorials/1_Basic/Tut-BasicTemplate.dat", "/home/jm/ramdisk/TutBasic.dat", '@', '&');
 	
-	SubGet.AddVariable("Out", 0);
+	//SubGet.AddVariable("Out", 0);
 	/*SubD.AddVariable("@AoA&", 0);
 	SubD.AddVariable("@CD", 0);
 	SubD.AddVariable("CM&", 0);
@@ -50,8 +47,6 @@ int main(int argc, char *argv[])
 	{
 		clog << SubGet.Var[i].Name << "\t" << SubGet.Var[i].Value << endl;
 	}
-    
-    //exit(1);
 
 	//+++ CONVENTIONS +++
 	/*
@@ -69,7 +64,7 @@ int main(int argc, char *argv[])
 	//OK
 	
 	// *** JMmath ***
-	
+
 	clog << endl << "*** JMmath ***" << endl << endl;
 
     ofstream mout("TestDir/JMmath/Circle.xls");
@@ -113,7 +108,7 @@ int main(int argc, char *argv[])
     */
 
     clog << "Permissions:" << endl;
-
+/*
     std::vector <bool> PermResults;
     PermResults.resize(3);
     
@@ -123,18 +118,17 @@ int main(int argc, char *argv[])
     //std::string FilePath = Browse("All files \t*.{dat,txt}\nData files \t*.dat\nText files \t*.txt", 0);
     //clog << Browse("Lickey \t*.lk", 4) << endl;
     //clog << endl << FilePath << endl << endl;
-
+	*/
     // *** JMdialogs ***
-/*
+
 	clog << endl << "*** JMdialogs ***" << endl << endl;
 
-	DIALOGS Dialog;
+	//DIALOGS Dialog;
 
-    Dialog.alert("%s", "bala");
-    //Dialog.alert("Alert ps!!!");
+    //Dialog.alert("%s", "bala");
+    /*Dialog.alert("Alert ps!!!");
     Dialog.alert("Alert %s_%i!!!", "Blab", 989);
     
-	
 	Dialog.form_label("Kra_kra");
 	Dialog.message_box(FL_NO_BOX);
 	Dialog.message_color(FL_BLACK, 92);
@@ -151,7 +145,8 @@ int main(int argc, char *argv[])
 	
 	Dialog.form_color(FL_BLUE);
     clog << Dialog.password("Hello World!!!", "BLOB") << endl;
-*/
+	*/
+
 	// *** JMconvert ***
 
 	clog << endl << "*** JMconvert ***" << endl << endl;
@@ -165,7 +160,7 @@ int main(int argc, char *argv[])
 
     float fReal = 0.25;
     //float fReal = 1350.1234567891234567912345678;
-     
+	
     clog << "Cstr2f\t" << "ch: " << ChReal  << "\tf : " << Cstr2f(ChReal)         << endl;
     clog << "f2Cstr\t" << "f : " << fReal   << "\tch: " << f2Cstr("%.4f", fReal)  << endl;
     clog << "f2Cstr\t" << "f : " << fReal   << "\tch: " << f2Cstr(fReal)          << endl;
@@ -213,10 +208,15 @@ int main(int argc, char *argv[])
 	// *** JMxfoil ***
 	
 	clog << endl << "*** JMxfoil ***" << endl << endl;
-
-	XFOIL CreateFoil;
-	CreateFoil.global_pipe_command = "./TestDir/JMxfoil/Xfoil > ./TestDir/JMxfoil/Xfoil.log";
 	
+	XFOIL CreateFoil;
+	
+#ifdef _WIN32
+	CreateFoil.global_pipe_command = "TestDir\\JMxfoil\\Xfoil.exe > TestDir\\JMxfoil\\Xfoil.log";
+#else
+	CreateFoil.global_pipe_command = "./TestDir/JMxfoil/Xfoil.exe > /TestDir/JMxfoil/Xfoil.log";
+#endif
+
 	clog << "- Make Airfoil" << endl;
 	CreateFoil.MakeAirfoil("NACA 23012", "TestDir/JMxfoil/NACA23012.dat");
 	CreateFoil.MakeAirfoil("NACA 2412", "TestDir/JMxfoil/NACA2412.dat");
@@ -232,13 +232,20 @@ int main(int argc, char *argv[])
 	CreateFoil.ModifyAirfoil("LOAD TestDir/JMxfoil/AirfoilMix.dat", "TestDir/JMxfoil/AirfoilMixMod.dat");
 	
 	clog << "- Analyz Airfoil" << endl;
+	
+#ifdef _WIN32
+	DelFile("TestDir\\JMxfoil\\XfoilData.dat");
+	CreateFoil.Analyz(1, 3, "LOAD TestDir/JMxfoil/NACA2412.dat", "TestDir/JMxfoil/XfoilData.dat", "TestDir\\JMxfoil\\Xfoil > TestDir\\JMxfoil\\XfoilAnalyze.log");
+#else	
 	DelFile("TestDir/JMxfoil/XfoilData.dat");
 	CreateFoil.Analyz(1, 3, "LOAD TestDir/JMxfoil/NACA2412.dat", "TestDir/JMxfoil/XfoilData.dat", "./TestDir/JMxfoil/Xfoil > ./TestDir/JMxfoil/XfoilAnalyze.log");
-	
+#endif
+
 	//CreateFoil.Re = 300000;																			//For Error
 	//CreateFoil.Analyz(1, 16, "LOAD TestDir/JMxfoil/NACA0012coarse.dat", "TestDir/JMxfoil/XfoilData.dat");	//For Error
 	
 	clog << "- Analyz Convergence" << endl;
+	
 	int err_nr;
 	string errors = "0";
 	CreateFoil.Convergence("TestDir/JMxfoil/XfoilAnalyze.log", err_nr, errors);
@@ -525,10 +532,10 @@ int main(int argc, char *argv[])
 	
 	clog << endl << "*** JMexternalExe ***" << endl << endl;
 
-#ifdef WIN32
+#ifdef _WIN32
 
 	clog << "- Call" << endl;
-	Call((char *)"Notepad");
+	//Call((char *)"Notepad");
 	clog << "- Pipe" << endl;
 	Pipe((char *)"TestDir\\JMxfoil\\Xfoil.exe", (char *)"", (char *)"TestDir\\JMexternalExe\\Xfoil.log", (char *)"NACA0012\nquit\n", (char *)"w");
 	
@@ -663,6 +670,6 @@ int main(int argc, char *argv[])
 	// ************
 	
 	clog << endl << "THE END" << endl << endl;
-	
+		
 	return EXIT_SUCCESS;
 }

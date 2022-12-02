@@ -1,7 +1,7 @@
-#include <math.h>
-#include <iostream>
+#define _USE_MATH_DEFINES
 
-using namespace std;
+#include <cmath>
+#include <iostream>
 
 void SetRotatePointRad(double AngRad, double &x, double &y)
 {
@@ -254,8 +254,8 @@ int Gauss(int n, double **A, double *X, double *D)
          
         else
         {
-            cout << "ERROR GAUSS: modulus of pivoting element < 0 -> singular matrix" << endl;
-            cout << "pivoting element = " << amax << endl;
+            std::cout << "ERROR GAUSS: modulus of pivoting element < 0 -> singular matrix" << std::endl;
+            std::cout << "pivoting element = " << amax << std::endl;
             break;
         }
         
@@ -345,8 +345,8 @@ int Gauss_Jordan(int n, double **A, double *D)
          
         else
         {
-            cout << "ERROR GAUSS: modulus of pivoting element < 0 -> singular matrix" << endl;
-            cout << "pivoting element = " << amax << endl;
+            std::cout << "ERROR GAUSS: modulus of pivoting element < 0 -> singular matrix" << std::endl;
+            std::cout << "pivoting element = " << amax << std::endl;
             flag = 0;
             break;
         }

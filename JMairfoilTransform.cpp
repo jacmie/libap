@@ -1,7 +1,5 @@
 #include "JMairfoilTransform.h"
 
-using namespace std;
-
 AIRFOIL_TRANSFORM::AIRFOIL_TRANSFORM()
 {
 	NrOfRows = 0;
@@ -29,12 +27,12 @@ int AIRFOIL_TRANSFORM::ReadAirfoil(char *AirfoilFile)
 {
 	//*** Open airoil data file ***
 	
-	ifstream in(AirfoilFile);
+	std::ifstream in(AirfoilFile);
 
     if(!in)
     {
 		//fl_alert("Can't read airfoil:\n%s", AirfoilFile);
-		clog << "Can't read airfoil:" << AirfoilFile << endl;
+		std::clog << "Can't read airfoil:" << AirfoilFile << std::endl;
         return 0;
     }
 
@@ -64,7 +62,7 @@ int AIRFOIL_TRANSFORM::ReadAirfoil(char *AirfoilFile)
 	return 1;
 }
 
-void AIRFOIL_TRANSFORM::CountRows(ifstream &in)
+void AIRFOIL_TRANSFORM::CountRows(std::ifstream &in)
 {
     char wiersz [255];
 
@@ -78,19 +76,19 @@ void AIRFOIL_TRANSFORM::CountRows(ifstream &in)
     NrOfRows--;
 
 	in.clear();
-	in.seekg(0, ios::beg);
+	in.seekg(0, std::ios::beg);
 }
 
-void AIRFOIL_TRANSFORM::CheckFileFormat(ifstream &in)
+void AIRFOIL_TRANSFORM::CheckFileFormat(std::ifstream &in)
 {
 	char line[256];
-    stringstream name;
+    std::stringstream name;
     
     in.getline(line, sizeof(line), '\n');
     
-    string str(line);
+    std::string str(line);
    
-    if (string::npos == str.find_first_not_of("-+e.0123456789 \t"))
+    if (std::string::npos == str.find_first_not_of("-+e.0123456789 \t"))
     {
         name << str;
 		name >> x[0] >> z[0];
@@ -150,11 +148,11 @@ void AIRFOIL_TRANSFORM::Transformations()
 
 int AIRFOIL_TRANSFORM::WriteAirfoil(char *AirfoilFile)
 {
-	ofstream out(AirfoilFile);
+	std::ofstream out(AirfoilFile);
 
     if(!out)
     {
-         cout << "Out data error!!!" << endl << endl;
+         std::clog << "Out data error!!!" << std::endl << std::endl;
          return 1;
     }
     
@@ -163,7 +161,7 @@ int AIRFOIL_TRANSFORM::WriteAirfoil(char *AirfoilFile)
     for(int i=0; i<NrOfCord; i++) 
     {
         //cout << fixed << setprecision(4) << x[i] << "\t" << y[i] << "\t" << z[i] << endl;   
-        out << fixed << setprecision(4) << x[i] << "\t" << y[i] << "\t" << z[i] << endl;  
+        out << std::fixed << std::setprecision(4) << x[i] << "\t" << y[i] << "\t" << z[i] << std::endl;  
     }
        
     out.close();

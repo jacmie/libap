@@ -1,7 +1,5 @@
 #include "JMGnuPlotPipe.h"
 
-using namespace std;
-
 GNUPLOT::GNUPLOT()
 {
 	MatrixFlag = 0;
@@ -28,7 +26,7 @@ int GNUPLOT::Plot2D(std::string DataFile)
     if(!gnucmd)
 	{
 		//fl_alert("GnuPlot pipe error!");
-		clog << "GnuPlot pipe error!" << endl;
+		std::clog << "GnuPlot pipe error!" << std::endl;
         return 1;
 	}
     
@@ -57,7 +55,7 @@ int GNUPLOT::Plot2D(std::string DataFile)
    
 	//strcat(Line, "pause -1\n");
    
-    clog << "Command: " << Line << endl;
+    std::clog << "Command: " << Line << std::endl;
     fputs(Line, gnucmd);
     
 	fflush(gnucmd);
@@ -78,7 +76,7 @@ int GNUPLOT::Plot3D(std::string DataFile)
 	if(!gnucmd)
 	{
 		//fl_alert("GnuPlot pipe error!");
-		clog << "GnuPlot pipe error!" << endl;
+		std::clog << "GnuPlot pipe error!" << std::endl;
         return 1;
 	}
             
@@ -93,7 +91,7 @@ int GNUPLOT::Plot3D(std::string DataFile)
            
     strcat(Line, "\n");
    
-    clog << "Command: " << Line << endl;
+    std::clog << "Command: " << Line << std::endl;
     fputs(Line, gnucmd);
     
     fflush(gnucmd);
@@ -103,6 +101,6 @@ int GNUPLOT::Plot3D(std::string DataFile)
 
 void GNUPLOT::PlotFromPlt(std::string PltFile)
 {
-	string Command = GnuPlotDir + " " + PltFile; 
-	clog << system(Command.c_str()) << endl;
+	std::string Command = GnuPlotDir + " " + PltFile; 
+	std::clog << system(Command.c_str()) << std::endl;
 }

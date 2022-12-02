@@ -7,8 +7,6 @@
 #include <sstream>
 #include <vector>
 
-#include "JMconvert.h"
-
 struct VARIABLE
 {  
     std::string Name;
@@ -35,7 +33,7 @@ class SUBSTITUTE
 	public:
 	
 	std::vector <VARIABLE> Var;
-        
+       
     SUBSTITUTE();
     SUBSTITUTE(std::string InFile, std::string OutFile, char Mark = '@', char EndMark = ' ');
     void Init(std::string InFile, std::string OutFile, char Mark = '@', char EndMark = ' ');

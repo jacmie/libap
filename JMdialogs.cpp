@@ -1,7 +1,5 @@
 #include "JMdialogs.h"
 
-using namespace std;
-
 DIALOG_WIN::DIALOG_WIN(int W, int H, const char *l) : Fl_Window(W, H, l) 
 {
 }
@@ -452,7 +450,7 @@ void DIALOGS::message(const char *fmt, ...)
     vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
 
-    if(print_logs) clog << buffer << endl;
+    if(print_logs) std::clog << buffer << std::endl;
 
     icon_deftext = "i";
     innards(buffer, 0, fl_close, 0);
@@ -468,7 +466,7 @@ void DIALOGS::alert(const char *fmt, ...)
     vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
 
-    if(print_logs) clog << buffer << endl;
+    if(print_logs) std::clog << buffer << std::endl;
 
     icon_deftext = "!";
   	innards(buffer, 0, fl_close, 0);  	

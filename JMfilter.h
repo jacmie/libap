@@ -1,7 +1,9 @@
 #ifndef _FILTER_H_
 #define _FILTER_H_
 
-#include <math.h>
+#define _USE_MATH_DEFINES
+
+#include <cmath>
 #include <iostream>
 #include <fstream>
 #include <vector>

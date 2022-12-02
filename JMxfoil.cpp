@@ -1,6 +1,8 @@
 #include "JMxfoil.h"
 
-using namespace std;
+//#include "JMconsole.h"
+//extern CONSOLE con;
+//using namespace std;
 
 XFOIL::XFOIL()
 {
@@ -36,8 +38,10 @@ XFOIL::XFOIL()
     global_pipe_command = "Xfoil > Xfoil.log";
 }
 
-void XFOIL::PrintParams(ostream &out)
+void XFOIL::PrintParams(std::ostream &out)
 {
+	using namespace std;
+
 	out << "Gap = " << Gap << endl;
 	out << "GapBlend = " << GapBlend << endl;
 	
@@ -60,16 +64,16 @@ void XFOIL::PrintParams(ostream &out)
 
 int XFOIL::MakeAirfoil(std::string airfoil_in, std::string airfoil_out, std::string pipe_command)
 { 
-	string command = global_pipe_command;
+	std::string command = global_pipe_command;
 
 	if(pipe_command.length())
 		command = pipe_command;
-
+	
     FILE *pXfoil;
           
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
     {
-        clog << "XFoil pipe error!!!" << endl;
+        std::clog << "XFoil pipe error!!!" << std::endl;
         return 1;
     }
     
@@ -99,9 +103,9 @@ int XFOIL::MakeAirfoil(std::string airfoil_in, std::string airfoil_out, std::str
 	return 0;
 }
 
-int XFOIL::Mixing(string airfoil_in1, string airfoil_in2, string airfoil_out, std::string pipe_command)
+int XFOIL::Mixing(std::string airfoil_in1, std::string airfoil_in2, std::string airfoil_out, std::string pipe_command)
 {
-	string command = global_pipe_command;
+	std::string command = global_pipe_command;
 
 	if(pipe_command.length())
 		command = pipe_command;
@@ -110,7 +114,7 @@ int XFOIL::Mixing(string airfoil_in1, string airfoil_in2, string airfoil_out, st
           
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
     {
-        clog << "XFoil pipe error!!!" << endl;
+        std::clog << "XFoil pipe error!!!" << std::endl;
         return 1;
     }
 	
@@ -145,9 +149,9 @@ int XFOIL::Mixing(string airfoil_in1, string airfoil_in2, string airfoil_out, st
 	return 0;
 }
 
-int XFOIL::ModifyAirfoil(string airfoil_in, string airfoil_out, std::string pipe_command)
+int XFOIL::ModifyAirfoil(std::string airfoil_in, std::string airfoil_out, std::string pipe_command)
 {
-	string command = global_pipe_command;
+	std::string command = global_pipe_command;
 
 	if(pipe_command.length())
 		command = pipe_command;
@@ -156,7 +160,7 @@ int XFOIL::ModifyAirfoil(string airfoil_in, string airfoil_out, std::string pipe
           
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
     {
-        clog << "XFoil pipe error!!!" << endl;
+        std::clog << "XFoil pipe error!!!" << std::endl;
         return 1;
     }
 	
@@ -209,9 +213,9 @@ int XFOIL::ModifyAirfoil(string airfoil_in, string airfoil_out, std::string pipe
 	return 0;
 }
 
-int XFOIL::Flap(string airfoil_in, string airfoil_out, std::string pipe_command)
+int XFOIL::Flap(std::string airfoil_in, std::string airfoil_out, std::string pipe_command)
 {
-	string command = global_pipe_command;
+	std::string command = global_pipe_command;
 
 	if(pipe_command.length())
 		command = pipe_command;
@@ -220,7 +224,7 @@ int XFOIL::Flap(string airfoil_in, string airfoil_out, std::string pipe_command)
           
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
     {
-        clog << "XFoil pipe error!!!" << endl;
+        std::clog << "XFoil pipe error!!!" << std::endl;
         return 1;
     }
 	
@@ -258,9 +262,9 @@ int XFOIL::Flap(string airfoil_in, string airfoil_out, std::string pipe_command)
 	return 0;
 }
 
-int XFOIL::Analyz(bool FlowFlag, double Flow, string airfoil_in, string aero_dat, std::string pipe_command)
+int XFOIL::Analyz(bool FlowFlag, double Flow, std::string airfoil_in, std::string aero_dat, std::string pipe_command)
 {       
-	string command = global_pipe_command;
+	std::string command = global_pipe_command;
 
 	if(pipe_command.length())
 		command = pipe_command;
@@ -269,7 +273,7 @@ int XFOIL::Analyz(bool FlowFlag, double Flow, string airfoil_in, string aero_dat
     
 	if (( pXfoil = popen(command.c_str(), "w")) == NULL)
     {
-        clog << "XFoil pipe error!!!" << endl;
+        std::clog << "XFoil pipe error!!!" << std::endl;
         return 1;
     }
 	
@@ -343,19 +347,19 @@ int XFOIL::Analyz(bool FlowFlag, double Flow, string airfoil_in, string aero_dat
 	return 0;
 }
 
-int XFOIL::Convergence(string log_file, int &err_nr, string &errors)
+int XFOIL::Convergence(std::string log_file, int &err_nr, std::string &errors)
 {
 	int  i   = 0;
-	string logline;
+	std::string logline;
 	size_t found;
 	
 	err_nr   = 0;
 	
-	ifstream in(log_file.c_str());
+	std::ifstream in(log_file.c_str());
 	
 	if(!in)
 	{
-		clog << "Couldn't read log file for convergence check!" << endl;
+		std::clog << "Couldn't read log file for convergence check!" << std::endl;
 		return 1;
 	}
 
@@ -368,7 +372,7 @@ int XFOIL::Convergence(string log_file, int &err_nr, string &errors)
 		found = logline.find("VISCAL:  Convergence failed");
 		found = logline.find("Local speed too large");
   
-		if (found != string::npos)
+		if (found != std::string::npos)
 		{
 			if(err_nr == 0)
 				errors = logline + " (" + int2Str(i) + ")\n"; 
@@ -386,11 +390,13 @@ int XFOIL::Convergence(string log_file, int &err_nr, string &errors)
 	return 0;
 }
 
-int XFOIL::GetData(string aero_dat)
+int XFOIL::GetData(std::string aero_dat)
 {
+	using namespace std;
+	
     // *** DATA FROM Xfoil ***
      
-    string linia;
+    std::string linia;
     
     ifstream in(aero_dat.c_str());
 	
@@ -443,17 +449,17 @@ int XFOIL::GetData(string aero_dat)
 	return 1;
 }
 
-void DelFile(string File)
+void DelFile(std::string File)
 {
-	string Str;
+	std::string Str;
 
-	#ifdef WIN32
+	#ifdef _WIN32
 		Str = "@if exist \"" + File + "\" del /q \"" + File + "\"";
 	#else
 		Str = "test -f \"" + File + "\" && rm -f \"" + File + "\"";
 	#endif
 	
-	clog << system(Str.c_str()) << endl;
+	std::clog << "del_file: "<< system(Str.c_str()) << std::endl;
 }
 
 void XFOIL::pPpar(FILE *pXfoil)

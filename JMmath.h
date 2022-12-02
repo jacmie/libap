@@ -1,7 +1,7 @@
-#include <math.h>
-#include <iostream>
+#define _USE_MATH_DEFINES
 
-using namespace std;
+#include <cmath>
+#include <iostream>
 
 void SetRotatePointRad(double AngRad, double &x, double &y);
 void SetRotatePointDeg(double AngDeg, double &x, double &y);

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <math.h>
+#include <cmath>
 #include <vector>
 
 template <class REAL> class BEZIER_POINT

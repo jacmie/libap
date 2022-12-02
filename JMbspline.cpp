@@ -1,7 +1,5 @@
 #include "JMbspline.h"
 
-using namespace std;
-
 template <class REAL> 
 B_SPLINE<REAL>::B_SPLINE()
 {
@@ -35,8 +33,8 @@ bool B_SPLINE<REAL>::CheckMinDegree(unsigned int degree)
 {
 	if(degree < min_degree)
 	{
-		clog << "Condition: Degree >= " << " " << min_degree << endl;
-		clog << "Minimum Degree reached: " << degree << "!!!" << endl;
+		std::clog << "Condition: Degree >= " << " " << min_degree << std::endl;
+		std::clog << "Minimum Degree reached: " << degree << "!!!" << std::endl;
 		return 1;
 	}
 
@@ -48,8 +46,8 @@ bool B_SPLINE<REAL>::CheckMinPolesNr(unsigned int poles_nr, unsigned int degree)
 {
 	if(poles_nr < degree + 1)
 	{
-		clog << "Condition: PolesNr >= Degree + 1" << endl;
-		clog << "Minimum PolesNr reached: " << poles_nr << "!!!" << endl;
+		std::clog << "Condition: PolesNr >= Degree + 1" << std::endl;
+		std::clog << "Minimum PolesNr reached: " << poles_nr << "!!!" << std::endl;
 		return 1;
 	}
 
@@ -86,6 +84,7 @@ bool B_SPLINE<REAL>::KnotsNrWithoutMults(unsigned int degree, unsigned int type,
 
 		if(KnotsNr < 0)
 		{
+			using namespace std;
 			clog << "Knots number negative!!!" << endl;
 			clog << "PolesNr = " << poles_nr << endl;
 			clog << "Degree  = " << degree << endl;
@@ -102,7 +101,7 @@ bool B_SPLINE<REAL>::KnotsNrWithoutMults(unsigned int degree, unsigned int type,
 		
 		if(0 != KnotsNr % degree)							//Check if it devides without Rest
 		{
-			clog << "Knots does not devide equally for Peacewise Spline!!!" << endl; 
+			std::clog << "Knots does not devide equally for Peacewise Spline!!!" << std::endl; 
 			return 1;
 		}
 
@@ -111,6 +110,7 @@ bool B_SPLINE<REAL>::KnotsNrWithoutMults(unsigned int degree, unsigned int type,
 			
 		if(KnotsNr < 0)
 		{
+			using namespace std;
 			clog << "Knots number negative!!!" << endl;
 			clog << "PolesNr = " << poles_nr << endl;
 			clog << "Degree  = " << degree << endl;
@@ -123,7 +123,7 @@ bool B_SPLINE<REAL>::KnotsNrWithoutMults(unsigned int degree, unsigned int type,
 
 	else
 	{
-		clog << "Unrecognized Bspline type!!!" << endl;
+		std::clog << "Unrecognized Bspline type!!!" << std::endl;
 		return 1;
 	}
 
@@ -206,7 +206,7 @@ void B_SPLINE<REAL>::deBoorData(unsigned int k, unsigned int xyz, std::vector <R
 }
 
 template <class REAL> 
-double B_SPLINE<REAL>::deBoor(unsigned int k, double x, vector <REAL> d)
+double B_SPLINE<REAL>::deBoor(unsigned int k, double x,  std::vector <REAL> &d)
 {
 	// https://en.wikipedia.org/wiki/De_Boor%27s_algorithm
 	
@@ -277,7 +277,7 @@ int B_SPLINE<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
 
 	// --- X ---
 
-	vector <REAL> d; 
+	std::vector <REAL> d; 
 	deBoorData(k, 0, d);
 	X = deBoor(k, t, d);
 
@@ -319,6 +319,8 @@ void B_SPLINE<REAL>::VertexesSeq(unsigned int v_nr)
 template <class REAL> 
 void B_SPLINE<REAL>::BasisFunctions(REAL t) // only for tests
 {
+	using namespace std;
+	
 	clog << endl << "=== Basis Functions ===" << endl;
 	clog << setprecision(2);
 

@@ -5,8 +5,6 @@
 //extern CONSOLE con;
 #endif
 
-using namespace std;
-
 BEZIER_AIRFOIL::BEZIER_AIRFOIL()
 {	
     nBR = 1;
@@ -208,7 +206,7 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
     if(nBR == 0 || nTR == 0) //Single spline on Top/Bottom
     {
 		// === Bottom surface ===
-		clog << " === Bottom surface === " << endl;
+		std::clog << " === Bottom surface === " << std::endl;
 		 
         LinearFunction(SplineBF.P[0].x, SplineBF.P[0].y, MinThX, 0.0, A, B);
         TE_Fi = atan(A);
@@ -269,7 +267,7 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
     	}
 		
 		// === Top surface ===
-		clog << " === Top surface === " << endl;
+		std::clog << " === Top surface === " << std::endl;
 
         LinearFunction(SplineTF.P[0].x, SplineTF.P[0].y, MaxThX, 0.0, A, B);
         LE_Fi = atan(A);
@@ -317,7 +315,7 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
         TE_Fi = atan(A);
 	    dFi   = (0.5*M_PI + TE_Fi)/(nBR-1);
     	Fi    = 0;
-		clog << dFi << "\t" << Fi*180/M_PI << endl;
+		std::clog << dFi << "\t" << Fi*180/M_PI << std::endl;
 		SetBezierPoints(Fi, dFi, MinThY, nBR, 0, SplineBR, MinThX);
 		
 		// === Bottom Front surface ===
@@ -325,7 +323,7 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
         LE_Fi = atan(A);
 	    dFi   = (0.5*M_PI - LE_Fi)/(nBF-1);
     	Fi    = M_PI/2 - LE_Fi;
-		clog << dFi << "\t" << Fi*180/M_PI << endl;
+		std::clog << dFi << "\t" << Fi*180/M_PI << std::endl;
 		SetBezierPoints(Fi, dFi, MinThY, nBF, nBF-1, SplineBF, MinThX);
 		
 		// --- LE/TE points correction from Slopes ---
@@ -383,7 +381,7 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
         LE_Fi = atan(A);
 	    dFi   = (0.5*M_PI + LE_Fi)/(nTF-1);
     	Fi    = 0;
-		clog << dFi << "\t" << Fi << endl;
+		std::clog << dFi << "\t" << Fi << std::endl;
 		SetBezierPoints(Fi, dFi, MaxThY, nTF, 0, SplineTF, MaxThX);
 		
 		// === Top Rear surface ===
@@ -391,7 +389,7 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
         TE_Fi = atan(A);
 	    dFi   = (0.5*M_PI - TE_Fi)/(nTR-1);
     	Fi    = 0.5*M_PI - TE_Fi;
-		clog << dFi << "\t" << Fi*180/M_PI << endl;
+		std::clog << dFi << "\t" << Fi*180/M_PI << std::endl;
 		SetBezierPoints(Fi, dFi, MaxThY, nTR, nTR-1, SplineTR, MaxThX);
 		
 		// --- LE/TE points correction from Slopes ---
@@ -429,7 +427,7 @@ void BEZIER_AIRFOIL::InitAirfoilSplinePoints()
 void BEZIER_AIRFOIL::SetBezierPoints(double Fi, double dFi, double MinMax, unsigned int N, unsigned int refN, BEZIER <double> &Spline, double RefX)
 {
 	double x, y;
-	clog << endl;
+	std::clog << std::endl;
 	for(unsigned int i=1; i<N-1; i++)
 	{    	
         Fi -= dFi;
@@ -437,16 +435,16 @@ void BEZIER_AIRFOIL::SetBezierPoints(double Fi, double dFi, double MinMax, unsig
         x = Spline.P[refN].x;
         y = Spline.P[refN].y;
 
-		clog << x << "\t" << y << "\t";
+		std::clog << x << "\t" << y << "\t";
 
 	    RotatePointRefRad(Fi, RefX, 0, x, y);
 	
-		clog << Fi*180/M_PI << "\t" << RefX << "\t" << x << "\t" << y << endl;
+		std::clog << Fi*180/M_PI << "\t" << RefX << "\t" << x << "\t" << y << std::endl;
         
 		Spline.P[i].x = x;
 		Spline.P[i].y = MinMax;
     }
-	clog << endl;
+	std::clog << std::endl;
 }
 
 void BEZIER_AIRFOIL::MakeVertexesSeq()
@@ -460,33 +458,33 @@ void BEZIER_AIRFOIL::MakeVertexesSeq()
 		SplineLE.VertexesSeq(vCirc);
 }
 
-void BEZIER_AIRFOIL::PrintOutPoints(string AirfoilFile)
+void BEZIER_AIRFOIL::PrintOutPoints(std::string AirfoilFile)
 {
-	ofstream out(AirfoilFile.c_str());
+	std::ofstream out(AirfoilFile.c_str());
 
-	out << fixed << setprecision(6);
+	out << std::fixed << std::setprecision(6);
 	
     if(nBR)
     {
     	SplineBR.PrintPointsFormat(0, 0, 12, 2);
     	SplineBR.PrintPoints(out);
-        out << endl;
+        out << std::endl;
 	}
 
     SplineBF.PrintPointsFormat(0, 0, 12, 2);
     SplineBF.PrintPoints(out);
-    out << endl;
+    out << std::endl;
     
 	if(vCirc != 0)
 	{
 		SplineLE.PrintPointsFormat(0, 0, 12, 2);
     	SplineLE.PrintPoints(out);
-		out << endl;
+		out << std::endl;
 	}
 
 	SplineTF.PrintPointsFormat(0, 0, 12, 2);
     SplineTF.PrintPoints(out);
-	out << endl;
+	out << std::endl;
 
     if(nTR)
     {
@@ -497,13 +495,13 @@ void BEZIER_AIRFOIL::PrintOutPoints(string AirfoilFile)
 	out.close();
 }
 
-void BEZIER_AIRFOIL::PrintOutVertex(string AirfoilFile, string AirfoilName)
+void BEZIER_AIRFOIL::PrintOutVertex(std::string AirfoilFile, std::string AirfoilName)
 {
 	MakeVertexesSeq();
 	
-	ofstream out(AirfoilFile.c_str());
+	std::ofstream out(AirfoilFile.c_str());
 
-	out << AirfoilName << fixed << setprecision(6) << endl;
+	out << AirfoilName << std::fixed << std::setprecision(6) << std::endl;
 	
     if(nBR)
     {

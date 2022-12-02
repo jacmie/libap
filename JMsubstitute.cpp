@@ -1,15 +1,14 @@
 #include "JMsubstitute.h"
 
-using namespace std;
-
 SUBSTITUTE::SUBSTITUTE()
 {
 }
 
 SUBSTITUTE::SUBSTITUTE(std::string InFile, std::string OutFile, char Mark, char EndMark)
 {
-	Init(InFile, OutFile, Mark, EndMark);
+	Init(InFile, OutFile, Mark, EndMark); 
 }
+
 
 void SUBSTITUTE::Init(std::string InFile, std::string OutFile, char Mark, char EndMark)
 {
@@ -32,13 +31,13 @@ int SUBSTITUTE::AddVariable(std::string Name, std::string Value)
 {
     if(Name.length() == 0)
     {
-        clog << "Name length equal to 0!!! The Variable NOT added!!!" << endl;
+        std::clog << "Name length equal to 0!!! The Variable NOT added!!!" << std::endl;
         return 1;
     }
 
     if(Value.length() == 0)
     {
-        clog << "Value length equal to 0!!! The Variable NOT added!!!" << endl;
+        std::clog << "Value length equal to 0!!! The Variable NOT added!!!" << std::endl;
         return 1;
     }
 
@@ -53,7 +52,13 @@ int SUBSTITUTE::AddVariable(std::string Name, std::string Value)
 
 int SUBSTITUTE::AddVariable(std::string Name, double Value)
 {
-    return AddVariable(Name, d2Str(Value));
+	std::string Str;
+	std::stringstream ss;
+	ss.precision(16);
+	ss << Value;
+	ss >> Str;
+   
+	return AddVariable(Name, Str);
 }
 
 int SUBSTITUTE::StripFromMarks(std::string &ToStrip)
@@ -61,7 +66,7 @@ int SUBSTITUTE::StripFromMarks(std::string &ToStrip)
 	if(ToStrip[0] == Prompt) ToStrip = ToStrip.substr(1); 
 	else
 	{
-		clog << "Wrong Variable Start Mark!!!" << endl;
+		std::clog << "Wrong Variable Start Mark!!!" << std::endl;
 		return 3;
 	}
 	
@@ -72,7 +77,7 @@ int SUBSTITUTE::StripFromMarks(std::string &ToStrip)
 		if(ToStrip[Size-1] == EndPrompt) ToStrip = ToStrip.substr(0, Size-1); 
 		else
 		{
-			clog << "Wrong Variable End Mark!!!" << endl;
+			std::clog << "Wrong Variable End Mark!!!" << std::endl;
 			return 3;
 		}
 	}
@@ -98,21 +103,21 @@ int SUBSTITUTE::Insert()
     // *** Fill Tamplate ***
     
 	int  len, pos;
-    string line;
+    std::string line;
 	
-    ifstream in(InPut);
+    std::ifstream in(InPut);
 	
 	if(!in)
     {
-        clog << "Can't open Input file!!!" << endl;
+        std::clog << "Can't open Input file!!!" << std::endl;
 		return 1;
     }
 	
-    ofstream out(OutPut);
+    std::ofstream out(OutPut);
     
     if(!out)
     {
-        clog << "Can't write Output file!!!" << endl;
+        std::clog << "Can't write Output file!!!" << std::endl;
         return 2;
     }
 
@@ -128,7 +133,7 @@ int SUBSTITUTE::Insert()
 				
 			if(pos == -1)
 			{
-				out << line << endl;
+				out << line << std::endl;
 				break;
 			}
 			
@@ -146,7 +151,7 @@ int SUBSTITUTE::Insert()
 					{
 						out << Var[i].Value;
 
-						if( (pos + 1 + len + 1) == int(line.length()) )  out << endl;
+						if( (pos + 1 + len + 1) == int(line.length()) )  out << std::endl;
 
 						line = line.substr(pos + 1 + len);
 						pos  = 0;
@@ -157,7 +162,7 @@ int SUBSTITUTE::Insert()
 					{
 						out << Var[i].Value;
 						
-                        if( (pos + 1 + len + 1) == int(line.length()) )  out << endl;
+                        if( (pos + 1 + len + 1) == int(line.length()) )  out << std::endl;
 
 						line = line.substr(pos + 1 + len + 1);
 						pos  = 0;
@@ -197,21 +202,21 @@ int SUBSTITUTE::Extract()
 
     //*** Find Position of the Variables ***
     
-    string line, word;
+    std::string line, word;
 	unsigned int line_nr=0, word_nr;
 	OUT_VARIABLE SingleVar;
 
-    ifstream in(InPut);
+    std::ifstream in(InPut);
 	if(!in) return 1;
 	
-    ifstream in2(OutPut);
+    std::ifstream in2(OutPut);
     if(!in2) return 2;
     
     while(!in.eof())
     {
 		getline(in, line);
 
-		stringstream ss;
+		std::stringstream ss;
 		ss.str(line);
 
 		word_nr = 0;
@@ -248,7 +253,7 @@ int SUBSTITUTE::Extract()
 
 	// *** Compare Var with OutVar ***
 
-	vector <unsigned int> List;
+	std::vector <unsigned int> List;
 	List.resize( Var.size() );
 
 	for(unsigned int i=0; i<Var.size(); i++)
@@ -266,13 +271,13 @@ int SUBSTITUTE::Extract()
 
 		if(Match == 0)
 		{
-			clog << "No Output Varible: " << Var[i].Name << "!!!" << endl;
+			std::clog << "No Output Varible: " << Var[i].Name << "!!!" << std::endl;
 			return 4;
 		}
 
 		if(Match > 1)
 		{
-			clog << "Too many Output Varibles: " << Var[i].Name << "!!!" << endl;
+			std::clog << "Too many Output Varibles: " << Var[i].Name << "!!!" << std::endl;
 			return 5;
 		}
 	}
@@ -282,14 +287,14 @@ int SUBSTITUTE::Extract()
 	for(unsigned int i=0; i<Var.size(); i++)
 	{
 		in2.clear();
-		in2.seekg (0, ios::beg);
+		in2.seekg (0, std::ios::beg);
 
 		for(unsigned int j=0; j<=OutVar[List[i]].LineNr; j++)	
 		{
 			getline(in2, line);
 		}
 
-		stringstream ss;
+		std::stringstream ss;
 		ss.str(line);
 		
 		for(unsigned int j=0; j<OutVar[List[i]].WordNr-1; j++)	

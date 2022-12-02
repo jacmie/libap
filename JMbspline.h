@@ -29,7 +29,7 @@ template <class REAL> class B_SPLINE : public BEZIER <REAL>
 	private:
     
 	void deBoorData(unsigned int k, unsigned int xyz, std::vector <REAL> &d);
-	double deBoor(unsigned int k, double x, std::vector <REAL> d);
+	double deBoor(unsigned int k, double x, std::vector <REAL> &d);
 
 	public:
 

@@ -3,7 +3,10 @@
 
 // Implementation of fl_message, fl_ask, fl_choice, fl_input etc.
 
-#include <stdarg.h>
+#ifdef _WIN32
+	#include <windows.h>
+#endif
+
 #include <iostream>
 
 #include <FL/Fl.H>

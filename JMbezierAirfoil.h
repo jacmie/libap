@@ -49,7 +49,7 @@ class BEZIER_AIRFOIL
 
 	void MakeVertexesSeq();
     
-    void PrintOutPoints(string AirfoilFile);
+    void PrintOutPoints(std::string AirfoilFile);
 	void PrintOutVertex(std::string AirfoilFile, std::string AirfoilName);
 
 	private:

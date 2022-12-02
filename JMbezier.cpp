@@ -1,8 +1,6 @@
 #include "JMbezier.h"
 #include "JMconsole.h"
 
-using namespace std;
-
 template <class REAL> 
 BEZIER_POINT<REAL>::BEZIER_POINT()
 {
@@ -66,8 +64,10 @@ REAL BEZIER_POINT<REAL>::Get(unsigned int XYZ)
 }
 
 template <class REAL>
-ostream& operator << (std::ostream &out, const BEZIER_POINT <REAL> &BP)
+std::ostream& operator << (std::ostream &out, const BEZIER_POINT <REAL> &BP)
 {
+	using namespace std;
+	
     if(BP.brackets)
         out << "{";  
     
@@ -152,7 +152,7 @@ int BEZIER<REAL>::Vertex(REAL t, REAL &X, REAL &Y, REAL &Z)
 {
 	if(t < 0 || t > 1)
 	{
-		clog << "Position = " << t << " is not in the interval t<0,1> !!!" << endl;
+		std::clog << "Position = " << t << " is not in the interval t<0,1> !!!" << std::endl;
 		return 1;
 	}
     
@@ -196,8 +196,8 @@ REAL BEZIER<REAL>::tVertex(unsigned int XYZ, REAL Value)
     
     if(Value<min || Value>max)
     {
-        clog << "!!!\tmin < X < max\t\t";
-        clog << min << " < " << Value << " < " << max << endl;
+        std::clog << "!!!\tmin < X < max\t\t";
+        std::clog << min << " < " << Value << " < " << max << std::endl;
         return 999;
     }
     
@@ -227,7 +227,7 @@ REAL BEZIER<REAL>::tVertex(unsigned int XYZ, REAL Value)
 			
 			if(fprim == 0)
 			{
-				clog << "Can't devide by fprim = 0!" << endl;
+				std::clog << "Can't devide by fprim = 0!" << std::endl;
 				return 999;
 			}
 			
@@ -323,17 +323,21 @@ void BEZIER<REAL>::PrintVertexesFormat(bool brackets, bool comas, unsigned int s
 }
 
 template <class REAL> 
-void BEZIER<REAL>::PrintPoints(ostream &out)
+void BEZIER<REAL>::PrintPoints(std::ostream &out)
 {
     for(unsigned int i=0; i<P.size(); i++)
-        out << P[i] << endl;
+	{
+        out << P[i] << std::endl;
+	}
 }
 
 template <class REAL> 
-void BEZIER<REAL>::PrintVertexes(ostream &out)
+void BEZIER<REAL>::PrintVertexes(std::ostream &out)
 {
     for(unsigned int i=0; i<V.size(); i++)
-        out << V[i] << endl;
+	{
+        out << V[i] << std::endl;
+	}
 }
 
 template <class REAL> 

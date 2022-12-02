@@ -1,7 +1,5 @@
 #include "JMdiscretization.h"
 
-using namespace std;
-
 void Discretization(int n, int paneling_type, double factor, double maxVal, double *Val)
 {
     double di = 1.0/(n-1);
@@ -34,7 +32,7 @@ bool Discretization(unsigned int n, REAL factor, std::vector <REAL> &Val, bool p
 {
 	if(factor <= 0)
 	{
-		clog << "Factor has to be bigger than 0!!!" << endl;
+		std::clog << "Factor has to be bigger than 0!!!" << std::endl;
 		return 1;
 	}
 

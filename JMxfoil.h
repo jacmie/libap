@@ -5,11 +5,10 @@
 #include <fstream>
 #include <string>
 
-#include "JMmath.h"
 #include "JMconvert.h"
 #include "itoa.h"
 
-void DelFile(string File);
+void DelFile(std::string File);
 
 class XFOIL
 {

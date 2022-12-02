@@ -1,7 +1,5 @@
 #include "JMfilter.h"
 
-using namespace std;
-
 FILTER::FILTER(int array_n, int filter_n, double amplitude)
 {
 	//*** Init parameters ***
@@ -88,7 +86,7 @@ int FILTER::FilterRange(int shift, double *Xinput, bool overwrite)
 	if(fn > n)
 		return 0;
 	
-	vector <double> Xin;
+	std::vector <double> Xin;
 	
 	for(int x=0; x<n; x++) //"n" limits range
 		Xin.push_back(Xinput[shift + x]); 
@@ -105,5 +103,5 @@ int FILTER::FilterRange(int shift, double *Xinput, bool overwrite)
 void FILTER::Print(std::ofstream &out)
 {
 	for(int x=0; x<n; x++)
-        out << x << "\t" << Xfiltered[x] << endl;
+        out << x << "\t" << Xfiltered[x] << std::endl;
 }

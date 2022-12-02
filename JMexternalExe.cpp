@@ -4,7 +4,7 @@
 #include <string.h>
 #include <vector>
 
-#ifdef WIN32 
+#ifdef _WIN32
 	#include <windows.h>
 	#include <direct.h>
 	#include <io.h>
@@ -15,9 +15,7 @@
 	#include <sys/wait.h>
 #endif
 
-#include "JMdynArray.h"
-
-using namespace std;
+//#include "JMdynArray.h"
 
 int Call(char *buffer)
 {
@@ -35,13 +33,13 @@ int Pipe(char *Program, char *input, char *log, char *buffer, char *mode)
 
     strcpy(Command, Program);
     
-    if(string(input) != "")
+    if(std::string(input) != "")
     {
         strcat(Command, " < ");
         strcat(Command, input);
     }
     
-    if(string(log) != "")
+    if(std::string(log) != "")
     {
         strcat(Command, " > ");
         strcat(Command, log);
@@ -49,27 +47,27 @@ int Pipe(char *Program, char *input, char *log, char *buffer, char *mode)
     
     strcat(Command, "\n");
     
-    cout << Command;
+    std::cout << Command;
     
     FILE *pipe;
           
     if (( pipe = popen(Command, mode)) == NULL)
     {
-        clog << "Pipe error!!!" << endl;
+        std::clog << "Pipe error!!!" << std::endl;
         return -1;
     }
     
-    if(string(mode) == "w")
+    if(std::string(mode) == "w")
     {
         fputs(buffer, pipe);
         fputs("\n", pipe);
     }
     
-    if(string(mode) == "r")
+    if(std::string(mode) == "r")
     {
         if( NULL == fgets(buffer, sizeof(buffer), pipe) )
         {
-            clog << "Couldn't get return value via the pipe!!!" << endl;
+            std::clog << "Couldn't get return value via the pipe!!!" << std::endl;
             return -2;
         }
     }
@@ -83,7 +81,7 @@ int Pipe(char *Program, char *input, char *log, char *buffer, char *mode)
 
 int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 {
-#ifdef WIN32
+#ifdef _WIN32
     DWORD exitCode;
     STARTUPINFO si;
 	PROCESS_INFORMATION pi;
@@ -101,7 +99,7 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 	std::string WinArg = "";
 	for(int i=0; i<ArgNr; i++)	// Assign Args, Arg[0] = Proc name
     {
-		WinArg += string(Arg[i]) + " ";
+		WinArg += std::string(Arg[i]) + " ";
     }
 	
     int ProcResult = CreateProcess(Arg[0],    	//The program
@@ -117,7 +115,7 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
                         
     if(!ProcResult)
     {
-	    clog << "Process failed!!!" << endl << endl;
+	    std::clog << "Process failed!!!" << std::endl << std::endl;
         return 1;
     }
            
@@ -134,7 +132,7 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
         if (!ProcResult)
         {
             // Could not get exit code.
-            clog << "Executed command but couldn't get exit code.\nCommand=%s\n" << endl;
+            std::clog << "Executed command but couldn't get exit code.\nCommand=%s\n" << std::endl;
             return 2;
         }
     }
@@ -184,9 +182,9 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 #endif
 }
 
-int CreateProcess(std::vector <std::string> Arg, bool Wait=1)
+int CreateProcess(std::vector <std::string> &Arg, bool Wait=1)
 {
-	vector <char*> Ptr;
+	std::vector <char*> Ptr;
 	for (unsigned int i=0; i<Arg.size(); i++) 
 	{
   		Ptr.push_back(&Arg[i][0]);
