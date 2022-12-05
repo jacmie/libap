@@ -14,6 +14,7 @@
 	#include <pwd.h>
 	#include <grp.h>
 	#include <sys/stat.h>
+    #include <vector>
 
 	int  GetUserGroups(std::vector <gid_t> &Groups);
 	int  CheckPermissions(std::string Path, std::vector <bool> &Results);
