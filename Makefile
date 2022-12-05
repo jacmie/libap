@@ -42,6 +42,7 @@ else
     SYSTEM   = -DWIN32 -mwindows
     DYN_LIBS = -mwindows  -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm
     INSTALL_DIR = /usr/local/
+    FLTK_LIBS += -lfltk_png
 endif
 
 #-------------------------------  Targets  --------------------------------
