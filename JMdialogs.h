@@ -1,5 +1,5 @@
-#ifndef DIALOGS_H
-#define DIALOGS_H
+#ifndef AP_DIALOGS_H
+#define AP_DIALOGS_H
 
 // Implementation of fl_message, fl_ask, fl_choice, fl_input etc.
 
