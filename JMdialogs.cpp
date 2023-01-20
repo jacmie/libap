@@ -1,5 +1,19 @@
 #include "JMdialogs.h"
 
+#ifdef _WIN32
+	#include <windows.h>
+#else
+	#include <cstdarg>
+#endif
+
+#include <iostream>
+
+#include <FL/Fl_Return_Button.H>
+#include <FL/Fl_XPM_Image.H>
+
+#include <FL/fl_draw.H>
+#include <FL/fl_ask.H>
+
 DIALOG_WIN::DIALOG_WIN(int W, int H, const char *l) : Fl_Window(W, H, l) 
 {
 }

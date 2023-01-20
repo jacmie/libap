@@ -15,8 +15,6 @@
 	#include <sys/wait.h>
 #endif
 
-//#include "JMdynArray.h"
-
 int Call(char *buffer)
 {
     char call[256];
@@ -79,7 +77,7 @@ int Pipe(char *Program, char *input, char *log, char *buffer, char *mode)
 	return 1;
 }
 
-int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
+int ExeCreateProcess(int ArgNr, char **Arg, bool Wait)
 {
 #ifdef _WIN32
     DWORD exitCode;
@@ -182,7 +180,7 @@ int CreateProcess(int ArgNr, char **Arg, bool Wait=1)
 #endif
 }
 
-int CreateProcess(std::vector <std::string> &Arg, bool Wait=1)
+int ExeCreateProcess(std::vector <std::string> &Arg, bool Wait)
 {
 	std::vector <char*> Ptr;
 	for (unsigned int i=0; i<Arg.size(); i++) 
@@ -190,7 +188,7 @@ int CreateProcess(std::vector <std::string> &Arg, bool Wait=1)
   		Ptr.push_back(&Arg[i][0]);
 	}
   	Ptr.push_back(0);
-
-	return CreateProcess(Arg.size(), &Ptr[0], Wait);
+	
+	return ExeCreateProcess(Arg.size(), &Ptr[0], Wait);
 }
 

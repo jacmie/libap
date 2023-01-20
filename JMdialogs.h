@@ -3,24 +3,13 @@
 
 // Implementation of fl_message, fl_ask, fl_choice, fl_input etc.
 
-#ifdef _WIN32
-	#include <windows.h>
-#else
-	#include <cstdarg>
-#endif
-
-#include <iostream>
+#include <string>
 
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Window.H>
 #include <FL/Fl_Input.H>
-#include <FL/fl_draw.H>
-
-#include <FL/fl_ask.H>
-#include <FL/Fl_XPM_Image.H>
+#include <FL/Fl_Window.H>
 
 class DIALOG_WIN : public Fl_Window 
 {

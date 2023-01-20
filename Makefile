@@ -53,7 +53,8 @@ all: libJMcommon.a CommonTest
 
 .cpp.o:
 	echo --- compilation: $*.cpp ...
-	g++ -std=c++17 -c $(PIC) -Wall -O2 $(DIRS_INC) $< -o $@
+	g++ -c $(PIC) -Wall -O2 $(DIRS_INC) $< -o $@
+	#g++ -std=c++17 -c $(PIC) -Wall -O2 $(DIRS_INC) $< -o $@
 
 libJMcommon.a: $(OBJECTS)
 	@echo --- make library: $@
