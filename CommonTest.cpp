@@ -562,14 +562,14 @@ int main(int argc, char *argv[])
     Arg.push_back("Sq");                                // Global directory
 	Arg.push_back("2.3");
 	Arg.push_back("4.1");
-	CreateProcess(Arg);
+	ExeCreateProcess(Arg);
 	
     Arg.resize(0);
 	Arg.push_back("sh");    							// Global direcotry
 	Arg.push_back("./TestDir/JMexternalExe/Sq.sh");	    // Local directory, doesn't support home dir: '~' !!!
 	Arg.push_back("2.3");
 	Arg.push_back("4.1");
-	CreateProcess(Arg);
+	ExeCreateProcess(Arg);
 
 #endif
 

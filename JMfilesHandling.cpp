@@ -9,14 +9,6 @@
 
 #ifdef _WIN32
 	#include <windows.h>
-#else
-	#include <pwd.h>
-	#include <grp.h>
-	#include <sys/stat.h>
-    #include <vector>
-
-	int  GetUserGroups(std::vector <gid_t> &Groups);
-	int  CheckPermissions(std::string Path, std::vector <bool> &Results);
 #endif
 
 #include <FL/Fl_Native_File_Chooser.H>
