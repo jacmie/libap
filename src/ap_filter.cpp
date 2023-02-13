@@ -1,4 +1,6 @@
-#include "JMfilter.h"
+#include <ap_filter.h>
+
+#include <cmath>
 
 FILTER::FILTER(int array_n, int filter_n, double amplitude)
 {

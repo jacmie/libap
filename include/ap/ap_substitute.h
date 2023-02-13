@@ -1,10 +1,7 @@
 #ifndef SUBSTITUTE_H
 #define SUBSTITUTE_H
 
-#include <string.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
+#include <string>
 #include <vector>
 
 struct VARIABLE

@@ -1,8 +1,11 @@
-#include "JMxfoil.h"
+#include "ap_xfoil.h"
 
-//#include "JMconsole.h"
-//extern CONSOLE con;
-//using namespace std;
+#include "ap_convert.h"
+
+#include <fstream>
+#include <iostream>
+
+#include <cstring> // refactor and remove !!!!
 
 XFOIL::XFOIL()
 {

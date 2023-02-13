@@ -1,15 +1,7 @@
-#ifndef _GNUPLOT_H_
-#define _GNUPLOT_H_
+#ifndef GNUPLOT_PIPE_H
+#define GNUPLOT_PIPE_H
 
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <string>
-#include <FL/fl_ask.H>
 
 class GNUPLOT
 {
@@ -27,4 +19,4 @@ class GNUPLOT
 	void PlotFromPlt(std::string PltFile);
 };
 
-#endif
+#endif //GNUPLOT_PIPE_H

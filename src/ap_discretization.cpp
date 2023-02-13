@@ -1,4 +1,7 @@
-#include "JMdiscretization.h"
+#include "ap_discretization.h"
+
+#include <cmath>
+#include <iostream>
 
 void Discretization(int n, int paneling_type, double factor, double maxVal, double *Val)
 {

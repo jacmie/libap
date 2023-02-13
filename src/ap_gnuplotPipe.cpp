@@ -1,4 +1,7 @@
-#include "JMGnuPlotPipe.h"
+#include "ap_gnuplotPipe.h"
+
+#include <iostream>
+#include <string.h>
 
 GNUPLOT::GNUPLOT()
 {

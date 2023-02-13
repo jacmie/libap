@@ -1,10 +1,8 @@
-#ifndef _FILTER_H_
-#define _FILTER_H_
+#ifndef AP_FILTER_H
+#define AP_FILTER_H
 
 #define _USE_MATH_DEFINES
 
-#include <cmath>
-#include <iostream>
 #include <fstream>
 #include <vector>
 

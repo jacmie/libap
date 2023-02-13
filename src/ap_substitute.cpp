@@ -1,4 +1,9 @@
-#include "JMsubstitute.h"
+#include "ap_substitute.h"
+
+#include <cstring> // refactor code and remove !!!!
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 SUBSTITUTE::SUBSTITUTE()
 {

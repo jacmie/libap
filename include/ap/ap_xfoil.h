@@ -1,12 +1,7 @@
-#ifndef _XFOIL_H_
-#define _XFOIL_H_
+#ifndef AP_XFOIL_H
+#define AP_XFOIL_H
 
-#include <iostream>
-#include <fstream>
 #include <string>
-
-#include "JMconvert.h"
-#include "itoa.h"
 
 void DelFile(std::string File);
 

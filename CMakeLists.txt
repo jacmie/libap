@@ -65,15 +65,15 @@ foreach(H_FILE ${GL_HEADERS})
 endforeach()
 
 foreach(CPP_FILE ${INDEPENDENT_SRC})
-    list(APPEND FULLPATH_INDEPENDENT_SRC src/ap/${CPP_FILE})
+    list(APPEND FULLPATH_INDEPENDENT_SRC src/${CPP_FILE})
 endforeach()
 
 foreach(CPP_FILE ${FL_SRC})
-    list(APPEND FULLPATH_FL_SRC src/ap/${CPP_FILE})
+    list(APPEND FULLPATH_FL_SRC src/${CPP_FILE})
 endforeach()
 
 foreach(CPP_FILE ${GL_SRC})
-    list(APPEND FULLPATH_GL_SRC src/ap/${CPP_FILE})
+    list(APPEND FULLPATH_GL_SRC src/${CPP_FILE})
 endforeach()
 
 
@@ -87,6 +87,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 ### Include & Lib Dependencies ###
 
+set(USE_FLTK ON CACHE BOOL "Build parts of the liballPurpose dependent on the FLTK library")
+set(USE_OPENGL ON CACHE BOOL "Build parts of the liballPurpose dependent on the OpenGL library")
 
 set(INCLUDE_DIR_FLTK            "/usr/local/include"                CACHE PATH "FLTK library header files directory.")
 #set(INCLUDE_DIR_GL_EXT          "/usr/local/include/glExt"          CACHE PATH "glExt library header files directory.")
@@ -113,29 +115,44 @@ elseif (IOS)
     # iOS libs
 endif()
 
+if(USE_FLTK)
+    find_library(FLTK_LIB fltk)
+    if(NOT FLTK_LIB)
+        message(FATAL_ERROR "FLTK library not found!")
+    endif()
+endif()
+
+#if(USE_OPENGL)
+#    find_library(OPENGL_LIB GL)
+#    if(NOT OPENGL_LIB)
+#        message(FATAL_ERROR "OpenGL library not found!")
+#    endif()
+#endif()
+
 
 ### Compile ###
 
 
-add_library(ap STATIC ${SRC_LIST_AIRFOIL_NO_MAIN})
-target_include_directories(AirfoilNoMain PRIVATE ${INCLUDE_DIR_FLTK} ${INCLUDE_DIR_GL_EXT} ${INCLUDE_DIR_JM_COMMON} ${INCLUDE_DIR_PANUKL_CONFIG} ${INCLUDE_DIR_OCCT} src/base src/designer)
-target_link_libraries(CADfoil PRIVATE -L${LIBRARY_DIR_FLTK} -L${LIBRARY_DIR_GL_EXT} -L${LIBRARY_DIR_JM_COMMON} -L${LIBRARY_DIR_PANUKL_CONFIG} -L${LIBRARY_DIR_OCCT})
+add_library(ap STATIC)
+target_sources(ap PRIVATE ${FULLPATH_INDEPENDENT_HEADERS} ${FULLPATH_INDEPENDENT_SRC})
+target_include_directories(ap PRIVATE include/ap)
+#target_link_libraries(CADfoil PRIVATE -L${LIBRARY_DIR_FLTK} -L${LIBRARY_DIR_GL_EXT} -L${LIBRARY_DIR_JM_COMMON} -L${LIBRARY_DIR_PANUKL_CONFIG} -L${LIBRARY_DIR_OCCT})
 
 message(">> See available Cache Variables settings")
 
 
 ### Testing ###
 
-add_subdirectory(extern/googletest)
+#add_subdirectory(extern/googletest)
 
-enable_testing()
+#enable_testing()
 
-include(GoogleTest)
+#include(GoogleTest)
 
 #add_library(libCADero STATIC)
 #target_sources(libCADero PRIVATE ${SRC_LIST_BASE} PRIVATE ${SRC_LIST_AIRFOIL_NO_MAIN} PRIVATE ${SRC_LIST_DESIGNER})
 
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 
 
@@ -144,6 +161,6 @@ add_subdirectory(tests)
 
 
 # Very basic, to imrove: launcher, icon, etc.
-install(TARGETS CADfoil DESTINATION bin)
-install(TARGETS CADero DESTINATION bin)
+#install(TARGETS CADfoil DESTINATION bin)
+#install(TARGETS CADero DESTINATION bin)
 # MinGW bin needs also libstdc++-6.dll (can't avoid if OCCT has dynamic libs)
