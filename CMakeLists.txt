@@ -88,7 +88,7 @@ set(CMAKE_CXX_STANDARD 17)
 ### Include & Lib Dependencies ###
 
 set(USE_FLTK ON CACHE BOOL "Build parts of the liballPurpose dependent on the FLTK library")
-set(USE_OPENGL ON CACHE BOOL "Build parts of the liballPurpose dependent on the OpenGL library")
+set(USE_GL ON CACHE BOOL "Build parts of the liballPurpose dependent on the OpenGL library")
 
 set(INCLUDE_DIR_FLTK            "/usr/local/include"                CACHE PATH "FLTK library header files directory.")
 #set(INCLUDE_DIR_GL_EXT          "/usr/local/include/glExt"          CACHE PATH "glExt library header files directory.")
@@ -122,7 +122,7 @@ if(USE_FLTK)
     endif()
 endif()
 
-#if(USE_OPENGL)
+#if(USE_GL)
 #    find_library(OPENGL_LIB GL)
 #    if(NOT OPENGL_LIB)
 #        message(FATAL_ERROR "OpenGL library not found!")
@@ -136,6 +136,23 @@ endif()
 add_library(ap STATIC)
 target_sources(ap PRIVATE ${FULLPATH_INDEPENDENT_HEADERS} ${FULLPATH_INDEPENDENT_SRC})
 target_include_directories(ap PRIVATE include/ap)
+
+if(USE_FLTK)
+    target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
+    target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK})
+    target_link_libraries(ap PRIVATE -lfltk_jpeg -lfltk_images -lfltk_gl -lfltk)
+    if (WIN32) #MINGW
+        target_link_libraries(-lfltk_png)
+    else
+        target_link_libraries(-lpng)    
+    endif()
+endif()
+
+if(USE_GL)
+    target_sources(ap PRIVATE ${FULLPATH_GL_HEADERS} ${FULLPATH_GL_SRC})
+#    target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK})
+endif()
+
 #target_link_libraries(CADfoil PRIVATE -L${LIBRARY_DIR_FLTK} -L${LIBRARY_DIR_GL_EXT} -L${LIBRARY_DIR_JM_COMMON} -L${LIBRARY_DIR_PANUKL_CONFIG} -L${LIBRARY_DIR_OCCT})
 
 message(">> See available Cache Variables settings")
