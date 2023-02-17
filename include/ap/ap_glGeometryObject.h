@@ -1,16 +1,14 @@
-#ifndef _GL_GEOMETRY_OBJECT_H_
-#define _GL_GEOMETRY_OBJECT_H_
+#ifndef AP_GL_GEOMETRY_OBJECT_H
+#define AP_GL_GEOMETRY_OBJECT_H
 
 #include <vector>
 
 #include <GL/gl.h>
 
-#include <mass_data.h>
+#include "ap_glTextLine.h"
+#include "ap_glFLTKcolor.h"
 
-#include "glTextLine.h"
-#include "glFLTKcolor.h"
-
-class GL_GEOMETRY_OBJECT : public MASS_OBJECT_DATA
+class GL_GEOMETRY_OBJECT
 {
 	public:
 
@@ -58,4 +56,4 @@ class GL_GEOMETRY_OBJECT : public MASS_OBJECT_DATA
 	void CirclePoints(unsigned int i, GLfloat Rx, GLfloat Ry, GLfloat H);
 };
 
-#endif
+#endif //AP_GL_GEOMETRY_OBJECT_H

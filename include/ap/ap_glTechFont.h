@@ -1,5 +1,5 @@
-#ifndef _GL_TECH_FONT_H_
-#define _GL_TECH_FONT_H_
+#ifndef AP_GL_TECH_FONT_H
+#define AP_GL_TECH_FONT_H
 
 #include <GL/gl.h>
 

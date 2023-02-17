@@ -1,5 +1,5 @@
-#ifndef _GL_FLTK_COLOR_H_
-#define _GL_FLTK_COLOR_H_
+#ifndef AP_GL_FLTK_COLOR_H
+#define AP_GL_FLTK_COLOR_H
 
 #include <iostream>
 
@@ -11,4 +11,4 @@ bool ColorIndex2RGB(unsigned int Index, GLubyte &Rcolor, GLubyte &Gcolor, GLubyt
 bool ColorAlfaValue(GLfloat Transparency, GLubyte &Alfa);
 bool SetGLdrawColor(unsigned int Index, GLfloat Transparency = 1.f);
 
-#endif
+#endif //AP_GL_FLTK_COLOR_H

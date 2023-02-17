@@ -1,4 +1,4 @@
-#include "glGeometryObject.h"
+#include "ap_glGeometryObject.h"
 
 using namespace std;
 
@@ -20,7 +20,7 @@ GL_GEOMETRY_OBJECT::GL_GEOMETRY_OBJECT()
 	CSpointSize = 5.0f;
 }
 
-int GL_GEOMETRY_OBJECT::RotationMatrix()
+/*int GL_GEOMETRY_OBJECT::RotationMatrix()
 {
 	if(0 != CheckData(0))
 		return CheckData(0);
@@ -31,7 +31,7 @@ int GL_GEOMETRY_OBJECT::RotationMatrix()
                	   js.x, js.y, js.z,
                    ks.x, ks.y, ks.z);
 	return 0;
-}
+}*/
 
 void GL_GEOMETRY_OBJECT::SetEdgesColor(unsigned int c)
 {

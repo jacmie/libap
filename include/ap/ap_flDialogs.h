@@ -168,4 +168,4 @@ class DIALOGS
 	const char* input_innards(const char* fmt, const char* defstr, uchar type);
 };
 
-#endif
+#endif //AP_DIALOGS_H

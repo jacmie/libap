@@ -1,5 +1,5 @@
-#ifndef FILES_HANDLING
-#define FILES_HANDLING
+#ifndef AP_FILES_HANDLING_H
+#define AP_FILES_HANDLING_H
 
 #ifndef _WIN32
 	#include <string>
@@ -15,4 +15,4 @@
 
 std::string Browse(const char *Filt, int DialogType, bool AskOverwriteFlag=1);
 	
-#endif
+#endif //AP_FILES_HANDLING_H

@@ -24,7 +24,7 @@ set(FL_HEADERS
 )
 
 set(GL_HEADERS
-    ap_glGeometryObject.h
+#    ap_glGeometryObject.h
     ap_glTechFont.h
     ap_glTextLine.h
 )
@@ -47,7 +47,7 @@ set(FL_SRC
 )
 
 set(GL_SRC
-    ap_glGeometryObject.cpp
+#    ap_glGeometryObject.cpp
     ap_glTechFont.cpp
     ap_glTextLine.cpp
 )
@@ -141,10 +141,10 @@ if(USE_FLTK)
     target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
     target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK})
     target_link_libraries(ap PRIVATE -lfltk_jpeg -lfltk_images -lfltk_gl -lfltk)
-    if (WIN32) #MINGW
-        target_link_libraries(-lfltk_png)
-    else
-        target_link_libraries(-lpng)    
+    if(WIN32) #MINGW
+        target_link_libraries(ap PRIVATE -lfltk_png)
+    elseif(UNIX)
+        target_link_libraries(ap PRIVATE -lpng)    
     endif()
 endif()
 
@@ -160,18 +160,28 @@ message(">> See available Cache Variables settings")
 
 ### Testing ###
 
-#add_subdirectory(extern/googletest)
 
-#enable_testing()
+set(BUILD_GTESTS ON CACHE BOOL "Build the tests")
 
-#include(GoogleTest)
+if(BUILD_GTESTS)
+#    enable_testing()
+#    include(GoogleTest)
+#    add_subdirectory(tests)
 
-#add_library(libCADero STATIC)
-#target_sources(libCADero PRIVATE ${SRC_LIST_BASE} PRIVATE ${SRC_LIST_AIRFOIL_NO_MAIN} PRIVATE ${SRC_LIST_DESIGNER})
+    enable_testing()
+    include(GoogleTest)
+#    gtest_discover_tests(ap_discretizationTest)
+    add_subdirectory("extern/googletest")
+    add_subdirectory(tests)
 
-#add_subdirectory(tests)
+#    add_subdirectory(ap_discretization_tests)
+#    add_subdirectory(./tests/ap_discretization_tests)
 
-
+    set_target_properties(gtest PROPERTIES FOLDER extern)
+    set_target_properties(gtest_main PROPERTIES FOLDER extern)
+    set_target_properties(gmock PROPERTIES FOLDER extern)
+    set_target_properties(gmock_main PROPERTIES FOLDER extern)
+endif()
 
 
 ### Installation ###

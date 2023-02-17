@@ -1,4 +1,4 @@
-#include "glTechFont.h"
+#include "ap_glTechFont.h"
 
 GL_TECH_FONT::GL_TECH_FONT(GLfloat Size, MATRIX_3x3 &RotationMatrix)
 {

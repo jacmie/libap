@@ -1,4 +1,4 @@
-#include "JMfilesHandling.h"
+#include "ap_flFilesHandling.h"
 
 #include <filesystem>
 #include <iostream>
@@ -13,7 +13,7 @@
 
 #include <FL/Fl_Native_File_Chooser.H>
 
-#include "JMdialogs.h"
+#include "ap_flDialogs.h"
 
 std::string Browse_FileExists(std::string FileName, bool AskOverwriteFlag)
 {

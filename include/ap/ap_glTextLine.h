@@ -1,7 +1,7 @@
-#ifndef _GL_TEXT_LINE_H_
-#define _GL_TEXT_LINE_H_
+#ifndef AP_GL_TEXT_LINE_H
+#define AP_GL_TEXT_LINE_H
 
-#include "glTechFont.h"
+#include "ap_glTechFont.h"
 
 /*
 	USE WITHIN:
