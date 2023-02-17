@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.25)
 
 project(ap LANGUAGES CXX)
 
+add_compile_options(-Wall -Wextra)
+set(CMAKE_CXX_STANDARD 17) 
+
 
 ### Process Source Files ### 
 
@@ -77,30 +80,17 @@ foreach(CPP_FILE ${GL_SRC})
 endforeach()
 
 
-### Compile Flags ###
-
-
-add_compile_options(-Wall -Wextra)
-add_compile_options(-Wno-write-strings -Wno-unused-parameter -Wno-cast-function-type) # Temporary options to limit number of Warnings
-set(CMAKE_CXX_STANDARD 17) 
-
-
 ### Include & Lib Dependencies ###
+
 
 set(USE_FLTK ON CACHE BOOL "Build parts of the liballPurpose dependent on the FLTK library")
 set(USE_GL ON CACHE BOOL "Build parts of the liballPurpose dependent on the OpenGL library")
 
 set(INCLUDE_DIR_FLTK            "/usr/local/include"                CACHE PATH "FLTK library header files directory.")
-#set(INCLUDE_DIR_GL_EXT          "/usr/local/include/glExt"          CACHE PATH "glExt library header files directory.")
 #set(INCLUDE_DIR_PANUKL_CONFIG   "/usr/local/include/PanuklConfig"   CACHE PATH "PanuklConfig library header files directory.")
 
 set(LIBRARY_DIR_FLTK            "/usr/local/lib"                    CACHE PATH "FLTK library binaries directory.")
-#set(LIBRARY_DIR_GL_EXT          "/usr/local/lib"                    CACHE PATH "glExt library binaries directory.")
 #set(LIBRARY_DIR_PANUKL_CONFIG   "/usr/local/lib"                    CACHE PATH "PanuklConfig library binaries directory.")
-
-#include_directories(src/base src/airfoil src/designer)
-#include_directories(${INCLUDE_DIR_FLTK} ${INCLUDE_DIR_GL_EXT} ${INCLUDE_DIR_JM_COMMON} ${INCLUDE_DIR_PANUKL_CONFIG} ${INCLUDE_DIR_OCCT})
-#link_libraries(-L${LIBRARY_DIR_FLTK} -L${LIBRARY_DIR_GL_EXT} -L${LIBRARY_DIR_JM_COMMON} -L${LIBRARY_DIR_PANUKL_CONFIG} -L${LIBRARY_DIR_OCCT})
 
 # In future check details and shift to: target_...
 link_libraries(-lfltk_jpeg -lfltk_images -lfltk_gl -lfltk)
@@ -141,7 +131,7 @@ if(USE_FLTK)
     target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
     target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK})
     target_link_libraries(ap PRIVATE -lfltk_jpeg -lfltk_images -lfltk_gl -lfltk)
-    if(WIN32) #MINGW
+    if(WIN32)
         target_link_libraries(ap PRIVATE -lfltk_png)
     elseif(UNIX)
         target_link_libraries(ap PRIVATE -lpng)    
@@ -153,8 +143,6 @@ if(USE_GL)
 #    target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK})
 endif()
 
-#target_link_libraries(CADfoil PRIVATE -L${LIBRARY_DIR_FLTK} -L${LIBRARY_DIR_GL_EXT} -L${LIBRARY_DIR_JM_COMMON} -L${LIBRARY_DIR_PANUKL_CONFIG} -L${LIBRARY_DIR_OCCT})
-
 message(">> See available Cache Variables settings")
 
 
@@ -164,30 +152,27 @@ message(">> See available Cache Variables settings")
 set(BUILD_GTESTS ON CACHE BOOL "Build the tests")
 
 if(BUILD_GTESTS)
-#    enable_testing()
-#    include(GoogleTest)
-#    add_subdirectory(tests)
-
     enable_testing()
     include(GoogleTest)
-#    gtest_discover_tests(ap_discretizationTest)
     add_subdirectory("extern/googletest")
     add_subdirectory(tests)
 
-#    add_subdirectory(ap_discretization_tests)
-#    add_subdirectory(./tests/ap_discretization_tests)
+    mark_as_advanced(
+        BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
+        gmock_build_tests gtest_build_samples gtest_build_tests
+        gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
+    )
 
     set_target_properties(gtest PROPERTIES FOLDER extern)
     set_target_properties(gtest_main PROPERTIES FOLDER extern)
     set_target_properties(gmock PROPERTIES FOLDER extern)
-    set_target_properties(gmock_main PROPERTIES FOLDER extern)
+    set_target_properties(gmock_main PROPERTIES FOLDER extern)    
 endif()
 
 
 ### Installation ###
 
+#install(DIRECTORY include/ap DESTINATION /usr/local/include)
 
-# Very basic, to imrove: launcher, icon, etc.
 #install(TARGETS CADfoil DESTINATION bin)
-#install(TARGETS CADero DESTINATION bin)
-# MinGW bin needs also libstdc++-6.dll (can't avoid if OCCT has dynamic libs)
+#install(TARGETS ap DESTINATION bin)
