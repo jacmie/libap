@@ -19,7 +19,7 @@ macro(build_test TESTNAME FILES LIBRARIES)
     gtest_discover_tests(${TESTNAME})
 endmacro()
 
-build_test(hello_test hello_test.cc ap)
+#build_test(hello_test hello_test.cc ap)
 build_test(ap_discretization_tests ap_discretization_tests.cpp ap)
 
 

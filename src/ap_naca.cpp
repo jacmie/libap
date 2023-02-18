@@ -29,7 +29,7 @@
  * included to PanuklConfigLib 20.11.2020
  */
 
-#include "naca.h"
+#include "ap_naca.h"
 
 double NACA_PROFILE::xcoord(double angle)
 {
@@ -133,7 +133,7 @@ void NACA_PROFILE::out_point(double x, double yc, double yt, double slope, int i
 
 #define dig(c) ((c)-'0')
 
-void NACA_PROFILE::get_params(struct NACA_AIRFOIL_DATA *data, const char *name)
+void NACA_PROFILE::get_params(struct NACA_AIRFOIL_DATA *data, std::string name)
 {
    A[0] = 0.2969;
    A[1] = -0.126;
@@ -145,20 +145,20 @@ void NACA_PROFILE::get_params(struct NACA_AIRFOIL_DATA *data, const char *name)
    else				
        A[4] = -0.1036;
    
-   data->name = name;
-   if(strlen(name) == 4) 
+   //data->name = name; !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   if(name.length() == 4) 
       {
       data->serie = four_digit;
       data->maxor = dig(name[0])/100.0;
       data->posmax = dig(name[1])/10.0;
-      data->thmax = atoi(name+2)/100.0;
+      //data->thmax = atoi(name+2)/100.0; !!!!!!!!!!!!!!!!!!!!!!!!!!
       }
    else 
       {
       int d1, d2, d3;
 
       data->serie = five_digit;
-      data->thmax = atoi(name+3)/100.0;
+      //data->thmax = atoi(name+3)/100.0; !!!!!!!!!!!!!!!!!!!!!!!!!!!!
       d1 = dig(name[0]); 
       d2 = dig(name[1]);
       d3 = dig(name[2]);
@@ -220,15 +220,15 @@ void NACA_PROFILE::draw_surface(int ndiv, const struct NACA_AIRFOIL_DATA *data, 
 /*
  * Check to see if this is a valid name for an NACA section
  */
-char* NACA_PROFILE::check_name(char *name)
+std::string NACA_PROFILE::check_name(std::string name)
 {
    int len;
 
    /* Trim off a leading NACA or naca */
-   if(!strncmp(name, "NACA", 4) || !strncmp(name, "naca", 4))
-      name += 4;
+   //if(!strncmp(name, "NACA", 4) || !strncmp(name, "naca", 4)) !!!!!!!!!!!!!!!!!!!!!!!!!!1
+   //   name += 4;
 
-   len = strlen(name);
+   len = name.length();
 
    if(len < 4 || len > 5) {
       return 0;
@@ -243,16 +243,16 @@ char* NACA_PROFILE::check_name(char *name)
    }
    else {
       /* Ok, first digit has to be 2, 3, 4, 6 */
-      if(!strchr("2346", name[0]))
-	 return 0;
+      //if(!strchr("2346", name[0])) !!!!!!!!!!!!!!!!!!!!!!!!!!1
+	 //return 0;
 
       /* Second digit has to be 12345, except if the first digit is [346]
       // then the second can only be [234] */
       if(name[1] < '1' || name[1] > '5')
 	 return 0;
-      if(strchr("346", name[0]))
-	 if(!strchr("234", name[1]))
-	    return 0;
+      //if(strchr("346", name[0])) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 //if(!strchr("234", name[1]))
+	   // return 0;
 
       /* Third digit has to be 0 or 1 */
       if(name[2] < '0' || name[2] > '1')
@@ -265,53 +265,53 @@ char* NACA_PROFILE::check_name(char *name)
    return name;
 }
 
-int NACA_PROFILE::generate_naca(char* cNACA, int NN)
+int NACA_PROFILE::generate_naca(std::string NACA, int NN)
 {
 	N = 2*NN - 1; // must be odd
 	CreateTabs( N );
 
-	char *cname;
+	std::string name;
 
-	if(!(cname = check_name(cNACA))) 
+	if(!(name == check_name(NACA))) 
 		{
-		fprintf(stderr, "%s is not a valid NACA section name.\n", cNACA );
+		fprintf(stderr, "%s is not a valid NACA section name.\n", NACA.c_str() );
 		return -1;
 		}
 	else
 		{
-		fprintf( stderr, "NACA %s - cname %s\n", cNACA, cname );
+		fprintf( stderr, "NACA %s - cname %s\n", NACA.c_str(), name.c_str() );
 		}
 
    iWrite = 0;
    iLicz = 0;
 
-   get_params(&data, cname);
+   get_params(&data, name);
    
    draw_surface(NN, &data, stderr);
    
    return 0;
 }
 
-int NACA_PROFILE::generate_naca(char *file_name, char* cNACA)
+int NACA_PROFILE::generate_naca(std::string fileName, std::string NACA)
 {
-	FILE *fp = fopen( file_name, "w" );
+	FILE *fp = fopen( fileName.c_str(), "w" );
 	
-	char *cname;
+	std::string name;
 
-	if(!(cname = check_name(cNACA))) 
+	if(!(name == check_name(NACA))) 
 		{
-		fprintf(stderr, "%s is not a valid NACA section name.\n", cNACA );
+		fprintf(stderr, "%s is not a valid NACA section name.\n", NACA.c_str() );
 		return -1;
 		}
 	else
 		{
-		fprintf( stderr, "NACA %s - cname %s\n", cNACA, cname );
+		fprintf( stderr, "NACA %s - cname %s\n", NACA.c_str(), name.c_str() );
 		}
 
-	return generate_naca(cname, 160, fp);
+	return generate_naca(name, 160, fp);
 }
 
-int NACA_PROFILE::generate_naca(char *name, int num, FILE *fp)
+int NACA_PROFILE::generate_naca(std::string name, int num, FILE *fp)
 {
    iWrite = 1;
 
@@ -334,8 +334,8 @@ int NACA_PROFILE::generate_naca(char *name, int num, FILE *fp)
 
 void NACA_PROFILE::ClearTabs( void )
 {
-	DELETE_TAB( X );
-	DELETE_TAB( Z );
+	//DELETE_TAB( X );
+	//DELETE_TAB( Z );
 }
 
 void NACA_PROFILE::CreateTabs( int nn )

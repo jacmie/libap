@@ -10,12 +10,14 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 set(INDEPENDENT_HEADERS
+    ap_airfoil.h    
     ap_basicMath.h
     ap_convert.h
     ap_discretization.h
     ap_externalExe.h
     ap_filter.h
     ap_gnuplotPipe.h
+    ap_naca.h
     ap_substitute.h
     ap_xfoil.h
 )
@@ -33,12 +35,14 @@ set(GL_HEADERS
 )
 
 set(INDEPENDENT_SRC
+    ap_airfoil.cpp  
     ap_basicMath.cpp
     ap_convert.cpp
     ap_discretization.cpp
     ap_externalExe.cpp
     ap_filter.cpp
     ap_gnuplotPipe.cpp
+    ap_naca.cpp
     ap_substitute.cpp
     ap_xfoil.cpp
 )

@@ -21,8 +21,9 @@
 
 #include <regex>
 #include <algorithm>
+#include <iostream>
 
-#include "airfoil.h"
+#include "ap_airfoil.h"
 
 using namespace std;
 
@@ -50,75 +51,71 @@ AIRFOIL::AIRFOIL( void )
 
 	iType = 0;
 	iReadType = 0;
-	memset( cName, 0, 100 );
 }
 
 void AIRFOIL::Clean( void )
 {
-	DELETE_TAB( Xd );
+	/*DELETE_TAB( Xd );
 	DELETE_TAB( Xg );
 	DELETE_TAB( Zd );
 	DELETE_TAB( Zg );
 	DELETE_TAB( Xf );
 	DELETE_TAB( Zf );
 	DELETE_TAB( Xrob );
-	DELETE_TAB( Zrob );
+	DELETE_TAB( Zrob );*/
 	N = 0;
 	Nf = 0;
 	Nrob = 0;
 	iType = 0;
-	memset( cName, 0, 100 );
 }
 
-int AIRFOIL::Read( char *cFile )
+int AIRFOIL::Read( std::string fileName )
 {
 	Clean();
 
 	fprintf(stderr,"iReadType %d\n",iReadType);
 	if( iReadType )
-		getiTypeByContent(cFile);        // gets file type by content
+		getiTypeByContent(fileName);   // gets file type by content
 	if( iReadType == 0 || iType == -1 )
-		getiTypeByExt(cFile);          // gets file type by extension
+		getiTypeByExt(fileName);       // gets file type by extension
 
 	// in case no type was detected finish
 	if(iType==-1) 
-		{
-		fprintf(stderr,"No correct file was provided!\n");
+	{
+		std::clog << "No correct file was provided!" << std::endl;
 		return -1;
-		}
-	
-	fprintf(stderr, "airfoil %s type %d\n", cFile, iType );
+	}
 	
 	switch( iType )
-		{
+	{
 		default:
 		case 0:
-			if( Read_PRF_0( cFile ) )return -1;
+			if( Read_PRF_0( fileName ) )return -1;
 			break;
 		case 1:
-			if( Read_PRF_1( cFile ) )return -1;
+			if( Read_PRF_1( fileName ) )return -1;
 			break;
 		case 2:
-			if( Read_KOO( cFile ) )return -1;
+			if( Read_KOO( fileName ) )return -1;
 			break;
 		case 3:
-			if( Read_DAT( cFile ) )return -1;
+			if( Read_DAT( fileName ) )return -1;
 			break;
 		case 4:
-			if( Read_DAT_LEDNICER( cFile ) )return -1;
+			if( Read_DAT_LEDNICER( fileName ) )return -1;
 			break;
-		}
+	}
 			
 	return 0;
 }
 
-int AIRFOIL::Write( char *cFile, int iTyp )
+int AIRFOIL::Write( std::string fileName, int iTyp )
 {
 	switch( iTyp )
 		{
 		default:
 		case 0:
-			if( Write_PRF( cFile ) )return -1;
+			if( Write_PRF( fileName ) )return -1;
 			break;
 /*		case 1:
 			if( Write_PRF_1( cFile ) )return -1;
@@ -127,7 +124,7 @@ int AIRFOIL::Write( char *cFile, int iTyp )
 			if( Write_KOO( cFile ) )return -1;
 			break;
 */		case 3:
-			if( Write_DAT( cFile ) )return -1;
+			if( Write_DAT( fileName ) )return -1;
 			break;
 		}
 			
@@ -141,13 +138,13 @@ int AIRFOIL::ReadNaca( long int iNACA, int NN )
 	return ReadNaca( cNACA );
 }
 
-int AIRFOIL::ReadNaca( char *cNACA, int NN )
+int AIRFOIL::ReadNaca( std::string NACA, int NN )
 {
-	sprintf(cName, "NACA %s", cNACA );
+	//Name = "NACA " + NACA;
 
 	NACA_PROFILE *NacaProfile = new NACA_PROFILE();
 	NacaProfile->setTE0( 1 );
-	NacaProfile->generate_naca( cNACA, NN );
+	NacaProfile->generate_naca( NACA, NN );
 	
 	Nf = NacaProfile->N;
 	Xf = new double[Nf+1]; 
@@ -159,7 +156,7 @@ int AIRFOIL::ReadNaca( char *cNACA, int NN )
 		Zf[i] = NacaProfile->Z[i];
 		}
 		
-	DELETE_(NacaProfile);
+	//DELETE_(NacaProfile);
 		
 	XFOIL2PRF();
 	
@@ -169,11 +166,11 @@ int AIRFOIL::ReadNaca( char *cNACA, int NN )
 /*
         Gets iType based on file content (by Anna Sima) - private
 */
-void AIRFOIL::getiTypeByContent(char *cFile)
+void AIRFOIL::getiTypeByContent(std::string fileName)
 {
 	iType = -1; // type not yet found
 	
-	FILE *ff = fopen( cFile, "r" );
+	FILE *ff = fopen( fileName.c_str(), "r" );
 	
 	// set of useful regex expressions
 	// \\d - digit
@@ -198,7 +195,7 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 	// [4 cols]
 	// * values 0-100
 	// if first line matches full HEADER or just number of lines
-	ReadStr( ff, cc);
+	//ReadStr( ff, cc.c_str()); !!!!!!!!!!!!!!!!!
 	if(regex_match(cc,prfHeader)||regex_match(cc,integer)) 
 		{
 		int N;
@@ -206,11 +203,9 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 		ReadPar( ff, "%d", &N );
 
 		// check number of lines
-		if(nLines( ff )!=N) 
+		/*if(nLines( ff )!=N) 
 			{
-			sprintf(comment,"Number of lines is incorrect, should be %d\n",N);
 			fprintf(stderr,"Number of lines is incorrect, should be %d\n",N);
-			if(iGUI) alert( comment );
 			iType=-1;
 			}
 		else
@@ -219,18 +214,16 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 			// check all further lines
 			for(int i=0; i<N; i++) 
 				{
-				ReadStr( ff, cc );
+				//ReadStr( ff, cc );
 				if(!regex_match(cc,fourCols))
 					{
 					// one of the lines is incorrect
-					sprintf(comment,"%s - line incorrect!\n",cc);
 					fprintf(stderr,"%s - line incorrect!\n",cc);
-					if(iGUI) alert( comment );
 					iType=-1; // set to nok
 					break;
 					}
 				}
-			}
+			}*/
 		}
     
 	// PRF 2
@@ -241,18 +234,16 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 	if(iType==-1) // // not yet found?
 		{
 		fseek(ff,0, SEEK_SET); // go to beginning
-		ReadStr( ff, cc);
+		//ReadStr( ff, cc); !!!!!!!!!!!!!!
 		// first line is a number, can be whatever - read second line then
-		ReadStr( ff, cc);
+		//ReadStr( ff, cc); !!!!!!!!!!!!!!
 		// second line must be integer - number of lines
 		if(regex_match(cc,integer)) 
 			{
-			N = atoi(cc); // convert second line to integer
-			if(nLines( ff )!=N)
+			//N = atoi(cc); // convert second line to integer !!!!!!!!!!!!!!!
+			/*if(nLines( ff )!=N) !!!!!!!!!!!!!!!!
 				{
-				sprintf(comment,"Number of lines is incorrect, should be %d\n",N);
 				fprintf(stderr,"Number of lines is incorrect, should be %d\n",N);
-				if(iGUI) alert( comment );
 				iType=-1;
 				}
 			else
@@ -261,18 +252,16 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 				// check all lines match format of two or three columns
 				for(int i=0; i<N; i++)
 					{
-					ReadStr( ff, cc );
+					//ReadStr( ff, cc ); !!!!!!!!!!!!!
 					if(!regex_match(cc,twoCols)&&!regex_match(cc,threeCols))
 						{
 						// one of the lines is incorrect
-						sprintf(comment,"%s - line incorrect!\n",cc);
 						fprintf(stderr,"%s - line incorrect!\n",cc);
-						if(iGUI) alert( comment );
 						iType=-1; // set to nok
 						break;
 						}
 					}
-				}
+				}*/
 			}
 		}
 
@@ -283,14 +272,14 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 	if(iType==-1) // not yet found?
 		{
 		fseek(ff,0, SEEK_SET); // go to beginning
-		ReadStr( ff, cc );
+		//ReadStr( ff, cc ); !!!!!!!!!!!!!!!!!!!
 		// check if header matches koo - name , number_of_line
 		if(regex_match(cc,kooHeader))
 			{
 			//get number of lines
-			int iLen = strlen( cc );
+			//int iLen = strlen( cc ); !!!!!!!!!!!!!!!!!!!!!!!1
 			// replace all characters with whitespace till ,
-			for( int i=0; i<iLen; i++ ) 
+			/*for( int i=0; i<iLen; i++ ) !!!!!!!!!!!!!!!!!!!!!!!
 				{
 				if(cc[i]==',' )
 					{
@@ -298,20 +287,18 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 					break;
 					}
 				cc[i]=' ';
-				}
+				}*/
 			// convert spaces + number of lines string to number
-			N = atoi(cc);
-			if(nLines( ff )!=N+1)
+			//N = atoi(cc); !!!!!!!!!!!!!!!!
+			/*if(nLines( ff )!=N+1) !!!!!!!!!!!!!!!!!!!!!!!!
 				{
-				sprintf(comment,"Number of lines is incorrect, should be %d\n",N);
 				fprintf(stderr,"Number of lines is incorrect, should be %d\n",N);
-				if(iGUI) alert( comment );
 				iType=-1;
 				}
 			else
 				{
 				iType=2;
-				}
+				}*/
 			}
 		}
 
@@ -322,18 +309,16 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 	if(iType==-1)     // not yet found?
 		{
 		fseek(ff,0, SEEK_SET); // go to beginning
-		ReadStr( ff, cc );
-		N = nLines( ff );
+		//ReadStr( ff, cc ); !!!!!!!!!!!!!!!
+		//N = nLines( ff ); !!!!!!!!!!!!!!!!11
 		// valide or further lines
 		iType = 3; // assume type is DAT selig
 		for(int i=0; i < N/2; i++) 
 			{
-			ReadStr( ff, cc );
+			//ReadStr( ff, cc ); !!!!!!!!!!!!!!!!!!1
 			if(!regex_match(cc,twoCols))
 				{
-				sprintf(comment,"%s - line incorrect(3)!\n",cc);
-				fprintf(stderr,"%s - line incorrect(3)!\n",cc);
-				if(iGUI) alert( comment );
+				//fprintf(stderr,"%s - line incorrect(3)!\n",cc); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				iType=-1;
 				break;
 				}
@@ -351,13 +336,13 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 	if(iType==-1)	// not yet found?
 		{
 		fseek(ff,0, SEEK_SET); // go to beginning
-		N = nLines( ff ); // get number of lines
-		ReadStr( ff, cc ); // name - whatever value, ignore comparison
-		ReadStr( ff, cc ); // should be number_of_lines. number_of_lines.
+		//N = nLines( ff ); // get number of lines !!!!!!!!!!!!!!!!
+		//ReadStr( ff, cc ); // name - whatever value, ignore comparison !!!!!!!!!!!!!!!!1
+		//ReadStr( ff, cc ); // should be number_of_lines. number_of_lines.!!!!!!!!!!!!!!
 		if(regex_match(cc,datNLines))
 			{
 			fseek(ff,0, SEEK_SET); // go to beginnig
-			ReadStr( ff, cc );     // omit first line
+			//ReadStr( ff, cc );     // omit first line !!!!!!!!!!!!!!!!!!!!!11
 			float f1,f2;
 			int n1,n2;
 			ReadPar(ff, "%f %f",&f1,&f2);
@@ -365,9 +350,7 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 			n2 = f2;
 			if(N!=n1+n2+2)
 				{
-				sprintf(comment,"Number of lines incorrect, should be %d, is %d\n",N,n1+n2);
 				fprintf(stderr,"Number of lines incorrect, should be %d, is %d\n",N,n1+n2);
-				if(iGUI) alert( comment );
 				iType=-1;
 				}
 			else
@@ -375,15 +358,13 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 				iType=4; // assume it is lednicer
 				for(int i=0; i < N; i++)
 					{
-					ReadStr( ff, cc );
+					//ReadStr( ff, cc ); !!!!!!!!!!!!!!!!!!!!!!!!!!!
 					//string sc=cc;
 					//if(!regex_match(cc,twoCols) && !sc.empty() && !IsBlank(sc) )
 					if(!regex_match(cc,twoCols) && cc[0]!='\0' )
 						{  
 						// ommit empty lines - lines == \0
-						sprintf(comment,"%s - line incorrect!\n",cc);
-						fprintf(stderr,"%s - line incorrect!\n",cc);
-						if(iGUI) alert( comment );
+						//fprintf(stderr,"%s - line incorrect!\n",cc); !!!!!!!!!!!!!!!!!!!!!!!!!1
 						iType=-1;
 						break;
 						}
@@ -398,11 +379,11 @@ void AIRFOIL::getiTypeByContent(char *cFile)
 /*
         Gets iType based on file extension
 */
-void AIRFOIL::getiTypeByExt(char *cFile)
+void AIRFOIL::getiTypeByExt(std::string fileName)
 {
-	const char *pext = filename_ext( (const char*)cFile );
-	char ext[4];
-	for(int i=0; i<3; i++)ext[i] = toupper( pext[i+1] );
+	//const char *pext = filename_ext( (const char*)fileName ); //!!!!!!!!!!!
+	char ext[4]; 
+	//for(int i=0; i<3; i++)ext[i] = toupper( pext[i+1] );// !!!!!!!!!!!!!!!1
 	ext[3] = '\0';
 
 	//fprintf(stderr,"cfile %s pext %s\n",cFile,pext);
@@ -411,13 +392,13 @@ void AIRFOIL::getiTypeByExt(char *cFile)
 	if( strcmp( ext, "PRF" ) == 0 )
 		{
 		iType = 0;
-		FILE *ff = fopen( cFile, "r" );
+		FILE *ff = fopen( fileName.c_str(), "r" );
 		if( ff )
 			{
 			int N;
 			ReadPar( ff, "%d", &N );
-			int NN = nLines( ff );
-			if( N != NN )iType = 1;
+			//int NN = nLines( ff ); !!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//if( N != NN )iType = 1; !!!!!!!!!!!!!!!!!!!!!!!!!!!
 			//fprintf( stderr, "N %d NN %d typ %d\n", N, NN, iType );
 			fclose( ff );
 			}
@@ -432,7 +413,7 @@ void AIRFOIL::getiTypeByExt(char *cFile)
 		{
 		// If both first numeric values are greater than 1, the file is lednicer format
 		iType = 3;
-		FILE *ff = fopen( cFile, "r" );
+		FILE *ff = fopen( fileName.c_str(), "r" );
 		if( ff )
 			{
 			char cc[512];
@@ -456,15 +437,13 @@ void AIRFOIL::getiTypeByExt(char *cFile)
 
 // Reads particular formats - private
 
-int AIRFOIL::Read_PRF_0( char *cFile )
+int AIRFOIL::Read_PRF_0( std::string fileName )
 {
 	FILE  *ff;
-	ff = fopen( cFile, "r" );
+	ff = fopen( fileName.c_str(), "r" );
 	if( ff == NULL )
 		{
-		sprintf( comment, "File: %s not found!\n", cFile );
-		fprintf( stderr, "File: %s not found!\n", cFile );
-		if(iGUI) alert( comment );
+		fprintf( stderr, "File: %s not found!\n", fileName.c_str() );
 		return -1;
 		}
 	
@@ -482,7 +461,7 @@ int AIRFOIL::Read_PRF_0( char *cFile )
 	double dAg = dAverage( Zg, N );
 	if( dAg < dAd )
 		{
-		ff = fopen( cFile, "r" );
+		ff = fopen( fileName.c_str(), "r" );
 		ReadPar( ff, "%d", &N );
 		
 		for(int i=0; i<N; i++)
@@ -511,9 +490,9 @@ int AIRFOIL::Read_PRF_0( char *cFile )
 */
 	TE_correct();		
 	
-	int iN = strlen( filename_name( cFile ) ) - 4;
-	strncpy( cName, filename_name( cFile ), iN );
-	cName[ iN ] = '\0';
+	//int iN = strlen( filename_name( cFile ) ) - 4; !!!!!!!!!!!!!!!
+	//strncpy( cName, filename_name( cFile ), iN ); !!!!!!!!!!!
+	//cName[ iN ] = '\0'; !!!!!!!!!!!!!!
 
 //	fprintf(stderr, "\nnazwa: %s\n", cName );
 	
@@ -522,15 +501,13 @@ int AIRFOIL::Read_PRF_0( char *cFile )
 	return 0;
 }
 
-int AIRFOIL::Read_PRF_1( char *cFile )
+int AIRFOIL::Read_PRF_1( std::string fileName )
 {
 	FILE  *ff;
-	ff = fopen( cFile, "r" );
+	ff = fopen( fileName.c_str(), "r" );
 	if( ff == NULL )
 		{
-		sprintf( comment, "File: %s not found!\n", cFile );
-		fprintf( stderr, "File: %s not found!\n", cFile );
-		if(iGUI) alert( comment );
+		fprintf( stderr, "File: %s not found!\n", fileName.c_str() );
 		return -1;
 		}
 	
@@ -576,9 +553,9 @@ int AIRFOIL::Read_PRF_1( char *cFile )
 */	
 	fclose( ff );
 	
-	int iN = strlen( filename_name( cFile ) ) - 4;
-	strncpy( cName, filename_name( cFile ), iN );
-	cName[ iN ] = '\0';
+	//int iN = strlen( filename_name( cFile ) ) - 4;
+	//strncpy( cName, filename_name( cFile ), iN ); !!!!!!!!!!!!!!!
+	//cName[ iN ] = '\0'; !!!!!!!!!!!!!!!!!
 	
 	double *Xfrob = new double[Nrob];
 	for( int i=0; i<Nrob; i++ )Xfrob[i] = Xrob[i];
@@ -640,7 +617,7 @@ int AIRFOIL::Read_PRF_1( char *cFile )
 		Xf[i] *= dMnoz/100.;
 		Zf[i] *= dMnoz/100.;
 		}
-	DELETE_TAB( Xfrob );
+	//DELETE_TAB( Xfrob );
 	return 0;
 }
 
@@ -661,11 +638,11 @@ void AIRFOIL::PRF2XFOIL( void )
 		}
 }
 
-int AIRFOIL::Write_PRF( char *cFile )
+int AIRFOIL::Write_PRF( std::string fileName )
 {
 	FILE  *ff;
-	ff = fopen( cFile, "w" );
-	fprintf(ff,"%d\t#\t%s\n", N, cName );
+	ff = fopen( fileName.c_str(), "w" );
+	//fprintf(ff,"%d\t#\t%s\n", N, cName );
 	for( int i=0; i<N; i++ )
 		fprintf( ff, "%f %f %f %f\n", Xg[i], Zg[i], Xd[i], Zd[i] );
 	fclose(ff);
@@ -673,33 +650,31 @@ int AIRFOIL::Write_PRF( char *cFile )
 	return 0;
 }
 
-int AIRFOIL::Read_KOO( char *cFile )
+int AIRFOIL::Read_KOO( std::string fileName )
 {
-	return Read_DAT( cFile );
+	return Read_DAT( fileName );
 }
 
 void AIRFOIL::Print( FILE* f ) {
 
-    fprintf(f,"%d\t#\t%s\n", N, cName );
+    //fprintf(f,"%d\t#\t%s\n", N, cName );
 	for( int i=0; i<N; i++ )
 		fprintf(f,"%f %f %f %f\n", Xg[i], Zg[i], Xd[i], Zd[i] );
 
 }
 
-int AIRFOIL::Read_DAT_LEDNICER( char *cFile )	// by Anna Sima
+int AIRFOIL::Read_DAT_LEDNICER( std::string fileName )	// by Anna Sima
 {
-
 	FILE  *ff;
-	ff = fopen( cFile, "r" );
+	ff = fopen( fileName.c_str(), "r" );
 	if( ff == NULL )
 		{
-		sprintf( comment, "File: %s not found!\n", cFile );
-		fprintf( stderr, "File: %s not found!\n", cFile );
-		if(iGUI) alert( comment );
+		//sprintf( comment, "File: %s not found!\n", cFile );
+		fprintf( stderr, "File: %s not found!\n", fileName.c_str() );
 		return -1;
 		}
 //reads 1st line - profile name
-	ReadStr( ff, cName );
+	//ReadStr( ff, cName );
 
 	float f1, f2;
 	int rowsPos, rowsNeg;
@@ -731,43 +706,41 @@ int AIRFOIL::Read_DAT_LEDNICER( char *cFile )	// by Anna Sima
 	return 0;
 }
 
-int AIRFOIL::Read_DAT( char *cFile )
+int AIRFOIL::Read_DAT( std::string fileName )
 {
 	FILE  *ff;
-	ff = fopen( cFile, "r" );
+	ff = fopen( fileName.c_str(), "r" );
 	if( ff == NULL )
 		{
-		sprintf( comment, "File: %s not found!\n", cFile );
-		fprintf( stderr, "File: %s not found!\n", cFile );
-		if(iGUI) alert( comment );
+		//sprintf( comment.c_str(), "File: %s not found!\n", fileName.c_str() );
+		fprintf( stderr, "File: %s not found!\n", fileName.c_str() );
 		return -1;
 		}
 
-	Nf = nLines( ff ) - 1;
+	//Nf = nLines( ff ) - 1;
 	fclose( ff );
 	if( Nf < 6 )
 		{
-		sprintf( comment, "File: %s - the number of rows is too small!\n", cFile );
-		fprintf( stderr, "File: %s - the number of rows is too small!\n", cFile );
-		if(iGUI) alert( comment );
+		//sprintf( comment.c_str(), "File: %s - the number of rows is too small!\n", fileName.c_str() ); //!!!!!!!!!!!!!!!!!!!!!!!!
+		fprintf( stderr, "File: %s - the number of rows is too small!\n", fileName.c_str() );
 		return -1;
 		}
 		
 	Xf = new double[Nf+1];
 	Zf = new double[Nf+1];
-	ff = fopen( cFile, "r" );
-	ReadStr( ff, cName );
+	ff = fopen( fileName.c_str(), "r" );
+	//ReadStr( ff, cName );
 	if( iType == 2 )
 		{
-		int iLen = strlen( cName );
-		for( int i=iLen; i>0; i-- )if( cName[i] == ',' )cName[i] = '\0';
+		//int iLen = strlen( cName );
+		//for( int i=iLen; i>0; i-- )if( cName[i] == ',' )cName[i] = '\0';
 		}
 	for( int i=0; i<Nf; i++ )
 		if( iType == 2 )
 			{
-			ReadStr( ff, cc );
-			for( int ii=0; ii < (int)strlen( cc ); ii++)if( cc[ii] == ',' )cc[ii] = ' ';
-			sscanf( cc, "%lf %lf", &Xf[i], &Zf[i] );
+			//ReadStr( ff, cc );
+			//for( int ii=0; ii < (int)strlen( cc ); ii++)if( cc[ii] == ',' )cc[ii] = ' '; //!!!!!!!!!!!!!!!!!!!!!!
+			//sscanf( cc, "%lf %lf", &Xf[i], &Zf[i] ); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			}
 		else
 			if( ReadPar( ff, "%lf %lf", &Xf[i], &Zf[i] ) == EOF )
@@ -893,11 +866,11 @@ void AIRFOIL::XFOIL2PRF( void )
 
 }
 
-int AIRFOIL::Write_DAT( char *cFile )
+int AIRFOIL::Write_DAT( std::string fileName )
 {
 	FILE  *ff;
-	ff = fopen( cFile, "w" );
-	fprintf(ff,"%s\n", cName );
+	ff = fopen( fileName.c_str(), "w" );
+	fprintf(ff,"%s\n", fileName.c_str() );
 	for( int i=0; i<Nf; i++ )
 		fprintf( ff, " %f %f \n", Xf[i], Zf[i] );
 	fclose(ff);
@@ -1149,6 +1122,131 @@ bool AIRFOIL::check_order( double d1, double d2, int iFlag )
 		return ( d1 < d2 );
 	else
 		return ( d1 > d2 );
+}
+
+//	read line
+int AIRFOIL::ReadStr( FILE * stream, char *Par )
+{
+	ReadDummy( stream );
+
+	char cc;
+	int i;
+	
+	cc = fgetc( stream );
+	i = 0;
+	while ( cc != '\n' && cc != EOF && cc != 0xD ) 
+		{
+		Par[i] = cc;
+		cc = fgetc( stream);
+		i++;
+		}
+	if( cc == 0xD )
+		{
+		cc = fgetc( stream );
+		if( cc != 0xA )ungetc( cc, stream );
+		}
+	
+	Par[i]='\0';
+
+	int j;
+	for( j=i-1; j>0; j-- )
+		{
+		if( isblank(Par[j]) )
+			Par[j] = '\0';
+		else
+			break;
+		}
+		
+	char *cRob = new char[j+2];
+	std::strcpy( cRob, Par );
+	int i0 = 0;
+	for( int i=0; i<j+1; i++ )
+		{
+		if( isblank(cRob[i]) )
+			i0 = i+1;
+		else
+			break;
+		}
+	strcpy( Par, cRob+i0 );
+	delete [] cRob;
+	
+	if( cc == EOF )return EOF;
+	return strlen( Par );	
+}
+
+void AIRFOIL::ReadStrL( FILE * stream, char *Par , int *len)
+{
+	char cc;
+	int i;
+	
+	cc = fgetc( stream );
+	i = 0;
+	while ( cc != '\n' && cc != EOF && cc != 0xD ) 
+		{
+		Par[i] = cc;
+		cc = fgetc( stream);
+		i++;
+		}
+	if( cc == 0xD )
+		{
+		cc = fgetc( stream );
+		if( cc != 0xA )ungetc(cc,stream);
+		}
+
+	Par[i]='\0';
+	if( cc == EOF )Par[i+1]=EOF;
+	*len = i;
+		
+}
+
+//	read up to four values from one line with comment
+int AIRFOIL::ReadPar( FILE *stream, const char *Format, void *Par )
+{
+	ReadDummy( stream );
+	fscanf( stream, Format, Par );			/* read value    */
+	return ReadComm( stream );
+}
+
+int AIRFOIL::ReadPar( FILE *stream, const char *Format, void *Par1, void *Par2 )
+{
+	ReadDummy( stream );
+	fscanf( stream, Format, Par1, Par2 );
+	return ReadComm( stream );
+}
+
+int AIRFOIL::ReadPar( FILE *stream, const char *Format, void *Par1, void *Par2, void *Par3 )
+{
+	ReadDummy( stream );
+	fscanf( stream, Format, Par1, Par2, Par3 );
+	return ReadComm( stream );
+}
+
+int AIRFOIL::ReadPar( FILE * stream, const char * Format, void *Par1, void *Par2, void *Par3, void *Par4 )
+{
+	ReadDummy( stream );
+	fscanf( stream, Format, Par1, Par2, Par3, Par4 );
+	return ReadComm( stream );
+}
+
+int AIRFOIL::ReadComm( FILE *stream )
+{
+	char a;
+	while ( a = fgetc( stream ) , ( a != '\n' && a != EOF ) );		/* omit comment */
+	if( a == EOF )return EOF;
+	return 0;	
+}
+
+void AIRFOIL::ReadDummy( FILE *stream )
+{
+	unsigned char ucRes = 1;
+	while ( ucRes )
+		{
+		char ch = fgetc(stream);
+		ucRes = (ch == '#');
+		ungetc(ch,stream);
+		//fseek( stream, -1, SEEK_CUR );
+		if( ucRes )ReadComm( stream );
+		}
 }
 
 //

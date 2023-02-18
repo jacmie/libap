@@ -19,16 +19,14 @@
 /*                                                                   */
 /*                                                                   */
 
-#ifndef _AIRFOIL_H_
-#define _AIRFOIL_H_
+#ifndef AP_AIRFOIL_H
+#define AP_AIRFOIL_H
 
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
 
-#include "iofun.h"
-#include "memfun.h"
-#include "naca.h"
+#include "ap_naca.h"
 
 /** AIRFOIL class to manipulate the airfoil geometry or \n
     it can read geometry data from file (5 commonly used fromats)
@@ -37,7 +35,7 @@
     included to PanuklConfigLib 20.11.2020
 */
 
-class AIRFOIL : public IOFUN, public MEMFUN 
+class AIRFOIL
 {
 	// 0 - recognition by content, 1 - recognition by filename extention
 	int iReadType;	
@@ -47,19 +45,19 @@ class AIRFOIL : public IOFUN, public MEMFUN
 	double *Xrob, *Zrob;
 	
 	// read by format
-	int Read_PRF_0( char *cFile );
-	int Read_PRF_1( char *cFile );
-	int Read_KOO( char *cFile );
-	int Read_DAT( char *cFile );
-	int Read_DAT_LEDNICER( char *cFile );	// by Anna Sima
+	int Read_PRF_0( std::string fileName );
+	int Read_PRF_1( std::string fileName );
+	int Read_KOO( std::string fileName );
+	int Read_DAT( std::string fileName );
+	int Read_DAT_LEDNICER( std::string fileName );	// by Anna Sima
 
 	// methods to get file type by a file content or its extension (by Anna Sima)
-	void getiTypeByContent( char *cFile );
-	void getiTypeByExt( char *cFile );
+	void getiTypeByContent( std::string fileName );
+	void getiTypeByExt( std::string fileName );
 
 	// methods to provide a valid PRF format
-	int Write_PRF( char *cFile );
-	int Write_DAT( char *cFile );
+	int Write_PRF( std::string fileName );
+	int Write_DAT( std::string fileName );
 
 	// Transformations
 	void PRF2XFOIL( void );
@@ -82,18 +80,27 @@ class AIRFOIL : public IOFUN, public MEMFUN
 	void Sort1( int N, double dRA[] );
 	void Sort2( int iN, double dRA[], double dKOL[], int iOrder );
 	bool check_order( double d1, double d2, int iFlag = 0 );
-	
-	char cc[200];
-	char comment[512];
 
-        protected:
+	int ReadStr( FILE * stream, char *Par );
+	void ReadStrL( FILE * stream, char *Par , int *len);
+	int ReadPar( FILE *stream, const char *Format, void *Par );
+	int ReadPar( FILE *stream, const char *Format, void *Par1, void *Par2 );
+	int ReadPar( FILE *stream, const char *Format, void *Par1, void *Par2, void *Par3 );
+	int ReadPar( FILE * stream, const char * Format, void *Par1, void *Par2, void *Par3, void *Par4 );
+	int ReadComm( FILE *stream );
+	void ReadDummy( FILE *stream );
+	
+	std::string cc;
+	std::string comment;
+
+protected:
 	
 	int iRead;   ///< 0 - no data, 1 - data read succesfuly
 
 	int iGUI;    ///< GUI flag - messages displayed using wrapping function "alert"
 	void (*alert)( char *c ) = NULL;  ///< virtual fuction to display the message (if iGUI > 0)
 
-        public:
+public:
 	
 	int Nf;      ///< size of the vectors with geometry data - compatible with Xfoil
 	double *Xf;  ///< X coordinates (Nf points)
@@ -114,14 +121,14 @@ class AIRFOIL : public IOFUN, public MEMFUN
 	*/
 	int iType;
 	
-	char cName[100];                                   ///< filename (without path)
+	std::string fileName; ///< filename (without path)
 	
 	/// prints PRF file (default on stdout)
 	void Print( FILE* f=stdout );
 	/// reads profile file
-	int Read( char *cFile );
+	int Read( std::string fileName );
 	/// saves profile file - two types are available: \n 0 - native PANUKL (4 columns) \n 3 - SELIG (Xfoil compatible) \n other - no action
-	int Write( char *cFile, int iTyp=0 );
+	int Write( std::string fileName, int iTyp=0 );
 	
 	/// returns read status: 0 - no data, 1 - data read succesfuly
 	int ReadStatus( void ){ return iRead; };           
@@ -133,7 +140,7 @@ class AIRFOIL : public IOFUN, public MEMFUN
 	/// generates NACA airfoil given by long int value (e.g. iNACA = 23012), \n NN - the number of points that define the airfoil geometry
 	int ReadNaca( long int iNACA, int NN=100 );
 	/// generates NACA airfoil given by string (e.g. cNACA = "23012"), \n NN - the number of points that define the airfoil geometry
-	int ReadNaca( char* cNACA, int NN=100 );
+	int ReadNaca( std::string NACA, int NN=100 );
 	/// cleans local variables
 	void Clean( void );
 
@@ -141,6 +148,6 @@ class AIRFOIL : public IOFUN, public MEMFUN
 	~AIRFOIL( void ){ Clean(); };
 };
 
-#endif /*_AIRFOIL_H_*/
+#endif /*AP_AIRFOIL_H*/
 
 

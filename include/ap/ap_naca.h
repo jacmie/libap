@@ -29,14 +29,16 @@
  * included to PanuklConfigLib 20.11.2020
  */
 
-#ifndef _NACA_H_
-#define _NACA_H_
+#ifndef AP_NACA_H
+#define AP_NACA_H
 
 #include <cstdio>
 #include <cmath>
 #include <cctype>
 
-#include "memfun.h"
+#include <string>
+
+//#include "memfun.h"
 
 enum series { four_digit, five_digit };
 
@@ -65,9 +67,9 @@ struct NACA_AIRFOIL_DATA
 */
 
 
-class NACA_PROFILE : public MEMFUN
+class NACA_PROFILE
 {
-	private:
+private:
 	
 	double A[5];
 	
@@ -87,23 +89,23 @@ class NACA_PROFILE : public MEMFUN
 
 	void out_point(double x, double yc, double yt, double slope, int is_upper, FILE *fp);
 
-	void get_params(struct NACA_AIRFOIL_DATA *data, const char *name);
+	void get_params(struct NACA_AIRFOIL_DATA *data, std::string name);
 
 	void draw_surface(int ndiv, const struct NACA_AIRFOIL_DATA *data, FILE *fp);
 
-	char *check_name(char *name);
+	std::string check_name(std::string name);
 	
 	void ClearTabs( void );
 	void CreateTabs( int nn );
 
-	public:
+public:
 	
 	NACA_PROFILE(void){ X=Z=0; };
 	~NACA_PROFILE(void);
   
-	int generate_naca(char *name, int num, FILE *fp);  ///< generates naca airfoil coordinates (NN points) and stores it in file defined by stream "fp"
-	int generate_naca(char *file_name, char* cNACA);   ///< generates naca airfoil coordinates (NN points) and stores it in file "file_name"
-	int generate_naca(char* cNACA, int NN=100);        ///< generates naca airfoil coordinates (NN points) and stores it in vectores X and Z
+	int generate_naca(std::string name, int num, FILE *fp);  		///< generates naca airfoil coordinates (NN points) and stores it in file defined by stream "fp"
+	int generate_naca(std::string file_name, std::string NACA);   	///< generates naca airfoil coordinates (NN points) and stores it in file "file_name"
+	int generate_naca(std::string cNACA, int NN=100);        		///< generates naca airfoil coordinates (NN points) and stores it in vectores X and Z
 	
 	void setTE0( int TE = 1 )/** TE=1 forces the zero thickness trailing edge*/{ data.iTE0 = TE; };
 
@@ -112,4 +114,4 @@ class NACA_PROFILE : public MEMFUN
 	int N;		///< coordiantes vectors' size
 };
 
-#endif /*_NACA_H_*/
+#endif /*AP_NACA_H*/
