@@ -3,8 +3,8 @@
 
 #include <GL/gl.h>
 
-#include <matr3d.h>
-#include <vector3d.h>
+#include <ap_matrix.h>
+#include <ap_vector.h>
 
 /*
 	USE WITHIN:

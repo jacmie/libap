@@ -1,6 +1,7 @@
-include(GoogleTest)
+#include(GoogleTest)
 
 macro(build_test TESTNAME FILES LIBRARIES)
+    set(FILE_PATHS "")    
     foreach(FILE ${FILES})
         list(APPEND FILE_PATHS ${TESTNAME}/${FILE})
     endforeach()
@@ -19,7 +20,7 @@ macro(build_test TESTNAME FILES LIBRARIES)
     gtest_discover_tests(${TESTNAME})
 endmacro()
 
-#build_test(hello_test hello_test.cc ap)
+build_test(ap_basicMath_tests ap_basicMath_tests.cpp ap)
 build_test(ap_discretization_tests ap_discretization_tests.cpp ap)
 
 

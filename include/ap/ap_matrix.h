@@ -17,15 +17,13 @@
 /*                                                                   */
 /*                                                                   */
 
-/*! \file matr3d.h
-    \brief MATRIX_3x3 class and functions
-*/
+#ifndef AP_MATRIX_H
+#define AP_MATRIX_H
 
-#ifndef _MATR_3D_H_
-#define _MATR_3D_H_
+#include "ap_vector.h"
 
-#include "vector3d.h"
-
+namespace ap
+{
 ///
 /// \brief MATRIX_3x3 class and functions
 ///
@@ -143,11 +141,11 @@ MATRIX_3x3  operator  -( const MATRIX_3x3 &A                       );
 void        operator /=(       MATRIX_3x3 &A , const double     &s );
 
 /// Arithmetic operator - multiplication of matrix and vector
-VECTOR_3D   operator  *( const MATRIX_3x3 &A , const VECTOR_3D  &b );
+VECTOR   operator  *( const MATRIX_3x3 &A , const VECTOR  &b );
 /// Arithmetic operator - multiplication of vector and matrix
-VECTOR_3D   operator  *( const VECTOR_3D  &b , const MATRIX_3x3 &A );
+VECTOR   operator  *( const VECTOR  &b , const MATRIX_3x3 &A );
 /// Arithmetic operator - multiplication of vector and inverted matrix
-VECTOR_3D   operator  /( const VECTOR_3D  &b ,       MATRIX_3x3 &A );
+VECTOR   operator  /( const VECTOR  &b ,       MATRIX_3x3 &A );
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -165,5 +163,6 @@ void  v_fprintf( FILE *dest , char *name , const MATRIX_3x3 &mat );
 void  v_fprintf( FILE *dest , char *fmt , char *name , const MATRIX_3x3 &mat );
 /// print to std:ostream
 std::ostream & operator << ( std::ostream & out, const MATRIX_3x3 &mat );
+}
 
-#endif /*_MATR_3D_H_*/
+#endif /*AP_MATRIX_H*/
