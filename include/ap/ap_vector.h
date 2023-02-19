@@ -99,7 +99,17 @@ namespace ap
 		 * \param v - VECTOR to assign
 		 * \sa VECTOR(const VECTOR &v)
 		 */
-    	VECTOR & operator = ( const VECTOR &v );
+    	VECTOR & operator =( const VECTOR &v )
+		{
+    		if( this != &v )
+        	{
+        		x = v.x;
+        		y = v.y;
+        		z = v.z;
+    		}
+
+    		return *this;
+		}
 
 		//! Resize the VECTOR
 		/*!
@@ -385,53 +395,189 @@ namespace ap
 			return len; 
 		}
 
-		/// normalizes the vector to unit - coordiantes are divided by the vector value, returnes the vector value (length)
-    	double Normalize( void );
-		// sets coordinates from three variables    
-    	//void GetFrom( double xp, double yp, double zp ){ x = xp;   y = yp;   z = zp;  };
-		// sets coordinates from the aray
-    	//void GetFrom( double a[] )                     { x = a[0]; y = a[1]; z = a[2];};
+		//! Normalizes the vector to unit 
+		/*!
+		 * Coordiantes are divided by the vector value.\n
+		 * /return vector value (length)
+		 */
+		real Normalize( void )
+		{
+    		real dlg = this->Len();
+
+    		if( dlg > 0.0 )
+        	{
+        		x /= dlg;
+        		y /= dlg;
+        		z /= dlg;
+        	}
+
+    		return dlg;
+		}
                     
-		/// copies coordinates to three variables    
-    	void PutTo( double &xp, double &yp, double &zp ){ xp = x; yp = y; zp = z; };
-		/// copies coordinates to the array  
-    	void PutTo( double a[] )                   { a[0] = x; a[1] = y; a[2] = z;};
+		//! copies coordinates to three variables    
+    	void Get( real &xp, real &yp, real &zp ){ xp = x; yp = y; zp = z; };
+		//! copies coordinates to the array  
+    	void Get( real a[] )                   { a[0] = x; a[1] = y; a[2] = z;};
     
-		// adds coordinates to three variables    
-    	//void AddTo( double &xp, double &yp, double &zp ){ xp += x; yp += y; zp += z; };
-		// adds coordinates to the array 
-    	//void AddTo( double a[] )                   { a[0] += x; a[1] += y; a[2] += z;};
-    
-		/// determines if any coordinate of given vector is a not-a-number (NaN) value.
+		//! determines if any coordinate of given vector is a not-a-number (NaN) value.
     	bool Isnan( void ){ return std::isnan( x ) || std::isnan( y ) || std::isnan( z ); };
     
-		///	Rotating functions
-		/// rotates the vector relative to the X axis by an alpha[rad] angle 
-		void rotX( double alpha);
-		/// rotates the vector relative to the Y axis by an alpha[rad] angle 
-		void rotY( double alpha);
-		/// rotates the vector relative to the Z axis by an alpha[rad] angle 
-		void rotZ( double alpha);
-		/// rotates the vector relative to the X axis by an alpha[deg] angle (precise values for 0,90,180,270 deg)
-		void rotdX( double alfa);
-		/// rotates the vector relative to the Y  axis (shifted by dX longwise X) by an alpha[deg] angle (precise values for 0,90,180,270 deg)
-		void rotdY( double alfa, double dX = 0. );
-		/// rotates the vector relative to the Z axis by an alpha[deg] angle (precise values for 0,90,180,270 deg)
-		void rotdZ( double alfa);
+		//!	Rotating functions
+		//! rotates the vector relative to the X axis by an alpha[rad] angle 
+		void rotX( real alpha)
+		{
+    		real yy=y;
+    		real zz=z;
+    		y = yy*cos(alpha) - zz*sin(alpha);
+    		z = yy*sin(alpha) + zz*cos(alpha);
+		}
+
+		//! rotates the vector relative to the Y axis by an alpha[rad] angle 
+		void rotY( real alpha)
+		{
+    		real xx=x;
+    		real zz=z;
+    		x = zz*sin(alpha) + xx*cos(alpha);
+    		z = zz*cos(alpha) - xx*sin(alpha);
+		}
+
+		//! rotates the vector relative to the Z axis by an alpha[rad] angle 
+		void rotZ( real alpha)
+		{
+    		real xx=x;
+    		real yy=y;
+    		x = xx*cos(alpha) - yy*sin(alpha);
+    		y = xx*sin(alpha) + yy*cos(alpha);
+		}
+
+		//! rotates the vector relative to the X axis by an alpha[deg] angle (precise values for 0,90,180,270 deg)
+		void rotdX( real alfa)
+		{
+    		real yy = y;
+    		real zz = z;
+
+    		if (alfa==0.)
+	    	{
+	    	}
+    		else
+	    	{
+	    		if (alfa==90.)
+	        	{
+	        		y = -zz;
+	        		z = yy;
+	        	}
+	    		else
+	        	{
+	        		if (alfa==180.)
+	            	{
+	            		y = -yy;
+	            		z = -zz;
+	            	}
+	        		else
+	            	{
+	            		if (alfa==270.)
+		            	{
+		            		y = zz;
+		            		z = -yy;
+		            	}
+	            		else
+		            	{
+		            		alfa *= M_PI/180.0;
+		            		y = yy*cos(alfa) - zz*sin(alfa);
+		            		z = yy*sin(alfa) + zz*cos(alfa);
+		            	}
+	            	}
+	        	}
+	    	}
+		}
+
+		//! rotates the vector relative to the Y  axis (shifted by dX longwise X) by an alpha[deg] angle (precise values for 0,90,180,270 deg)
+		void rotdY( real alfa, real dX = 0. )
+		{
+    		real xx = x;
+    		real zz = z;
+    
+			if (alfa==0.)
+	    	{
+	    	}
+    		else
+	    	{
+	    		if (alfa==90.)
+	        	{
+	        		x =  zz + dX;
+	        		z = -xx + dX;
+	        	}
+	    		else
+	        	{
+	        		if (alfa==180.)
+	            	{
+	            		x = -xx + 2.*dX;
+	            		z = -zz;
+	            	}
+	        		else
+	            	{
+	            		if (alfa==270.)
+		            	{
+		            		x = -zz + dX;
+		            		z =  xx - dX;
+		            	}
+	            		else
+		            	{
+		            		alfa *= M_PI/180.0;
+		            		x = zz*sin(alfa) + (xx-dX)*cos(alfa) + dX;
+		            		z = zz*cos(alfa) - (xx-dX)*sin(alfa);
+		            	}
+	            	}
+	        	}
+	    	}
+		}
+
+		//! rotates the vector relative to the Z axis by an alpha[deg] angle (precise values for 0,90,180,270 deg)
+		void rotdZ( real alfa)
+		{
+    		real xx = x;
+    		real yy = y;
+	
+    		if (alfa==0.)
+	    	{
+	    	}
+    		else
+	    	{
+	    		if (alfa==90.)
+	        	{
+	        		x = -yy;
+	        		y = xx;
+	        	}
+	    		else
+	        	{
+	        		if (alfa==180.)
+	            	{
+	            		x = -xx;
+	            		y = -yy;
+	            	}
+	        		else
+	            	{
+	            		if (alfa==270.)
+		            	{
+		            		x = yy;
+		            		y = -xx;
+		            	}
+	            		else
+		            	{
+		            		alfa *= M_PI/180.0;
+		            		x = xx*cos(alfa) - yy*sin(alfa);
+		            		y = xx*sin(alfa) + yy*cos(alfa);
+		            	}
+	            	}
+	        	}
+	    	}
+		}
 
         // Member access.  The first operator[] returns a const reference
         // rather than a Real value.  This supports writing via standard file
         // operations that require a const pointer to data.
-        
-		real const& operator[](unsigned int i) const
-        {
-            return data[i];
-        }
-
-        real& operator[](unsigned int i)
-        {
-            return data[i];
-        }
+        real const& operator[](unsigned int i) const { return data[i]; }
+        real& operator[](unsigned int i) { return data[i]; }
 
 	private:
 		bool grFlag = 1; // global resize flag
@@ -447,155 +593,188 @@ namespace ap
 	};
 
 /*
-		// dot product
-		double operator *( const VECTOR &A , const VECTOR &B )
-		{
-  			return  ( A.x * B.x  +  A.y * B.y  +  A.z * B.z );
-		}
+/// Arithmetic operator - dot (scalar) product of two vectors
+real      operator  *( const VECTOR &A, const VECTOR &B );
+/// Arithmetic operator - cross (vector) product of two vectors
+VECTOR   operator  %( const VECTOR &A, const VECTOR &B );
+/// Arithmetic operator - product of vector and scalar
+VECTOR   operator  *( const VECTOR &A, const real    &s );
+/// Arithmetic operator - product of scalar and vector
+VECTOR   operator  *( const real    &s, const VECTOR &A );
+/// Arithmetic operator - vector divided by scalar (product of vector and reciprocal scalar)
+VECTOR   operator  /( const VECTOR &A, const real    &s );
+/// Arithmetic operator - sum of two vectors
+VECTOR   operator  +( const VECTOR &A, const VECTOR &B );
+/// Arithmetic operator - sum of two vectors
+VECTOR   operator  +( const VECTOR &A                     );
+/// Arithmetic operator - subtraction of two vectors (sum of A and -B)
+VECTOR   operator  -( const VECTOR &A, const VECTOR &B );
+/// Arithmetic operator - reverse of vector (-A)
+VECTOR   operator  -( const VECTOR &A                     );
+/// Arithmetic operator - coordinates products (AxBx, AyBy, AzBz)
+VECTOR   operator  &( const VECTOR &A, const VECTOR &B );
+/// Arithmetic operator - cross product assigment
+void        operator %=(       VECTOR &A, const VECTOR &B );
+/// Arithmetic operator - addition assigment
+void        operator +=(       VECTOR &A, const VECTOR &B );
+/// Arithmetic operator - subtraction assigment
+void        operator -=(       VECTOR &A, const VECTOR &B );
+/// Arithmetic operator - multiplication assigment (coordiante by coordiante)
+void        operator &=(       VECTOR &A, const VECTOR &B );
+/// Arithmetic operator - multiplication assigment
+void        operator *=(       VECTOR &A, const real    &s );
+/// Arithmetic operator - division assigment
+void        operator /=(       VECTOR &A, const real    &s );
 
-		// cross product
-		VECTOR operator %( const VECTOR &A , const VECTOR &B )
-		{
- 			VECTOR c;
+	// dot product
+	real operator *( const VECTOR &A , const VECTOR &B )
+	{
+  		return  ( A.x * B.x  +  A.y * B.y  +  A.z * B.z );
+	}
 
-  			c.x = A.y * B.z - A.z * B.y;
-  			c.y = A.z * B.x - A.x * B.z;
-  			c.z = A.x * B.y - A.y * B.x;
+	// cross product
+	VECTOR operator %( const VECTOR &A , const VECTOR &B )
+	{
+ 		VECTOR c;
 
- 			return c;
-		}
+  		c.x = A.y * B.z - A.z * B.y;
+  		c.y = A.z * B.x - A.x * B.z;
+  		c.z = A.x * B.y - A.y * B.x;
 
-		// scalar mult
-		VECTOR operator *( const VECTOR &A , const double &s )
-		{
- 			VECTOR c;
+ 		return c;
+	}
 
-  			c.x = A.x * s;
-  			c.y = A.y * s;
-  			c.z = A.z * s;
+	// scalar mult
+	VECTOR operator *( const VECTOR &A , const real &s )
+	{
+ 		VECTOR c;
 
- 			return c;
-		}
+  		c.x = A.x * s;
+  		c.y = A.y * s;
+  		c.z = A.z * s;
 
-		VECTOR operator *( const double &s , const VECTOR &A )
-		{
- 			VECTOR c;
+ 		return c;
+	}
 
-  			c.x = A.x * s;
-  			c.y = A.y * s;
-  			c.z = A.z * s;
+	VECTOR operator *( const real &s , const VECTOR &A )
+	{
+ 		VECTOR c;
 
- 			return c;
-		}
+  		c.x = A.x * s;
+  		c.y = A.y * s;
+  		c.z = A.z * s;
 
-		VECTOR operator /( const VECTOR &A , const double &s )
-		{
- 			VECTOR c;
+ 		return c;
+	}
 
-  			c.x = A.x / s;
-  			c.y = A.y / s;
-  			c.z = A.z / s;
+	VECTOR operator /( const VECTOR &A , const real &s )
+	{
+ 		VECTOR c;
 
- 			return c;
-		}
+  		c.x = A.x / s;
+  		c.y = A.y / s;
+  		c.z = A.z / s;
 
-		// sum
-		VECTOR operator +( const VECTOR &A , const VECTOR &B )
-		{
- 			VECTOR c;
+ 		return c;
+	}
 
-  			c.x = A.x + B.x;
-  			c.y = A.y + B.y;
-  			c.z = A.z + B.z;
+	// sum
+	VECTOR operator +( const VECTOR &A , const VECTOR &B )
+	{
+ 		VECTOR c;
 
- 			return c;
-		}
+  		c.x = A.x + B.x;
+  		c.y = A.y + B.y;
+  		c.z = A.z + B.z;
 
-		VECTOR operator +( const VECTOR &A )
-		{
- 			VECTOR c;
+ 		return c;
+	}
 
-  			c.x = A.x;
-  			c.y = A.y;
-  			c.z = A.z;
+	VECTOR operator +( const VECTOR &A )
+	{
+ 		VECTOR c;
 
- 			return c;
-		}
+  		c.x = A.x;
+  		c.y = A.y;
+  		c.z = A.z;
 
-		VECTOR operator -( const VECTOR &A , const VECTOR &B )
-		{
- 			VECTOR c;
+ 		return c;
+	}
 
-  			c.x = A.x - B.x;
-  			c.y = A.y - B.y;
-  			c.z = A.z - B.z;
+	VECTOR operator -( const VECTOR &A , const VECTOR &B )
+	{
+ 		VECTOR c;
 
- 			return c;
-		}
+  		c.x = A.x - B.x;
+  		c.y = A.y - B.y;
+  		c.z = A.z - B.z;
 
-		VECTOR operator -( const VECTOR &A )
-		{
- 			VECTOR c;
+ 		return c;
+	}
 
-  			c.x = -A.x;
-  			c.y = -A.y;
-  			c.z = -A.z;
+	VECTOR operator -( const VECTOR &A )
+	{
+ 		VECTOR c;
 
- 			return c;
-		}
+  		c.x = -A.x;
+  		c.y = -A.y;
+  		c.z = -A.z;
 
-		// Shorthand Ops
+ 		return c;
+	}
 
-		void operator %=( VECTOR &A , const VECTOR &B )
-		{
- 			VECTOR tmp;
+	// Shorthand Ops
 
-  			tmp.x = A.y * B.z - A.z * B.y;
-  			tmp.y = A.z * B.x - A.x * B.z;
-  			tmp.z = A.x * B.y - A.y * B.x;
+	void operator %=( VECTOR &A , const VECTOR &B )
+	{
+ 		VECTOR tmp;
 
-  			A.x = tmp.x;
-  			A.y = tmp.y;
-  			A.z = tmp.z;
-		}
+  		tmp.x = A.y * B.z - A.z * B.y;
+  		tmp.y = A.z * B.x - A.x * B.z;
+  		tmp.z = A.x * B.y - A.y * B.x;
 
-		void operator +=( VECTOR &A , const VECTOR &B )
-		{
-  			A.x += B.x;
-  			A.y += B.y;
-  			A.z += B.z;
-		}
+  		A.x = tmp.x;
+  		A.y = tmp.y;
+  		A.z = tmp.z;
+	}
 
-		void operator -=( VECTOR &A , const VECTOR &B )
-		{
-  			A.x -= B.x;
-  			A.y -= B.y;
-  			A.z -= B.z;
-		}
+	void operator +=( VECTOR &A , const VECTOR &B )
+	{
+  		A.x += B.x;
+  		A.y += B.y;
+  		A.z += B.z;
+	}
 
-		void operator &=( VECTOR &A , const VECTOR &B )
-		{
-  			A.x *= B.x;
-  			A.y *= B.y;
-  			A.z *= B.z;
-		}
+	void operator -=( VECTOR &A , const VECTOR &B )
+	{
+  		A.x -= B.x;
+  		A.y -= B.y;
+  		A.z -= B.z;
+	}
 
-		void operator *=( VECTOR &A , const double &s )
-		{
-  			A.x *= s;
-  			A.y *= s;
-  			A.z *= s;
-		}
+	void operator &=( VECTOR &A , const VECTOR &B )
+	{
+  		A.x *= B.x;
+  		A.y *= B.y;
+  		A.z *= B.z;
+	}
 
-		void operator /=( VECTOR &A , const double  &s )
-		{
-  			A.x /= s;
-  			A.y /= s;
-  			A.z /= s;
-		}
-		*/
+	void operator *=( VECTOR &A , const real &s )
+	{
+  		A.x *= s;
+  		A.y *= s;
+  		A.z *= s;
+	}
+
+	void operator /=( VECTOR &A , const real  &s )
+	{
+  		A.x /= s;
+  		A.y /= s;
+  		A.z /= s;
+	}
+	*/
 		
-	// compare two vectors
+	//! Boolean operator - compares two vectors - true if all appropriate coordinates are equal
     template <typename real>
 	bool operator ==( const VECTOR <real> &A, const VECTOR <real> &B )
 	{
@@ -619,345 +798,52 @@ namespace ap
 		//return ( A.x == B.x && A.y == B.y && A.z == B.z );
 		return 1;
 	}
-	
-    	//  Methods of VECTOR class
-/*
-VECTOR &VECTOR::operator= ( const VECTOR &a )
-{
-    if( this != &a )
-        {
-        x = a.x;
-        y = a.y;
-        z = a.z;
-    }
 
-    return *this;
-}
-
-double VECTOR::Normalize( void )
-{
-    double dlg = this->Len();
-
-    if( dlg > 0.0 )
-        {
-        x /= dlg;
-        y /= dlg;
-        z /= dlg;
-        }
-
-    return dlg;
-}
-
-//	roatation functions of VECTOR classs
-
-void VECTOR::rotX( double alfa)
-{
-    double yy=y;
-    double zz=z;
-    y = yy*cos(alfa) - zz*sin(alfa);
-    z = yy*sin(alfa) + zz*cos(alfa);
-}
-
-void VECTOR::rotY( double alfa)
-{
-    double xx=x;
-    double zz=z;
-    x = zz*sin(alfa) + xx*cos(alfa);
-    z = zz*cos(alfa) - xx*sin(alfa);
-}
-
-void VECTOR::rotZ( double alfa)
-{
-    double xx=x;
-    double yy=y;
-    x = xx*cos(alfa) - yy*sin(alfa);
-    y = xx*sin(alfa) + yy*cos(alfa);
-}
-	
-void VECTOR::rotdX( double alfa )
-{
-    double yy = y;
-    double zz = z;
-
-    if (alfa==0.)
-	    {
-	    }
-    else
-	    {
-	    if (alfa==90.)
-	        {
-	        y = -zz;
-	        z = yy;
-	        }
-	    else
-	        {
-	        if (alfa==180.)
-	            {
-	            y = -yy;
-	            z = -zz;
-	            }
-	        else
-	            {
-	            if (alfa==270.)
-		            {
-		            y = zz;
-		            z = -yy;
-		            }
-	            else
-		            {
-		            alfa *= M_PI/180.0;
-		            y = yy*cos(alfa) - zz*sin(alfa);
-		            z = yy*sin(alfa) + zz*cos(alfa);
-		            }
-	            }
-	        }
-	    }
-}
-	
-void VECTOR::rotdY( double alfa, double dX )
-{
-    double xx = x;
-    double zz = z;
-    
-	if (alfa==0.)
-	    {
-	    }
-    else
-	    {
-	    if (alfa==90.)
-	        {
-	        x =  zz + dX;
-	        z = -xx + dX;
-	        }
-	    else
-	        {
-	        if (alfa==180.)
-	            {
-	            x = -xx + 2.*dX;
-	            z = -zz;
-	            }
-	        else
-	            {
-	            if (alfa==270.)
-		            {
-		            x = -zz + dX;
-		            z =  xx - dX;
-		            }
-	            else
-		            {
-		            alfa *= M_PI/180.0;
-		            x = zz*sin(alfa) + (xx-dX)*cos(alfa) + dX;
-		            z = zz*cos(alfa) - (xx-dX)*sin(alfa);
-		            }
-	            }
-	        }
-	    }
-}
-	
-void VECTOR::rotdZ( double alfa )
-{
-    double xx = x;
-    double yy = y;
-	
-    if (alfa==0.)
-	    {
-	    }
-    else
-	    {
-	    if (alfa==90.)
-	        {
-	        x = -yy;
-	        y = xx;
-	        }
-	    else
-	        {
-	        if (alfa==180.)
-	            {
-	            x = -xx;
-	            y = -yy;
-	            }
-	        else
-	            {
-	            if (alfa==270.)
-		            {
-		            x = yy;
-		            y = -xx;
-		            }
-	            else
-		            {
-		            alfa *= M_PI/180.0;
-		            x = xx*cos(alfa) - yy*sin(alfa);
-		            y = xx*sin(alfa) + yy*cos(alfa);
-		            }
-	            }
-	        }
-	    }
-}*/
-
-
-
-///////////////////////////////////////////////////////////////////
-/*
-VECTOR  VECTOR_3__E0( void )
-{
-  return VECTOR( 0.0 , 0.0 , 0.0 );
-}
-
-VECTOR  VECTOR_3__E1( void )
-{
-  return VECTOR( 1.0 , 1.0 , 1.0 );
-}
-
-VECTOR  VECTOR_3__Ex( void )
-{
-  return VECTOR( 1.0 , 0.0 , 0.0 );
-}
-
-VECTOR  VECTOR_3__Ey( void )
-{
-  return VECTOR( 0.0 , 1.0 , 0.0 );
-}
-
-VECTOR  VECTOR_3__Ez( void )
-{
-  return VECTOR( 0.0 , 0.0 , 1.0 );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-void  v_printf( char *name , const VECTOR &vec )
-{
-  printf( "%s=[%19.11f,%19.11f,%19.11f]\n", name , vec.x , vec.y , vec.z );
-}
-
-void  v_printf( char *fmt , char *name , const VECTOR &vec )
-{
-  printf( fmt , name , vec.x , vec.y , vec.z );
-}
-
-void  v_sprintf( char *dest , char *name , const VECTOR &vec )
-{
-  sprintf(dest,"%s=[%19.11f,%19.11f %19.11f]", name , vec.x , vec.y , vec.z );
-}
-
-void  v_sprintf( char *dest , char *fmt , char *name , const VECTOR &vec )
-{
-  sprintf(dest , fmt , name , vec.x , vec.y , vec.z );
-}
-
-void  v_fprintf( FILE *dest , char *name , const VECTOR &vec )
-{
-  fprintf(dest,"%s=[%19.11f,%19.11f %19.11f]\n", name , vec.x , vec.y , vec.z );
-}
-
-void  v_fprintf( FILE *dest , char *fmt , char *name , const VECTOR &vec )
-{
-  fprintf( dest , fmt , name , vec.x , vec.y , vec.z );
-}*/
-
-template <typename real>
-std::ostream& operator << ( std::ostream &out, const VECTOR <real> &vec )
-{
-  	//out << "["   << vec.x << " , " << vec.y << " , " << vec.z << "]";
-	out << "[";
-	for(unsigned int i=0; i<vec.Size(); i++)
+	//! print to std:ostream
+	template <typename real>
+	std::ostream& operator << ( std::ostream &out, const VECTOR <real> &vec )
 	{
-		out << std::setw(12) << vec[i];
+  		//out << "["   << vec.x << " , " << vec.y << " , " << vec.z << "]";
+		out << "[";
+		for(unsigned int i=0; i<vec.Size(); i++)
+		{
+			out << std::setw(12) << vec[i];
+		}
+		out << "]";
+  		return out;
 	}
-	out << "]";
-  	return out;
-}
 
-//**************************************************************************
-/*
-void vout (FILE *ff,VECTOR vec)
-{
-    fprintf (ff,"% 12.7f % 12.7f % 12.7f",vec.x,vec.y,vec.z);
-}
+	/*
+	//! returns vector (0,0,0)
+	VECTOR  VECTOR_3__E0( void )
+	{
+  		return VECTOR( 0.0 , 0.0 , 0.0 );
+	}
 
-//**************************************************************************
+	//! returns vector (1,1,1)
+	VECTOR  VECTOR_3__E1( void )
+	{
+  		return VECTOR( 1.0 , 1.0 , 1.0 );
+	}
 
-void voutn (FILE *ff,VECTOR vec)
-{
-    fprintf (ff,"% 12.7f % 12.7f % 12.7f",vec.x,-vec.y,vec.z);
-}
+	//! returns vector (1,0,0)
+	VECTOR  VECTOR_3__Ex( void )
+	{
+  		return VECTOR( 1.0 , 0.0 , 0.0 );
+	}
 
-//**************************************************************************
+	//! returns vector (0,1,0)
+	VECTOR  VECTOR_3__Ey( void )
+	{
+  		return VECTOR( 0.0 , 1.0 , 0.0 );
+	}
 
-void vout0 (FILE *ff,VECTOR vec)
-{
-    fprintf (ff,"% 12.7f % 12.7f % 12.7f",vec.x,0.,vec.z);
-}
-
-/// Arithmetic operator - dot (scalar) product of two vectors
-double      operator  *( const VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - cross (vector) product of two vectors
-VECTOR   operator  %( const VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - product of vector and scalar
-VECTOR   operator  *( const VECTOR &A, const double    &s );
-/// Arithmetic operator - product of scalar and vector
-VECTOR   operator  *( const double    &s, const VECTOR &A );
-/// Arithmetic operator - vector divided by scalar (product of vector and reciprocal scalar)
-VECTOR   operator  /( const VECTOR &A, const double    &s );
-/// Arithmetic operator - sum of two vectors
-VECTOR   operator  +( const VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - sum of two vectors
-VECTOR   operator  +( const VECTOR &A                     );
-/// Arithmetic operator - subtraction of two vectors (sum of A and -B)
-VECTOR   operator  -( const VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - reverse of vector (-A)
-VECTOR   operator  -( const VECTOR &A                     );
-/// Arithmetic operator - coordinates products (AxBx, AyBy, AzBz)
-VECTOR   operator  &( const VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - cross product assigment
-void        operator %=(       VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - addition assigment
-void        operator +=(       VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - subtraction assigment
-void        operator -=(       VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - multiplication assigment (coordiante by coordiante)
-void        operator &=(       VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - multiplication assigment
-void        operator *=(       VECTOR &A, const double    &s );
-/// Arithmetic operator - division assigment
-void        operator /=(       VECTOR &A, const double    &s );
-/// Boolean operator - compares two vectors - true if all appropriate coordinates are equal
-bool        operator ==( const VECTOR &A, const VECTOR &B );
-
-////////////////////////////////////////////////////////////////////////////
-
-/// print to stdout name and vector components
-void  v_printf( char *name , const VECTOR &vec );
-/// print to stdout name and vector components according to given format "fmt"
-void  v_printf( char *fmt , char *name , const VECTOR &vec );
-/// print to string "dest" name and vector components
-void  v_sprintf( char *dest , char *name , const VECTOR &vec );
-/// print to string "dest" name and vector components according to given format "fmt"
-void  v_sprintf( char *dest , char *fmt , char *name , const VECTOR &vec );
-/// print to stream "dest" name and vector components
-void  v_fprintf( FILE *dest , char *name , const VECTOR &vec );
-/// print to sstream "dest" name and vector components according to given format "fmt"
-void  v_fprintf( FILE *dest , char *fmt , char *name , const VECTOR &vec );
-/// print to std:ostream
-std::ostream & operator << ( std::ostream & out, const VECTOR & v );
-
-/// printf vector components (x,y,z) to stream ff
-void vout  (FILE *ff, VECTOR vec);
-/// printf vector components (x,-y,z) to stream ff
-void voutn (FILE *ff, VECTOR vec);
-/// printf vector components (x,0,z) to stream ff
-void vout0 (FILE *ff, VECTOR vec);
-
-/// returns vector (0,0,0)
-VECTOR  VECTOR_3__E0( void );
-/// returns vector (1,1,1)
-VECTOR  VECTOR_3__E1( void );
-/// returns vector (1,0,0)
-VECTOR  VECTOR_3__Ex( void );
-/// returns vector (0,1,0)
-VECTOR  VECTOR_3__Ey( void );
-/// returns vector (0,0,1)
-VECTOR  VECTOR_3__Ez( void );*/
+	//! returns vector (0,0,1)
+	VECTOR  VECTOR_3__Ez( void )
+	{
+  		return VECTOR( 0.0 , 0.0 , 1.0 );
+	}
+	*/
 }
 
 #endif /*AP_VECTOR_H*/
