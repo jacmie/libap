@@ -117,7 +117,7 @@ namespace ap
 		 * \param n - new size of the VECTOR
 		 * \sa VECTOR(const VECTOR &v)
 		 */
-		void Resize(unsigned int n) { data.resize(n); }
+		void Resize(const unsigned int n) { data.resize(n); }
 
 		//! Resize and assign the value to the VECTOR
 		/*!
@@ -127,7 +127,7 @@ namespace ap
 		 * \param n - new size of the VECTOR
 		 * \param val - value assigned to all elements of the VECTOR
 		 */
-		void Assign(unsigned int n, real val) { data.assign(n, val); Link(); }
+		void Assign(const unsigned int n, const real val) { data.assign(n, val); Link(); }
 		
 		//! Resize and assign the value to the VECTOR
 		/*!
@@ -159,7 +159,7 @@ namespace ap
 		 * \note Resize() and Assign() methods don't depend on the resizing flags.
 		 * \param val - value witch is set to the grFlag
 		 */
-    	void SetGolobalResizeFlag( bool val ) {	grFlag = val; }
+    	void SetGolobalResizeFlag(const bool val) {	grFlag = val; }
 
 		//! Set the VECTOR elements value
 		/*!
@@ -167,7 +167,7 @@ namespace ap
 		 * values are assigned matching the first four values of the [data](@ref data).
 		 * \param val - value witch is set for all elements of the VECTOR
 		 */
-    	void Set( real val ) 
+    	void Set(const real val) 
 		{ 
 			data.assign(data.size(), val); 
 			Link();
@@ -184,7 +184,7 @@ namespace ap
 		 * \sa SetGolobalResizeFlag(bool val)
 		 * \sa Assign(unsigned int n, real val)
 		 */
-    	bool Set( unsigned int n, real val, bool rFlag=1 ) 
+    	bool Set(const unsigned int n, const real val, const bool rFlag=1 ) 
 		{ 
 			if( !(grFlag && rFlag) )	
 			{
@@ -206,7 +206,7 @@ namespace ap
 		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
 		 * \sa SetGolobalResizeFlag(bool val)
 		 */
-    	bool Set( const VECTOR &v, bool rFlag=1 ) 
+    	bool Set(const VECTOR &v, const bool rFlag=1) 
 		{ 
 			if( !(grFlag && rFlag) )	
 			{
@@ -228,7 +228,7 @@ namespace ap
 		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
 		 * \sa SetGolobalResizeFlag(bool val)
 		 */
-    	bool Set( const std::vector <real> &v, bool rFlag=1 ) 
+    	bool Set(const std::vector <real> &v, const bool rFlag=1) 
 		{
 			if( !(grFlag && rFlag) )	
 			{
@@ -251,7 +251,7 @@ namespace ap
 		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
 		 * \sa SetGolobalResizeFlag(bool val)
 		 */
-    	bool Set( unsigned int n, real a[], bool rFlag=1 ) 
+    	bool Set(const unsigned int n, const real a[], const bool rFlag=1 ) 
 		{ 
 			if( !(grFlag && rFlag) )	
 			{
@@ -275,7 +275,7 @@ namespace ap
 		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
 		 * \sa SetGolobalResizeFlag(bool val)
 		 */
-    	bool Set2D( real xp, real yp, bool rFlag=1 ) 	
+    	bool Set2D(const real xp, const real yp, const bool rFlag=1) 	
 		{ 
 			if( !(grFlag && rFlag) )	
 			{
@@ -301,7 +301,7 @@ namespace ap
 		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
 		 * \sa SetGolobalResizeFlag(bool val)
 		 */
-    	bool Set3D( real xp, real yp, real zp, bool rFlag=1 ) 	
+    	bool Set3D(const real xp, const real yp, const real zp, const bool rFlag=1 ) 	
 		{ 
 			if( !(grFlag && rFlag) )	
 			{
@@ -329,7 +329,7 @@ namespace ap
 		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
 		 * \sa SetGolobalResizeFlag(bool val)
 		 */
-    	bool Set4D( real xp, real yp, real zp, real wp, bool rFlag=1 ) 	
+    	bool Set4D(const real xp, const real yp, const real zp, const real wp, const bool rFlag=1 ) 	
 		{ 
 			if( !(grFlag && rFlag) )	
 			{
@@ -350,7 +350,7 @@ namespace ap
 		/*!
 		 * Computed from all VECTOR elements as: sqrt(x*x + y*y + z*z + ...)
 		 */
-    	real Len( void ) const 
+    	real Len(void) const 
 		{
 			real len=0;
 			for(unsigned int i=0; i<Size(); i++) { len += data[i]*data[i]; }
@@ -361,7 +361,7 @@ namespace ap
 		/*!
 		 * Computed as: sqrt(x*x + y*y)
 		 */
-    	real LenXY( void ) const 
+    	real LenXY(void) const 
 		{ 
 			return sqrt( x*x + y*y ); 
 		}  
@@ -370,7 +370,7 @@ namespace ap
 		/*!
 		 * Computed as: sqrt(x*x + z*z)
 		 */
-    	real LenXZ( void ) const 
+    	real LenXZ(void) const 
 		{ 
 			return sqrt( x*x + z*z ); 
 		}  
@@ -379,7 +379,7 @@ namespace ap
 		/*!
 		 * Computed as: sqrt(y*y + z*z)
 		 */
-    	real LenYZ( void ) const 
+    	real LenYZ(void) const 
 		{ 
 			return sqrt( y*y + z*z ); 
 		}  
@@ -388,7 +388,7 @@ namespace ap
 		/*!
 		 * Computed from all VECTOR elements as: (x*x + y*y + z*z + ...)
 		 */
-    	real Sq( void ) const 
+    	real Sq(void) const 
 		{ 
 			real len=0;
 			for(unsigned int i=0; i<Size(); i++) { len += data[i]*data[i]; }
@@ -400,7 +400,7 @@ namespace ap
 		 * Coordiantes are divided by the vector value.\n
 		 * /return vector value (length)
 		 */
-		real Normalize( void )
+		real Norm(void)
 		{
     		real dlg = this->Len();
 
@@ -413,17 +413,127 @@ namespace ap
 
     		return dlg;
 		}
-                    
-		//! copies coordinates to three variables    
-    	void Get( real &xp, real &yp, real &zp ){ xp = x; yp = y; zp = z; };
-		//! copies coordinates to the array  
-    	void Get( real a[] )                   { a[0] = x; a[1] = y; a[2] = z;};
+                   
+		//! Get values from the VECTOR to other VECTOR 
+		/*!
+		 * \param v - VECTOR to witch current VECTOR is coppied
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR is allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags
+		 * \sa SetGolobalResizeFlag(bool val)
+		 */
+		bool Get(VECTOR <real> &v, const bool rFlag=1)
+		{
+			if( !(grFlag && rFlag) )	
+			{
+				//resizing not allowed - compare vector sizes 
+				if(data.size() != v.Size()) return 1;
+			}
+
+			v.data = data;
+			v.Link();
+			return 0;
+		}
+		
+		//! Get values from standard vector
+		/*!
+		 * \param v - std::vector to witch the VECTOR values are copied
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the std::vector is allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags
+		 * \sa SetGolobalResizeFlag(bool val)
+		 */
+    	bool Get(std::vector <real> &v, const bool rFlag=1) 
+		{
+			if( !(grFlag && rFlag) )	
+			{
+				//resizing not allowed - compare vector sizes 
+				if(data.size() != v.size()) return 1;
+			}
+
+			v = data;
+			return 0;
+		};
+		
+		//! Get values to array
+		/*!
+		 * \param n - size of the array
+		 * \param a - array to witch the VECTOR values are copied
+		 * \return Returns 0 on success, or 1 on failure if the array and VECTOR size are not equal. 
+		 */
+    	bool Get(const unsigned int n, real a[]) 
+		{ 
+			if(data.size() != n) return 1;
+			
+			for(unsigned int i=0; i<n; i++) { a[i] = data[i]; }
+			return 0;
+		}
+
+		//! Get to 2D values
+		/*!
+		 * \param xp - value copied from the first VECTOR element
+		 * \param yp - value copied from the second VECTOR element
+		 * \return Returns 0 on success, or 1 if the VECTOR size is not equal to 2
+		 */
+    	bool Get2D(real &xp, real &yp) 	
+		{ 
+			if(data.size() != 2) return 1;
+		
+			xp = data[0];
+			yp = data[1];
+			return 0;
+		};
+
+		//! Get to 3D values
+		/*!
+		 * \param xp - value copied from the first VECTOR element
+		 * \param yp - value copied from the second VECTOR element
+		 * \param zp - value copied from the third VECTOR element
+		 * \return Returns 0 on success, or 1 if the VECTOR size is not equal to 3
+		 */
+    	bool Get3D(real &xp, real &yp, real &zp) 	
+		{ 
+			if(data.size() != 3) return 1;
+		
+			xp = data[0];
+			yp = data[1];
+			zp = data[2];
+			return 0;
+		};
+
+		//! Get to 4D values
+		/*!
+		 * \param xp - value copied from the first VECTOR element
+		 * \param yp - value copied from the second VECTOR element
+		 * \param zp - value copied from the third VECTOR element
+		 * \param wp - value copied from the fourth VECTOR element
+		 * \return Returns 0 on success, or 1 if the VECTOR size is not equal to 4
+		 */
+    	bool Get4D(real &xp, real &yp, real &zp, real &wp) 	
+		{ 
+			if(data.size() != 4) return 1;
+		
+			xp = data[0];
+			yp = data[1];
+			zp = data[2];
+			wp = data[3];
+			return 0;
+		};
     
-		//! determines if any coordinate of given vector is a not-a-number (NaN) value.
-    	bool Isnan( void ){ return std::isnan( x ) || std::isnan( y ) || std::isnan( z ); };
+		//! Determines if any element of the vector is a not-a-number (NaN) value
+    	bool IsNan(void)
+		{
+			for(unsigned int i=0; i<Size(); i++)
+			{
+				if( std::isnan(data[i]) ) 
+				{
+					std::clog << "Element: " << i << " of the vector is NaN!!!" << std::endl;
+					return 1;
+				}
+			}
+
+			return 0;
+		}
     
-		//!	Rotating functions
-		//! rotates the vector relative to the X axis by an alpha[rad] angle 
+		//! Rotates the vector relative to the X axis by an alpha[rad] angle 
 		void rotX( real alpha)
 		{
     		real yy=y;
@@ -432,7 +542,7 @@ namespace ap
     		z = yy*sin(alpha) + zz*cos(alpha);
 		}
 
-		//! rotates the vector relative to the Y axis by an alpha[rad] angle 
+		//! Rotates the vector relative to the Y axis by an alpha[rad] angle 
 		void rotY( real alpha)
 		{
     		real xx=x;
@@ -441,7 +551,7 @@ namespace ap
     		z = zz*cos(alpha) - xx*sin(alpha);
 		}
 
-		//! rotates the vector relative to the Z axis by an alpha[rad] angle 
+		//! Rotates the vector relative to the Z axis by an alpha[rad] angle 
 		void rotZ( real alpha)
 		{
     		real xx=x;
@@ -450,7 +560,7 @@ namespace ap
     		y = xx*sin(alpha) + yy*cos(alpha);
 		}
 
-		//! rotates the vector relative to the X axis by an alpha[deg] angle (precise values for 0,90,180,270 deg)
+		//! Rotates the vector relative to the X axis by an alpha[deg] angle (precise values for 0,90,180,270 deg)
 		void rotdX( real alfa)
 		{
     		real yy = y;
@@ -491,7 +601,7 @@ namespace ap
 	    	}
 		}
 
-		//! rotates the vector relative to the Y  axis (shifted by dX longwise X) by an alpha[deg] angle (precise values for 0,90,180,270 deg)
+		//! Rotates the vector relative to the Y  axis (shifted by dX longwise X) by an alpha[deg] angle (precise values for 0,90,180,270 deg)
 		void rotdY( real alfa, real dX = 0. )
 		{
     		real xx = x;
@@ -532,7 +642,7 @@ namespace ap
 	    	}
 		}
 
-		//! rotates the vector relative to the Z axis by an alpha[deg] angle (precise values for 0,90,180,270 deg)
+		//! Rotates the vector relative to the Z axis by an alpha[deg] angle (precise values for 0,90,180,270 deg)
 		void rotdZ( real alfa)
 		{
     		real xx = x;
