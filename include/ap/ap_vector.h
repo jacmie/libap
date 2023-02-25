@@ -62,7 +62,7 @@ namespace ap
 		/*!
 		 * \param n - size of the vector
 		 */
-    	VECTOR( unsigned int n ) { Assign(n, 0); }
+    	VECTOR( unsigned int n ) { Assign(n, 1.1); }
 		
 		//! Fill constructor
 		/*!
@@ -103,13 +103,31 @@ namespace ap
 		{
     		if( this != &v )
         	{
-        		x = v.x;
-        		y = v.y;
-        		z = v.z;
+				data = v.data;
+				Link();
     		}
 
     		return *this;
 		}
+		
+		//! Assignment operator
+		/*!
+		 * \param v - VECTOR to assign
+		 * \sa VECTOR(const VECTOR &v)
+		 */
+		//!!!!!!!!!!!!!!!!!!!!!!!!!
+		/*
+    	VECTOR.x & operator =( const VECTOR &v.x )
+		{
+			/ *
+    		if( this != &v )
+        	{
+				data = v.data;
+				Link();
+    		}* /
+
+    		return *this;
+		}*/
 
 		//! Resize the VECTOR
 		/*!
@@ -533,164 +551,11 @@ namespace ap
 			return 0;
 		}
     
-		//! Rotates the vector relative to the X axis by an alpha[rad] angle 
-		void rotX( real alpha)
-		{
-    		real yy=y;
-    		real zz=z;
-    		y = yy*cos(alpha) - zz*sin(alpha);
-    		z = yy*sin(alpha) + zz*cos(alpha);
-		}
-
-		//! Rotates the vector relative to the Y axis by an alpha[rad] angle 
-		void rotY( real alpha)
-		{
-    		real xx=x;
-    		real zz=z;
-    		x = zz*sin(alpha) + xx*cos(alpha);
-    		z = zz*cos(alpha) - xx*sin(alpha);
-		}
-
-		//! Rotates the vector relative to the Z axis by an alpha[rad] angle 
-		void rotZ( real alpha)
-		{
-    		real xx=x;
-    		real yy=y;
-    		x = xx*cos(alpha) - yy*sin(alpha);
-    		y = xx*sin(alpha) + yy*cos(alpha);
-		}
-
-		//! Rotates the vector relative to the X axis by an alpha[deg] angle (precise values for 0,90,180,270 deg)
-		void rotdX( real alfa)
-		{
-    		real yy = y;
-    		real zz = z;
-
-    		if (alfa==0.)
-	    	{
-	    	}
-    		else
-	    	{
-	    		if (alfa==90.)
-	        	{
-	        		y = -zz;
-	        		z = yy;
-	        	}
-	    		else
-	        	{
-	        		if (alfa==180.)
-	            	{
-	            		y = -yy;
-	            		z = -zz;
-	            	}
-	        		else
-	            	{
-	            		if (alfa==270.)
-		            	{
-		            		y = zz;
-		            		z = -yy;
-		            	}
-	            		else
-		            	{
-		            		alfa *= M_PI/180.0;
-		            		y = yy*cos(alfa) - zz*sin(alfa);
-		            		z = yy*sin(alfa) + zz*cos(alfa);
-		            	}
-	            	}
-	        	}
-	    	}
-		}
-
-		//! Rotates the vector relative to the Y  axis (shifted by dX longwise X) by an alpha[deg] angle (precise values for 0,90,180,270 deg)
-		void rotdY( real alfa, real dX = 0. )
-		{
-    		real xx = x;
-    		real zz = z;
-    
-			if (alfa==0.)
-	    	{
-	    	}
-    		else
-	    	{
-	    		if (alfa==90.)
-	        	{
-	        		x =  zz + dX;
-	        		z = -xx + dX;
-	        	}
-	    		else
-	        	{
-	        		if (alfa==180.)
-	            	{
-	            		x = -xx + 2.*dX;
-	            		z = -zz;
-	            	}
-	        		else
-	            	{
-	            		if (alfa==270.)
-		            	{
-		            		x = -zz + dX;
-		            		z =  xx - dX;
-		            	}
-	            		else
-		            	{
-		            		alfa *= M_PI/180.0;
-		            		x = zz*sin(alfa) + (xx-dX)*cos(alfa) + dX;
-		            		z = zz*cos(alfa) - (xx-dX)*sin(alfa);
-		            	}
-	            	}
-	        	}
-	    	}
-		}
-
-		//! Rotates the vector relative to the Z axis by an alpha[deg] angle (precise values for 0,90,180,270 deg)
-		void rotdZ( real alfa)
-		{
-    		real xx = x;
-    		real yy = y;
-	
-    		if (alfa==0.)
-	    	{
-	    	}
-    		else
-	    	{
-	    		if (alfa==90.)
-	        	{
-	        		x = -yy;
-	        		y = xx;
-	        	}
-	    		else
-	        	{
-	        		if (alfa==180.)
-	            	{
-	            		x = -xx;
-	            		y = -yy;
-	            	}
-	        		else
-	            	{
-	            		if (alfa==270.)
-		            	{
-		            		x = yy;
-		            		y = -xx;
-		            	}
-	            		else
-		            	{
-		            		alfa *= M_PI/180.0;
-		            		x = xx*cos(alfa) - yy*sin(alfa);
-		            		y = xx*sin(alfa) + yy*cos(alfa);
-		            	}
-	            	}
-	        	}
-	    	}
-		}
-
         // Member access.  The first operator[] returns a const reference
         // rather than a Real value.  This supports writing via standard file
         // operations that require a const pointer to data.
         real const& operator[](unsigned int i) const { return data[i]; }
         real& operator[](unsigned int i) { return data[i]; }
-
-	private:
-		bool grFlag = 1; // global resize flag
 		
 		void Link()
 		{
@@ -700,212 +565,163 @@ namespace ap
 			if(n>2)	z = data[2];
 			if(n>3)	w = data[3];
 		}
+
+	private:
+		bool grFlag = 1; // global resize flag
 	};
 
-/*
-/// Arithmetic operator - dot (scalar) product of two vectors
-real      operator  *( const VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - cross (vector) product of two vectors
-VECTOR   operator  %( const VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - product of vector and scalar
-VECTOR   operator  *( const VECTOR &A, const real    &s );
-/// Arithmetic operator - product of scalar and vector
-VECTOR   operator  *( const real    &s, const VECTOR &A );
-/// Arithmetic operator - vector divided by scalar (product of vector and reciprocal scalar)
-VECTOR   operator  /( const VECTOR &A, const real    &s );
-/// Arithmetic operator - sum of two vectors
-VECTOR   operator  +( const VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - sum of two vectors
-VECTOR   operator  +( const VECTOR &A                     );
-/// Arithmetic operator - subtraction of two vectors (sum of A and -B)
-VECTOR   operator  -( const VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - reverse of vector (-A)
-VECTOR   operator  -( const VECTOR &A                     );
-/// Arithmetic operator - coordinates products (AxBx, AyBy, AzBz)
-VECTOR   operator  &( const VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - cross product assigment
-void        operator %=(       VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - addition assigment
-void        operator +=(       VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - subtraction assigment
-void        operator -=(       VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - multiplication assigment (coordiante by coordiante)
-void        operator &=(       VECTOR &A, const VECTOR &B );
-/// Arithmetic operator - multiplication assigment
-void        operator *=(       VECTOR &A, const real    &s );
-/// Arithmetic operator - division assigment
-void        operator /=(       VECTOR &A, const real    &s );
-
-	// dot product
-	real operator *( const VECTOR &A , const VECTOR &B )
+	//! Arithmetic operator - coordinates products (AxBx, AyBy, AzBz)
+    template <typename real>
+	VECTOR <real> operator &( const VECTOR <real> &a, const VECTOR <real> &b )
 	{
-  		return  ( A.x * B.x  +  A.y * B.y  +  A.z * B.z );
+ 		VECTOR <real> c;
+		if( a.Size()!=b.Size() ) return c;
+
+		c.Resize(a.Size());
+		for(unsigned int i=0; i<a.Size(); i++) { c[i] = a[i]*b[i]; }
+		c.Link();
+		return c;
+	}
+	
+	//! Arithmetic operator - dot (scalar) product of two VECTORS
+    template <typename real>
+	real operator *( const VECTOR <real> &a , const VECTOR <real> &b )
+	{
+		real c=0;
+		if( a.Size() != b.Size() ) return c;
+		for(unsigned int i=0; i<a.Size(); i++) { c += a[i]*b[i]; }
+  		return c;
 	}
 
-	// cross product
-	VECTOR operator %( const VECTOR &A , const VECTOR &B )
+	//! Arithmetic operator - cross (vector) product of two VECTORS
+    template <typename real>
+	VECTOR <real> operator %( const VECTOR <real> &a , const VECTOR <real> &b )
 	{
- 		VECTOR c;
+ 		VECTOR <real> c;
+		if( a.Size()<3 || b.Size()<3 || a.Size()!=b.Size() ) return c;
 
-  		c.x = A.y * B.z - A.z * B.y;
-  		c.y = A.z * B.x - A.x * B.z;
-  		c.z = A.x * B.y - A.y * B.x;
+		c.Resize(a.Size());
+  		c[0] = a.y * b.z - a.z * b.y;
+  		c[1] = a.z * b.x - a.x * b.z;
+  		c[2] = a.x * b.y - a.y * b.x;
+		c.Link();
+		return c;
+	}
+	
+	//! Arithmetic operator - product of vector and scalar
+    template <typename real>
+	VECTOR <real> operator *( const VECTOR <real> &a , const real &s )
+	{
+ 		VECTOR <real> c(a.Size());
+		for(unsigned int i=0; i<a.Size(); i++) { c[i] = a[i]*s; }
+		c.Link();
+		return c;
+	}
 
+	//! Arithmetic operator - product of scalar and vector
+    template <typename real>
+	VECTOR <real> operator *( const real &s , const VECTOR <real> &a ) { return a*s; }
+
+
+	//! Arithmetic operator - vector divided by scalar (product of vector and reciprocal scalar)
+    template <typename real>
+	VECTOR <real> operator /( const VECTOR <real> &a , const real &s )
+	{
+ 		VECTOR <real> c(a.Size());
+		for(unsigned int i=0; i<a.Size(); i++) { c[i] = a[i]/s; }
+		c.Link();
  		return c;
 	}
 
-	// scalar mult
-	VECTOR operator *( const VECTOR &A , const real &s )
+	//! Arithmetic operator - sum of two vectors
+    template <typename real>
+	VECTOR <real> operator +( const VECTOR <real> &a , const VECTOR <real> &b )
 	{
- 		VECTOR c;
+ 		VECTOR <real> c;
+		if( a.Size() != b.Size() ) return c;
 
-  		c.x = A.x * s;
-  		c.y = A.y * s;
-  		c.z = A.z * s;
-
+ 		c.Resize(a.Size());
+		for(unsigned int i=0; i<a.Size(); i++) { c[i] = a[i] + b[i]; }
+		c.Link();
  		return c;
 	}
 
-	VECTOR operator *( const real &s , const VECTOR &A )
+	//! Arithmetic operator - subtraction of two vectors (sum of A and -B)
+    template <typename real>
+	VECTOR <real> operator -( const VECTOR <real> &a , const VECTOR <real> &b )
 	{
- 		VECTOR c;
+ 		VECTOR <real> c;
+		if( a.Size() != b.Size() ) return c;
 
-  		c.x = A.x * s;
-  		c.y = A.y * s;
-  		c.z = A.z * s;
-
+ 		c.Resize(a.Size());
+		for(unsigned int i=0; i<a.Size(); i++) { c[i] = a[i] - b[i]; }
+		c.Link();
  		return c;
 	}
 
-	VECTOR operator /( const VECTOR &A , const real &s )
+	//! Arithmetic operator - reverse of vector (-A)
+    template <typename real>
+	VECTOR <real> operator -( const VECTOR <real> &a )
 	{
- 		VECTOR c;
-
-  		c.x = A.x / s;
-  		c.y = A.y / s;
-  		c.z = A.z / s;
-
- 		return c;
-	}
-
-	// sum
-	VECTOR operator +( const VECTOR &A , const VECTOR &B )
-	{
- 		VECTOR c;
-
-  		c.x = A.x + B.x;
-  		c.y = A.y + B.y;
-  		c.z = A.z + B.z;
-
- 		return c;
-	}
-
-	VECTOR operator +( const VECTOR &A )
-	{
- 		VECTOR c;
-
-  		c.x = A.x;
-  		c.y = A.y;
-  		c.z = A.z;
-
- 		return c;
-	}
-
-	VECTOR operator -( const VECTOR &A , const VECTOR &B )
-	{
- 		VECTOR c;
-
-  		c.x = A.x - B.x;
-  		c.y = A.y - B.y;
-  		c.z = A.z - B.z;
-
- 		return c;
-	}
-
-	VECTOR operator -( const VECTOR &A )
-	{
- 		VECTOR c;
-
-  		c.x = -A.x;
-  		c.y = -A.y;
-  		c.z = -A.z;
-
+ 		VECTOR <real> c(a.Size());
+		for(unsigned int i=0; i<a.Size(); i++) { c[i] = -a[i]; }
+		c.Link();
  		return c;
 	}
 
 	// Shorthand Ops
 
-	void operator %=( VECTOR &A , const VECTOR &B )
-	{
- 		VECTOR tmp;
+	//! Arithmetic operator - multiplication assigment (coordiante by coordiante)
+    template <typename real>
+	void operator &=( VECTOR <real> &a, const VECTOR <real> &b ) {	a = a&b; }
 
-  		tmp.x = A.y * B.z - A.z * B.y;
-  		tmp.y = A.z * B.x - A.x * B.z;
-  		tmp.z = A.x * B.y - A.y * B.x;
+	//! Arithmetic operator - cross product assigment
+    template <typename real>
+	void operator %=( VECTOR <real> &a, const VECTOR <real> &b ) { a = a%b; }
 
-  		A.x = tmp.x;
-  		A.y = tmp.y;
-  		A.z = tmp.z;
-	}
+	//! Arithmetic operator - addition assigment
+    template <typename real>
+	void operator +=( VECTOR <real> &a, const VECTOR <real> &b ) { a = a+b; }
 
-	void operator +=( VECTOR &A , const VECTOR &B )
-	{
-  		A.x += B.x;
-  		A.y += B.y;
-  		A.z += B.z;
-	}
+	//! Arithmetic operator - subtraction assigment
+    template <typename real>
+	void operator -=( VECTOR <real> &a , const VECTOR <real> &b ) { a = a-b; }
 
-	void operator -=( VECTOR &A , const VECTOR &B )
-	{
-  		A.x -= B.x;
-  		A.y -= B.y;
-  		A.z -= B.z;
-	}
+	//! Arithmetic operator - multiplication assigment
+    template <typename real>
+	void operator *=( VECTOR <real> &a , const real &s ) { a = a*s; }
 
-	void operator &=( VECTOR &A , const VECTOR &B )
-	{
-  		A.x *= B.x;
-  		A.y *= B.y;
-  		A.z *= B.z;
-	}
-
-	void operator *=( VECTOR &A , const real &s )
-	{
-  		A.x *= s;
-  		A.y *= s;
-  		A.z *= s;
-	}
-
-	void operator /=( VECTOR &A , const real  &s )
-	{
-  		A.x /= s;
-  		A.y /= s;
-  		A.z /= s;
-	}
-	*/
+	//! Arithmetic operator - division assigment
+    template <typename real>
+	void operator /=( VECTOR <real> &a , const real  &s ) { a = a/s;} 
 		
 	//! Boolean operator - compares two vectors - true if all appropriate coordinates are equal
     template <typename real>
-	bool operator ==( const VECTOR <real> &A, const VECTOR <real> &B )
+	bool operator ==( const VECTOR <real> &a, const VECTOR <real> &b )
 	{
-		if(A.Size() != B.Size()) 
+		if(a.Size() != b.Size()) 
 		{
 			std::clog << "Vector sizes not equal!!!" << std::endl;
 			return 0;
 		}
 
-		for(unsigned int i=0; i<A.Size(); i++)
+		for(unsigned int i=0; i<a.Size(); i++)
 		{
-			if(A.data[i] != B.data[i])
+			if(a.data[i] != b.data[i])
 			{
 				std::clog << "Id of the first element of the vectors which is not equal: " << i << "!!!" << std::endl;
-				std::clog << "Element value of the A vector: " << A.data[i] << std::endl;
-				std::clog << "Element value of the B vector: " << B.data[i] << std::endl;
+				std::clog << "Element value of the A vector: " << a.data[i] << std::endl;
+				std::clog << "Element value of the B vector: " << b.data[i] << std::endl;
 				return 0;
 			}
 		}
-
-		//return ( A.x == B.x && A.y == B.y && A.z == B.z );
+		
+		unsigned int n=a.Size();
+		if(n>0) { if(a.x != b.x) { std::clog << "x is not equal!!!" << std::endl; std::clog << "A.x = " << a.x << "\tB.x = " << b.x << std::endl; return 0; } }
+		if(n>1) { if(a.y != b.y) { std::clog << "y is not equal!!!" << std::endl; std::clog << "A.y = " << a.y << "\tB.y = " << b.y << std::endl; return 0; } }
+		if(n>2) { if(a.z != b.z) { std::clog << "z is not equal!!!" << std::endl; std::clog << "A.z = " << a.z << "\tB.z = " << b.z << std::endl; return 0; } }
+		if(n>3) { if(a.w != b.w) { std::clog << "w is not equal!!!" << std::endl; std::clog << "A.w = " << a.w << "\tB.w = " << b.w << std::endl; return 0; } }
+		
 		return 1;
 	}
 

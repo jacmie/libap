@@ -9,6 +9,15 @@
 using namespace std;
 using namespace ap;
 
+TEST(ap_basicMath_tests, VECTOR_assign_operator) {
+	VECTOR <double> v;
+	v.Set4D(2.3, 5.6, 5.4, 3.2);
+
+	VECTOR <double> w = v;
+
+	EXPECT_EQ(v, w);
+}
+
 TEST(ap_basicMath_tests, VECTOR_set_value) {
 	VECTOR <double> v;
 	v.Resize(20);
@@ -384,4 +393,117 @@ TEST(ap_basicMath_tests, VECTOR_IsNan) {
 	v.Resize(9);
 	
 	EXPECT_EQ(0, v.IsNan()) << v << std::endl;
+}
+		
+TEST(ap_basicMath_tests, VECTOR_coordinates_products) {
+	VECTOR <double> a;
+	VECTOR <double> b;
+	a.Set3D(4.0, 4.0, 4.0);
+	b.Set3D(1.0, 2.0, 3.0);
+
+	VECTOR <double> c = a&b;
+	VECTOR <double> d;
+	d.Set3D(4.0, 8.0, 12.0);
+	EXPECT_EQ(c, d);
+	
+	a&=b;
+	EXPECT_EQ(a, d);
+}
+
+TEST(ap_basicMath_tests, VECTOR_dot_product) {
+	VECTOR <double> a;
+	VECTOR <double> b;
+	a.Set3D(1.0, 2.0, 3.0);
+	b.Set3D(1.0, 2.0, 3.0);
+	
+	EXPECT_DOUBLE_EQ(14, a*b);
+}
+
+TEST(ap_basicMath_tests, VECTOR_cross_product) {
+	VECTOR <double> a;
+	VECTOR <double> b;
+	a.Set3D(4.0, 4.0, 4.0);
+	b.Set3D(1.0, 2.0, 3.0);
+
+	VECTOR <double> c = a%b;
+	VECTOR <double> d;
+	d.Set3D(4.0, -8.0, 4.0);
+	EXPECT_EQ(c, d);
+	
+	a%=b;
+	EXPECT_EQ(a, d);
+}
+
+TEST(ap_basicMath_tests, VECTOR_mult_VECTOR_scalar) {
+ 	VECTOR <double> v;
+	v.Set2D(1.1, 2.2);
+ 
+	VECTOR <double> w = v*2.0;
+	EXPECT_DOUBLE_EQ(2.2, w.x);
+	EXPECT_DOUBLE_EQ(4.4, w.y);
+
+	v *= 2.0;
+	EXPECT_DOUBLE_EQ(2.2, v.x);
+	EXPECT_DOUBLE_EQ(4.4, v.y);
+}
+
+TEST(ap_basicMath_tests, VECTOR_mult_scalar_VECTOR) {
+ 	VECTOR <double> v;
+	v.Set2D(1.1, 2.2);
+ 
+	VECTOR <double> w = 2.0*v;
+	EXPECT_DOUBLE_EQ(2.2, w.x);
+	EXPECT_DOUBLE_EQ(4.4, w.y);
+}
+
+TEST(ap_basicMath_tests, VECTOR_divide_VECTOR_with_scalar) {
+ 	VECTOR <double> v;
+	v.Set2D(2.2, 4.4);
+ 
+	VECTOR <double> w = v/2.0;
+	EXPECT_DOUBLE_EQ(1.1, w.x);
+	EXPECT_DOUBLE_EQ(2.2, w.y);
+
+	v /= 2.0;
+	EXPECT_DOUBLE_EQ(1.1, v.x);
+	EXPECT_DOUBLE_EQ(2.2, v.y);
+}
+
+TEST(ap_basicMath_tests, VECTOR_add_VECTORS) {
+	VECTOR <double> a;
+	VECTOR <double> b;
+	a.Set3D(4.0, 4.0, 4.0);
+	b.Set3D(1.0, 2.0, 3.0);
+
+	VECTOR <double> c = a+b;
+	VECTOR <double> d;
+	d.Set3D(5.0, 6.0, 7.0);
+	EXPECT_EQ(c, d);
+
+	a += b;
+	EXPECT_EQ(a, d);
+}
+
+TEST(ap_basicMath_tests, VECTOR_substract_VECTORS) {
+	VECTOR <double> a;
+	VECTOR <double> b;
+	a.Set3D(4.0, 4.0, 4.0);
+	b.Set3D(1.0, 2.0, 3.0);
+	
+	VECTOR <double> c = a-b;
+	VECTOR <double> d;
+	d.Set3D(3.0, 2.0, 1.0);
+	EXPECT_EQ(c, d);
+
+	a -= b;
+	EXPECT_EQ(a, d);
+}
+
+TEST(ap_basicMath_tests, VECTOR_revers) {
+	VECTOR <double> a;
+	VECTOR <double> b;
+	a.Set3D(1.0, 2.0, 3.0);
+	b.Set3D(-1.0, -2.0, -3.0);
+
+	EXPECT_EQ(-a, b);
 }

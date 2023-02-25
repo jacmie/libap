@@ -165,4 +165,41 @@ void  v_fprintf( FILE *dest , char *fmt , char *name , const MATRIX_3x3 &mat );
 std::ostream & operator << ( std::ostream & out, const MATRIX_3x3 &mat );
 }
 
+/*
+MATRIX_3x3 GL_DISP::RotAbout_X(float RotX)
+{
+	float SX = sin(RotX*M_PI/180);
+	float CX = cos(RotX*M_PI/180);
+
+	MATRIX_3x3 MX( 1,  0,   0,
+                   0,  CX, -SX,
+                   0,  SX,  CX );
+
+	return MX;
+}
+
+MATRIX_3x3 GL_DISP::RotAbout_Y(float RotY)
+{
+	float SY = sin(RotY*M_PI/180);
+	float CY = cos(RotY*M_PI/180);
+
+    MATRIX_3x3 MY( CY,  0,  SY,
+                    0,  1,  0,
+                  -SY,  0,  CY );
+    
+	return MY;
+}
+
+MATRIX_3x3 GL_DISP::RotAbout_Z(float RotZ)
+{
+	float SZ = sin(RotZ*M_PI/180);
+	float CZ = cos(RotZ*M_PI/180);
+
+	MATRIX_3x3 MZ( CZ, -SZ, 0,
+                   SZ,  CZ, 0,
+                    0,  0,  1 );
+	return MZ;
+}*/
+
+
 #endif /*AP_MATRIX_H*/
