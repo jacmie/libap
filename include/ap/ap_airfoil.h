@@ -123,25 +123,31 @@ public:
 	
 	std::string fileName; ///< filename (without path)
 	
-	/// prints PRF file (default on stdout)
+	//! prints PRF file (default on stdout)
 	void Print( FILE* f=stdout );
-	/// reads profile file
+
+	//! reads profile file
 	int Read( std::string fileName );
-	/// saves profile file - two types are available: \n 0 - native PANUKL (4 columns) \n 3 - SELIG (Xfoil compatible) \n other - no action
+
+	//! saves profile file - two types are available: \n 0 - native PANUKL (4 columns) \n 3 - SELIG (Xfoil compatible) \n other - no action
 	int Write( std::string fileName, int iTyp=0 );
 	
-	/// returns read status: 0 - no data, 1 - data read succesfuly
+	//! returns read status: 0 - no data, 1 - data read succesfuly
 	int ReadStatus( void ){ return iRead; };           
-	/// returns the type of format recognition: \n 0 - recognition by content (default), \n 1 - recognition by filename extention
+
+	//! returns the type of format recognition: \n 0 - recognition by content (default), \n 1 - recognition by filename extention
 	int GetReadType( void ) { return iReadType; };
-	/// sets the type of format recognition
+
+	//! sets the type of format recognition
 	void SetReadType( int iRT ) { iReadType = iRT; };  
 	
-	/// generates NACA airfoil given by long int value (e.g. iNACA = 23012), \n NN - the number of points that define the airfoil geometry
+	//! generates NACA airfoil given by long int value (e.g. iNACA = 23012), \n NN - the number of points that define the airfoil geometry
 	int ReadNaca( long int iNACA, int NN=100 );
-	/// generates NACA airfoil given by string (e.g. cNACA = "23012"), \n NN - the number of points that define the airfoil geometry
+
+	//! generates NACA airfoil given by string (e.g. cNACA = "23012"), \n NN - the number of points that define the airfoil geometry
 	int ReadNaca( std::string NACA, int NN=100 );
-	/// cleans local variables
+
+	//! cleans local variables
 	void Clean( void );
 
 	AIRFOIL( void );

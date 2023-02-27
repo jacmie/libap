@@ -31,6 +31,7 @@
 
 namespace ap
 {
+
     //! Vector class
 	/*! 
 	 * VECTOR originates as part of the Config Lib for Panukl software: 
@@ -46,11 +47,9 @@ namespace ap
     class VECTOR
     {
 	public:
-    	real x = 0; //!< first element of the vector
+    	real x = 0; //!< x coordinate
 		real y = 0; //!< y coordinate
 		real z = 0; //!< z coordinate
-		real w = 0; //!< z coordinate
-    	std::vector <real> data; //!< public data container
 
 		//! Deafult constructor
 		/*!
@@ -58,19 +57,12 @@ namespace ap
 		 */
     	VECTOR() = default;
 		
-		//! Set size constructor
-		/*!
-		 * \param n - size of the vector
-		 */
-    	VECTOR( unsigned int n ) { Assign(n, 1.1); }
-		
 		//! Fill constructor
 		/*!
-		 * \param n - size of the vector
 		 * \param val - value witch initializes the vector
-		 * \sa Assign(unsigned int n, real val)
+		 * \sa Set(real val)
 		 */
-    	VECTOR( unsigned int n, real val ) { Assign(n, val); }
+    	VECTOR( real val ) { Set(val); }
     	 
 		//! Copy constructor 
 		/*!
@@ -99,59 +91,25 @@ namespace ap
 		 * \param v - VECTOR to assign
 		 * \sa VECTOR(const VECTOR &v)
 		 */
-    	VECTOR & operator =( const VECTOR &v )
+    	VECTOR& operator =( const VECTOR &v )
 		{
-    		if( this != &v )
-        	{
-				data = v.data;
-				Link();
-    		}
-
+    		if( this != &v ) { Set(v.x, v.y, v.z); }
     		return *this;
 		}
 		
-		//! Assignment operator
+		//! Assignment operator with normalization
 		/*!
-		 * \param v - VECTOR to assign
-		 * \sa VECTOR(const VECTOR &v)
+		 * \param v - VECTOR to assign and normalize
 		 */
-		//!!!!!!!!!!!!!!!!!!!!!!!!!
-		/*
-    	VECTOR.x & operator =( const VECTOR &v.x )
+    	VECTOR& operator ^=( const VECTOR &v )
 		{
-			/ *
-    		if( this != &v )
-        	{
-				data = v.data;
-				Link();
-    		}* /
-
+    		if( this != &v ) 
+			{ 
+				Set(v.x, v.y, v.z); 
+				Norm();
+			}
     		return *this;
-		}*/
-
-		//! Resize the VECTOR
-		/*!
-		 * Method similar to std::vector.resize(n). 
-		 * \param n - new size of the VECTOR
-		 * \sa VECTOR(const VECTOR &v)
-		 */
-		void Resize(const unsigned int n) { data.resize(n); }
-
-		//! Resize and assign the value to the VECTOR
-		/*!
-		 * Method similar to std::vector.assign(n, val). 
-		 * Additionaly VECTOR variables [x](@ref x), [y](@ref x), [z](@ref z), [w](@ref w) 
-		 * values are assigned matching the first four values of the [data](@ref data).
-		 * \param n - new size of the VECTOR
-		 * \param val - value assigned to all elements of the VECTOR
-		 */
-		void Assign(const unsigned int n, const real val) { data.assign(n, val); Link(); }
-		
-		//! Resize and assign the value to the VECTOR
-		/*!
-		 * \return Size of the VECTOR
-		 */
-		unsigned int Size() const { return data.size(); }
+		}
 
 		//! Set global resize flag
 		/*!
@@ -181,60 +139,35 @@ namespace ap
 
 		//! Set the VECTOR elements value
 		/*!
-		 * Additionaly VECTOR variables [x](@ref x), [y](@ref x), [z](@ref z), [w](@ref w) 
-		 * values are assigned matching the first four values of the [data](@ref data).
 		 * \param val - value witch is set for all elements of the VECTOR
 		 */
     	void Set(const real val) 
-		{ 
-			data.assign(data.size(), val); 
-			Link();
+		{
+			x = y = z = val;
 		}
 		
-		//! Resize the VECTOR and set elements value
+		//! Set from 3 values
 		/*!
-		 * Additionaly VECTOR variables [x](@ref x), [y](@ref x), [z](@ref z), [w](@ref w) 
-		 * values are assigned matching the first four values of the [data](@ref data).
-		 * \param n - size of the VECTOR
-		 * \param val - value witch is assigned to the elements of the VECTOR
-		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR is allowed
-		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
-		 * \sa SetGolobalResizeFlag(bool val)
-		 * \sa Assign(unsigned int n, real val)
+		 * \param xp - value assigned to the first VECTOR element
+		 * \param yp - value assigned to the second VECTOR element
+		 * \param zp - value assigned to the third VECTOR element
 		 */
-    	bool Set(const unsigned int n, const real val, const bool rFlag=1 ) 
+    	void Set(const real &xp, const real &yp, const real &zp) 	
 		{ 
-			if( !(grFlag && rFlag) )	
-			{
-				//resizing not allowed - compare vector sizes 
-				if(data.size() != n) return 1;
-			}
-
-			data.assign(n, val);
-			Link();
-			return 0;
-		}
+			x = xp;
+			y = yp;
+			z = zp;
+		};
 		
 		//! Set values from other other VECTOR 
 		/*!
-		 * Additionaly VECTOR variables [x](@ref x), [y](@ref x), [z](@ref z), [w](@ref w) 
-		 * values are assigned matching the first four values of the [data](@ref data).
 		 * \param v - VECTOR witch is assigned to the current VECTOR
-		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR is allowed
-		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
-		 * \sa SetGolobalResizeFlag(bool val)
 		 */
-    	bool Set(const VECTOR &v, const bool rFlag=1) 
+    	void Set(const VECTOR &v) 
 		{ 
-			if( !(grFlag && rFlag) )	
-			{
-				//resizing not allowed - compare vector sizes 
-				if(data.size() != v.Size()) return 1;
-			}
-
-			data = v.data;
-			Link();
-			return 0;
+			x = v.x;
+			y = v.y;
+			z = v.z;
 		}
 
 		//! Set values from standard vector
@@ -250,19 +183,18 @@ namespace ap
 		{
 			if( !(grFlag && rFlag) )	
 			{
-				//resizing not allowed - compare vector sizes 
-				if(data.size() != v.size()) return 1;
+				//size unmatched not allowed - compare vector sizes 
+				if(3 != v.size()) return 1;
 			}
 
-			data = v;
-			Link();
+			if(v.size() > 0) x = v[0];
+			if(v.size() > 1) y = v[1];
+			if(v.size() > 2) z = v[2];
 			return 0;
 		};
 		
 		//! Set values from array
 		/*!
-		 * Additionaly VECTOR variables [x](@ref x), [y](@ref x), [z](@ref z), [w](@ref w) 
-		 * values are assigned matching the first four values of the [data](@ref data).
 		 * \param n - size of the VECTOR
 		 * \param a - array witch is assigned to the VECTOR, values are stored in the [data](@ref data) container
 		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR is allowed
@@ -273,96 +205,77 @@ namespace ap
 		{ 
 			if( !(grFlag && rFlag) )	
 			{
-				//resizing not allowed - compare vector sizes 
-				if(data.size() != n) return 1;
+				//size unmatched not allowed - compare vector sizes 
+				if(3 != n) return 1;
 			}
 			
-			data.resize(0);
-			for(unsigned int i=0; i<n; i++) { data.push_back(a[i]); }
-			Link();
+			if(n > 0) x = a[0];
+			if(n > 1) y = a[1];
+			if(n > 2) z = a[2];
 			return 0;
 		}
 
-		//! Set from 2D values
+		//! Get to 3D values
 		/*!
-		 * Additionaly VECTOR variables [x](@ref x), [y](@ref x) 
-		 * values are assigned matching the first two values of the [data](@ref data).
-		 * \param xp - value assigned to the first VECTOR element
-		 * \param yp - value assigned to the second VECTOR element
-		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR is allowed
-		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
+		 * \param xp - value copied from the first VECTOR element
+		 * \param yp - value copied from the second VECTOR element
+		 * \param zp - value copied from the third VECTOR element
+		 */
+    	void Get(real &xp, real &yp, real &zp) 	
+		{ 
+			xp = x;
+			yp = y;
+			zp = z;
+		}
+                   
+		//! Get values from the VECTOR to other VECTOR 
+		/*!
+		 * \param v - VECTOR to witch current VECTOR is coppied
+		 */
+		void Get(VECTOR <real> &v) { v.x=x; v.y=y; v.z=z; }
+		
+		//! Get values to standard vector
+		/*!
+		 * \param v - std::vector to witch the VECTOR values are copied
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the std::vector is allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags
 		 * \sa SetGolobalResizeFlag(bool val)
 		 */
-    	bool Set2D(const real xp, const real yp, const bool rFlag=1) 	
-		{ 
+    	bool Get(std::vector <real> &v, const bool rFlag=1) 
+		{
 			if( !(grFlag && rFlag) )	
 			{
 				//resizing not allowed - compare vector sizes 
-				if(data.size() != 2) return 1;
+				if(3 != v.size()) return 1;
 			}
-			
-			data.resize(0);
-			data.push_back(xp);
-			data.push_back(yp);
-			Link();
+
+			std::vector <real> w;
+			w.push_back(x);
+			w.push_back(y);
+			w.push_back(z);
+			v = w;
 			return 0;
 		};
 		
-		//! Set from 3D values
+		//! Get values to array
 		/*!
-		 * Additionaly VECTOR variables [x](@ref x), [y](@ref x), [z](@ref z) 
-		 * values are assigned matching the first three values of the [data](@ref data).
-		 * \param xp - value assigned to the first VECTOR element
-		 * \param yp - value assigned to the second VECTOR element
-		 * \param zp - value assigned to the third VECTOR element
-		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR is allowed
-		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
-		 * \sa SetGolobalResizeFlag(bool val)
+		 * \param n - size of the array
+		 * \param a - array to witch the VECTOR values are copied
+		 * \return Returns 0 on success, or 1 on failure if the array and VECTOR size are not equal. 
 		 */
-    	bool Set3D(const real xp, const real yp, const real zp, const bool rFlag=1 ) 	
+    	bool Get(const unsigned int n, real a[], const bool rFlag=1) 
 		{ 
 			if( !(grFlag && rFlag) )	
 			{
 				//resizing not allowed - compare vector sizes 
-				if(data.size() != 3) return 1;
+				if(3 != n) return 1;
 			}
 			
-			data.resize(0);
-			data.push_back(xp);
-			data.push_back(yp);
-			data.push_back(zp);
-			Link();
+			if(n > 0) a[0] = x;
+			if(n > 1) a[1] = y;
+			if(n > 2) a[2] = z;
 			return 0;
-		};
-	
-		//! Set from 4D values
-		/*!
-		 * Additionaly VECTOR variables [x](@ref x), [y](@ref x), [z](@ref z), [w](@ref w) 
-		 * values are assigned matching the first four values of the [data](@ref data).
-		 * \param xp - value assigned to the first VECTOR element
-		 * \param yp - value assigned to the second VECTOR element
-		 * \param zp - value assigned to the third VECTOR element
-		 * \param wp - value assigned to the fourth VECTOR element
-		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR is allowed
-		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
-		 * \sa SetGolobalResizeFlag(bool val)
-		 */
-    	bool Set4D(const real xp, const real yp, const real zp, const real wp, const bool rFlag=1 ) 	
-		{ 
-			if( !(grFlag && rFlag) )	
-			{
-				//resizing not allowed - compare vector sizes 
-				if(data.size() != 4) return 1;
-			}
-			
-			data.resize(0);
-			data.push_back(xp);
-			data.push_back(yp);
-			data.push_back(zp);
-			data.push_back(wp);
-			Link();
-			return 0;
-		};
+		}
 
 		//! Length of the vector 
 		/*!
@@ -370,9 +283,7 @@ namespace ap
 		 */
     	real Len(void) const 
 		{
-			real len=0;
-			for(unsigned int i=0; i<Size(); i++) { len += data[i]*data[i]; }
-			return sqrt(len); 
+			return sqrt( x*x + y*y + z*z ); 
 		}
 		
 		//! Length of the 2D vector in the XY plane
@@ -408,9 +319,7 @@ namespace ap
 		 */
     	real Sq(void) const 
 		{ 
-			real len=0;
-			for(unsigned int i=0; i<Size(); i++) { len += data[i]*data[i]; }
-			return len; 
+			return ( x*x + y*y + z*z ); 
 		}
 
 		//! Normalizes the vector to unit 
@@ -431,139 +340,14 @@ namespace ap
 
     		return dlg;
 		}
-                   
-		//! Get values from the VECTOR to other VECTOR 
-		/*!
-		 * \param v - VECTOR to witch current VECTOR is coppied
-		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR is allowed
-		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags
-		 * \sa SetGolobalResizeFlag(bool val)
-		 */
-		bool Get(VECTOR <real> &v, const bool rFlag=1)
-		{
-			if( !(grFlag && rFlag) )	
-			{
-				//resizing not allowed - compare vector sizes 
-				if(data.size() != v.Size()) return 1;
-			}
-
-			v.data = data;
-			v.Link();
-			return 0;
-		}
-		
-		//! Get values from standard vector
-		/*!
-		 * \param v - std::vector to witch the VECTOR values are copied
-		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the std::vector is allowed
-		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags
-		 * \sa SetGolobalResizeFlag(bool val)
-		 */
-    	bool Get(std::vector <real> &v, const bool rFlag=1) 
-		{
-			if( !(grFlag && rFlag) )	
-			{
-				//resizing not allowed - compare vector sizes 
-				if(data.size() != v.size()) return 1;
-			}
-
-			v = data;
-			return 0;
-		};
-		
-		//! Get values to array
-		/*!
-		 * \param n - size of the array
-		 * \param a - array to witch the VECTOR values are copied
-		 * \return Returns 0 on success, or 1 on failure if the array and VECTOR size are not equal. 
-		 */
-    	bool Get(const unsigned int n, real a[]) 
-		{ 
-			if(data.size() != n) return 1;
-			
-			for(unsigned int i=0; i<n; i++) { a[i] = data[i]; }
-			return 0;
-		}
-
-		//! Get to 2D values
-		/*!
-		 * \param xp - value copied from the first VECTOR element
-		 * \param yp - value copied from the second VECTOR element
-		 * \return Returns 0 on success, or 1 if the VECTOR size is not equal to 2
-		 */
-    	bool Get2D(real &xp, real &yp) 	
-		{ 
-			if(data.size() != 2) return 1;
-		
-			xp = data[0];
-			yp = data[1];
-			return 0;
-		};
-
-		//! Get to 3D values
-		/*!
-		 * \param xp - value copied from the first VECTOR element
-		 * \param yp - value copied from the second VECTOR element
-		 * \param zp - value copied from the third VECTOR element
-		 * \return Returns 0 on success, or 1 if the VECTOR size is not equal to 3
-		 */
-    	bool Get3D(real &xp, real &yp, real &zp) 	
-		{ 
-			if(data.size() != 3) return 1;
-		
-			xp = data[0];
-			yp = data[1];
-			zp = data[2];
-			return 0;
-		};
-
-		//! Get to 4D values
-		/*!
-		 * \param xp - value copied from the first VECTOR element
-		 * \param yp - value copied from the second VECTOR element
-		 * \param zp - value copied from the third VECTOR element
-		 * \param wp - value copied from the fourth VECTOR element
-		 * \return Returns 0 on success, or 1 if the VECTOR size is not equal to 4
-		 */
-    	bool Get4D(real &xp, real &yp, real &zp, real &wp) 	
-		{ 
-			if(data.size() != 4) return 1;
-		
-			xp = data[0];
-			yp = data[1];
-			zp = data[2];
-			wp = data[3];
-			return 0;
-		};
     
 		//! Determines if any element of the vector is a not-a-number (NaN) value
     	bool IsNan(void)
 		{
-			for(unsigned int i=0; i<Size(); i++)
-			{
-				if( std::isnan(data[i]) ) 
-				{
-					std::clog << "Element: " << i << " of the vector is NaN!!!" << std::endl;
-					return 1;
-				}
-			}
-
+			if( std::isnan(x) ) { std::clog << "x is NaN!!!" << std::endl; return 1; }
+			if( std::isnan(y) ) { std::clog << "y is NaN!!!" << std::endl; return 1; }
+			if( std::isnan(z) ) { std::clog << "z is NaN!!!" << std::endl; return 1; }
 			return 0;
-		}
-    
-        // Member access.  The first operator[] returns a const reference
-        // rather than a Real value.  This supports writing via standard file
-        // operations that require a const pointer to data.
-        real const& operator[](unsigned int i) const { return data[i]; }
-        real& operator[](unsigned int i) { return data[i]; }
-		
-		void Link()
-		{
-			unsigned int n=data.size();
-			if(n>0) x = data[0];
-			if(n>1)	y = data[1];
-			if(n>2)	z = data[2];
-			if(n>3)	w = data[3];
 		}
 
 	private:
@@ -575,22 +359,17 @@ namespace ap
 	VECTOR <real> operator &( const VECTOR <real> &a, const VECTOR <real> &b )
 	{
  		VECTOR <real> c;
-		if( a.Size()!=b.Size() ) return c;
-
-		c.Resize(a.Size());
-		for(unsigned int i=0; i<a.Size(); i++) { c[i] = a[i]*b[i]; }
-		c.Link();
+ 		c.x = a.x * b.x;
+		c.y = a.y * b.y;
+ 		c.z = a.z * b.z;
 		return c;
 	}
-	
+
 	//! Arithmetic operator - dot (scalar) product of two VECTORS
     template <typename real>
 	real operator *( const VECTOR <real> &a , const VECTOR <real> &b )
 	{
-		real c=0;
-		if( a.Size() != b.Size() ) return c;
-		for(unsigned int i=0; i<a.Size(); i++) { c += a[i]*b[i]; }
-  		return c;
+  		return (a.x*b.x + a.y*b.y + a.z*b.z);
 	}
 
 	//! Arithmetic operator - cross (vector) product of two VECTORS
@@ -598,13 +377,9 @@ namespace ap
 	VECTOR <real> operator %( const VECTOR <real> &a , const VECTOR <real> &b )
 	{
  		VECTOR <real> c;
-		if( a.Size()<3 || b.Size()<3 || a.Size()!=b.Size() ) return c;
-
-		c.Resize(a.Size());
-  		c[0] = a.y * b.z - a.z * b.y;
-  		c[1] = a.z * b.x - a.x * b.z;
-  		c[2] = a.x * b.y - a.y * b.x;
-		c.Link();
+  		c.x = a.y * b.z - a.z * b.y;
+  		c.y = a.z * b.x - a.x * b.z;
+  		c.z = a.x * b.y - a.y * b.x;
 		return c;
 	}
 	
@@ -612,9 +387,10 @@ namespace ap
     template <typename real>
 	VECTOR <real> operator *( const VECTOR <real> &a , const real &s )
 	{
- 		VECTOR <real> c(a.Size());
-		for(unsigned int i=0; i<a.Size(); i++) { c[i] = a[i]*s; }
-		c.Link();
+ 		VECTOR <real> c;
+  		c.x = a.x * s;
+  		c.y = a.y * s;
+  		c.z = a.z * s;
 		return c;
 	}
 
@@ -627,9 +403,10 @@ namespace ap
     template <typename real>
 	VECTOR <real> operator /( const VECTOR <real> &a , const real &s )
 	{
- 		VECTOR <real> c(a.Size());
-		for(unsigned int i=0; i<a.Size(); i++) { c[i] = a[i]/s; }
-		c.Link();
+ 		VECTOR <real> c;
+  		c.x = a.x / s;
+  		c.y = a.y / s;
+  		c.z = a.z / s;
  		return c;
 	}
 
@@ -638,12 +415,10 @@ namespace ap
 	VECTOR <real> operator +( const VECTOR <real> &a , const VECTOR <real> &b )
 	{
  		VECTOR <real> c;
-		if( a.Size() != b.Size() ) return c;
-
- 		c.Resize(a.Size());
-		for(unsigned int i=0; i<a.Size(); i++) { c[i] = a[i] + b[i]; }
-		c.Link();
- 		return c;
+  		c.x = a.x + b.x;
+  		c.y = a.y + b.y;
+  		c.z = a.z + b.z;
+		return c;
 	}
 
 	//! Arithmetic operator - subtraction of two vectors (sum of A and -B)
@@ -651,21 +426,20 @@ namespace ap
 	VECTOR <real> operator -( const VECTOR <real> &a , const VECTOR <real> &b )
 	{
  		VECTOR <real> c;
-		if( a.Size() != b.Size() ) return c;
-
- 		c.Resize(a.Size());
-		for(unsigned int i=0; i<a.Size(); i++) { c[i] = a[i] - b[i]; }
-		c.Link();
- 		return c;
+  		c.x = a.x - b.x;
+  		c.y = a.y - b.y;
+  		c.z = a.z - b.z;
+		return c;
 	}
 
 	//! Arithmetic operator - reverse of vector (-A)
     template <typename real>
 	VECTOR <real> operator -( const VECTOR <real> &a )
 	{
- 		VECTOR <real> c(a.Size());
-		for(unsigned int i=0; i<a.Size(); i++) { c[i] = -a[i]; }
-		c.Link();
+ 		VECTOR <real> c;
+  		c.x = -a.x;
+  		c.y = -a.y;
+  		c.z = -a.z;
  		return c;
 	}
 
@@ -679,6 +453,13 @@ namespace ap
     template <typename real>
 	void operator %=( VECTOR <real> &a, const VECTOR <real> &b ) { a = a%b; }
 
+	//! Arithmetic operator - multiplication assigment
+    template <typename real>
+	void operator *=( VECTOR <real> &a , const real &s ) { a = a*s; }
+	//! Arithmetic operator - division assigment
+    template <typename real>
+	void operator /=( VECTOR <real> &a , const real  &s ) { a = a/s;} 
+
 	//! Arithmetic operator - addition assigment
     template <typename real>
 	void operator +=( VECTOR <real> &a, const VECTOR <real> &b ) { a = a+b; }
@@ -687,40 +468,13 @@ namespace ap
     template <typename real>
 	void operator -=( VECTOR <real> &a , const VECTOR <real> &b ) { a = a-b; }
 
-	//! Arithmetic operator - multiplication assigment
-    template <typename real>
-	void operator *=( VECTOR <real> &a , const real &s ) { a = a*s; }
-
-	//! Arithmetic operator - division assigment
-    template <typename real>
-	void operator /=( VECTOR <real> &a , const real  &s ) { a = a/s;} 
-		
 	//! Boolean operator - compares two vectors - true if all appropriate coordinates are equal
     template <typename real>
 	bool operator ==( const VECTOR <real> &a, const VECTOR <real> &b )
 	{
-		if(a.Size() != b.Size()) 
-		{
-			std::clog << "Vector sizes not equal!!!" << std::endl;
-			return 0;
-		}
-
-		for(unsigned int i=0; i<a.Size(); i++)
-		{
-			if(a.data[i] != b.data[i])
-			{
-				std::clog << "Id of the first element of the vectors which is not equal: " << i << "!!!" << std::endl;
-				std::clog << "Element value of the A vector: " << a.data[i] << std::endl;
-				std::clog << "Element value of the B vector: " << b.data[i] << std::endl;
-				return 0;
-			}
-		}
-		
-		unsigned int n=a.Size();
-		if(n>0) { if(a.x != b.x) { std::clog << "x is not equal!!!" << std::endl; std::clog << "A.x = " << a.x << "\tB.x = " << b.x << std::endl; return 0; } }
-		if(n>1) { if(a.y != b.y) { std::clog << "y is not equal!!!" << std::endl; std::clog << "A.y = " << a.y << "\tB.y = " << b.y << std::endl; return 0; } }
-		if(n>2) { if(a.z != b.z) { std::clog << "z is not equal!!!" << std::endl; std::clog << "A.z = " << a.z << "\tB.z = " << b.z << std::endl; return 0; } }
-		if(n>3) { if(a.w != b.w) { std::clog << "w is not equal!!!" << std::endl; std::clog << "A.w = " << a.w << "\tB.w = " << b.w << std::endl; return 0; } }
+		if(a.x != b.x) { std::clog << "x is not equal!!!" << std::endl; std::clog << "A.x = " << a.x << "\tB.x = " << b.x << std::endl; return 0; }
+		if(a.y != b.y) { std::clog << "y is not equal!!!" << std::endl; std::clog << "A.y = " << a.y << "\tB.y = " << b.y << std::endl; return 0; }
+		if(a.z != b.z) { std::clog << "z is not equal!!!" << std::endl; std::clog << "A.z = " << a.z << "\tB.z = " << b.z << std::endl; return 0; }
 		
 		return 1;
 	}
@@ -729,13 +483,7 @@ namespace ap
 	template <typename real>
 	std::ostream& operator << ( std::ostream &out, const VECTOR <real> &vec )
 	{
-  		//out << "["   << vec.x << " , " << vec.y << " , " << vec.z << "]";
-		out << "[";
-		for(unsigned int i=0; i<vec.Size(); i++)
-		{
-			out << std::setw(12) << vec[i];
-		}
-		out << "]";
+  		out << "[" << std::setw(12) << vec.x << std::setw(12) << vec.y << std::setw(12) << vec.z << "]";
   		return out;
 	}
 
