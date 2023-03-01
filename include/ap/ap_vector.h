@@ -53,7 +53,8 @@ namespace ap
 
 		//! Deafult constructor
 		/*!
-		 * \note VECTOR object still has to be initialized by one of the methods: Resize, Assigne, or Set.
+		 * \note VECTOR object still has to be initialized by one of the Set() methods.
+		 * \sa Set()
 		 */
     	VECTOR() = default;
 		
@@ -67,24 +68,23 @@ namespace ap
 		//! Copy constructor 
 		/*!
 		 * \param v - VECTOR to copy
-		 * \sa Assign(unsigned int n, real val)
-		 * \sa Set(unsigned int n, real val, bool rFlag)
+		 * \sa Set(const VECTOR &v)
 		 */
     	VECTOR( const VECTOR &v ) { Set(v);	}
 		
-		//! Copy constructor 
+		//! Copy constructor from std::vector
 		/*!
 		 * \param v - std::vector to copy
 		 * \sa Set(const std::vector <real> &v, bool rFlag)
 		 */
     	VECTOR( const std::vector <real> &v ) { Set(v); }
 
-		//! Copy constructor 
+		//! Copy constructor from array 
 		/*!
 		 * \param a - array to copy
 		 * \sa bool Set(unsigned int size, real a[], bool rFlag) 
 		 */
-    	VECTOR( real a[] ) { Set(a); }
+    	VECTOR( unsigned int n,  real a[] ) { Set(n, a); }
   
 		//! Assignment operator
 		/*!
