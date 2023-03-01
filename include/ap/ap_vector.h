@@ -1,28 +1,7 @@
-/*********************************************************************/ 
-/*                                                                   */ 
-/*             Config files library - (C) TGG 2019                   */ 
-/*                                                                   */ 
-/*********************************************************************/ 
-/*                          Warszawa, 2019                           */ 
-/*********************************************************************/ 
-/*                                                                   */
-/* File: vector3d.h                                                  */
-/*                                                                   */
-/* Author: F.A.Dul, modif. by T.Grabowski                            */
-/*                                                                   */
-/* Contents - vector 3d class                                        */
-/*                                                                   */ 
-/*                                                                   */
-/*********************************************************************/
-/*                                                                   */
-/*                                                                   */
+// Part of All Purpose - ap library
 
-/*! \file vector.h
-    \brief Vector 3D class and functions
-*/
-
-#ifndef AP_VECTOR_H
-#define AP_VECTOR_H
+#ifndef AP_VECTOR_3_H
+#define AP_VECTOR_3_H
 
 #include <cmath>
 #include <cstdio>
@@ -34,17 +13,17 @@ namespace ap
 
     //! Vector class
 	/*! 
-	 * VECTOR originates as part of the Config Lib for Panukl software: 
+	 * VECTOR_3 originates as part of the Config Lib for Panukl software: 
 	 * https://itlims-zsis.meil.pw.edu.pl/software/PANUKL/2020/Config_API/index.html
 	 * created by. F.A.Dul, modif. by T.Grabowski.\n
-	 * The VECTOR class is header only part of the ap library.
+	 * The VECTOR_3 class is header only part of the ap library.
 	 * It means that only the header file: ap_vector.h has to be included in the project and linking is not needed.\n
-	 * Implementation of the VECTOR class aims at universality and ease of use. 
+	 * Implementation of the VECTOR_3 class aims at universality and ease of use. 
 	 * It is small, easy to understand and with clean code sytax 
 	 * resembling as close as possible equations notation.\n
 	 */
     template <typename real>
-    class VECTOR
+    class VECTOR_3
     {
 	public:
     	real x = 0; //!< x coordinate
@@ -53,45 +32,45 @@ namespace ap
 
 		//! Deafult constructor
 		/*!
-		 * \note VECTOR object still has to be initialized by one of the Set() methods.
+		 * \note VECTOR_3 object still has to be initialized by one of the Set() methods.
 		 * \sa Set()
 		 */
-    	VECTOR() = default;
+    	VECTOR_3() = default;
 		
 		//! Fill constructor
 		/*!
 		 * \param val - value witch initializes the vector
 		 * \sa Set(real val)
 		 */
-    	VECTOR( real val ) { Set(val); }
+    	VECTOR_3( real val ) { Set(val); }
     	 
 		//! Copy constructor 
 		/*!
-		 * \param v - VECTOR to copy
-		 * \sa Set(const VECTOR &v)
+		 * \param v - VECTOR_3 to copy
+		 * \sa Set(const VECTOR_3 &v)
 		 */
-    	VECTOR( const VECTOR &v ) { Set(v);	}
+    	VECTOR_3( const VECTOR_3 &v ) { Set(v);	}
 		
 		//! Copy constructor from std::vector
 		/*!
 		 * \param v - std::vector to copy
 		 * \sa Set(const std::vector <real> &v, bool rFlag)
 		 */
-    	VECTOR( const std::vector <real> &v ) { Set(v); }
+    	VECTOR_3( const std::vector <real> &v ) { Set(v); }
 
 		//! Copy constructor from array 
 		/*!
 		 * \param a - array to copy
-		 * \sa bool Set(unsigned int size, real a[], bool rFlag) 
+		 * \sa Set(unsigned int size, real a[], bool rFlag) 
 		 */
-    	VECTOR( unsigned int n,  real a[] ) { Set(n, a); }
+    	VECTOR_3( unsigned int n,  real a[] ) { Set(n, a); }
   
 		//! Assignment operator
 		/*!
-		 * \param v - VECTOR to assign
-		 * \sa VECTOR(const VECTOR &v)
+		 * \param v - VECTOR_3 to assign
+		 * \sa VECTOR_3(const VECTOR_3 &v)
 		 */
-    	VECTOR& operator =( const VECTOR &v )
+    	VECTOR_3& operator =( const VECTOR_3 &v )
 		{
     		if( this != &v ) { Set(v.x, v.y, v.z); }
     		return *this;
@@ -99,9 +78,11 @@ namespace ap
 		
 		//! Assignment operator with normalization
 		/*!
-		 * \param v - VECTOR to assign and normalize
+		 * This is equivalent of making the assigment operation followed by normalization Norm();
+		 * \param v - VECTOR_3 to assign and normalize
+		 * \sa Norm()
 		 */
-    	VECTOR& operator ^=( const VECTOR &v )
+    	VECTOR_3& operator ^=( const VECTOR_3 &v )
 		{
     		if( this != &v ) 
 			{ 
@@ -113,10 +94,8 @@ namespace ap
 
 		//! Set global resize flag
 		/*!
-		 * Resize flags provide control over the VECTOR resizing. 
-		 * Most of the Set() methods can resize the resulting vector basing on the input data.
-		 * Size of the VECTOR is compared with the input data. If they don't match the VECTOR can be resized, 
-		 * or the Set() function may return failure value. The behavior depends on the flags set:\n
+		 * Size of the VECTOR_3 is compared with the input data. If they don't match 
+		 * the Set() function may return failure value. The behavior depends on the flags set:\n
 		 * 
 		 * - **grFlag** - global resize flag
 		 * -  **rFlag** - local resize flag of the particular Set() operation
@@ -130,16 +109,15 @@ namespace ap
 		 * | 0      | 1      | 0      |
 		 * | 0      | 0      | 0      |
 		 *
-		 * The table indicates that resizing of the VECTOR with Set() methods will be possible only when both flags are true.\n
-		 * By default both resizing flags are true.
-		 * \note Resize() and Assign() methods don't depend on the resizing flags.
+		 * The table indicates that resizing of the VECTOR_3 with Set() methods will be possible only when both flags are true.\n
+		 * \note By default both resizing flags are true.
 		 * \param val - value witch is set to the grFlag
 		 */
     	void SetGolobalResizeFlag(const bool val) {	grFlag = val; }
 
-		//! Set the VECTOR elements value
+		//! Set the VECTOR_3 elements the value
 		/*!
-		 * \param val - value witch is set for all elements of the VECTOR
+		 * \param val - value witch is set for all elements of the VECTOR_3
 		 */
     	void Set(const real val) 
 		{
@@ -148,9 +126,9 @@ namespace ap
 		
 		//! Set from 3 values
 		/*!
-		 * \param xp - value assigned to the first VECTOR element
-		 * \param yp - value assigned to the second VECTOR element
-		 * \param zp - value assigned to the third VECTOR element
+		 * \param xp - value assigned to the first VECTOR_3 element
+		 * \param yp - value assigned to the second VECTOR_3 element
+		 * \param zp - value assigned to the third VECTOR_3 element
 		 */
     	void Set(const real &xp, const real &yp, const real &zp) 	
 		{ 
@@ -159,11 +137,11 @@ namespace ap
 			z = zp;
 		};
 		
-		//! Set values from other other VECTOR 
+		//! Set values from other VECTOR_3 
 		/*!
-		 * \param v - VECTOR witch is assigned to the current VECTOR
+		 * \param v - VECTOR_3 witch is assigned to the current VECTOR_3
 		 */
-    	void Set(const VECTOR &v) 
+    	void Set(const VECTOR_3 &v) 
 		{ 
 			x = v.x;
 			y = v.y;
@@ -172,11 +150,10 @@ namespace ap
 
 		//! Set values from standard vector
 		/*!
-		 * Additionaly VECTOR variables [x](@ref x), [y](@ref x), [z](@ref z), [w](@ref w) 
-		 * values are assigned matching the first four values of the [data](@ref data).
-		 * \param v - std::vector witch is assigned to the VECTOR, values are stored in the [data](@ref data) container
-		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR is allowed
-		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
+		 * \param v - std::vector witch is assigned to the VECTOR_3
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR_3 is allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR_3 has same size as the std::vector and the resize flags set. 
+		 * In case of failure the std::vector won't be assigned.
 		 * \sa SetGolobalResizeFlag(bool val)
 		 */
     	bool Set(const std::vector <real> &v, const bool rFlag=1) 
@@ -195,10 +172,11 @@ namespace ap
 		
 		//! Set values from array
 		/*!
-		 * \param n - size of the VECTOR
-		 * \param a - array witch is assigned to the VECTOR, values are stored in the [data](@ref data) container
-		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the VECTOR is allowed
-		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags.
+		 * \param n - size of the array
+		 * \param a - array witch is assigned to the VECTOR_3
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if unmached sizes are allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR_3 has same size as the array and the resize flags set. 
+		 * In case of failure the array won't be assigned.
 		 * \sa SetGolobalResizeFlag(bool val)
 		 */
     	bool Set(const unsigned int n, const real a[], const bool rFlag=1 ) 
@@ -214,12 +192,24 @@ namespace ap
 			if(n > 2) z = a[2];
 			return 0;
 		}
+	
+		//! Set VECTOR_3 (0, 0, 0)
+		void Zero()
+		{
+			x = y = z = 0;
+		}
+
+		//! Set VECTOR_3 (1, 1, 1)
+		void Ones()
+		{
+			x = y = z = 1;
+		}
 
 		//! Get to 3D values
 		/*!
-		 * \param xp - value copied from the first VECTOR element
-		 * \param yp - value copied from the second VECTOR element
-		 * \param zp - value copied from the third VECTOR element
+		 * \param xp - value copied from the first VECTOR_3 element
+		 * \param yp - value copied from the second VECTOR_3 element
+		 * \param zp - value copied from the third VECTOR_3 element
 		 */
     	void Get(real &xp, real &yp, real &zp) 	
 		{ 
@@ -228,17 +218,17 @@ namespace ap
 			zp = z;
 		}
                    
-		//! Get values from the VECTOR to other VECTOR 
+		//! Get values from the VECTOR_3 to other VECTOR_3 
 		/*!
-		 * \param v - VECTOR to witch current VECTOR is coppied
+		 * \param v - VECTOR_3 to witch current VECTOR_3 is coppied
 		 */
-		void Get(VECTOR <real> &v) { v.x=x; v.y=y; v.z=z; }
+		void Get(VECTOR_3 <real> &v) { v.x=x; v.y=y; v.z=z; }
 		
 		//! Get values to standard vector
 		/*!
-		 * \param v - std::vector to witch the VECTOR values are copied
+		 * \param v - std::vector to witch the VECTOR_3 values are copied
 		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the std::vector is allowed
-		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR had to be resized and the value set for the resizing flags
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the std::vector had to be resized and the values set for the resizing flags.
 		 * \sa SetGolobalResizeFlag(bool val)
 		 */
     	bool Get(std::vector <real> &v, const bool rFlag=1) 
@@ -260,8 +250,8 @@ namespace ap
 		//! Get values to array
 		/*!
 		 * \param n - size of the array
-		 * \param a - array to witch the VECTOR values are copied
-		 * \return Returns 0 on success, or 1 on failure if the array and VECTOR size are not equal. 
+		 * \param a - array to witch the VECTOR_3 values are copied
+		 * \return Returns 0 on success, or 1 on failure if the array and VECTOR_3 size are not equal. 
 		 */
     	bool Get(const unsigned int n, real a[], const bool rFlag=1) 
 		{ 
@@ -279,9 +269,9 @@ namespace ap
 
 		//! Length of the vector 
 		/*!
-		 * Computed from all VECTOR elements as: sqrt(x*x + y*y + z*z + ...)
+		 * Computed as: sqrt(x*x + y*y + z*z)
 		 */
-    	real Len(void) const 
+    	real Len() const 
 		{
 			return sqrt( x*x + y*y + z*z ); 
 		}
@@ -290,7 +280,7 @@ namespace ap
 		/*!
 		 * Computed as: sqrt(x*x + y*y)
 		 */
-    	real LenXY(void) const 
+    	real LenXY() const 
 		{ 
 			return sqrt( x*x + y*y ); 
 		}  
@@ -299,7 +289,7 @@ namespace ap
 		/*!
 		 * Computed as: sqrt(x*x + z*z)
 		 */
-    	real LenXZ(void) const 
+    	real LenXZ() const 
 		{ 
 			return sqrt( x*x + z*z ); 
 		}  
@@ -308,16 +298,16 @@ namespace ap
 		/*!
 		 * Computed as: sqrt(y*y + z*z)
 		 */
-    	real LenYZ(void) const 
+    	real LenYZ() const 
 		{ 
 			return sqrt( y*y + z*z ); 
 		}  
 		
 		//! Square value of the vector
 		/*!
-		 * Computed from all VECTOR elements as: (x*x + y*y + z*z + ...)
+		 * Computed from all VECTOR_3 elements as: (x*x + y*y + z*z + ...)
 		 */
-    	real Sq(void) const 
+    	real Sq() const 
 		{ 
 			return ( x*x + y*y + z*z ); 
 		}
@@ -325,9 +315,9 @@ namespace ap
 		//! Normalizes the vector to unit 
 		/*!
 		 * Coordiantes are divided by the vector value.\n
-		 * /return vector value (length)
+		 * \return vector value (length)
 		 */
-		real Norm(void)
+		real Norm()
 		{
     		real dlg = this->Len();
 
@@ -342,7 +332,7 @@ namespace ap
 		}
     
 		//! Determines if any element of the vector is a not-a-number (NaN) value
-    	bool IsNan(void)
+    	bool IsNan()
 		{
 			if( std::isnan(x) ) { std::clog << "x is NaN!!!" << std::endl; return 1; }
 			if( std::isnan(y) ) { std::clog << "y is NaN!!!" << std::endl; return 1; }
@@ -356,27 +346,27 @@ namespace ap
 
 	//! Arithmetic operator - coordinates products (AxBx, AyBy, AzBz)
     template <typename real>
-	VECTOR <real> operator &( const VECTOR <real> &a, const VECTOR <real> &b )
+	VECTOR_3 <real> operator &( const VECTOR_3 <real> &a, const VECTOR_3 <real> &b )
 	{
- 		VECTOR <real> c;
+ 		VECTOR_3 <real> c;
  		c.x = a.x * b.x;
 		c.y = a.y * b.y;
  		c.z = a.z * b.z;
 		return c;
 	}
 
-	//! Arithmetic operator - dot (scalar) product of two VECTORS
+	//! Arithmetic operator - dot (scalar) product of two VECTOR_3S
     template <typename real>
-	real operator *( const VECTOR <real> &a , const VECTOR <real> &b )
+	real operator *( const VECTOR_3 <real> &a , const VECTOR_3 <real> &b )
 	{
   		return (a.x*b.x + a.y*b.y + a.z*b.z);
 	}
 
-	//! Arithmetic operator - cross (vector) product of two VECTORS
+	//! Arithmetic operator - cross (vector) product of two VECTOR_3S
     template <typename real>
-	VECTOR <real> operator %( const VECTOR <real> &a , const VECTOR <real> &b )
+	VECTOR_3 <real> operator %( const VECTOR_3 <real> &a , const VECTOR_3 <real> &b )
 	{
- 		VECTOR <real> c;
+ 		VECTOR_3 <real> c;
   		c.x = a.y * b.z - a.z * b.y;
   		c.y = a.z * b.x - a.x * b.z;
   		c.z = a.x * b.y - a.y * b.x;
@@ -385,9 +375,9 @@ namespace ap
 	
 	//! Arithmetic operator - product of vector and scalar
     template <typename real>
-	VECTOR <real> operator *( const VECTOR <real> &a , const real &s )
+	VECTOR_3 <real> operator *( const VECTOR_3 <real> &a , const real &s )
 	{
- 		VECTOR <real> c;
+ 		VECTOR_3 <real> c;
   		c.x = a.x * s;
   		c.y = a.y * s;
   		c.z = a.z * s;
@@ -396,14 +386,14 @@ namespace ap
 
 	//! Arithmetic operator - product of scalar and vector
     template <typename real>
-	VECTOR <real> operator *( const real &s , const VECTOR <real> &a ) { return a*s; }
+	VECTOR_3 <real> operator *( const real &s , const VECTOR_3 <real> &a ) { return a*s; }
 
 
 	//! Arithmetic operator - vector divided by scalar (product of vector and reciprocal scalar)
     template <typename real>
-	VECTOR <real> operator /( const VECTOR <real> &a , const real &s )
+	VECTOR_3 <real> operator /( const VECTOR_3 <real> &a , const real &s )
 	{
- 		VECTOR <real> c;
+ 		VECTOR_3 <real> c;
   		c.x = a.x / s;
   		c.y = a.y / s;
   		c.z = a.z / s;
@@ -412,9 +402,9 @@ namespace ap
 
 	//! Arithmetic operator - sum of two vectors
     template <typename real>
-	VECTOR <real> operator +( const VECTOR <real> &a , const VECTOR <real> &b )
+	VECTOR_3 <real> operator +( const VECTOR_3 <real> &a , const VECTOR_3 <real> &b )
 	{
- 		VECTOR <real> c;
+ 		VECTOR_3 <real> c;
   		c.x = a.x + b.x;
   		c.y = a.y + b.y;
   		c.z = a.z + b.z;
@@ -423,9 +413,9 @@ namespace ap
 
 	//! Arithmetic operator - subtraction of two vectors (sum of A and -B)
     template <typename real>
-	VECTOR <real> operator -( const VECTOR <real> &a , const VECTOR <real> &b )
+	VECTOR_3 <real> operator -( const VECTOR_3 <real> &a , const VECTOR_3 <real> &b )
 	{
- 		VECTOR <real> c;
+ 		VECTOR_3 <real> c;
   		c.x = a.x - b.x;
   		c.y = a.y - b.y;
   		c.z = a.z - b.z;
@@ -434,9 +424,9 @@ namespace ap
 
 	//! Arithmetic operator - reverse of vector (-A)
     template <typename real>
-	VECTOR <real> operator -( const VECTOR <real> &a )
+	VECTOR_3 <real> operator -( const VECTOR_3 <real> &a )
 	{
- 		VECTOR <real> c;
+ 		VECTOR_3 <real> c;
   		c.x = -a.x;
   		c.y = -a.y;
   		c.z = -a.z;
@@ -447,30 +437,30 @@ namespace ap
 
 	//! Arithmetic operator - multiplication assigment (coordiante by coordiante)
     template <typename real>
-	void operator &=( VECTOR <real> &a, const VECTOR <real> &b ) {	a = a&b; }
+	void operator &=( VECTOR_3 <real> &a, const VECTOR_3 <real> &b ) {	a = a&b; }
 
 	//! Arithmetic operator - cross product assigment
     template <typename real>
-	void operator %=( VECTOR <real> &a, const VECTOR <real> &b ) { a = a%b; }
+	void operator %=( VECTOR_3 <real> &a, const VECTOR_3 <real> &b ) { a = a%b; }
 
 	//! Arithmetic operator - multiplication assigment
     template <typename real>
-	void operator *=( VECTOR <real> &a , const real &s ) { a = a*s; }
+	void operator *=( VECTOR_3 <real> &a , const real &s ) { a = a*s; }
 	//! Arithmetic operator - division assigment
     template <typename real>
-	void operator /=( VECTOR <real> &a , const real  &s ) { a = a/s;} 
+	void operator /=( VECTOR_3 <real> &a , const real  &s ) { a = a/s;} 
 
 	//! Arithmetic operator - addition assigment
     template <typename real>
-	void operator +=( VECTOR <real> &a, const VECTOR <real> &b ) { a = a+b; }
+	void operator +=( VECTOR_3 <real> &a, const VECTOR_3 <real> &b ) { a = a+b; }
 
 	//! Arithmetic operator - subtraction assigment
     template <typename real>
-	void operator -=( VECTOR <real> &a , const VECTOR <real> &b ) { a = a-b; }
+	void operator -=( VECTOR_3 <real> &a , const VECTOR_3 <real> &b ) { a = a-b; }
 
 	//! Boolean operator - compares two vectors - true if all appropriate coordinates are equal
     template <typename real>
-	bool operator ==( const VECTOR <real> &a, const VECTOR <real> &b )
+	bool operator ==( const VECTOR_3 <real> &a, const VECTOR_3 <real> &b )
 	{
 		if(a.x != b.x) { std::clog << "x is not equal!!!" << std::endl; std::clog << "A.x = " << a.x << "\tB.x = " << b.x << std::endl; return 0; }
 		if(a.y != b.y) { std::clog << "y is not equal!!!" << std::endl; std::clog << "A.y = " << a.y << "\tB.y = " << b.y << std::endl; return 0; }
@@ -481,43 +471,11 @@ namespace ap
 
 	//! print to std:ostream
 	template <typename real>
-	std::ostream& operator << ( std::ostream &out, const VECTOR <real> &vec )
+	std::ostream& operator << ( std::ostream &out, const VECTOR_3 <real> &vec )
 	{
   		out << "[" << std::setw(12) << vec.x << std::setw(12) << vec.y << std::setw(12) << vec.z << "]";
   		return out;
 	}
-
-	/*
-	//! returns vector (0,0,0)
-	VECTOR  VECTOR_3__E0( void )
-	{
-  		return VECTOR( 0.0 , 0.0 , 0.0 );
-	}
-
-	//! returns vector (1,1,1)
-	VECTOR  VECTOR_3__E1( void )
-	{
-  		return VECTOR( 1.0 , 1.0 , 1.0 );
-	}
-
-	//! returns vector (1,0,0)
-	VECTOR  VECTOR_3__Ex( void )
-	{
-  		return VECTOR( 1.0 , 0.0 , 0.0 );
-	}
-
-	//! returns vector (0,1,0)
-	VECTOR  VECTOR_3__Ey( void )
-	{
-  		return VECTOR( 0.0 , 1.0 , 0.0 );
-	}
-
-	//! returns vector (0,0,1)
-	VECTOR  VECTOR_3__Ez( void )
-	{
-  		return VECTOR( 0.0 , 0.0 , 1.0 );
-	}
-	*/
 }
 
-#endif /*AP_VECTOR_H*/
+#endif /*AP_VECTOR_3_H*/
