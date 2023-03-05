@@ -42,35 +42,44 @@ namespace ap
 		 * \param val - value witch initializes the vector
 		 * \sa Set(real val)
 		 */
-    	VECTOR_3( real val ) { Set(val); }
+    	VECTOR_3(const real val) { Set(val); }
     	 
+		//! Copy constructor 
+		/*!
+		 * \param x - x element value
+		 * \param y - y element value
+		 * \param z - z element value
+		 * \sa Set(const real &xp, const real &yp, const real &zp)
+		 */
+    	VECTOR_3(const real &x, const real &y, const real &z) { Set(x, y, z);	}
+		
 		//! Copy constructor 
 		/*!
 		 * \param v - VECTOR_3 to copy
 		 * \sa Set(const VECTOR_3 &v)
 		 */
-    	VECTOR_3( const VECTOR_3 &v ) { Set(v);	}
+    	VECTOR_3(const VECTOR_3 &v) { Set(v); }
 		
 		//! Copy constructor from std::vector
 		/*!
 		 * \param v - std::vector to copy
 		 * \sa Set(const std::vector <real> &v, bool rFlag)
 		 */
-    	VECTOR_3( const std::vector <real> &v ) { Set(v); }
+    	VECTOR_3(const std::vector <real> &v) { Set(v); }
 
 		//! Copy constructor from array 
 		/*!
 		 * \param a - array to copy
 		 * \sa Set(unsigned int size, real a[], bool rFlag) 
 		 */
-    	VECTOR_3( unsigned int n,  real a[] ) { Set(n, a); }
+    	VECTOR_3(const unsigned int n, const real a[]) { Set(n, a); }
   
 		//! Assignment operator
 		/*!
 		 * \param v - VECTOR_3 to assign
 		 * \sa VECTOR_3(const VECTOR_3 &v)
 		 */
-    	VECTOR_3& operator =( const VECTOR_3 &v )
+    	VECTOR_3& operator =(const VECTOR_3 &v)
 		{
     		if( this != &v ) { Set(v.x, v.y, v.z); }
     		return *this;
@@ -82,7 +91,7 @@ namespace ap
 		 * \param v - VECTOR_3 to assign and normalize
 		 * \sa Norm()
 		 */
-    	VECTOR_3& operator ^=( const VECTOR_3 &v )
+    	VECTOR_3& operator ^=(const VECTOR_3 &v)
 		{
     		if( this != &v ) 
 			{ 

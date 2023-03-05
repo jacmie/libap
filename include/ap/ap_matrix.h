@@ -31,127 +31,565 @@ namespace ap
     	real zz = 0;  ///< (2,2) element
 
 		//! Default constructor - sets components to zero
+		/*!
+		 * \note MATRIX_3x3 object still has to be initialized by one of the Set() methods.
+		 * \sa Set()
+		 */
     	MATRIX_3x3() = default;
 
-		//! constructor - sets components values from variables
+		//! Fill constructor
+		/*!
+		 * \param val - value witch initializes the vector
+		 * \sa Set(real val)
+		 */
+    	MATRIX_3x3 (const real &val) { Set(val); } 
+		
+		//! Copy constructor 
+		/*!
+		 * Set from 9 values.
+		 * \param xx_p - xx element of the MATRIX_3x3 
+		 * \param xy_p - xy element of the MATRIX_3x3
+		 * \param xz_p - xz element of the MATRIX_3x3 
+		 * \param yx_p - yx element of the MATRIX_3x3 
+		 * \param yy_p - yy element of the MATRIX_3x3
+		 * \param yz_p - yz element of the MATRIX_3x3 
+		 * \param zx_p - zx element of the MATRIX_3x3 
+		 * \param zy_p - zy element of the MATRIX_3x3
+		 * \param zz_p - zz element of the MATRIX_3x3 
+		 * \sa Set(const real &xx_p, const real &xy_p, const real &xz_p,
+                 const real &yx_p, const real &yy_p, const real &yz_p,
+                 const real &zx_p, const real &zy_p, const real &zz_p)
+		 */
     	MATRIX_3x3( real xx_p , real xy_p , real xz_p ,
                 	real yx_p , real yy_p , real yz_p ,
-                	real zx_p , real zy_p , real zz_p ) :
-                       xx(xx_p) , xy(xy_p) , xz(xz_p) ,
-                       yx(yx_p) , yy(yy_p) , yz(yz_p) ,
-                       zx(zx_p) , zy(zy_p) , zz(zz_p)
-        {};
+                	real zx_p , real zy_p , real zz_p ) 
+	    { Set(xx_p, xy_p, xz_p, yx_p, yy_p, yz_p, zx_p, zy_p, zz_p); }
 		
-		//! copies components values from the array (one dimensional)
-    	MATRIX_3x3( std::vector <real> &A ) { Set(A); }
+		//! Copy constructor 
+		/*!
+		 * \param A - MATRIX_3x3 to copy
+		 * \sa Set(const MATRIX_3x3 &A)
+		 */
+    	MATRIX_3x3(const MATRIX_3x3 &A) { Set(A); } 
+		
+		//! Copy constructor from std::vector (one dimensional)
+		/*!
+		 * \param A - std::vector to copy to MATRIX_3x3 by rows
+		 * \sa Set(std::vector <real> &A, const bool rFlag=1)
+		 */
+    	MATRIX_3x3(const std::vector <real> &A) { Set(A); }
 
-		//! copies components values from the array (two dimensional)
-    	MATRIX_3x3( std::vector < std::vector <real> > &A ) { Set(A); }
+		//! Copy constructor from std::vector (two dimensional)
+		/*!
+		 * \param A - std::vector to copy MATRIX_3x3 
+		 * \sa Set(std::vector <real> &A, const bool rFlag=1)
+		 */
+    	MATRIX_3x3(const std::vector < std::vector <real> > &A) { Set(A); }
 
-		//! constructor - sets components values from the array (one dimensional)
-    	MATRIX_3x3( real M[] ) { Set(M); }
+		//! Copy constructor from array (one dimensional) 
+		/*!
+		 * \param A - array to copy
+		 * \sa Set(const unsigned int n, real A[], const bool rFlag=1) 
+		 */
+    	MATRIX_3x3(const unsigned int n, real A[]) { Set(n, A); }
 
-		//! constructor - sets components values from the array (two dimensional)
-    	MATRIX_3x3( real M[3][3] ) { Set(M); }
+		//! Copy constructor from array (fixed size two dimensional) 
+		/*!
+		 * \param A - array to copy
+		 * \sa Set(const real A[3][3]) 
+		 */
+    	MATRIX_3x3(const real A[3][3]) { Set(A); }
+    	
+		//! Copy constructor from array of pointers (two dimensional) 
+		/*!
+		 * \param A - array to copy
+		 * \sa Set(const unsigned int n, real **A, const bool rFlag=1) 
+		 */
+		MATRIX_3x3(const unsigned int n, real **A) { Set(n, A); }
+  
+		//! Assignment operator
+		/*!
+		 * \param v - MATRIX_3x3 to assign
+		 * \sa MATRIX_3x3(const MATRIX_3x3 &A)
+		 */
+    	MATRIX_3x3& operator =(const MATRIX_3x3 &A)
+		{
+    		if( this != &A ) { Set(A); }
+    		return *this;
+		}
+		
+		//! Set global resize flag
+		/*!
+		 * Size of the MATRIX_3x3 is compared with the input data. If they don't match 
+		 * the Set() function may return failure value. The behavior depends on the flags set:\n
+		 * 
+		 * - **grFlag** - global resize flag
+		 * -  **rFlag** - local resize flag of the particular Set() operation
+		 *
+		 * Set() methods perform boolean operations as in the following table:
+		 *
+		 * | grFlag | grFlag | Result |
+		 * | :----: | :----: | :----: |
+		 * | 1      | 1      | 1      |
+		 * | 1      | 0      | 0      |
+		 * | 0      | 1      | 0      |
+		 * | 0      | 0      | 0      |
+		 *
+		 * The table indicates that resizing of the MATRIX_3x3 with Set() methods will be possible only when both flags are true.\n
+		 * \note By default both resizing flags are true.
+		 * \param val - value witch is set to the grFlag
+		 */
+    	void SetGolobalResizeFlag(const bool val) {	grFlag = val; }
 
-		//! copies components values from variables
-    	void Set( real xx_p , real xy_p , real xz_p ,
-                  real yx_p , real yy_p , real yz_p ,
-                  real zx_p , real zy_p , real zz_p )
+		//! Set the MATRIX_3x3 elements the value
+		/*!
+		 * \param val - value witch is set for all elements of the MATRIX_3x3
+		 */
+    	void Set(const real val) { xx = xy = xz = yx = yy = yz = zx = zy = zz = val; }
+		
+		//! Copies components values from variables
+		/*! 
+		 * Set from 9 values.
+		 * \param xx_p - xx element of the MATRIX_3x3 
+		 * \param xy_p - xy element of the MATRIX_3x3
+		 * \param xz_p - xz element of the MATRIX_3x3 
+		 * \param yx_p - yx element of the MATRIX_3x3 
+		 * \param yy_p - yy element of the MATRIX_3x3
+		 * \param yz_p - yz element of the MATRIX_3x3 
+		 * \param zx_p - zx element of the MATRIX_3x3 
+		 * \param zy_p - zy element of the MATRIX_3x3
+		 * \param zz_p - zz element of the MATRIX_3x3 
+		 */
+    	void Set(const real &xx_p, const real &xy_p, const real &xz_p,
+                 const real &yx_p, const real &yy_p, const real &yz_p,
+                 const real &zx_p, const real &zy_p, const real &zz_p)
         {
         	xx = xx_p;   xy = xy_p;    xz = xz_p;
         	yx = yx_p;   yy = yy_p;    yz = yz_p;
         	zx = zx_p;   zy = zy_p;    zz = zz_p;
         };
+		
+		//! Set values from other MATRIX_3x3 
+		/*!
+		 * \param v - MATRIX_3x3 witch is assigned to the current MATRIX_3x3
+		 */
+    	void Set(const MATRIX_3x3 &A) 
+		{ 
+        	xx = A.xx;   xy = A.xy;    xz = A.xz;
+        	yx = A.yx;   yy = A.yy;    yz = A.yz;
+        	zx = A.zx;   zy = A.zy;    zz = A.zz;
+		}
 
-		//! copies components values from the array (one dimensional)
-    	void Set( std::vector <real> &A )
+		//! Copies components values from the std::vector (one dimensional)
+		/*!
+		 * \param A - std::vector witch is assigned to the MATRIX_3x3 by rows
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the MATRIX_3x3 is allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR_3 has same size as the std::vector and the resize flags set. 
+		 * In case of failure the std::vector won't be assigned.
+		 * \sa SetGolobalResizeFlag(bool val)
+		 */
+    	bool Set(const std::vector <real> &A, const bool rFlag=1)
         {
-        	xx = A[0];   xy = A[1];    xz = A[2];
-        	yx = A[3];   yy = A[4];    yz = A[5];
-        	zx = A[6];   zy = A[7];    zz = A[8];
+			if( !(grFlag && rFlag) )	
+			{
+				//size unmatched not allowed - compare vector sizes 
+				if(9 != A.size()) return 1;
+			}
+
+			if(A.size() >= 4 && A.size() < 9)
+			{
+        		xx = A[0];   xy = A[1];
+        		yx = A[2];   yy = A[3];
+			}
+
+			if(A.size() >= 9)
+			{
+        		xx = A[0];   xy = A[1];    xz = A[2];
+        		yx = A[3];   yy = A[4];    yz = A[5];
+        		zx = A[6];   zy = A[7];    zz = A[8];
+			}
+
+			return 0;
         };
 
-		//! copies components values from the array (two dimensional)
-    	void Set( std::vector < std::vector <real> > &A )
+		//! Copies components values from the std::vector (two dimensional)
+		/*!
+		 * \param A - <std::vector <std::vector> > witch is assigned to the MATRIX_3x3
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the MATRIX_3x3 is allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR_3 has same size as the std::vector and the resize flags set. 
+		 * In case of failure the <std::vector <std::vector> > won't be assigned.
+		 * \sa SetGolobalResizeFlag(bool val)
+		 */
+    	bool Set(const std::vector < std::vector <real> > &A, const bool rFlag=1)
         {
-        	xx = A[0][0];   xy = A[0][1];   xz = A[0][2];
+			std::cerr << "Copies components values from the std::vector (two dimensional)" << std::endl;
+			if( !(grFlag && rFlag) )	
+			{
+				//size unmatched not allowed - compare vector sizes 
+				if(3 != A.size() && 3 != A[0].size()) return 1;
+			}
+
+			if(A.size() == 2 && A[0].size() == 2)
+			{
+				xx = A[0][0];   xy = A[0][1];
+        		yx = A[1][0];   yy = A[1][1];
+			}
+
+			if(A.size() >= 3 && A[0].size() >= 3)
+			{
+				xx = A[0][0];   xy = A[0][1];   xz = A[0][2];
+        		yx = A[1][0];   yy = A[1][1];   yz = A[1][2];
+        		zx = A[2][0];   zy = A[2][1];   zz = A[2][2];
+			}
+
+			return 0;
+        };
+
+		//! Copies components values from the array (one dimensional)
+		/*!
+		 * \param A - one dimensional array witch is assigned to the MATRIX_3x3 by rows
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the MATRIX_3x3 is allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the MATRIX_3x3 has same size as the array and the resize flags set. 
+		 * In case of failure the array won't be assigned.
+		 * \sa SetGolobalResizeFlag(bool val)
+		 */
+    	bool Set(const unsigned int n, real A[], const bool rFlag=1)
+        {
+			std::cerr << "Copies components values from the array (one dimensional)" << std::endl;
+			if( !(grFlag && rFlag) )	
+			{
+				//size unmatched not allowed - compare vector sizes 
+				if(9 != n) return 1;
+			}
+
+			if(n >= 4 && n < 9)
+			{
+        		xx = A[0];   xy = A[1];
+        		yx = A[2];   yy = A[3];
+			}
+
+			if(n >= 9)
+			{
+        		xx = A[0];   xy = A[1];    xz = A[2];
+        		yx = A[3];   yy = A[4];    yz = A[5];
+        		zx = A[6];   zy = A[7];    zz = A[8];
+			}
+
+			return 0;
+        };
+
+		//! Copies components values from the array (two dimensional)
+		/*!
+		 * \param A - fixed size, two dimensional array witch is assigned to the MATRIX_3x3 by rows
+		 */
+    	void Set(const real A[3][3])
+        {
+			xx = A[0][0];   xy = A[0][1];   xz = A[0][2];
         	yx = A[1][0];   yy = A[1][1];   yz = A[1][2];
-        	zx = A[2][0];   zy = A[2][1];   zz = A[2][2];
-        };
-
-		//! copies components values from the array (one dimensional)
-    	void Set( real A[] )
+       		zx = A[2][0];   zy = A[2][1];   zz = A[2][2];
+        }
+		
+		//! Copies components values from the array of pointers (two dimensional)
+		/*!
+		 * \param A - two dimensional array of pointers witch values are assigned to the MATRIX_3x3 by rows
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the MATRIX_3x3 is allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR_3 has same size as the array and the resize flags set. 
+		 * In case of failure the array won't be assigned.
+		 * \sa SetGolobalResizeFlag(bool val)
+		 */
+    	bool Set(const unsigned int n, real **A, const bool rFlag=1)
         {
-        	xx = A[0];   xy = A[1];    xz = A[2];
-        	yx = A[3];   yy = A[4];    yz = A[5];
-        	zx = A[6];   zy = A[7];    zz = A[8];
-        };
+			std::cerr << "Copies components values from the array (two dimensional)" << std::endl;
+			for(unsigned int i; i<3; i++) {
+				for(unsigned int j; j<3; j++) { std::clog << A[i][j] << std::endl; }
+			}
 
-		//! copies components values from the array (two dimensional)
-    	void Set( real A[3][3] )
-        {
-        	xx = A[0][0];   xy = A[0][1];   xz = A[0][2];
-        	yx = A[1][0];   yy = A[1][1];   yz = A[1][2];
-        	zx = A[2][0];   zy = A[2][1];   zz = A[2][2];
-        };
+			if( !(grFlag && rFlag) )	
+			{
+				//size unmatched not allowed - compare vector sizes 
+				if(3 != n) return 1;
+			}
 
-		//! reset matrix - set all components to zero  
+			if(n == 2)
+			{
+				xx = A[0][0];   xy = A[0][1];
+        		yx = A[1][0];   yy = A[1][1];
+			}
+
+			if(n >= 3)
+			{
+				xx = A[0][0];   xy = A[0][1];   xz = A[0][2];
+        		yx = A[1][0];   yy = A[1][1];   yz = A[1][2];
+        		zx = A[2][0];   zy = A[2][1];   zz = A[2][2];
+			}
+
+			return 0;
+        }
+
+		//! Set all MATRIX_3x3 components to zero  
     	void Zero()
         {
-        	xx = 0.0;  xy = 0.0;  xz = 0.0;
-        	yx = 0.0;  yy = 0.0;  yz = 0.0;
-        	zx = 0.0;  zy = 0.0;  zz = 0.0;
+        	xx = 0;  xy = 0;  xz = 0;
+        	yx = 0;  yy = 0;  yz = 0;
+        	zx = 0;  zy = 0;  zz = 0;
+        };
+		
+		//! Set all MATRIX_3x3 components to one  
+    	void Ones()
+        {
+        	xx = 1;  xy = 1;  xz = 1;
+        	yx = 1;  yy = 1;  yz = 1;
+        	zx = 1;  zy = 1;  zz = 1;
         };
 
 		//! Set unit matrix  
     	void Unit()
         {
-        	xx = 1.0;  xy = 0.0;  xz = 0.0;
-        	yx = 0.0;  yy = 1.0;  yz = 0.0;
-        	zx = 0.0;  zy = 0.0;  zz = 1.0;
+        	xx = 1;  xy = 0;  xz = 0;
+        	yx = 0;  yy = 1;  yz = 0;
+        	zx = 0;  zy = 0;  zz = 1;
         };
 
-		//! Matrix determinant	
-    	real Det( void )
-        {
-        	return xz*yy*zx + xx*yz*zy + xy*yx*zz;
-        };
-/*
-		MATRIX RotMat_X(float RotX)
+		//! Set rotation MATRIX_3x3 about X axis with radians
+		/*!
+		 * \param radAng - angle of rotation about X axis in radians  
+		 */
+		void RotMatX(real radAng)
 		{
-			float SX = sin(RotX*M_PI/180);
-			float CX = cos(RotX*M_PI/180);
+			real SX = sin(radAng);
+			real CX = cos(radAng);
 
-			MATRIX_3x3 MX( 1,  0,   0,
-            		       0,  CX, -SX,
-                   		   0,  SX,  CX );
-
-			return MX;
+        	xx = 1;  xy = 0;   xz = 0;
+        	yx = 0;  yy = CX;  yz = -SX;
+        	zx = 0;  zy = SX;  zz = CX;
 		}
 
-		MATRIX RotMat_Y(float RotY)
+		//! Set rotation MATRIX_3x3 about Y axis with radians
+		/*!
+		 * \param radAng - angle of rotation about Y axis in radians  
+		 * \return Rotation matrix about Y axis. 
+		 */
+		void RotMatY(real radAng)
 		{
-			float SY = sin(RotY*M_PI/180);
-			float CY = cos(RotY*M_PI/180);
+			real SY = sin(radAng);
+			real CY = cos(radAng);
 
-    		MATRIX_3x3 MY( CY,  0,  SY,
-                    		0,  1,  0,
-                  		  -SY,  0,  CY );
-    
-			return MY;
+        	xx = CY;   xy = 0;   xz = SY;
+        	yx = 0;    yy = 1;   yz = 0;
+        	zx = -SY;  zy = 0;   zz = CY;
 		}
 
-		MATRIX RotMat_Z(float RotZ)
+		//! Set rotation MATRIX_3x3 about Z axis with radians
+		/*!
+		 * \param radAng - angle of rotation about Z axis in radians  
+		 * \return Rotation matrix about Z axis. 
+		 */
+		void RotMatZ(real radAng)
 		{
-			float SZ = sin(RotZ*M_PI/180);
-			float CZ = cos(RotZ*M_PI/180);
+			real SZ = sin(radAng);
+			real CZ = cos(radAng);
 
 			MATRIX_3x3 MZ( CZ, -SZ, 0,
             		       SZ,  CZ, 0,
                     		0,  0,  1 );
-			return MZ;
-		}*/
+
+        	xx = CZ;   xy = -SZ;  xz = 0;
+        	yx = SZ;   yy = CZ;   yz = 0;
+        	zx = 0;    zy = 0;    zz = 1;
+		}
+
+		//! Set rotation MATRIX_3x3 about X axis with degrees
+		/*!
+		 * \param degAng - angle of rotation about X axis in degrees 
+		 * \return Rotation matrix about X axis.
+		 */
+		void RotMatXdeg(real degAng) { RotMatX(degAng*M_PI/180); }
+
+		//! Set rotation MATRIX_3x3 about Y axis with degrees
+		/*!
+		 * \param degAng - angle of rotation about Y axis in degrees  
+		 * \return Rotation matrix about Y axis. 
+		 */
+		void RotMatYdeg(real degAng) { RotMatY(degAng*M_PI/180); }
+
+		//! Set rotation MATRIX_3x3 about Z axis with degrees
+		/*!
+		 * \param degAng - angle of rotation about Z axis in degrees  
+		 * \return Rotation matrix about Z axis. 
+		 */
+		void RotMatZdeg(real degAng) { RotMatZ(degAng*M_PI/180); }
+
+		//! Get to MATRIX_3x3 values
+		/*!
+		 * \param xx_p - xx value copied from the MATRIX_3x3 
+		 * \param xy_p - xy value copied from the MATRIX_3x3
+		 * \param xz_p - xz value copied from the MATRIX_3x3 
+		 * \param yx_p - xx value copied from the MATRIX_3x3 
+		 * \param yy_p - xy value copied from the MATRIX_3x3
+		 * \param yz_p - xz value copied from the MATRIX_3x3 
+		 * \param zx_p - xx value copied from the MATRIX_3x3 
+		 * \param zy_p - xy value copied from the MATRIX_3x3
+		 * \param zz_p - xz value copied from the MATRIX_3x3 
+		 */
+    	void Get(real &xx_p, real &xy_p, real &xz_p, real &yx_p, real &yy_p, real &yz_p, real &zx_p, real &zy_p, real &zz_p) 	
+		{ 
+        	xx_p = xx;   xy_p = xy;    xz_p = xz;
+        	yx_p = yx;   yy_p = yy;    yz_p = yz;
+        	zx_p = zx;   zy_p = zy;    zz_p = zz;
+		}
+		
+		//! Get values from the MATRIX_3x3 to other MATRIX_3x3 
+		/*!
+		 * \param A - MATRIX_3x3 to witch current MATRIX_3x3 is coppied
+		 */
+		void Get(MATRIX_3x3 <real> &A) { 
+			A.xx=xx; A.xy=xy; A.xz=xz;
+			A.yx=yx; A.yy=yy; A.yz=yz;
+			A.zx=zx; A.zy=zy; A.zz=zz;
+		}
+		
+		//! Get values to standard vector (one dimensional)
+		/*!
+		 * \param v - std::vector to witch the MATRIX_3x3 values are copied by rows
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the std::vector is allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the std::vector had to be resized and the values set for the resizing flags.
+		 * \sa SetGolobalResizeFlag(bool val)
+		 */
+    	bool Get(std::vector <real> &A, const bool rFlag=1) 
+		{
+			if( !(grFlag && rFlag) )	
+			{
+				//resizing not allowed - compare vector sizes 
+				if(9 != A.size()) return 1;
+			}
+
+			std::vector <real> v;
+			v.push_back(xx);
+			v.push_back(xy);
+			v.push_back(xz);
+			v.push_back(yx);
+			v.push_back(yy);
+			v.push_back(yz);
+			v.push_back(zx);
+			v.push_back(zy);
+			v.push_back(zz);
+			A = v;
+			return 0;
+		};
+
+		//! Get values to standard vector (two dimensional)
+		/*!
+		 * \param v - std::vector to witch the MATRIX_3x3 values are copied
+		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the std::vector is allowed
+		 * \return Returns 0 on success, or 1 on failure. The result depends if the std::vector had to be resized and the values set for the resizing flags.
+		 * \sa SetGolobalResizeFlag(bool val)
+		 */
+    	bool Get(std::vector < std::vector <real> > &A, const bool rFlag=1) 
+		{
+			if( !(grFlag && rFlag) )	
+			{
+				//resizing not allowed - compare vector sizes 
+				if(3 != A.size() && 3 != A[0].size()) return 1;
+			}
+
+			if(A.size() == 2 && A[0].size() == 2)
+			{
+				A[0][0] = xx;   A[0][1] = xy;
+        		A[1][0] = yx;   A[1][1] = yy;
+			}
+
+			if(A.size() >= 3 && A[0].size() >= 3)
+			{
+				A[0][0] = xx;   A[0][1] = xy;   A[0][2] = xz;
+        		A[1][0] = yx;   A[1][1] = yy;   A[1][2] = yz;
+        		A[2][0] = zx;   A[2][1] = zy;   A[2][2] = zz;
+			}
+			
+			return 0;
+		};
+
+		//! Get values to array (one dimensional)
+		/*!
+		 * \param n - size of the array
+		 * \param A - array to witch the MATRIX_3x3 values are copied
+		 * \return Returns 0 on success, or 1 on failure if the array and MATRIX_3x3 sizes don't match. 
+		 */
+    	bool Get(const unsigned int n, real A[], const bool rFlag=1) 
+		{ 
+			if( !(grFlag && rFlag) )	
+			{
+				//resizing not allowed - compare vector sizes 
+				if(9 != n) return 1;
+			}
+			
+			if(n >= 4 && n < 9)
+			{
+        		A[0] = xx;   A[1] = xy;
+        		A[2] = yx;   A[3] = yy;
+			}
+
+			if(n >= 9)
+			{
+        		A[0] = xx;   A[1] = xy;    A[2] = xz;
+        		A[3] = yx;   A[4] = yy;    A[5] = yz;
+        		A[6] = zx;   A[7] = zy;    A[8] = zz;
+			}
+
+			return 0;
+		}
+		
+		//! Get values to fixed size array (two dimensional)
+		/*!
+		 * \param A - array to witch the MATRIX_3x3 values are copied
+		 */
+    	void Get(real A[3][3])
+        {
+			A[0][0] = xx;   A[0][1] = xy;   A[0][2] = xz;
+        	A[1][0] = yx;   A[1][1] = yy;   A[1][2] = yz;
+       		A[2][0] = zx;   A[2][1] = zy;   A[2][2] = zz;
+        }
+
+		//! Get values to array of pointers (two dimensional)
+		/*!
+		 * \param n - size of the array
+		 * \param A - array of pointers to witch the MATRIX_3x3 values are copied
+		 * \return Returns 0 on success, or 1 on failure if the array and MATRIX_3x3 sizes don't match. 
+		 */
+    	bool Get(const unsigned int n, real **A, const bool rFlag=1) 
+		{ 
+			if( !(grFlag && rFlag) )	
+			{
+				//resizing not allowed - compare vector sizes 
+				if(3 != n) return 1;
+			}
+			
+			if(n == 2)
+			{
+				A[0][0] = xx;   A[0][1] = xy;
+        		A[1][0] = yx;   A[1][1] = yy;
+			}
+
+			if(n >= 3)
+			{
+				A[0][0] = xx;   A[0][1] = xy;   A[0][2] = xz;
+        		A[1][0] = yx;   A[1][1] = yy;   A[1][2] = yz;
+        		A[2][0] = zx;   A[2][1] = zy;   A[2][2] = zz;
+			}
+
+			return 0;
+		}
+
+		//! Matrix determinant	
+		/*!
+		 * \return Value of the MATRIX_3x3 determinant. 
+		 */
+    	real Det()
+        {
+        	return xz*yy*zx + xx*yz*zy + xy*yx*zz;
+        };
+
+	private:
+		bool grFlag = 1; // global resize flag
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -222,7 +660,5 @@ namespace ap
   		return out;
 	}
 }
-
-
 
 #endif /*AP_MATRIX_H*/

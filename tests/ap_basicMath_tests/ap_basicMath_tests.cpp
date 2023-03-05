@@ -407,3 +407,514 @@ TEST(ap_basicMath_tests, VECTOR_3_revers) {
 	EXPECT_EQ(-a, b);
 }
 
+TEST(ap_basicMath_tests, MATRIX_3x3_set_from_std_vector) {
+	vector <double> w;
+	w.assign(9, 3.3);
+
+	MATRIX_3x3 <double> A;
+	EXPECT_EQ(0, A.Set(w));
+	EXPECT_DOUBLE_EQ(A.xx, w[0]);
+	EXPECT_DOUBLE_EQ(A.xy, w[1]);
+	EXPECT_DOUBLE_EQ(A.xz, w[2]);
+	EXPECT_DOUBLE_EQ(A.yx, w[3]);
+	EXPECT_DOUBLE_EQ(A.yy, w[4]);
+	EXPECT_DOUBLE_EQ(A.yz, w[5]);
+	EXPECT_DOUBLE_EQ(A.zx, w[6]);
+	EXPECT_DOUBLE_EQ(A.zy, w[7]);
+	EXPECT_DOUBLE_EQ(A.zz, w[8]);
+	
+	w.assign(4, 6.6);
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Set(w, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Set(w, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Set(w, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Set(w, 1)) << "grFlag=1, rFlag=1 - size unmatched allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, w[0]);
+	EXPECT_DOUBLE_EQ(A.xy, w[1]);
+	EXPECT_DOUBLE_EQ(A.yx, w[2]);
+	EXPECT_DOUBLE_EQ(A.yy, w[3]);
+	
+	w.assign(15, 9.9);
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Set(w, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Set(w, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Set(w, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Set(w, 1)) << "grFlag=1, rFlag=1 - size unmatched allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, w[0]);
+	EXPECT_DOUBLE_EQ(A.xy, w[1]);
+	EXPECT_DOUBLE_EQ(A.xz, w[2]);
+	EXPECT_DOUBLE_EQ(A.yx, w[3]);
+	EXPECT_DOUBLE_EQ(A.yy, w[4]);
+	EXPECT_DOUBLE_EQ(A.yz, w[5]);
+	EXPECT_DOUBLE_EQ(A.zx, w[6]);
+	EXPECT_DOUBLE_EQ(A.zy, w[7]);
+	EXPECT_DOUBLE_EQ(A.zz, w[8]);
+	
+	vector <vector <double> > v;
+	v.resize(3);
+	for(unsigned int i=0; i<3; i++) { v[i].assign(3, i*1.1); }
+
+	EXPECT_EQ(0, A.Set(v));
+	EXPECT_DOUBLE_EQ(A.xx, v[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v[0][1]);
+	EXPECT_DOUBLE_EQ(A.xz, v[0][2]);
+	EXPECT_DOUBLE_EQ(A.yx, v[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v[1][1]);
+	EXPECT_DOUBLE_EQ(A.yz, v[1][2]);
+	EXPECT_DOUBLE_EQ(A.zx, v[2][0]);
+	EXPECT_DOUBLE_EQ(A.zy, v[2][1]);
+	EXPECT_DOUBLE_EQ(A.zz, v[2][2]);
+	
+	vector <vector <double> > v2;
+	v2.resize(2);
+	for(unsigned int i=0; i<2; i++)
+		v2[i].assign(2, 3.3);
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Set(v2, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Set(v2, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Set(v2, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Set(v2, 1)) << "grFlag=1, rFlag=1 - size unmatched allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, v2[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v2[0][1]);
+	EXPECT_DOUBLE_EQ(A.yx, v2[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v2[1][1]);
+	
+	vector <vector <double> > v3;
+	v3.resize(4);
+	for(unsigned int i=0; i<4; i++)
+		v3[i].assign(4, 4.4);
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Set(v3, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Set(v3, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Set(v3, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Set(v3, 1)) << "grFlag=1, rFlag=1 - size unmatched allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, v3[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v3[0][1]);
+	EXPECT_DOUBLE_EQ(A.xz, v3[0][2]);
+	EXPECT_DOUBLE_EQ(A.yx, v3[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v3[1][1]);
+	EXPECT_DOUBLE_EQ(A.yz, v3[1][2]);
+	EXPECT_DOUBLE_EQ(A.zx, v3[2][0]);
+	EXPECT_DOUBLE_EQ(A.zy, v3[2][1]);
+	EXPECT_DOUBLE_EQ(A.zz, v3[2][2]);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_set_from_array) {
+	double w[] = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
+
+	MATRIX_3x3 <double> A;
+	EXPECT_EQ(0, A.Set(9, w));
+	EXPECT_DOUBLE_EQ(A.xx, w[0]);
+	EXPECT_DOUBLE_EQ(A.xy, w[1]);
+	EXPECT_DOUBLE_EQ(A.xz, w[2]);
+	EXPECT_DOUBLE_EQ(A.yx, w[3]);
+	EXPECT_DOUBLE_EQ(A.yy, w[4]);
+	EXPECT_DOUBLE_EQ(A.yz, w[5]);
+	EXPECT_DOUBLE_EQ(A.zx, w[6]);
+	EXPECT_DOUBLE_EQ(A.zy, w[7]);
+	EXPECT_DOUBLE_EQ(A.zz, w[8]);
+	
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Set(4, w, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Set(4, w, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Set(4, w, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Set(4, w, 1)) << "grFlag=1, rFlag=1 - size unmatched allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, w[0]);
+	EXPECT_DOUBLE_EQ(A.xy, w[1]);
+	EXPECT_DOUBLE_EQ(A.yx, w[2]);
+	EXPECT_DOUBLE_EQ(A.yy, w[3]);
+	
+	double w2[] = {1.1, 1.2, 1.3, 1.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3};
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Set(16, w2, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Set(16, w2, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Set(16, w2, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Set(16, w2, 1)) << "grFlag=1, rFlag=1 - size unmatched allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, w2[0]);
+	EXPECT_DOUBLE_EQ(A.xy, w2[1]);
+	EXPECT_DOUBLE_EQ(A.xz, w2[2]);
+	EXPECT_DOUBLE_EQ(A.yx, w2[3]);
+	EXPECT_DOUBLE_EQ(A.yy, w2[4]);
+	EXPECT_DOUBLE_EQ(A.yz, w2[5]);
+	EXPECT_DOUBLE_EQ(A.zx, w2[6]);
+	EXPECT_DOUBLE_EQ(A.zy, w2[7]);
+	EXPECT_DOUBLE_EQ(A.zz, w2[8]);
+	
+	double v[3][3];
+	for(unsigned int i=0; i<3; i++) {
+		for(unsigned int j; j<3; j++) { v[i][j] = 1.0 + i*0.1*j; }
+	}
+		
+	A.Set(v);
+	EXPECT_DOUBLE_EQ(A.xx, v[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v[0][1]);
+	EXPECT_DOUBLE_EQ(A.xz, v[0][2]);
+	EXPECT_DOUBLE_EQ(A.yx, v[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v[1][1]);
+	EXPECT_DOUBLE_EQ(A.yz, v[1][2]);
+	EXPECT_DOUBLE_EQ(A.zx, v[2][0]);
+	EXPECT_DOUBLE_EQ(A.zy, v[2][1]);
+	EXPECT_DOUBLE_EQ(A.zz, v[2][2]);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_set_from_array_of_pointers) {
+	double **v = new double* [3];
+	for(unsigned int i=0; i<3; i++) {
+  		v[i] = new double [3];
+		for(unsigned int j; j<3; j++) { v[i][j] = 1.0 + i*0.1*j; }
+	}
+	
+	MATRIX_3x3 <double> A;
+	EXPECT_EQ(0, A.Set(3, v));
+	EXPECT_DOUBLE_EQ(A.xx, v[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v[0][1]);
+	EXPECT_DOUBLE_EQ(A.xz, v[0][2]);
+	EXPECT_DOUBLE_EQ(A.yx, v[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v[1][1]);
+	EXPECT_DOUBLE_EQ(A.yz, v[1][2]);
+	EXPECT_DOUBLE_EQ(A.zx, v[2][0]);
+	EXPECT_DOUBLE_EQ(A.zy, v[2][1]);
+	EXPECT_DOUBLE_EQ(A.zz, v[2][2]);
+	
+	double **v2 = new double* [2];
+	for(unsigned int i=0; i<2; i++) {
+  		v2[i] = new double [2];
+		for(unsigned int j; j<2; j++) { v2[i][j] = 1.0 + i*0.2*j; }
+	}
+	
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Set(2, v2, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Set(2, v2, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Set(2, v2, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Set(2, v2, 1)) << "grFlag=1, rFlag=1 - size unmatched allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, v2[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v2[0][1]);
+	EXPECT_DOUBLE_EQ(A.yx, v2[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v2[1][1]);
+	
+	double **v3 = new double* [4];
+	for(unsigned int i=0; i<4; i++) {
+  		v3[i] = new double [4];
+		for(unsigned int j; j<4; j++) { v3[i][j] = 1.0 + i*0.3*j; }
+	}
+	
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Set(4, v3, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Set(4, v3, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Set(4, v3, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Set(4, v3, 1)) << "grFlag=1, rFlag=1 - size unmatched allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, v3[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v3[0][1]);
+	EXPECT_DOUBLE_EQ(A.xz, v3[0][2]);
+	EXPECT_DOUBLE_EQ(A.yx, v3[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v3[1][1]);
+	EXPECT_DOUBLE_EQ(A.yz, v3[1][2]);
+	EXPECT_DOUBLE_EQ(A.zx, v3[2][0]);
+	EXPECT_DOUBLE_EQ(A.zy, v3[2][1]);
+	EXPECT_DOUBLE_EQ(A.zz, v3[2][2]);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_get_to_std_vector_one_dim) {
+	MATRIX_3x3 <double> A;
+    A.Set(3.3); 
+
+	std::vector <double> v;
+	EXPECT_EQ(0, A.Get(v));
+	EXPECT_EQ(A.xx, v[0]);
+	EXPECT_EQ(A.xy, v[1]);
+	EXPECT_EQ(A.xz, v[2]);
+	EXPECT_EQ(A.yx, v[3]);
+	EXPECT_EQ(A.yy, v[4]);
+	EXPECT_EQ(A.yz, v[5]);
+	EXPECT_EQ(A.zx, v[6]);
+	EXPECT_EQ(A.zy, v[7]);
+	EXPECT_EQ(A.zz, v[8]);
+	
+	v.assign(4, 6.6);
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Get(v, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Get(v, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Get(v, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Get(v, 1)) << "grFlag=1, rFlag=1 - resize allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, v[0]);
+	EXPECT_DOUBLE_EQ(A.xy, v[1]);
+	EXPECT_DOUBLE_EQ(A.yx, v[2]);
+	EXPECT_DOUBLE_EQ(A.yy, v[3]);
+	
+	v.assign(16, 9.9);
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Get(v, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Get(v, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Get(v, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Get(v, 1)) << "grFlag=1, rFlag=1 - resize allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, v[0]);
+	EXPECT_DOUBLE_EQ(A.xy, v[1]);
+	EXPECT_DOUBLE_EQ(A.xz, v[2]);
+	EXPECT_DOUBLE_EQ(A.yx, v[3]);
+	EXPECT_DOUBLE_EQ(A.yy, v[4]);
+	EXPECT_DOUBLE_EQ(A.yz, v[5]);
+	EXPECT_DOUBLE_EQ(A.zx, v[6]);
+	EXPECT_DOUBLE_EQ(A.zy, v[7]);
+	EXPECT_DOUBLE_EQ(A.zz, v[8]);
+}                                                     
+
+TEST(ap_basicMath_tests, MATRIX_3x3_set_rotation_matrix) {
+	MATRIX_3x3 <double> M;
+	double dAng = 30;
+	double rAng = dAng*M_PI/180;
+
+	M.RotMatX(rAng);
+	EXPECT_EQ(M.xx, 1);
+	EXPECT_EQ(M.xy, 0);
+	EXPECT_EQ(M.xz, 0);
+	EXPECT_EQ(M.yx, 0);
+	EXPECT_EQ(M.yy, cos(rAng));
+	EXPECT_EQ(M.yz, -sin(rAng));
+	EXPECT_EQ(M.zx, 0);
+	EXPECT_EQ(M.zy, sin(rAng));
+	EXPECT_EQ(M.zz, cos(rAng));
+
+	M.RotMatY(rAng);
+	EXPECT_EQ(M.xx, cos(rAng));
+	EXPECT_EQ(M.xy, 0);
+	EXPECT_EQ(M.xz, sin(rAng));
+	EXPECT_EQ(M.yx, 0);
+	EXPECT_EQ(M.yy, 1);
+	EXPECT_EQ(M.yz, 0);
+	EXPECT_EQ(M.zx, -sin(rAng));
+	EXPECT_EQ(M.zy, 0);
+	EXPECT_EQ(M.zz, cos(rAng));
+
+	M.RotMatZ(rAng);
+	EXPECT_EQ(M.xx, cos(rAng));
+	EXPECT_EQ(M.xy, -sin(rAng));
+	EXPECT_EQ(M.xz, 0);
+	EXPECT_EQ(M.yx, sin(rAng));
+	EXPECT_EQ(M.yy, cos(rAng));
+	EXPECT_EQ(M.yz, 0);
+	EXPECT_EQ(M.zx, 0);
+	EXPECT_EQ(M.zy, 0);
+	EXPECT_EQ(M.zz, 1);
+
+	M.RotMatXdeg(dAng);
+	EXPECT_EQ(M.xx, 1);
+	EXPECT_EQ(M.xy, 0);
+	EXPECT_EQ(M.xz, 0);
+	EXPECT_EQ(M.yx, 0);
+	EXPECT_EQ(M.yy, cos(rAng));
+	EXPECT_EQ(M.yz, -sin(rAng));
+	EXPECT_EQ(M.zx, 0);
+	EXPECT_EQ(M.zy, sin(rAng));
+	EXPECT_EQ(M.zz, cos(rAng));
+
+	M.RotMatYdeg(dAng);
+	EXPECT_EQ(M.xx, cos(rAng));
+	EXPECT_EQ(M.xy, 0);
+	EXPECT_EQ(M.xz, sin(rAng));
+	EXPECT_EQ(M.yx, 0);
+	EXPECT_EQ(M.yy, 1);
+	EXPECT_EQ(M.yz, 0);
+	EXPECT_EQ(M.zx, -sin(rAng));
+	EXPECT_EQ(M.zy, 0);
+	EXPECT_EQ(M.zz, cos(rAng));
+
+	M.RotMatZdeg(dAng);
+	EXPECT_EQ(M.xx, cos(rAng));
+	EXPECT_EQ(M.xy, -sin(rAng));
+	EXPECT_EQ(M.xz, 0);
+	EXPECT_EQ(M.yx, sin(rAng));
+	EXPECT_EQ(M.yy, cos(rAng));
+	EXPECT_EQ(M.yz, 0);
+	EXPECT_EQ(M.zx, 0);
+	EXPECT_EQ(M.zy, 0);
+	EXPECT_EQ(M.zz, 1);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_get_to_std_vector_two_dim) {
+	MATRIX_3x3 <double> A;
+    A.Set(3.3); 
+
+	std::vector < std::vector <double> > v;
+	v.resize(3);
+	for(unsigned int i=0; i<v.size(); i++) { v[i].resize(3); }
+
+	EXPECT_EQ(0, A.Get(v));
+	EXPECT_EQ(A.xx, v[0][0]);
+	EXPECT_EQ(A.xy, v[0][1]);
+	EXPECT_EQ(A.xz, v[0][2]);
+	EXPECT_EQ(A.yx, v[1][0]);
+	EXPECT_EQ(A.yy, v[1][1]);
+	EXPECT_EQ(A.yz, v[1][2]);
+	EXPECT_EQ(A.zx, v[2][0]);
+	EXPECT_EQ(A.zy, v[2][1]);
+	EXPECT_EQ(A.zz, v[2][2]);
+	
+	std::vector < std::vector <double> > v2;
+	v2.resize(2);
+	for(unsigned int i=0; i<v2.size(); i++) { v2[i].resize(2); }
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Get(v2, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Get(v2, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Get(v2, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Get(v2, 1)) << "grFlag=1, rFlag=1 - resize allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, v[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v[0][1]);
+	EXPECT_DOUBLE_EQ(A.yx, v[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v[1][1]);
+	
+	std::vector < std::vector <double> > v3;
+	v3.resize(4);
+	for(unsigned int i=0; i<v3.size(); i++) { v3[i].resize(4); }
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Get(v3, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Get(v3, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Get(v3, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Get(v3, 1)) << "grFlag=1, rFlag=1 - resize allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, v3[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v3[0][1]);
+	EXPECT_DOUBLE_EQ(A.xz, v3[0][2]);
+	EXPECT_DOUBLE_EQ(A.yx, v3[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v3[1][1]);
+	EXPECT_DOUBLE_EQ(A.yz, v3[1][2]);
+	EXPECT_DOUBLE_EQ(A.zx, v3[2][0]);
+	EXPECT_DOUBLE_EQ(A.zy, v3[2][1]);
+	EXPECT_DOUBLE_EQ(A.zz, v3[2][2]);
+}                                                     
+
+TEST(ap_basicMath_tests, MATRIX_3x3_get_to_array_one_dim) {
+	double u[4];
+	double v[9];
+	double w[16];
+
+	MATRIX_3x3 <double> A;
+	A.Set(5.4);
+	EXPECT_EQ(0, A.Get(9, v));
+	EXPECT_DOUBLE_EQ(A.xx, v[0]);
+	EXPECT_DOUBLE_EQ(A.xy, v[1]);
+	EXPECT_DOUBLE_EQ(A.xz, v[2]);
+	EXPECT_DOUBLE_EQ(A.yx, v[3]);
+	EXPECT_DOUBLE_EQ(A.yy, v[4]);
+	EXPECT_DOUBLE_EQ(A.yz, v[5]);
+	EXPECT_DOUBLE_EQ(A.zx, v[6]);
+	EXPECT_DOUBLE_EQ(A.zy, v[7]);
+	EXPECT_DOUBLE_EQ(A.zz, v[8]);
+	
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Get(4, u, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Get(4, u, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Get(4, u, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Get(4, u, 1)) << "grFlag=1, rFlag=1 - resize allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, u[0]);
+	EXPECT_DOUBLE_EQ(A.xy, u[1]);
+	EXPECT_DOUBLE_EQ(A.yx, u[2]);
+	EXPECT_DOUBLE_EQ(A.yy, u[3]);
+	
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Get(16, w, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Get(16, w, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Get(16, w, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Get(16, w, 1)) << "grFlag=1, rFlag=1 - resize allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, w[0]);
+	EXPECT_DOUBLE_EQ(A.xy, w[1]);
+	EXPECT_DOUBLE_EQ(A.xz, w[2]);
+	EXPECT_DOUBLE_EQ(A.yx, w[3]);
+	EXPECT_DOUBLE_EQ(A.yy, w[4]);
+	EXPECT_DOUBLE_EQ(A.yz, w[5]);
+	EXPECT_DOUBLE_EQ(A.zx, w[6]);
+	EXPECT_DOUBLE_EQ(A.zy, w[7]);
+	EXPECT_DOUBLE_EQ(A.zz, w[8]);
+}                                                     
+
+TEST(ap_basicMath_tests, MATRIX_3x3_get_to_array_fixed_two_dim) {
+	double v[3][3];
+
+	MATRIX_3x3 <double> A(5.4);
+	A.Get(v);
+	EXPECT_DOUBLE_EQ(A.xx, v[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v[0][1]);
+	EXPECT_DOUBLE_EQ(A.xz, v[0][2]);
+	EXPECT_DOUBLE_EQ(A.yx, v[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v[1][1]);
+	EXPECT_DOUBLE_EQ(A.yz, v[1][2]);
+	EXPECT_DOUBLE_EQ(A.zx, v[2][0]);
+	EXPECT_DOUBLE_EQ(A.zy, v[2][1]);
+	EXPECT_DOUBLE_EQ(A.zz, v[2][2]);
+}                                                     
+
+TEST(ap_basicMath_tests, MATRIX_3x3_get_to_array_two_dim) {
+	double **u = new double* [2];
+	for(unsigned int i=0; i<2; i++) {
+  		u[i] = new double [2];
+	}
+	
+	double **v = new double* [3];
+	for(unsigned int i=0; i<3; i++) {
+  		v[i] = new double [3];
+	}
+	
+	double **w = new double* [3];
+	for(unsigned int i=0; i<3; i++) {
+  		w[i] = new double [3];
+	}
+
+	MATRIX_3x3 <double> A;
+	A.Set(5.4);
+	EXPECT_EQ(0, A.Get(3, v));
+	EXPECT_DOUBLE_EQ(A.xx, v[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, v[0][1]);
+	EXPECT_DOUBLE_EQ(A.xz, v[0][2]);
+	EXPECT_DOUBLE_EQ(A.yx, v[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, v[1][1]);
+	EXPECT_DOUBLE_EQ(A.yz, v[1][2]);
+	EXPECT_DOUBLE_EQ(A.zx, v[2][0]);
+	EXPECT_DOUBLE_EQ(A.zy, v[2][1]);
+	EXPECT_DOUBLE_EQ(A.zz, v[2][2]);
+	
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Get(2, u, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Get(2, u, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Get(2, u, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Get(2, u, 1)) << "grFlag=1, rFlag=1 - resize allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, u[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, u[0][1]);
+	EXPECT_DOUBLE_EQ(A.yx, u[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, u[1][1]);
+	
+	A.SetGolobalResizeFlag(0);                
+	EXPECT_EQ(1, A.Get(4, w, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, A.Get(4, w, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	A.SetGolobalResizeFlag(1);                
+	EXPECT_EQ(1, A.Get(4, w, 0)) << "grFlag=1, rFlag=0" << std::endl;
+	EXPECT_EQ(0, A.Get(4, w, 1)) << "grFlag=1, rFlag=1 - resize allowed" << std::endl;
+	EXPECT_DOUBLE_EQ(A.xx, w[0][0]);
+	EXPECT_DOUBLE_EQ(A.xy, w[0][1]);
+	EXPECT_DOUBLE_EQ(A.xz, w[0][2]);
+	EXPECT_DOUBLE_EQ(A.yx, w[1][0]);
+	EXPECT_DOUBLE_EQ(A.yy, w[1][1]);
+	EXPECT_DOUBLE_EQ(A.yz, w[1][2]);
+	EXPECT_DOUBLE_EQ(A.zx, w[2][0]);
+	EXPECT_DOUBLE_EQ(A.zy, w[2][1]);
+	EXPECT_DOUBLE_EQ(A.zz, w[2][2]);
+}                                                     
+
+TEST(ap_basicMath_tests, MATRIX_3x3_determinant) {
+	MATRIX_3x3 <double> A(4.6);
+	double val = 4.6*4.6*4.6 * 3;
+
+	EXPECT_DOUBLE_EQ(A.Det(), val);
+}
