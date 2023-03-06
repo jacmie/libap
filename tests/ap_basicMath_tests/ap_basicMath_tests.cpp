@@ -913,8 +913,254 @@ TEST(ap_basicMath_tests, MATRIX_3x3_get_to_array_two_dim) {
 }                                                     
 
 TEST(ap_basicMath_tests, MATRIX_3x3_determinant) {
-	MATRIX_3x3 <double> A(4.6);
-	double val = 4.6*4.6*4.6 * 3;
+	MATRIX_3x3 <double> A(1, 2, 3, 0, 1, 4, 5, 6, 0);
 
-	EXPECT_DOUBLE_EQ(A.Det(), val);
+	EXPECT_DOUBLE_EQ(A.Det(), 1);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_multiplication_of_matrices) {
+	MATRIX_3x3 <double> A(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	MATRIX_3x3 <double> B(9, 8, 7, 6, 5, 4, 3, 2, 1);
+	MATRIX_3x3 <double> C = A*B;
+	
+	EXPECT_DOUBLE_EQ(C.xx, 30);
+	EXPECT_DOUBLE_EQ(C.xy, 24);
+	EXPECT_DOUBLE_EQ(C.xz, 18);
+	EXPECT_DOUBLE_EQ(C.yx, 84);
+	EXPECT_DOUBLE_EQ(C.yy, 69);
+	EXPECT_DOUBLE_EQ(C.yz, 54);
+	EXPECT_DOUBLE_EQ(C.zx, 138);
+	EXPECT_DOUBLE_EQ(C.zy, 114);
+	EXPECT_DOUBLE_EQ(C.zz, 90);
+	
+	A *= B;
+	
+	EXPECT_DOUBLE_EQ(A.xx, 30);
+	EXPECT_DOUBLE_EQ(A.xy, 24);
+	EXPECT_DOUBLE_EQ(A.xz, 18);
+	EXPECT_DOUBLE_EQ(A.yx, 84);
+	EXPECT_DOUBLE_EQ(A.yy, 69);
+	EXPECT_DOUBLE_EQ(A.yz, 54);
+	EXPECT_DOUBLE_EQ(A.zx, 138);
+	EXPECT_DOUBLE_EQ(A.zy, 114);
+	EXPECT_DOUBLE_EQ(A.zz, 90);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_multiplication_of_matrices_components) {
+	MATRIX_3x3 <double> A(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	MATRIX_3x3 <double> B(10, 20, 30, 40, 50, 60, 70, 80, 90);
+	MATRIX_3x3 <double> C = A&B;
+	
+	EXPECT_DOUBLE_EQ(C.xx, 10);
+	EXPECT_DOUBLE_EQ(C.xy, 40);
+	EXPECT_DOUBLE_EQ(C.xz, 90);
+	EXPECT_DOUBLE_EQ(C.yx, 160);
+	EXPECT_DOUBLE_EQ(C.yy, 250);
+	EXPECT_DOUBLE_EQ(C.yz, 360);
+	EXPECT_DOUBLE_EQ(C.zx, 490);
+	EXPECT_DOUBLE_EQ(C.zy, 640);
+	EXPECT_DOUBLE_EQ(C.zz, 810);
+	
+	A &= B;
+	
+	EXPECT_DOUBLE_EQ(A.xx, 10);
+	EXPECT_DOUBLE_EQ(A.xy, 40);
+	EXPECT_DOUBLE_EQ(A.xz, 90);
+	EXPECT_DOUBLE_EQ(A.yx, 160);
+	EXPECT_DOUBLE_EQ(A.yy, 250);
+	EXPECT_DOUBLE_EQ(A.yz, 360);
+	EXPECT_DOUBLE_EQ(A.zx, 490);
+	EXPECT_DOUBLE_EQ(A.zy, 640);
+	EXPECT_DOUBLE_EQ(A.zz, 810);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_multiplication_by_scalar) {
+	MATRIX_3x3 <double> A(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	MATRIX_3x3 B = 0.5*A;
+	MATRIX_3x3 C = A*0.5;
+
+	EXPECT_DOUBLE_EQ(B.xx, 0.5);
+	EXPECT_DOUBLE_EQ(B.xy, 1);
+	EXPECT_DOUBLE_EQ(B.xz, 1.5);
+	EXPECT_DOUBLE_EQ(B.yx, 2);
+	EXPECT_DOUBLE_EQ(B.yy, 2.5);
+	EXPECT_DOUBLE_EQ(B.yz, 3);
+	EXPECT_DOUBLE_EQ(B.zx, 3.5);
+	EXPECT_DOUBLE_EQ(B.zy, 4);
+	EXPECT_DOUBLE_EQ(B.zz, 4.5);
+
+	EXPECT_DOUBLE_EQ(C.xx, 0.5);
+	EXPECT_DOUBLE_EQ(C.xy, 1);
+	EXPECT_DOUBLE_EQ(C.xz, 1.5);
+	EXPECT_DOUBLE_EQ(C.yx, 2);
+	EXPECT_DOUBLE_EQ(C.yy, 2.5);
+	EXPECT_DOUBLE_EQ(C.yz, 3);
+	EXPECT_DOUBLE_EQ(C.zx, 3.5);
+	EXPECT_DOUBLE_EQ(C.zy, 4);
+	EXPECT_DOUBLE_EQ(C.zz, 4.5);
+	
+	A *= 0.5;
+
+	EXPECT_DOUBLE_EQ(A.xx, 0.5);
+	EXPECT_DOUBLE_EQ(A.xy, 1);
+	EXPECT_DOUBLE_EQ(A.xz, 1.5);
+	EXPECT_DOUBLE_EQ(A.yx, 2);
+	EXPECT_DOUBLE_EQ(A.yy, 2.5);
+	EXPECT_DOUBLE_EQ(A.yz, 3);
+	EXPECT_DOUBLE_EQ(A.zx, 3.5);
+	EXPECT_DOUBLE_EQ(A.zy, 4);
+	EXPECT_DOUBLE_EQ(A.zz, 4.5);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_division_by_scalar) {
+	MATRIX_3x3 <double> A(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	MATRIX_3x3 B = A/2.0;
+	A /= 2.0;
+
+	EXPECT_DOUBLE_EQ(A.xx, 0.5);
+	EXPECT_DOUBLE_EQ(A.xy, 1);
+	EXPECT_DOUBLE_EQ(A.xz, 1.5);
+	EXPECT_DOUBLE_EQ(A.yx, 2);
+	EXPECT_DOUBLE_EQ(A.yy, 2.5);
+	EXPECT_DOUBLE_EQ(A.yz, 3);
+	EXPECT_DOUBLE_EQ(A.zx, 3.5);
+	EXPECT_DOUBLE_EQ(A.zy, 4);
+	EXPECT_DOUBLE_EQ(A.zz, 4.5);
+	
+	EXPECT_DOUBLE_EQ(B.xx, 0.5);
+	EXPECT_DOUBLE_EQ(B.xy, 1);
+	EXPECT_DOUBLE_EQ(B.xz, 1.5);
+	EXPECT_DOUBLE_EQ(B.yx, 2);
+	EXPECT_DOUBLE_EQ(B.yy, 2.5);
+	EXPECT_DOUBLE_EQ(B.yz, 3);
+	EXPECT_DOUBLE_EQ(B.zx, 3.5);
+	EXPECT_DOUBLE_EQ(B.zy, 4);
+	EXPECT_DOUBLE_EQ(B.zz, 4.5);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_sum_of_matrixes) {
+	MATRIX_3x3 <double> A(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	MATRIX_3x3 <double> B(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	MATRIX_3x3 C = A+B;
+
+	EXPECT_DOUBLE_EQ(C.xx, 2);
+	EXPECT_DOUBLE_EQ(C.xy, 4);
+	EXPECT_DOUBLE_EQ(C.xz, 6);
+	EXPECT_DOUBLE_EQ(C.yx, 8);
+	EXPECT_DOUBLE_EQ(C.yy, 10);
+	EXPECT_DOUBLE_EQ(C.yz, 12);
+	EXPECT_DOUBLE_EQ(C.zx, 14);
+	EXPECT_DOUBLE_EQ(C.zy, 16);
+	EXPECT_DOUBLE_EQ(C.zz, 18);
+	
+	A += B;
+
+	EXPECT_DOUBLE_EQ(A.xx, 2);
+	EXPECT_DOUBLE_EQ(A.xy, 4);
+	EXPECT_DOUBLE_EQ(A.xz, 6);
+	EXPECT_DOUBLE_EQ(A.yx, 8);
+	EXPECT_DOUBLE_EQ(A.yy, 10);
+	EXPECT_DOUBLE_EQ(A.yz, 12);
+	EXPECT_DOUBLE_EQ(A.zx, 14);
+	EXPECT_DOUBLE_EQ(A.zy, 16);
+	EXPECT_DOUBLE_EQ(A.zz, 18);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_substraction_of_matrixes) {
+	MATRIX_3x3 <double> A(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	MATRIX_3x3 <double> B(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	MATRIX_3x3 C = A-B;
+
+	EXPECT_DOUBLE_EQ(C.xx, 0);
+	EXPECT_DOUBLE_EQ(C.xy, 0);
+	EXPECT_DOUBLE_EQ(C.xz, 0);
+	EXPECT_DOUBLE_EQ(C.yx, 0);
+	EXPECT_DOUBLE_EQ(C.yy, 0);
+	EXPECT_DOUBLE_EQ(C.yz, 0);
+	EXPECT_DOUBLE_EQ(C.zx, 0);
+	EXPECT_DOUBLE_EQ(C.zy, 0);
+	EXPECT_DOUBLE_EQ(C.zz, 0);
+	
+	A -= B;
+
+	EXPECT_DOUBLE_EQ(A.xx, 0);
+	EXPECT_DOUBLE_EQ(A.xy, 0);
+	EXPECT_DOUBLE_EQ(A.xz, 0);
+	EXPECT_DOUBLE_EQ(A.yx, 0);
+	EXPECT_DOUBLE_EQ(A.yy, 0);
+	EXPECT_DOUBLE_EQ(A.yz, 0);
+	EXPECT_DOUBLE_EQ(A.zx, 0);
+	EXPECT_DOUBLE_EQ(A.zy, 0);
+	EXPECT_DOUBLE_EQ(A.zz, 0);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_revers) {
+	MATRIX_3x3 <double> A(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	MATRIX_3x3 <double> C = -A;
+	
+	EXPECT_DOUBLE_EQ(C.xx, -1);
+	EXPECT_DOUBLE_EQ(C.xy, -2);
+	EXPECT_DOUBLE_EQ(C.xz, -3);
+	EXPECT_DOUBLE_EQ(C.yx, -4);
+	EXPECT_DOUBLE_EQ(C.yy, -5);
+	EXPECT_DOUBLE_EQ(C.yz, -6);
+	EXPECT_DOUBLE_EQ(C.zx, -7);
+	EXPECT_DOUBLE_EQ(C.zy, -8);
+	EXPECT_DOUBLE_EQ(C.zz, -9);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_multiplication_by_vector) {
+	MATRIX_3x3 <double> A(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	VECTOR_3   <double> v(2, 1, 3);
+	VECTOR_3   <double> w = A*v;
+
+	EXPECT_DOUBLE_EQ(w.x, 13);
+	EXPECT_DOUBLE_EQ(w.y, 31);
+	EXPECT_DOUBLE_EQ(w.z, 49);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_multiplication_vector_by_matrix) {
+	MATRIX_3x3 <double> A(2, 1, 3, 3, 3, 2, 4, 1, 2);
+	VECTOR_3   <double> v(1, 2, 3);
+	VECTOR_3   <double> w = v*A;
+
+	EXPECT_DOUBLE_EQ(w.x, 20);
+	EXPECT_DOUBLE_EQ(w.y, 10);
+	EXPECT_DOUBLE_EQ(w.z, 13);
+	
+	v *= A;
+
+	EXPECT_DOUBLE_EQ(v.x, 20);
+	EXPECT_DOUBLE_EQ(v.y, 10);
+	EXPECT_DOUBLE_EQ(v.z, 13);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_transposition) {
+	MATRIX_3x3 <double> A(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	MATRIX_3x3 <double> C = !A;
+	
+	EXPECT_DOUBLE_EQ(C.xx, 1);
+	EXPECT_DOUBLE_EQ(C.xy, 4);
+	EXPECT_DOUBLE_EQ(C.xz, 7);
+	EXPECT_DOUBLE_EQ(C.yx, 2);
+	EXPECT_DOUBLE_EQ(C.yy, 5);
+	EXPECT_DOUBLE_EQ(C.yz, 8);
+	EXPECT_DOUBLE_EQ(C.zx, 3);
+	EXPECT_DOUBLE_EQ(C.zy, 6);
+	EXPECT_DOUBLE_EQ(C.zz, 9);
+}
+
+TEST(ap_basicMath_tests, MATRIX_3x3_inversion) {
+	MATRIX_3x3 <double> A(1, 2, 3, 0, 1, 4, 5, 6, 0);
+	MATRIX_3x3 <double> C = ~A;
+	
+	EXPECT_DOUBLE_EQ(C.xx, -24);
+	EXPECT_DOUBLE_EQ(C.xy, 18);
+	EXPECT_DOUBLE_EQ(C.xz, 5);
+	EXPECT_DOUBLE_EQ(C.yx, 20);
+	EXPECT_DOUBLE_EQ(C.yy, -15);
+	EXPECT_DOUBLE_EQ(C.yz, -4);
+	EXPECT_DOUBLE_EQ(C.zx, -5);
+	EXPECT_DOUBLE_EQ(C.zy, 4);
+	EXPECT_DOUBLE_EQ(C.zz, 1);
 }

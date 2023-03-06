@@ -585,71 +585,222 @@ namespace ap
 		 */
     	real Det()
         {
-        	return xz*yy*zx + xx*yz*zy + xy*yx*zz;
-        };
+        	return xx*(yy*zz - yz*zy) - xy*(yx*zz - yz*zx) + xz*(yx*zy - yy*zx);
+        }
 
 	private:
 		bool grFlag = 1; // global resize flag
 	};
 
-	/////////////////////////////////////////////////////////////////////////////
-/*
 	//! Arithmetic operator - multiplication of 2 matrices
     template <typename real>
-	MATRIX_3x3  operator  *( const MATRIX_3x3 &A , const MATRIX_3x3 &B );
+	MATRIX_3x3 <real> operator *(const MATRIX_3x3 <real> &A, const MATRIX_3x3 <real> &B)
+	{
+  		MATRIX_3x3 <real> C;
+
+  		C.xx = A.xx * B.xx  +  A.xy * B.yx  + A.xz * B.zx;
+  		C.yx = A.yx * B.xx  +  A.yy * B.yx  + A.yz * B.zx;
+  		C.zx = A.zx * B.xx  +  A.zy * B.yx  + A.zz * B.zx;
+
+  		C.xy = A.xx * B.xy  +  A.xy * B.yy  + A.xz * B.zy;
+  		C.yy = A.yx * B.xy  +  A.yy * B.yy  + A.yz * B.zy;
+  		C.zy = A.zx * B.xy  +  A.zy * B.yy  + A.zz * B.zy;
+
+  		C.xz = A.xx * B.xz  +  A.xy * B.yz  + A.xz * B.zz;
+  		C.yz = A.yx * B.xz  +  A.yy * B.yz  + A.yz * B.zz;
+  		C.zz = A.zx * B.xz  +  A.zy * B.yz  + A.zz * B.zz;
+
+ 		return  C;
+	}
 	
 	//! Arithmetic operator - multiplication of 2 matrices components ( AxxBxx, AxyBxy, ..., AzzBzz )
     template <typename real>
-	MATRIX_3x3  operator  &( const MATRIX_3x3 &A , const MATRIX_3x3 &B );
-	
-	//! Arithmetic operator - matrix transposition ( A^T )
-    template <typename real>
-	MATRIX_3x3  operator  !( const MATRIX_3x3 &A                       );
-	
-	//! Arithmetic operator - matrix inversion ( A^(-1) )
-    template <typename real>
-	MATRIX_3x3  operator  ~( const MATRIX_3x3 &A                       );
+	MATRIX_3x3 <real> operator &(const MATRIX_3x3 <real> &A, const MATRIX_3x3 <real> &B)
+	{
+ 		MATRIX_3x3 <real> C;
+
+  		C.xx = A.xx * B.xx;     C.xy = A.xy * B.xy;      C.xz = A.xz * B.xz;
+  		C.yx = A.yx * B.yx;     C.yy = A.yy * B.yy;      C.yz = A.yz * B.yz;
+  		C.zx = A.zx * B.zx;     C.zy = A.zy * B.zy;      C.zz = A.zz * B.zz;
+
+ 		return C;
+	}
 	
 	//! Arithmetic operator - product of matrix and scalar
     template <typename real>
-	MATRIX_3x3  operator  *( const MATRIX_3x3 &A , const real     &s );
+	MATRIX_3x3 <real> operator *(const MATRIX_3x3 <real> &A, const real &s)
+	{
+ 		MATRIX_3x3 <real> C;
+
+  		C.xx = A.xx * s;     C.xy = A.xy * s;      C.xz = A.xz * s;
+  		C.yx = A.yx * s;     C.yy = A.yy * s;      C.yz = A.yz * s;
+  		C.zx = A.zx * s;     C.zy = A.zy * s;      C.zz = A.zz * s;
+
+ 		return C;
+	}
 	
 	//! Arithmetic operator - product of scalar and matrix
     template <typename real>
-	MATRIX_3x3  operator  *( const real     &s , const MATRIX_3x3 &A );
-	
+	MATRIX_3x3 <real> operator *(const real &s, const MATRIX_3x3 <real> &A)
+	{
+ 		return A*s;
+	}
+
 	//! Arithmetic operator - division of matrix by scalar (product of matrix and 1/s)
     template <typename real>
-	MATRIX_3x3  operator  /( const MATRIX_3x3 &A , const real     &s );
+	MATRIX_3x3 <real> operator /(const MATRIX_3x3 <real> &A, const real &s)
+	{
+ 		MATRIX_3x3 <real> C;
+
+  		C.xx = A.xx / s;     C.xy = A.xy / s;      C.xz = A.xz / s;
+  		C.yx = A.yx / s;     C.yy = A.yy / s;      C.yz = A.yz / s;
+  		C.zx = A.zx / s;     C.zy = A.zy / s;      C.zz = A.zz / s;
+
+ 		return C;
+	}
 	
 	//! Arithmetic operator - sum of 2 matrices
     template <typename real>
-	MATRIX_3x3  operator  +( const MATRIX_3x3 &A , const MATRIX_3x3 &B );
+	MATRIX_3x3 <real> operator +(const MATRIX_3x3 <real> &A, const MATRIX_3x3 <real> &B)
+	{
+ 		MATRIX_3x3 <real> C;
+
+  		C.xx = A.xx + B.xx;     C.xy = A.xy + B.xy;      C.xz = A.xz + B.xz;
+  		C.yx = A.yx + B.yx;     C.yy = A.yy + B.yy;      C.yz = A.yz + B.yz;
+  		C.zx = A.zx + B.zx;     C.zy = A.zy + B.zy;      C.zz = A.zz + B.zz;
+
+ 		return C;
+	}
 	
 	//! Arithmetic operator - subtraction of 2 matrices (sum of A and -B)
     template <typename real>
-	MATRIX_3x3  operator  -( const MATRIX_3x3 &A , const MATRIX_3x3 &B );
-	
+	MATRIX_3x3 <real> operator -(const MATRIX_3x3 <real> &A, const MATRIX_3x3 <real> &B)
+	{
+ 		MATRIX_3x3 <real> C;
+
+  		C.xx = A.xx - B.xx;     C.xy = A.xy - B.xy;      C.xz = A.xz - B.xz;
+  		C.yx = A.yx - B.yx;     C.yy = A.yy - B.yy;      C.yz = A.yz - B.yz;
+  		C.zx = A.zx - B.zx;     C.zy = A.zy - B.zy;      C.zz = A.zz - B.zz;
+
+ 		return C;
+	}
+
 	//! Arithmetic operator - reverse of matrix (-A)
     template <typename real>
-	MATRIX_3x3  operator  -( const MATRIX_3x3 &A                       );
-	
-	//! Arithmetic operator - division assignment
-    template <typename real>
-	void        operator /=(       MATRIX_3x3 &A , const real     &s );
+	MATRIX_3x3 <real> operator -(const MATRIX_3x3 <real> &A)
+	{
+ 		MATRIX_3x3 <real> C;
+
+  		C.xx = -A.xx;     C.xy = -A.xy;      C.xz = -A.xz;
+  		C.yx = -A.yx;     C.yy = -A.yy;      C.yz = -A.yz;
+  		C.zx = -A.zx;     C.zy = -A.zy;      C.zz = -A.zz;
+
+ 		return C;
+	}
 
 	//! Arithmetic operator - multiplication of matrix and vector
     template <typename real>
-	VECTOR   operator  *( const MATRIX_3x3 &A , const VECTOR  &b );
+	VECTOR_3 <real> operator *(const MATRIX_3x3 <real> &A, const VECTOR_3 <real> &v)
+	{
+ 		VECTOR_3 <real> w;
+
+  		w.x = A.xx * v.x  +  A.xy * v.y  +  A.xz * v.z;
+  		w.y = A.yx * v.x  +  A.yy * v.y  +  A.yz * v.z;
+  		w.z = A.zx * v.x  +  A.zy * v.y  +  A.zz * v.z;
+
+ 		return w;
+	}
+	
 	//! Arithmetic operator - multiplication of vector and matrix
     template <typename real>
-	VECTOR   operator  *( const VECTOR  &b , const MATRIX_3x3 &A );
+	VECTOR_3 <real> operator *(const VECTOR_3 <real> &v, const MATRIX_3x3 <real> &A)
+	{
+ 		VECTOR_3 <real> w;
+
+  		w.x = v.x * A.xx  +  v.y * A.yx  +  v.z * A.zx;
+  		w.y = v.x * A.xy  +  v.y * A.yy  +  v.z * A.zy;
+  		w.z = v.x * A.xz  +  v.y * A.yz  +  v.z * A.zz;
+
+ 		return w;
+	}
+	
 	//! Arithmetic operator - multiplication of vector and inverted matrix
     template <typename real>
-	VECTOR   operator  /( const VECTOR  &b ,       MATRIX_3x3 &A );
-*/
-	////////////////////////////////////////////////////////////////////////////
+	VECTOR_3 <real> operator /(const VECTOR_3 <real> &v, const MATRIX_3x3 <real> &A)
+	{
+		return v * ~A;
+	}
 
+	//! Arithmetic operator - matrix transposition ( A^T )
+    template <typename real>
+	MATRIX_3x3 <real> operator !(const MATRIX_3x3 <real> &A) // A^T
+	{
+  		return MATRIX_3x3 <real> (
+                          A.xx, A.yx, A.zx,
+                          A.xy, A.yy, A.zy,
+                          A.xz, A.yz, A.zz
+                       	  );
+	}
+	
+	//! Arithmetic operator - matrix inversion ( A^(-1) )
+    template <typename real>
+	MATRIX_3x3 <real> operator ~(const MATRIX_3x3 <real> &A) // A^(-1)
+	{
+  		MATRIX_3x3 <real> C = A;
+  		real w;
+		w = C.Det();
+  
+  		C.xx = A.yy * A.zz  -  A.zy * A.yz;
+  		C.xy = A.xz * A.zy  -  A.xy * A.zz;
+  		C.xz = A.xy * A.yz  -  A.xz * A.yy;
+
+  		C.yx = A.yz * A.zx  -  A.yx * A.zz;
+  		C.yy = A.xx * A.zz  -  A.xz * A.zx;
+  		C.yz = A.xz * A.yx  -  A.xx * A.yz;
+
+  		C.zx = A.yx * A.zy  -  A.yy * A.zx;
+  		C.zy = A.xy * A.zx  -  A.xx * A.zy;
+  		C.zz = A.xx * A.yy  -  A.xy * A.yx;
+  
+  		if(w != 0.0) C /= w;
+  
+  		return C;
+	}
+	
+	// Shorthand Ops
+
+	//! Arithmetic operator - multiplication of 2 matrices
+    template <typename real>
+	void operator *=(MATRIX_3x3 <real> &A, const MATRIX_3x3 <real> &B) { A = A*B; }
+	
+	//! Arithmetic operator - multiplication of 2 matrices components ( AxxBxx, AxyBxy, ..., AzzBzz )
+    template <typename real>
+	void operator &=(MATRIX_3x3 <real> &A, const MATRIX_3x3 <real> &B) { A = A&B; }
+	
+	//! Arithmetic operator - product of matrix and scalar
+    template <typename real>
+	void operator *=(MATRIX_3x3 <real> &A, const real &s) { A = A*s; }
+	
+	//! Arithmetic operator - division assignment
+    template <typename real>
+	void operator /=(MATRIX_3x3 <real> &A, const real &s) { A = A/s; }
+	
+	//! Arithmetic operator - sum of 2 matrices
+    template <typename real>
+	void operator +=(MATRIX_3x3 <real> &A, const MATRIX_3x3 <real> &B) { A = A+B; }
+	
+	//! Arithmetic operator - subtraction of 2 matrices (sum of A and -B)
+    template <typename real>
+	void operator -=(MATRIX_3x3 <real> &A, const MATRIX_3x3 <real> &B) { A = A-B; }
+
+	//! Arithmetic operator - multiplication of vector and matrix
+    template <typename real>
+	void operator *=(VECTOR_3 <real> &v, const MATRIX_3x3 <real> &A) { v = v*A; }
+	
+	//! Arithmetic operator - multiplication of vector and inverted matrix
+    template <typename real>
+	void operator /=(VECTOR_3 <real> &v, const MATRIX_3x3 <real> &A) { v = v/A; }
+	
 	//! Print to std:ostream
     template <typename real>
 	std::ostream& operator << ( std::ostream &out, const MATRIX_3x3 <real> &mat )

@@ -455,6 +455,7 @@ namespace ap
 	//! Arithmetic operator - multiplication assigment
     template <typename real>
 	void operator *=( VECTOR_3 <real> &a , const real &s ) { a = a*s; }
+	
 	//! Arithmetic operator - division assigment
     template <typename real>
 	void operator /=( VECTOR_3 <real> &a , const real  &s ) { a = a/s;} 
