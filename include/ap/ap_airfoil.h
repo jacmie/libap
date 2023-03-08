@@ -35,8 +35,14 @@
     included to PanuklConfigLib 20.11.2020
 */
 
+namespace ap
+{
+	enum recognizeAirfoilBy {AIRFOIL_BY_CONTENT=0, AIRFOIL_BY_EXTENSION};
+
 class AIRFOIL
 {
+	enum airfoilFileType {PRF_4=0, PRF_3, PRF_2, KOO, XFOIL, L_DAT};
+
 	// 0 - recognition by content, 1 - recognition by filename extention
 	int iReadType;	
 	
@@ -51,9 +57,13 @@ class AIRFOIL
 	int Read_DAT( std::string fileName );
 	int Read_DAT_LEDNICER( std::string fileName );	// by Anna Sima
 
+	void ReadRow(int type, std::string &line, double &x1, double &y1, double &x2, double &y2);
+	int ReadColumns(int type, std::stringstream &buffer, 
+		std::vector <double> &x1, std::vector <double> &y1, std::vector <double> &x2, std::vector <double> &y2, 
+		unsigned int n1, unsigned int n2);
 	// methods to get file type by a file content or its extension (by Anna Sima)
-	void getiTypeByContent( std::string fileName );
-	void getiTypeByExt( std::string fileName );
+	int getiTypeByContent( std::string fileName );
+	int getiTypeByExt( std::string fileName );
 
 	// methods to provide a valid PRF format
 	int Write_PRF( std::string fileName );
@@ -89,6 +99,8 @@ class AIRFOIL
 	int ReadPar( FILE * stream, const char * Format, void *Par1, void *Par2, void *Par3, void *Par4 );
 	int ReadComm( FILE *stream );
 	void ReadDummy( FILE *stream );
+	int isstrblank( char *cc, int iLen );
+	int nLines( FILE * stream );
 	
 	std::string cc;
 	std::string comment;
@@ -133,13 +145,13 @@ public:
 	int Write( std::string fileName, int iTyp=0 );
 	
 	//! returns read status: 0 - no data, 1 - data read succesfuly
-	int ReadStatus( void ){ return iRead; };           
+	int ReadStatus() { return iRead; }
 
 	//! returns the type of format recognition: \n 0 - recognition by content (default), \n 1 - recognition by filename extention
-	int GetReadType( void ) { return iReadType; };
+	int GetReadType() { return iReadType; }
 
 	//! sets the type of format recognition
-	void SetReadType( int iRT ) { iReadType = iRT; };  
+	void SetReadType( int iRT ) { iReadType = iRT; }
 	
 	//! generates NACA airfoil given by long int value (e.g. iNACA = 23012), \n NN - the number of points that define the airfoil geometry
 	int ReadNaca( long int iNACA, int NN=100 );
@@ -153,6 +165,7 @@ public:
 	AIRFOIL( void );
 	~AIRFOIL( void ){ Clean(); };
 };
+}
 
 #endif /*AP_AIRFOIL_H*/
 

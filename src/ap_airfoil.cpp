@@ -22,36 +22,40 @@
 #include <regex>
 #include <algorithm>
 #include <iostream>
+#include <sstream>
+#include <fstream>
 
 #include "ap_airfoil.h"
 
 using namespace std;
 
-AIRFOIL::AIRFOIL( void )
+namespace ap
 {
-	Xd = 0;
-	Xg = 0;
-	Zd = 0;
-	Zg = 0;
-	Xf = 0;
-	Zf = 0;
-	Xrob = 0;
-	Zrob = 0;
-	N = 0;
-	Nf = 0;
-	Nrob = 0;
+	AIRFOIL::AIRFOIL( void )
+	{
+		Xd = 0;
+		Xg = 0;
+		Zd = 0;
+		Zg = 0;
+		Xf = 0;
+		Zf = 0;
+		Xrob = 0;
+		Zrob = 0;
+		N = 0;
+		Nf = 0;
+		Nrob = 0;
 
-	/* Types:
+		/* Types:
 	    0 - PRF - PANUKL (prf1) - native PANUKL (4 columns) format \n
 	    1 - PRF - prf2 - by L.Wiechers- NAME in header, N below header \n 
 	    2 - KOO - koordinate by L.Wiechers \n
 	    3 - DAT - SELIG - (Xfoil) \n
 	    4 - DAT - LEDNICER
-	*/
+		*/
 
-	iType = 0;
-	iReadType = 0;
-}
+		iType = 0;
+		iReadType = 0;
+	}
 
 void AIRFOIL::Clean( void )
 {
@@ -73,16 +77,16 @@ int AIRFOIL::Read( std::string fileName )
 {
 	Clean();
 
-	fprintf(stderr,"iReadType %d\n",iReadType);
-	if( iReadType )
-		getiTypeByContent(fileName);   // gets file type by content
-	if( iReadType == 0 || iType == -1 )
-		getiTypeByExt(fileName);       // gets file type by extension
+	int iType = -1;
 
+	if( iReadType == AIRFOIL_BY_CONTENT )   { iType = getiTypeByContent(fileName); }
+	if( iReadType == AIRFOIL_BY_EXTENSION ) { iType = getiTypeByExt(fileName); } 
+
+	std::clog << "iType = " << iType << std::endl;
 	// in case no type was detected finish
-	if(iType==-1) 
+	if(iType == -1) 
 	{
-		std::clog << "No correct file was provided!" << std::endl;
+		std::clog << "Unrecognized airfoil file type!!!" << std::endl;
 		return -1;
 	}
 	
@@ -164,14 +168,121 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 }
 
 /*
-        Gets iType based on file content (by Anna Sima) - private
+    Gets iType based on file content (by Anna Sima) - private
 */
-void AIRFOIL::getiTypeByContent(std::string fileName)
+	void AIRFOIL::ReadRow(int type, std::string &line, double &x1, double &y1, double &x2, double &y2)
+	{
+		std::stringstream ss;
+		ss.str(line);
+		switch(type) { // one of the lines has incorrect format
+			case PRF_4: { ss >> x1 >> y1 >> x2 >> y2; break; }
+			case PRF_3: { ss >> x1 >> y1 >> x2; break; }
+			default: 	{ ss >> x1 >> y1; }
+		}
+	}
+
+	int AIRFOIL::ReadColumns(int type, std::stringstream &buffer, 
+		std::vector <double> &x1, std::vector <double> &y1, std::vector <double> &x2, std::vector <double> &y2, 
+		unsigned int n1, unsigned int n2)
+	{
+		regex twoCols  ("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");  //number whitespaces(\s) number
+		regex threeCols("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");
+		regex fourCols ("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");
+
+		std::string line;
+		int lineNr=0; 
+		double x1_, y1_, x2_, y2_;
+
+		// === Check number of columns and count data rows ===
+		while( !buffer.eof() ) {
+			getline(buffer, line);
+			if( 0 == line.length() ) continue;
+			
+			switch(type) { // one of the lines has incorrect format
+				case PRF_4: { if(!regex_match(line, fourCols)) return 20; break; }
+				case PRF_3: { if(!regex_match(line, threeCols)) return 20; break; }
+				case PRF_2: { if(!regex_match(line, twoCols)) return 20; break; }
+				case KOO:   { if(!regex_match(line, twoCols)) return 20; break; }
+				case XFOIL: { if(!regex_match(line, twoCols)) return 20; break; }
+				case L_DAT: { if(!regex_match(line, twoCols)) return 20; break; }
+			}
+			
+			ReadRow(type, line, x1_, y1_, x2_, y2_);
+			x1.push_back(x1_);
+			y1.push_back(y1_);
+			if(type == PRF_4) {
+				x2.push_back(x2_);
+				y2.push_back(y2_);
+			}
+			
+			clog << line << endl;
+			lineNr++;
+		}
+		
+		// === Check declared vs counted data rows ===
+		std::clog << x1.size() << "\t" << n1 << "\t" << n2 << "\t" << n1+n2 << std::endl;
+		switch(type) { // one of the lines has incorrect format
+			case PRF_4: { if(x1.size() != n1) return 30; break; }
+			case PRF_3: { if(x1.size() != n1) return 30; break; }
+			case PRF_2: { if(x1.size() != n1) return 30; break; }
+			case KOO:   { if(x1.size() != n1) return 30; break; }
+			case XFOIL: { break; } // no declared nr of data rows
+			case L_DAT: { if(x1.size() != n1+n2) return 30; break; }
+		}
+
+		// === Check data end values ===
+		switch(type) { // one of the lines has incorrect format
+			case PRF_4: { 
+					if(x1[0] != 0.0) return 40; 
+					if(x1[x1.size()-1] != 100.0) return 40; 
+					if(x2[0] != 0.0) return 40; 
+					if(x2[x1.size()-1] != 100.0) return 40; 
+					break; 
+					}
+			case PRF_3:  
+			case PRF_2: { 
+					if(x1[0] != 0.0) { return 40; }
+					if(x1[x1.size()-1] != 100.0) { return 40; }
+					break; 
+					}
+			case KOO:   { 
+					if(x1[0] != 100.0) { return 40; }
+					if(x1[x1.size()-1] != 100.0) { return 40; }
+					break; 
+					}
+			case XFOIL: {
+					if(x1[0] != 1.0) { return 40; }
+					if(x1[x1.size()-1] != 1.0) { return 40; }
+					break;
+					}
+			case L_DAT: { 
+					if(x1[0] != 0.0 		&& x1[0] != 1.0) { return 40; }
+					if(x1[n1-1] != 0.0 		&& x1[n1-1] != 1.0) { return 40; }
+					if(x1[n1] != 0.0 		&& x1[n1] != 1.0) { return 40; }
+					if(x1[n1+n2-1] != 0.0 	&& x1[n1+n2-1] != 1.0) { return 40; }
+					//Devide for two tables!!!!! x2, y2
+					break; 
+					}
+		}
+
+		return type;
+	}
+
+int AIRFOIL::getiTypeByContent(std::string fileName)
 {
+	clog << "getiTypeByContent" << endl;
+
 	iType = -1; // type not yet found
 	
-	FILE *ff = fopen( fileName.c_str(), "r" );
-	
+	ifstream in(fileName);
+    if(!in) return 10; 	//couldn't read file
+    std::stringstream buffer;
+    buffer << in.rdbuf();
+    in.close();
+
+	std::string buckup = buffer.str();
+	std::string line;
+
 	// set of useful regex expressions
 	// \\d - digit
 	// \\s - whitespace
@@ -180,206 +291,157 @@ void AIRFOIL::getiTypeByContent(std::string fileName)
 	// [] - match one from inside
 	// (\\+|-)? - possible + or minues - one or zero times
 	// . - whatever character
-	regex integer("\\s*\\d+\\s*");   				// positive integer
+	regex integer("\\s*\\d+\\s*");   						// positive integer
 	regex number("\\s*(\\+|-)?[\\d\\.]+\\s*");   			// 1 22 1.2 0.2 .2  2. - any number
-	regex prfHeader("\\d+\\s+#\\s+.+");				// number_of_lines # name (e.g. "18	#	NACA 0012	")
-	regex kooHeader(".+\\s+,\\s+\\d+");				// name , number_of_lines-1
+	regex prfHeader("\\d+\\s+#\\s+.+");						// number_of_lines # name (e.g. "18	#	NACA 0012	")
+	regex kooHeader(".+\\s+,\\s+\\d+");						// name , number_of_lines-1
 	regex datNLines("\\s*\\d+\\.\\s*\\d+\\.\\s*");			// 31.  31.
 	regex twoCols  ("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");  //number whitespaces(\s) number
 	regex threeCols("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");
 	regex fourCols ("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");
 	
+	std::vector <double> x1;
+	std::vector <double> y1;
+	std::vector <double> x2;
+	std::vector <double> y2;
+
 	// read first line
 	// PRF
 	// HEADER - number_of_lines # name
 	// [4 cols]
 	// * values 0-100
 	// if first line matches full HEADER or just number of lines
-	//ReadStr( ff, cc.c_str()); !!!!!!!!!!!!!!!!!
-	if(regex_match(cc,prfHeader)||regex_match(cc,integer)) 
-		{
-		int N;
-		fseek(ff,0, SEEK_SET); // go to beginning
-		ReadPar( ff, "%d", &N );
+	/*getline(buffer, line);
+	if( regex_match(line, prfHeader) || regex_match(line, integer) ) 
+	{
+		clog << "IN" << endl;
+		buffer.str(buckup); 
+		int n;
+		buffer >> n; // get declared number of lines
+		getline(buffer, line); //read the header line till the end
 
-		// check number of lines
-		/*if(nLines( ff )!=N) 
-			{
-			fprintf(stderr,"Number of lines is incorrect, should be %d\n",N);
-			iType=-1;
-			}
-		else
-			{
-			iType = 0; // assume it is ok
-			// check all further lines
-			for(int i=0; i<N; i++) 
-				{
-				//ReadStr( ff, cc );
-				if(!regex_match(cc,fourCols))
-					{
-					// one of the lines is incorrect
-					fprintf(stderr,"%s - line incorrect!\n",cc);
-					iType=-1; // set to nok
-					break;
-					}
-				}
-			}*/
+		int lineNr=0;
+		while( !buffer.eof() ) {
+			getline(buffer, line);
+			if( 0 == line.length() ) continue;
+			if(!regex_match(line, fourCols)) return 20; // one of the lines is incorrect
+			clog << line << endl;
+			lineNr++;
 		}
+		
+		clog << "lineNr = " << lineNr << "\t" << n << endl;
+		if(lineNr == n) return 0;
+		else 			return 30;
+	}*/
     
 	// PRF 2
 	// HEADER1 - numer "1" or "2"
 	// HEADER2 - number_of_lines
 	// [2 cols] or [3 cols]
 	// * values 0-100
-	if(iType==-1) // // not yet found?
-		{
-		fseek(ff,0, SEEK_SET); // go to beginning
-		//ReadStr( ff, cc); !!!!!!!!!!!!!!
-		// first line is a number, can be whatever - read second line then
-		//ReadStr( ff, cc); !!!!!!!!!!!!!!
-		// second line must be integer - number of lines
-		if(regex_match(cc,integer)) 
-			{
-			//N = atoi(cc); // convert second line to integer !!!!!!!!!!!!!!!
-			/*if(nLines( ff )!=N) !!!!!!!!!!!!!!!!
-				{
-				fprintf(stderr,"Number of lines is incorrect, should be %d\n",N);
-				iType=-1;
-				}
-			else
-				{
-				iType = 1; // assume type is PRF 2
-				// check all lines match format of two or three columns
-				for(int i=0; i<N; i++)
-					{
-					//ReadStr( ff, cc ); !!!!!!!!!!!!!
-					if(!regex_match(cc,twoCols)&&!regex_match(cc,threeCols))
-						{
-						// one of the lines is incorrect
-						fprintf(stderr,"%s - line incorrect!\n",cc);
-						iType=-1; // set to nok
-						break;
-						}
-					}
-				}*/
-			}
+	/*buffer.str(buckup); 
+	getline(buffer, line); // first line is a number, can be whatever - read second line then
+	getline(buffer, line);
+	if( regex_match(line, integer) ) // second line must be integer - number of lines
+	{
+		clog << "IN2" << endl;
+		int n = stoi(line); // convert second line to integer
+		clog << n << endl;
+		
+		int lineNr=0;
+		while( !buffer.eof() ) {
+			getline(buffer, line);
+			if( 0 == line.length() ) continue;
+			//if(!regex_match(line, threeCols)) return 20; // one of the lines is incorrect
+			if(!regex_match(line, twoCols) && !regex_match(line, threeCols)) return 20; // one of the lines is incorrect
+			clog << line << endl;
+			lineNr++;
 		}
+		
+		clog << "lineNr = " << lineNr << "\t" << n << endl;
+		if(lineNr == n) return 0;
+		else 			return 30;
+	}*/
 
 	// KOO
 	// HEADER - name , number_of_lines-1
 	// [2 cols]
 	// * values 0-100
-	if(iType==-1) // not yet found?
-		{
-		fseek(ff,0, SEEK_SET); // go to beginning
-		//ReadStr( ff, cc ); !!!!!!!!!!!!!!!!!!!
-		// check if header matches koo - name , number_of_line
-		if(regex_match(cc,kooHeader))
-			{
-			//get number of lines
-			//int iLen = strlen( cc ); !!!!!!!!!!!!!!!!!!!!!!!1
-			// replace all characters with whitespace till ,
-			/*for( int i=0; i<iLen; i++ ) !!!!!!!!!!!!!!!!!!!!!!!
-				{
-				if(cc[i]==',' )
-					{
-					cc[i]=' ';
-					break;
-					}
-				cc[i]=' ';
-				}*/
-			// convert spaces + number of lines string to number
-			//N = atoi(cc); !!!!!!!!!!!!!!!!
-			/*if(nLines( ff )!=N+1) !!!!!!!!!!!!!!!!!!!!!!!!
-				{
-				fprintf(stderr,"Number of lines is incorrect, should be %d\n",N);
-				iType=-1;
-				}
-			else
-				{
-				iType=2;
-				}*/
-			}
+	/*buffer.str(buckup); 
+	getline(buffer, line);
+	// check if header matches koo - name , number_of_line
+	if(regex_match(line, kooHeader))
+	{
+		std::size_t coma = line.find_first_of(","); //get number of lines
+		int n = stoi( line.substr(coma + 1) );
+		clog << n << endl;
+		
+		int lineNr=0;
+		while( !buffer.eof() ) {
+			getline(buffer, line);
+			if( 0 == line.length() ) continue;
+			if(!regex_match(line, twoCols)) return 20; // one of the lines is incorrect
+			clog << line << endl;
+			lineNr++;
 		}
-
+		
+		clog << "lineNr = " << lineNr << "\t" << n << endl;
+		if(lineNr == n) return 0;
+		else 			return 30;
+	}*/
+	
 	// DAT - selig
 	// HEADER - name
 	// [2 cols]
 	// * values 0.0-1.0
-	if(iType==-1)     // not yet found?
+/*		
+	buffer.str(buckup); 
+	getline(buffer, line);
+		
+	int lineNr=0;
+		while( !buffer.eof() ) {
+			getline(buffer, line);
+			if( 0 == line.length() ) continue;
+			if(!regex_match(line, twoCols)) return 20; // one of the lines is incorrect
+			clog << line << endl;
+			lineNr++;
+		}
+*/
+
+		// DAT - lednicer
+		// HEADER - name
+		// HEADER - number_of_lines. number_of_lines.
+		// [empty line]
+		// [2 cols]
+		// [empty line]
+		// [2 cols]
+		// * values from 0 to 1
+		buffer.str(buckup); 
+		getline(buffer, line);
+		getline(buffer, line);
+		if(regex_match(line, datNLines))
 		{
-		fseek(ff,0, SEEK_SET); // go to beginning
-		//ReadStr( ff, cc ); !!!!!!!!!!!!!!!
-		//N = nLines( ff ); !!!!!!!!!!!!!!!!11
-		// valide or further lines
-		iType = 3; // assume type is DAT selig
-		for(int i=0; i < N/2; i++) 
-			{
-			//ReadStr( ff, cc ); !!!!!!!!!!!!!!!!!!1
-			if(!regex_match(cc,twoCols))
-				{
-				//fprintf(stderr,"%s - line incorrect(3)!\n",cc); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				iType=-1;
-				break;
-				}
-			}
+			clog << line << endl;
+			float n1, n2;
+			std::stringstream ss;
+			ss.str(line);
+			ss >> n1 >> n2;
+			clog << n1 << "\t" << n2 << endl;
+			
+			int type = ReadColumns(L_DAT, buffer, x1, y1, x2, y2, n1, n2);
+			clog << "type:" << type << endl;
+			//if(type) return 20; 
 		}
 
-	// DAT - lednicer
-	// HEADER - name
-	// HEADER - number_of_lines. number_of_lines.
-	// [empty line]
-	// [2 cols]
-	// [empty line]
-	// [2 cols]
-	// * values from 0 to 1
-	if(iType==-1)	// not yet found?
-		{
-		fseek(ff,0, SEEK_SET); // go to beginning
-		//N = nLines( ff ); // get number of lines !!!!!!!!!!!!!!!!
-		//ReadStr( ff, cc ); // name - whatever value, ignore comparison !!!!!!!!!!!!!!!!1
-		//ReadStr( ff, cc ); // should be number_of_lines. number_of_lines.!!!!!!!!!!!!!!
-		if(regex_match(cc,datNLines))
-			{
-			fseek(ff,0, SEEK_SET); // go to beginnig
-			//ReadStr( ff, cc );     // omit first line !!!!!!!!!!!!!!!!!!!!!11
-			float f1,f2;
-			int n1,n2;
-			ReadPar(ff, "%f %f",&f1,&f2);
-			n1 = f1;
-			n2 = f2;
-			if(N!=n1+n2+2)
-				{
-				fprintf(stderr,"Number of lines incorrect, should be %d, is %d\n",N,n1+n2);
-				iType=-1;
-				}
-			else
-				{
-				iType=4; // assume it is lednicer
-				for(int i=0; i < N; i++)
-					{
-					//ReadStr( ff, cc ); !!!!!!!!!!!!!!!!!!!!!!!!!!!
-					//string sc=cc;
-					//if(!regex_match(cc,twoCols) && !sc.empty() && !IsBlank(sc) )
-					if(!regex_match(cc,twoCols) && cc[0]!='\0' )
-						{  
-						// ommit empty lines - lines == \0
-						//fprintf(stderr,"%s - line incorrect!\n",cc); !!!!!!!!!!!!!!!!!!!!!!!!!1
-						iType=-1;
-						break;
-						}
-				}
-			}
-		}
+		clog << "END getiTypeByContent" << endl;
+
+		return -1; // file type not found
 	}
-	
-	fclose(ff);
 
-}
 /*
         Gets iType based on file extension
 */
-void AIRFOIL::getiTypeByExt(std::string fileName)
+int AIRFOIL::getiTypeByExt(std::string fileName)
 {
 	//const char *pext = filename_ext( (const char*)fileName ); //!!!!!!!!!!!
 	char ext[4]; 
@@ -433,6 +495,7 @@ void AIRFOIL::getiTypeByExt(std::string fileName)
 	else
 		iType=-1;
 
+	return iType;
 }
 
 // Reads particular formats - private
@@ -621,7 +684,7 @@ int AIRFOIL::Read_PRF_1( std::string fileName )
 	return 0;
 }
 
-void AIRFOIL::PRF2XFOIL( void )
+void AIRFOIL::PRF2XFOIL()
 {
 	Nf = 2*N - 1;
 	Xf = new double[Nf];
@@ -1169,7 +1232,9 @@ int AIRFOIL::ReadStr( FILE * stream, char *Par )
 		}
 	strcpy( Par, cRob+i0 );
 	delete [] cRob;
-	
+
+	clog << "Par: " << Par << endl;
+
 	if( cc == EOF )return EOF;
 	return strlen( Par );	
 }
@@ -1310,4 +1375,5 @@ void AIRFOIL::Sort2( int iN, double dRA[], double dKOL[], int iOrder )
 		dKOL[i-1] = dRA2;
 		}
 
+}
 }
