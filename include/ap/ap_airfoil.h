@@ -44,11 +44,7 @@ class AIRFOIL
 	enum airfoilFileType {PRF_4=0, PRF_3, PRF_2, KOO, XFOIL, L_DAT};
 
 	// 0 - recognition by content, 1 - recognition by filename extention
-	int iReadType;	
-	
-	// local variables (arrays)
-	int Nrob;
-	double *Xrob, *Zrob;
+	bool iReadType = 0;	
 	
 	// read by format
 	int Read_PRF_0( std::string fileName );
@@ -101,9 +97,6 @@ class AIRFOIL
 	void ReadDummy( FILE *stream );
 	int isstrblank( char *cc, int iLen );
 	int nLines( FILE * stream );
-	
-	std::string cc;
-	std::string comment;
 
 protected:
 	
@@ -111,27 +104,14 @@ protected:
 
 public:
 	
-	int Nf;      ///< size of the vectors with geometry data - compatible with Xfoil
-	double *Xf;  ///< X coordinates (Nf points)
-	double *Zf;  ///< Z coordinates (Nf points)
+	std::vector <double> Xf;  ///< X coordinates (Nf points)
+	std::vector <double> Zf;  ///< Z coordinates (Nf points)
 	
-	int N;       ///< size of the vectors with geometry data - 4 column native PANUKL format
 	std::vector <double> Xd;  ///< X coordinates of lower contour (N points)
 	std::vector <double> Xg;  ///< X coordinates of upper contour (N points)
 	std::vector <double> Zd;  ///< Z coordinates of lower contour (N points)
 	std::vector <double> Zg;  ///< Z coordinates of upper contour (N points)
 
-	/** File type: \n
-	    0 - PRF - PANUKL (prf1) - native PANUKL (4 columns) format \n
-	    1 - PRF - prf2 - by L.Wiechers- NAME in header, N below header \n 
-	    2 - KOO - koordinate by L.Wiechers \n
-	    3 - DAT - SELIG - (Xfoil) \n
-	    4 - DAT - LEDNICER
-	*/
-	int iType;
-	
-	std::string fileName; ///< filename (without path)
-	
 	//! prints PRF file (default on stdout)
 	void Print( FILE* f=stdout );
 

@@ -32,47 +32,13 @@ using namespace std;
 
 namespace ap
 {
-	AIRFOIL::AIRFOIL( void )
+	AIRFOIL::AIRFOIL()
 	{
-		//Xd = 0;
-		//Xg = 0;
-		//Zd = 0;
-		//Zg = 0;
-		//Xf = 0;
-		//Zf = 0;
-		Xrob = 0;
-		Zrob = 0;
-		N = 0;
-		Nf = 0;
-		Nrob = 0;
-
-		/* Types:
-	    0 - PRF - PANUKL (prf1) - native PANUKL (4 columns) format \n
-	    1 - PRF - prf2 - by L.Wiechers- NAME in header, N below header \n 
-	    2 - KOO - koordinate by L.Wiechers \n
-	    3 - DAT - SELIG - (Xfoil) \n
-	    4 - DAT - LEDNICER
-		*/
-
-		iType = 0;
-		iReadType = 0;
 	}
 
-void AIRFOIL::Clean( void )
-{
-	/*DELETE_TAB( Xd );
-	DELETE_TAB( Xg );
-	DELETE_TAB( Zd );
-	DELETE_TAB( Zg );
-	DELETE_TAB( Xf );
-	DELETE_TAB( Zf );
-	DELETE_TAB( Xrob );
-	DELETE_TAB( Zrob );*/
-	N = 0;
-	Nf = 0;
-	Nrob = 0;
-	iType = 0;
-}
+	void AIRFOIL::Clean()
+	{
+	}
 
 int AIRFOIL::Read( std::string fileName )
 {
@@ -161,11 +127,10 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 	NacaProfile->setTE0( 1 );
 	NacaProfile->generate_naca( NACA, NN );
 	
-	Nf = NacaProfile->N;
-	Xf = new double[Nf+1]; 
-	Zf = new double[Nf+1]; 
+	Xf.resize(NacaProfile->N + 1); 
+	Zf.resize(NacaProfile->N + 1); 
 
-	for( int i=0; i<Nf; i++ )
+	for(unsigned int i=0; i<Xf.size(); i++)
 		{
 		Xf[i] = NacaProfile->X[i];
 		Zf[i] = NacaProfile->Z[i];
@@ -409,6 +374,8 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 */
 int AIRFOIL::getiTypeByExt(std::string fileName)
 {
+	int iType;
+
 	//const char *pext = filename_ext( (const char*)fileName ); //!!!!!!!!!!!
 	char ext[4]; 
 	//for(int i=0; i<3; i++)ext[i] = toupper( pext[i+1] );// !!!!!!!!!!!!!!!1
@@ -475,17 +442,17 @@ int AIRFOIL::Read_PRF_0( std::string fileName )
 		fprintf( stderr, "File: %s not found!\n", fileName.c_str() );
 		return -1;
 		}
-	
+/*	
 	ReadPar( ff, "%d", &N );
 	Xg.resize(N); 
 	Xd.resize(N); 
 	Zg.resize(N); 
 	Zd.resize(N); 
-	
 	for(int i=0; i<N; i++)
 		ReadPar( ff, "%lf %lf %lf %lf", &Xg[i], &Zg[i], &Xd[i], &Zd[i] );
 	fclose( ff );
 
+*/	
 	/*double dAd = dAverage( Zd, N );
 	double dAg = dAverage( Zg, N );
 	if( dAg < dAd )
@@ -507,7 +474,7 @@ int AIRFOIL::Read_PRF_0( std::string fileName )
 	double dMnoz = 100./dCa;
 	
 	if( dCa < 80. || dCa > 120. )
-	for(int i=0; i<N; i++)
+	for(unsigned int i=0; i<Xg.size(); i++)
 		{
 		Xg[i] *= dMnoz;
 		Zg[i] *= dMnoz;
@@ -544,13 +511,12 @@ int AIRFOIL::Read_PRF_1( std::string fileName )
 	
 	int iTyp = 2;
 	ReadPar( ff, "%d", &iTyp );
+	int Nrob;
 	ReadPar( ff, "%d", &Nrob );
-	Xrob = new double[2*Nrob]; 
-	Zrob = new double[2*Nrob];
-	Nf = Nrob;
-	if( iTyp == 1 ) Nf = Nf*2 - 1;
-	Xf = new double[Nf]; 
-	Zf = new double[Nf]; 
+	double *Xrob = new double[2*Nrob]; 
+	double *Zrob = new double[2*Nrob];
+	Xf.resize(Nrob*2 - 1); 
+	Zf.resize(Nrob*2 - 1); 
 	
 	if( iTyp == 1 )
 		{
@@ -590,11 +556,10 @@ int AIRFOIL::Read_PRF_1( std::string fileName )
 	
 	double *Xfrob = new double[Nrob];
 	for( int i=0; i<Nrob; i++ )Xfrob[i] = Xrob[i];
-	N = Nrob;
-	SortClean( &N, Xfrob );
+	//SortClean( &N, Xfrob );
 	
-	int nmax = N;
-	int nmin = N;
+	int nmax = Xg.size();
+	int nmin = Xg.size();
 	double dCa = dMaxT( Xrob, &nmax );
 	double dX0 = dMinT( Xrob, &nmin );
 
@@ -612,11 +577,11 @@ int AIRFOIL::Read_PRF_1( std::string fileName )
 	Zrob[NN+1] = Zrob[0];
 	Nrob++;
 	
-	Xg.resize(N); 
-	Xd.resize(N); 
-	Zg.resize(N); 
-	Zd.resize(N);
-	for( int i=0; i<N; i++ )
+	Xg.resize(Xg.size()); 
+	Xd.resize(Xg.size()); 
+	Zg.resize(Xg.size()); 
+	Zd.resize(Xg.size());
+	for(unsigned int i=0; i<Xg.size(); i++)
 		{
 		Xd[i] = Xfrob[i];
 		Zd[i] = inter1( &Xrob[NN+1], &Zrob[NN+1], Nrob-NN-1, Xd[i] );
@@ -624,7 +589,7 @@ int AIRFOIL::Read_PRF_1( std::string fileName )
 		Zg[i] = inter1( Xrob, Zrob, NN+1, Xg[i] );
 		}
 	
-	for( int i=0; i<N; i++ )
+	for(unsigned int i=0; i<Xg.size(); i++)
 		{
 		Xg[i] -= dX0;
 		Xg[i] *= dMnoz;
@@ -640,9 +605,9 @@ int AIRFOIL::Read_PRF_1( std::string fileName )
 
 	//PRF2XFOIL();
 	int nf2 = 0;
-	while( Xf[nf2] < Xf[nf2+1] && nf2 < Nf )nf2++;
-	Sort2( nf2+1, Xf, Zf, -1 );
-	for( int i=0; i<Nf; i++ )
+	while( Xf[nf2] < Xf[nf2+1] && nf2 < Xf.size() )nf2++;
+	Sort2( nf2+1, &Xf[0], &Zf[0], -1 );
+	for(unsigned int i=0; i<Xf.size(); i++ )
 		{
 		Xf[i] -= dX0;
 		Xf[i] *= dMnoz/100.;
@@ -654,18 +619,17 @@ int AIRFOIL::Read_PRF_1( std::string fileName )
 
 void AIRFOIL::PRF2XFOIL()
 {
-	Nf = 2*N - 1;
-	Xf = new double[Nf];
-	Zf = new double[Nf];
-	for(int i=0; i<N; i++)
-		{
-		Xf[i] = Xd[N-1-i]/100.;
-		Zf[i] = Zd[N-1-i]/100.;
+	Xf.resize(2*Xg.size() - 1);
+	Zf.resize(2*Xg.size() - 1);
+	for(unsigned int i=0; i<Xg.size(); i++)
+		{           
+		Xf[i] = Xd[Xg.size()-1-i]/100.;
+		Zf[i] = Zd[Xg.size()-1-i]/100.;
 		}
-	for(int i=N; i<Nf; i++)
+	for(unsigned int i=Xg.size(); i<Xf.size(); i++)
 		{
-		Xf[i] = Xg[i-N+1]/100.;
-		Zf[i] = Zg[i-N+1]/100.;
+		Xf[i] = Xg[i-Xg.size()+1]/100.;
+		Zf[i] = Zg[i-Xg.size()+1]/100.;
 		}
 }
 
@@ -674,7 +638,7 @@ int AIRFOIL::Write_PRF( std::string fileName )
 	FILE  *ff;
 	ff = fopen( fileName.c_str(), "w" );
 	//fprintf(ff,"%d\t#\t%s\n", N, cName );
-	for( int i=0; i<N; i++ )
+	for(unsigned int i=0; i<Xg.size(); i++)
 		fprintf( ff, "%f %f %f %f\n", Xg[i], Zg[i], Xd[i], Zd[i] );
 	fclose(ff);
 
@@ -689,7 +653,7 @@ int AIRFOIL::Read_KOO( std::string fileName )
 void AIRFOIL::Print( FILE* f ) {
 
     //fprintf(f,"%d\t#\t%s\n", N, cName );
-	for( int i=0; i<N; i++ )
+	for(unsigned int i=0; i<Xf.size(); i++)
 		fprintf(f,"%f %f %f %f\n", Xg[i], Zg[i], Xd[i], Zd[i] );
 
 }
@@ -715,10 +679,10 @@ int AIRFOIL::Read_DAT_LEDNICER( std::string fileName )	// by Anna Sima
 	rowsNeg = f2;
 
 //makes empty arrays to store values from the file
-	Xf = new double[rowsPos+rowsNeg];
-	Zf = new double[rowsPos+rowsNeg];
+	Xf.resize(rowsPos+rowsNeg);
+	Zf.resize(rowsPos+rowsNeg);
 
-	Nf = rowsPos+rowsNeg-1; //total number of points(rows) that will be in the end
+	//Nf = rowsPos+rowsNeg-1; //total number of points(rows) that will be in the end
 
 	for( int i=rowsPos-1; i>=0; i-- ) {
 	    ReadPar(ff, "%lf %lf",&Xf[i],&Zf[i]); //read all upper
@@ -730,7 +694,7 @@ int AIRFOIL::Read_DAT_LEDNICER( std::string fileName )	// by Anna Sima
 
 	fclose( ff );
 	
-	Check( &Nf, Xf, Zf );
+	//Check( &Nf, &Xf[0], &Zf[0] );
 
 	XFOIL2PRF();
 
@@ -739,7 +703,7 @@ int AIRFOIL::Read_DAT_LEDNICER( std::string fileName )	// by Anna Sima
 
 int AIRFOIL::Read_DAT( std::string fileName )
 {
-	FILE  *ff;
+	/*FILE  *ff;
 	ff = fopen( fileName.c_str(), "r" );
 	if( ff == NULL )
 		{
@@ -750,15 +714,15 @@ int AIRFOIL::Read_DAT( std::string fileName )
 
 	//Nf = nLines( ff ) - 1;
 	fclose( ff );
-	if( Nf < 6 )
+	if( Xf.size() < 6 )
 		{
 		//sprintf( comment.c_str(), "File: %s - the number of rows is too small!\n", fileName.c_str() ); //!!!!!!!!!!!!!!!!!!!!!!!!
 		fprintf( stderr, "File: %s - the number of rows is too small!\n", fileName.c_str() );
 		return -1;
 		}
 		
-	Xf = new double[Nf+1];
-	Zf = new double[Nf+1];
+	Xf.resize(Nf+1);
+	Zf.resize(Nf+1);
 	ff = fopen( fileName.c_str(), "r" );
 	//ReadStr( ff, cName );
 	if( iType == 2 )
@@ -781,19 +745,19 @@ int AIRFOIL::Read_DAT( std::string fileName )
 				};
 	fclose( ff );
 	
-	Check( &Nf, Xf, Zf );
+	Check( &Nf, &Xf[0], &Zf[0] );
 	
 	XFOIL2PRF();
-
+*/
 	return 0;
 }
 
 void AIRFOIL::XFOIL2PRF( void )
 {
-	int nmax = Nf;
-	int nmin = Nf;
-	double dCa = dMaxT( Xf, &nmax );
-	double dX0 = dMinT( Xf, &nmin );
+	int nmax = Xf.size();
+	int nmin = Xf.size();
+	double dCa = dMaxT( &Xf[0], &nmax );
+	double dX0 = dMinT( &Xf[0], &nmin );
 	//fprintf(stderr,"Xf min %f %f %f\n",Xf[nmin-1],Xf[nmin],Xf[nmin+1]);
 	
 	if( Xf[nmin-1] == Xf[nmin] )		// nose correction
@@ -806,18 +770,20 @@ void AIRFOIL::XFOIL2PRF( void )
 	        }
 	    double Y0 = 0.5*(YY[2]+YY[1]);
 	    double X0 = apr3( Y0, YY, XX );
-	    for( int i=Nf; i>nmin; i-- )
+	    for(int i=Xf.size(); i>nmin; i--)
 	        {
 	        Xf[i] = Xf[i-1];
 	        Zf[i] = Zf[i-1];
 	        }
 	    Xf[nmin] = X0;
 	    Zf[nmin] = Y0;
-	    Nf++;
-	    nmax = Nf;
-	    nmin = Nf;
-	    dCa = dMaxT( Xf, &nmax );
-	    dX0 = dMinT( Xf, &nmin );
+	    //Nf++;
+	    nmax++;
+	    nmin++;
+	    //nmax = Nf;
+	    //nmin = Nf;
+	    dCa = dMaxT( &Xf[0], &nmax );
+	    dX0 = dMinT( &Xf[0], &nmin );
 	    }
 	dCa -= dX0;
 	double dMnoz = 100./dCa;
@@ -827,29 +793,30 @@ void AIRFOIL::XFOIL2PRF( void )
 	int NN = min( nmin, nmax );
 	if( nmax > nmin || nmax == 0 )
 		{
-		dW1 = dAverage( Zf, nmin );
-		dW2 = dAverage( &Zf[nmin], Nf - nmin );
+		dW1 = dAverage( &Zf[0], nmin );
+		dW2 = dAverage( &Zf[nmin], Xf.size() - nmin );
 		if( dW2 > dW1 )iSter = 1;
 		NN = nmin;
 		}
 	else
 		{
-		dW1 = dAverage( Zf, nmax );
+		dW1 = dAverage( &Zf[0], nmax );
 		dW2 = dAverage( &Zf[nmax], nmin - nmax );
 		if( dW2 > dW1 )iSter = 1;
 		NN = nmax;
 		}
 		
 	fprintf( stderr, "ReadDAT - Xfoil2Prf:\n" );
-	fprintf( stderr, "Nf = %d NN = %d iSter = %d\n", Nf, NN, iSter );
+	//fprintf( stderr, "Nf = %d NN = %d iSter = %d\n", Nf, NN, iSter );
 	fprintf( stderr, "max %d min %d\n", nmax, nmin );
 	fprintf( stderr, "X0  %f Ca  %f\n", dX0, dCa );
 	fflush( stderr );
 	
-	double *Xfrob = new double[Nf];
-	for( int i=0; i<Nf; i++ )Xfrob[i] = Xf[i];
-	N = Nf;
-	SortClean( &N, Xfrob );
+	std::vector <double> Xfrob;
+	Xfrob.resize( Xf.size() );
+	for(unsigned int i=0; i<Xf.size(); i++ )Xfrob[i] = Xf[i];
+	unsigned int N = Xf.size();
+	//SortClean( &N, &Xfrob[0] );
 	
 	Xg.resize(N); 
 	Xd.resize(N); 
@@ -857,26 +824,26 @@ void AIRFOIL::XFOIL2PRF( void )
 	Zd.resize(N);
 	if(iSter == 1)
 		{
-		for( int i=0; i<N; i++ )
+		for(unsigned int i=0; i<N; i++)
 			{
 			Xd[i] = Xfrob[i];
-			Zd[i] = inter1( Xf, Zf, NN+1, Xd[i] );
+			Zd[i] = inter1( &Xf[0], &Zf[0], NN+1, Xd[i] );
 			Xg[i] = Xd[i];
-			Zg[i] = inter1( &Xf[NN], &Zf[NN], Nf-NN, Xg[i] );
+			Zg[i] = inter1( &Xf[NN], &Zf[NN], Xf.size()-NN, Xg[i] );
 			}
 		}
 	else
 		{
-		for( int i=0; i<N; i++ )
+		for(unsigned int i=0; i<N; i++)
 			{
 			Xd[i] = Xfrob[i];
-			Zd[i] = inter1( &Xf[NN], &Zf[NN], Nf-NN, Xd[i] );
+			Zd[i] = inter1( &Xf[NN], &Zf[NN], Xf.size()-NN, Xd[i] );
 			Xg[i] = Xd[i];
-			Zg[i] = inter1( Xf, Zf, NN+1, Xg[i] );
+			Zg[i] = inter1( &Xf[0], &Zf[0], NN+1, Xg[i] );
 			}
 		}
 	
-	for( int i=0; i<N; i++ )
+	for(unsigned int i=0; i<N; i++)
 		{
 		Xg[i] -= dX0;
 		Xg[i] *= dMnoz;
@@ -888,13 +855,12 @@ void AIRFOIL::XFOIL2PRF( void )
 
 	TE_correct();		
 	
-	for( int i=0; i<Nf; i++ )
+	for(unsigned int i=0; i<Xf.size(); i++)
 		{
 		Xf[i] -= dX0;
 		Xf[i] *= dMnoz/100.;
 		Zf[i] *= dMnoz/100.;
 		}
-
 }
 
 int AIRFOIL::Write_DAT( std::string fileName )
@@ -902,7 +868,7 @@ int AIRFOIL::Write_DAT( std::string fileName )
 	FILE  *ff;
 	ff = fopen( fileName.c_str(), "w" );
 	fprintf(ff,"%s\n", fileName.c_str() );
-	for( int i=0; i<Nf; i++ )
+	for(unsigned int i=0; i<Xf.size(); i++)
 		fprintf( ff, " %f %f \n", Xf[i], Zf[i] );
 	fclose(ff);
 	
@@ -911,8 +877,8 @@ int AIRFOIL::Write_DAT( std::string fileName )
 
 void AIRFOIL::TE_correct( void )
 {
-        double zz = 0.5*(Zd[N-1]+Zg[N-1]);
-        Zd[N-1] = Zg[N-1] = zz;
+     //  double zz = 0.5*(Zd[N-1]+Zg[N-1]);
+       // Zd[N-1] = Zg[N-1] = zz;
 }
 
 // math routines
@@ -968,20 +934,21 @@ double AIRFOIL::dMinT( double *dTab, int *i1 )
 
 void AIRFOIL::Check( int *nn, double *X, double *Z )
 {
-	N = *nn;
+	int N = *nn;
 	for(int i=0; i<N-1; i++)
-                {
-                if( X[i] == X[i+1] && Z[i] == Z[i+1] )
-                        {
-                        for( int ii=i; ii<N-1; ii++ )
-				{
+    {
+    	if( X[i] == X[i+1] && Z[i] == Z[i+1] )
+     	{
+        	for( int ii=i; ii<N-1; ii++ )
+			{
 				X[ii]=X[ii+1];
 				Z[ii]=Z[ii+1];
-				}
-                        N--;
-                        }
-                }
-        *nn = N;
+			}
+            N--;
+        }
+    }
+    
+	*nn = N;
 }
 
 unsigned long AIRFOIL::locate(double xx[], unsigned long n, double x )
