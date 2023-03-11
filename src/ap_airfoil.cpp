@@ -21,6 +21,7 @@
 
 #include <regex>
 #include <algorithm>
+//#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -33,12 +34,12 @@ namespace ap
 {
 	AIRFOIL::AIRFOIL( void )
 	{
-		Xd = 0;
-		Xg = 0;
-		Zd = 0;
-		Zg = 0;
-		Xf = 0;
-		Zf = 0;
+		//Xd = 0;
+		//Xg = 0;
+		//Zd = 0;
+		//Zg = 0;
+		//Xf = 0;
+		//Zf = 0;
 		Xrob = 0;
 		Zrob = 0;
 		N = 0;
@@ -82,7 +83,17 @@ int AIRFOIL::Read( std::string fileName )
 	if( iReadType == AIRFOIL_BY_CONTENT )   { iType = getiTypeByContent(fileName); }
 	if( iReadType == AIRFOIL_BY_EXTENSION ) { iType = getiTypeByExt(fileName); } 
 
-	std::clog << "iType = " << iType << std::endl;
+	//std::clog << "iType = " << iType << std::endl;
+	switch(iType) { // one of the lines has incorrect format
+		case PRF_4: { std::clog << "PRF_4" << std::endl; break; }
+		case PRF_3: { std::clog << "PRF_3" << std::endl; break; }
+		case PRF_2: { std::clog << "PRF_2" << std::endl; break; }
+		case KOO:   { std::clog << "KOO"   << std::endl; break; }
+		case XFOIL: { std::clog << "XFOIL" << std::endl; break; }
+		case L_DAT: { std::clog << "L_DAT" << std::endl; break; }
+	}
+	return 1;
+
 	// in case no type was detected finish
 	if(iType == -1) 
 	{
@@ -181,9 +192,9 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 		}
 	}
 
-	int AIRFOIL::ReadColumns(int type, std::stringstream &buffer, 
+	int AIRFOIL::ReadColumns(const int type, std::stringstream &buffer, 
 		std::vector <double> &x1, std::vector <double> &y1, std::vector <double> &x2, std::vector <double> &y2, 
-		unsigned int n1, unsigned int n2)
+		const unsigned int n1, const unsigned int n2)
 	{
 		regex twoCols  ("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");  //number whitespaces(\s) number
 		regex threeCols("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");
@@ -225,7 +236,7 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			case PRF_4: { if(x1.size() != n1) return 30; break; }
 			case PRF_3: { if(x1.size() != n1) return 30; break; }
 			case PRF_2: { if(x1.size() != n1) return 30; break; }
-			case KOO:   { if(x1.size() != n1) return 30; break; }
+			case KOO:   { if(x1.size() != n1+1) return 30; break; }
 			case XFOIL: { break; } // no declared nr of data rows
 			case L_DAT: { if(x1.size() != n1+n2) return 30; break; }
 		}
@@ -241,8 +252,8 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 					}
 			case PRF_3:  
 			case PRF_2: { 
-					if(x1[0] != 0.0) { return 40; }
-					if(x1[x1.size()-1] != 100.0) { return 40; }
+					//if(x1[0] != 0.0) { return 40; }
+					//if(x1[x1.size()-1] != 100.0) { return 40; }
 					break; 
 					}
 			case KOO:   { 
@@ -268,145 +279,87 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 		return type;
 	}
 
-int AIRFOIL::getiTypeByContent(std::string fileName)
-{
-	clog << "getiTypeByContent" << endl;
-
-	iType = -1; // type not yet found
-	
-	ifstream in(fileName);
-    if(!in) return 10; 	//couldn't read file
-    std::stringstream buffer;
-    buffer << in.rdbuf();
-    in.close();
-
-	std::string buckup = buffer.str();
-	std::string line;
-
-	// set of useful regex expressions
-	// \\d - digit
-	// \\s - whitespace
-	// + - one or more occurences
-	// * - zero or more occurences
-	// [] - match one from inside
-	// (\\+|-)? - possible + or minues - one or zero times
-	// . - whatever character
-	regex integer("\\s*\\d+\\s*");   						// positive integer
-	regex number("\\s*(\\+|-)?[\\d\\.]+\\s*");   			// 1 22 1.2 0.2 .2  2. - any number
-	regex prfHeader("\\d+\\s+#\\s+.+");						// number_of_lines # name (e.g. "18	#	NACA 0012	")
-	regex kooHeader(".+\\s+,\\s+\\d+");						// name , number_of_lines-1
-	regex datNLines("\\s*\\d+\\.\\s*\\d+\\.\\s*");			// 31.  31.
-	regex twoCols  ("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");  //number whitespaces(\s) number
-	regex threeCols("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");
-	regex fourCols ("\\s*(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s+(\\+|-)?[\\d\\.]+\\s*");
-	
-	std::vector <double> x1;
-	std::vector <double> y1;
-	std::vector <double> x2;
-	std::vector <double> y2;
-
-	// read first line
-	// PRF
-	// HEADER - number_of_lines # name
-	// [4 cols]
-	// * values 0-100
-	// if first line matches full HEADER or just number of lines
-	/*getline(buffer, line);
-	if( regex_match(line, prfHeader) || regex_match(line, integer) ) 
+	int AIRFOIL::getiTypeByContent(std::string fileName)
 	{
-		clog << "IN" << endl;
-		buffer.str(buckup); 
-		int n;
-		buffer >> n; // get declared number of lines
-		getline(buffer, line); //read the header line till the end
+		clog << "getiTypeByContent" << endl;
 
-		int lineNr=0;
-		while( !buffer.eof() ) {
-			getline(buffer, line);
-			if( 0 == line.length() ) continue;
-			if(!regex_match(line, fourCols)) return 20; // one of the lines is incorrect
-			clog << line << endl;
-			lineNr++;
+		ifstream in(fileName);
+    	if(!in) return 10; 	//couldn't read file
+    	std::stringstream buffer;
+	    buffer << in.rdbuf();
+   	 	in.close();
+
+		std::string buckup = buffer.str();
+		std::string line;
+
+		// set of useful regex expressions
+		// \\d - digit
+		// \\s - whitespace
+		// + - one or more occurences
+		// * - zero or more occurences
+		// [] - match one from inside
+		// (\\+|-)? - possible + or minues - one or zero times
+		// . - whatever character
+		regex integer("\\s*\\d+\\s*");   						// positive integer
+		regex number("\\s*(\\+|-)?[\\d\\.]+\\s*");   			// 1 22 1.2 0.2 .2  2. - any number
+		regex prfHeader("\\d+\\s+#\\s+.+");						// number_of_lines # name (e.g. "18	#	NACA 0012	")
+		regex kooHeader(".+\\s+,\\s+\\d+");						// name , number_of_lines-1
+		regex datNLines("\\s*\\d+\\.\\s*\\d+\\.\\s*");			// 31.  31.
+	
+		std::vector <double> x1;
+		std::vector <double> y1;
+		std::vector <double> x2;
+		std::vector <double> y2;
+
+		// read first line
+		// PRF
+		// HEADER - number_of_lines # name
+		// [4 cols]
+		// * values 0-100
+		// if first line matches full HEADER or just number of lines
+		getline(buffer, line);
+		if( regex_match(line, prfHeader) || regex_match(line, integer) ) {
+			buffer.str(buckup); 
+			int n;
+			buffer >> n; // get declared number of lines
+			getline(buffer, line); //read the header line till the end
+
+			if(PRF_4 == ReadColumns(PRF_4, buffer, x1, y1, x2, y2, n, 0) ) return PRF_4;
 		}
-		
-		clog << "lineNr = " << lineNr << "\t" << n << endl;
-		if(lineNr == n) return 0;
-		else 			return 30;
-	}*/
     
-	// PRF 2
-	// HEADER1 - numer "1" or "2"
-	// HEADER2 - number_of_lines
-	// [2 cols] or [3 cols]
-	// * values 0-100
-	/*buffer.str(buckup); 
-	getline(buffer, line); // first line is a number, can be whatever - read second line then
-	getline(buffer, line);
-	if( regex_match(line, integer) ) // second line must be integer - number of lines
-	{
-		clog << "IN2" << endl;
-		int n = stoi(line); // convert second line to integer
-		clog << n << endl;
+		// PRF 2
+		// HEADER1 - numer "1" or "2"
+		// HEADER2 - number_of_lines
+		// [2 cols] or [3 cols]
+		// * values 0-100
+		buffer.str(buckup); 
+		getline(buffer, line); // first line is a number, can be whatever - read second line then
+		getline(buffer, line);
+		if( regex_match(line, integer) ) { // second line must be single integer - number of lines
+			unsigned int n = stoi(line); // convert second line to integer
+			
+			if(PRF_3 == ReadColumns(PRF_3, buffer, x1, y1, x2, y2, n, 0) ) return PRF_3;
 		
-		int lineNr=0;
-		while( !buffer.eof() ) {
+			buffer.str(buckup); 
+			getline(buffer, line); // first line is a number, can be whatever - read second line then
 			getline(buffer, line);
-			if( 0 == line.length() ) continue;
-			//if(!regex_match(line, threeCols)) return 20; // one of the lines is incorrect
-			if(!regex_match(line, twoCols) && !regex_match(line, threeCols)) return 20; // one of the lines is incorrect
-			clog << line << endl;
-			lineNr++;
+			if(PRF_2 == ReadColumns(PRF_2, buffer, x1, y1, x2, y2, n, 0) ) return PRF_2;
 		}
-		
-		clog << "lineNr = " << lineNr << "\t" << n << endl;
-		if(lineNr == n) return 0;
-		else 			return 30;
-	}*/
 
-	// KOO
-	// HEADER - name , number_of_lines-1
-	// [2 cols]
-	// * values 0-100
-	/*buffer.str(buckup); 
-	getline(buffer, line);
-	// check if header matches koo - name , number_of_line
-	if(regex_match(line, kooHeader))
-	{
-		std::size_t coma = line.find_first_of(","); //get number of lines
-		int n = stoi( line.substr(coma + 1) );
-		clog << n << endl;
+		// KOO
+		// HEADER - name , number_of_lines-1
+		// [2 cols]
+		// * values 0-100
+		buffer.str(buckup); 
+		getline(buffer, line);
+		// check if header matches koo - name , number_of_line
+		if(regex_match(line, kooHeader))
+		{
+			std::size_t coma = line.find_first_of(","); //get number of lines
+			int n = stoi( line.substr(coma + 1) );
 		
-		int lineNr=0;
-		while( !buffer.eof() ) {
-			getline(buffer, line);
-			if( 0 == line.length() ) continue;
-			if(!regex_match(line, twoCols)) return 20; // one of the lines is incorrect
-			clog << line << endl;
-			lineNr++;
+			if(KOO == ReadColumns(KOO, buffer, x1, y1, x2, y2, n, 0) ) return KOO;
 		}
-		
-		clog << "lineNr = " << lineNr << "\t" << n << endl;
-		if(lineNr == n) return 0;
-		else 			return 30;
-	}*/
-	
-	// DAT - selig
-	// HEADER - name
-	// [2 cols]
-	// * values 0.0-1.0
-/*		
-	buffer.str(buckup); 
-	getline(buffer, line);
-		
-	int lineNr=0;
-		while( !buffer.eof() ) {
-			getline(buffer, line);
-			if( 0 == line.length() ) continue;
-			if(!regex_match(line, twoCols)) return 20; // one of the lines is incorrect
-			clog << line << endl;
-			lineNr++;
-		}
-*/
 
 		// DAT - lednicer
 		// HEADER - name
@@ -416,9 +369,12 @@ int AIRFOIL::getiTypeByContent(std::string fileName)
 		// [empty line]
 		// [2 cols]
 		// * values from 0 to 1
+		clog << "LEDD" << endl;
 		buffer.str(buckup); 
 		getline(buffer, line);
+			clog << line << endl;
 		getline(buffer, line);
+			clog << line << endl;
 		if(regex_match(line, datNLines))
 		{
 			clog << line << endl;
@@ -428,10 +384,20 @@ int AIRFOIL::getiTypeByContent(std::string fileName)
 			ss >> n1 >> n2;
 			clog << n1 << "\t" << n2 << endl;
 			
-			int type = ReadColumns(L_DAT, buffer, x1, y1, x2, y2, n1, n2);
-			clog << "type:" << type << endl;
+			if(L_DAT == ReadColumns(L_DAT, buffer, x1, y1, x2, y2, n1, n2) ) return L_DAT;
+			//int type = ReadColumns(L_DAT, buffer, x1, y1, x2, y2, n1, n2);
+			//clog << "type:" << type << endl;
 			//if(type) return 20; 
 		}
+	
+		// DAT - selig
+		// HEADER - name
+		// [2 cols]
+		// * values 0.0-1.0
+		buffer.str(buckup); 
+		getline(buffer, line);
+		
+		if(XFOIL == ReadColumns(XFOIL, buffer, x1, y1, x2, y2, 0, 0) ) return XFOIL;
 
 		clog << "END getiTypeByContent" << endl;
 
@@ -511,16 +477,16 @@ int AIRFOIL::Read_PRF_0( std::string fileName )
 		}
 	
 	ReadPar( ff, "%d", &N );
-	Xg = new double[N]; 
-	Xd = new double[N]; 
-	Zg = new double[N]; 
-	Zd = new double[N]; 
+	Xg.resize(N); 
+	Xd.resize(N); 
+	Zg.resize(N); 
+	Zd.resize(N); 
 	
 	for(int i=0; i<N; i++)
 		ReadPar( ff, "%lf %lf %lf %lf", &Xg[i], &Zg[i], &Xd[i], &Zd[i] );
 	fclose( ff );
 
-	double dAd = dAverage( Zd, N );
+	/*double dAd = dAverage( Zd, N );
 	double dAg = dAverage( Zg, N );
 	if( dAg < dAd )
 		{
@@ -530,10 +496,12 @@ int AIRFOIL::Read_PRF_0( std::string fileName )
 		for(int i=0; i<N; i++)
 			ReadPar( ff, "%lf %lf %lf %lf", &Xd[i], &Zd[i], &Xg[i], &Zg[i] );
 		fclose( ff );
-		}
+		}*/
 	
-	double dCa = max( tabmax( Xd, N ), tabmax( Xg, N ) );
-	double dX0 = min( tabmin( Xd, N ), tabmin( Xg, N ) );
+	//double dCa = max( tabmax( Xd, N ), tabmax( Xg, N ) );
+	//std::vector <double> ::iterator idMax = std::max_element( Xd.begin(), Xd.end() );
+	double dCa = max( Xd[*std::max_element( Xd.begin(), Xd.end() )], Xg[*std::max_element( Xg.begin(), Xg.end() )] );
+	double dX0 = min( Xd[*std::min_element( Xd.begin(), Xd.end() )], Xg[*std::min_element( Xg.begin(), Xg.end() )] );
 
 	dCa -= dX0;
 	double dMnoz = 100./dCa;
@@ -644,10 +612,10 @@ int AIRFOIL::Read_PRF_1( std::string fileName )
 	Zrob[NN+1] = Zrob[0];
 	Nrob++;
 	
-	Xg = new double[N]; 
-	Xd = new double[N]; 
-	Zg = new double[N]; 
-	Zd = new double[N];
+	Xg.resize(N); 
+	Xd.resize(N); 
+	Zg.resize(N); 
+	Zd.resize(N);
 	for( int i=0; i<N; i++ )
 		{
 		Xd[i] = Xfrob[i];
@@ -883,10 +851,10 @@ void AIRFOIL::XFOIL2PRF( void )
 	N = Nf;
 	SortClean( &N, Xfrob );
 	
-	Xg = new double[N]; 
-	Xd = new double[N]; 
-	Zg = new double[N]; 
-	Zd = new double[N];
+	Xg.resize(N); 
+	Xd.resize(N); 
+	Zg.resize(N); 
+	Zd.resize(N);
 	if(iSter == 1)
 		{
 		for( int i=0; i<N; i++ )

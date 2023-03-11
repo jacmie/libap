@@ -58,9 +58,9 @@ class AIRFOIL
 	int Read_DAT_LEDNICER( std::string fileName );	// by Anna Sima
 
 	void ReadRow(int type, std::string &line, double &x1, double &y1, double &x2, double &y2);
-	int ReadColumns(int type, std::stringstream &buffer, 
+	int ReadColumns(const int type, std::stringstream &buffer, 
 		std::vector <double> &x1, std::vector <double> &y1, std::vector <double> &x2, std::vector <double> &y2, 
-		unsigned int n1, unsigned int n2);
+		const unsigned int n1, const unsigned int n2);
 	// methods to get file type by a file content or its extension (by Anna Sima)
 	int getiTypeByContent( std::string fileName );
 	int getiTypeByExt( std::string fileName );
@@ -109,9 +109,6 @@ protected:
 	
 	int iRead;   ///< 0 - no data, 1 - data read succesfuly
 
-	int iGUI;    ///< GUI flag - messages displayed using wrapping function "alert"
-	void (*alert)( char *c ) = NULL;  ///< virtual fuction to display the message (if iGUI > 0)
-
 public:
 	
 	int Nf;      ///< size of the vectors with geometry data - compatible with Xfoil
@@ -119,10 +116,10 @@ public:
 	double *Zf;  ///< Z coordinates (Nf points)
 	
 	int N;       ///< size of the vectors with geometry data - 4 column native PANUKL format
-	double *Xd;  ///< X coordinates of lower contour (N points)
-	double *Xg;  ///< X coordinates of upper contour (N points)
-	double *Zd;  ///< Z coordinates of lower contour (N points)
-	double *Zg;  ///< Z coordinates of upper contour (N points)
+	std::vector <double> Xd;  ///< X coordinates of lower contour (N points)
+	std::vector <double> Xg;  ///< X coordinates of upper contour (N points)
+	std::vector <double> Zd;  ///< Z coordinates of lower contour (N points)
+	std::vector <double> Zg;  ///< Z coordinates of upper contour (N points)
 
 	/** File type: \n
 	    0 - PRF - PANUKL (prf1) - native PANUKL (4 columns) format \n
