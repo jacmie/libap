@@ -512,6 +512,8 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			}
 
 			Print2col(clog);
+				
+			nMin = std::distance( Xf.begin(), std::min_element(Xf.begin(), Xf.end()) );
 
 			if(Xf.size() == 2*nMin+1) { // equal data division
 				clog << "no interpol " << endl;
@@ -537,13 +539,103 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			}
 			else { // interpolation needed
 				clog << "interpol " << endl;
+	
+				vector <double> xin;
+				vector <double> yin;
+				xin.resize(3);
+				yin.resize(3);
 				
-				if( front/nFront < rear/nRear ) {
+				xin[0] = 0;
+				xin[1] = 2;
+				xin[2] = 4;
+				yin[0] = 0;
+				yin[1] = 4;
+				yin[2] = 16;
+
+				clog << L_interp(xin, yin, 3) << endl;
+
+				clog << nMin << "\t" << 0.5*Xf.size() - 1 << endl;
+				
+				if( nMin > 0.5*Xf.size() - 1 ) {
+					Xg = Xf;
+					Zg = Zf;
+
+					Xg.resize(nMin + 1);
+					Zg.resize(nMin + 1);
+					std::reverse(Xg.begin(), Xg.end());
+					std::reverse(Zg.begin(), Zg.end());
+					for(unsigned int i=0; i<Xg.size(); i++) {
+						Xg[i] *= 100.0;
+						Zg[i] *= 100.0;
+					}
+
+					Xd = Xg;
+					Zd.assign(Xd.size(), 0.0);
+					Zd[0] = Zg[0];
+					Zd[Zg.size()-1] = Zg[Zg.size()-1];
+
+					std::vector <double> xdata;
+					std::vector <double> zdata;
+					xdata = Xf;
+					zdata = Zf;
+
+					xdata.erase(xdata.begin(), xdata.begin() + nMin);
+					zdata.erase(zdata.begin(), zdata.begin() + nMin);
+					for(unsigned int i=0; i<xdata.size(); i++) {
+						xdata[i] *= 100.0;
+						zdata[i] *= 100.0;
+					}
+
+					for(unsigned int i=1; i<Xg.size()-1; i++)
+					{
+						//clog << xdata[i] << "\t" << zdata[i] << endl;
+
+						std::vector <double>::iterator low, up;
+  						low = std::lower_bound(xdata.begin(), xdata.end(), Xg[i]);
+
+						unsigned int d = std::distance(xdata.begin(), low);
+						clog << d << "\t" << xdata[std::distance(xdata.begin(), low)] << "\t" << Xg[i] << "\t";
+			
+						if(d==0)
+						{
+							xin[0] = xdata[d];
+							xin[1] = xdata[d+1];
+							xin[2] = xdata[d+2];
+							yin[0] = zdata[d];
+							yin[1] = zdata[d+1];
+							yin[2] = zdata[d+2];
+						}
+
+						if(d>0 && d<xdata.size()-1)
+						{
+							xin[0] = xdata[d-1];
+							xin[1] = xdata[d];
+							xin[2] = xdata[d+1];
+							yin[0] = zdata[d-1];
+							yin[1] = zdata[d];
+							yin[2] = zdata[d+1];
+						}
+						
+						if(d==xdata.size()-1)
+						{
+							xin[0] = xdata[d-2];
+							xin[1] = xdata[d-1];
+							xin[2] = xdata[d];
+							yin[0] = zdata[d-2];
+							yin[1] = zdata[d-1];
+							yin[2] = zdata[d];
+						}
+
+						Zd[i] = L_interp(xin, yin, Xg[i]);
+						
+						clog << Zd[i] << endl;
+					}
+					
 				}
 				else {
 				}
 
-				PRF2XFOIL(); 
+				//PRF2XFOIL(); 
 			}
 
 			Print4col(clog);
@@ -555,6 +647,117 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 
 		return -1; // file type not found
 	}
+
+	double AIRFOIL::L_interp(const std::vector <double> &x, const std::vector <double> &y, const double &xi) {
+		double l, L = 0;
+
+		for(unsigned int i=0; i<x.size(); i++) {
+			l = 1;
+
+			for(unsigned int j=0; j<x.size(); j++) {
+				if(i == j) continue;
+				l *= ((xi - x[j])/(x[i] - x[j]));
+			}
+
+			L += l*y[i];
+		}
+
+		return L;
+	}
+
+void AIRFOIL::XFOIL2PRF( void )
+{
+	int nmax = Xf.size();
+	int nmin = Xf.size();
+	double dCa = dMaxT( &Xf[0], &nmax );
+	double dX0 = dMinT( &Xf[0], &nmin );
+	//fprintf(stderr,"Xf min %f %f %f\n",Xf[nmin-1],Xf[nmin],Xf[nmin+1]);
+	
+	if( Xf[nmin-1] == Xf[nmin] )		// nose correction
+	    {
+	    double XX[4], YY[4];
+	    for( int i=0; i<4; i++)
+	        {
+	        XX[i]=Xf[nmin-2+i];
+	        YY[i]=Zf[nmin-2+i];
+	        }
+	    double Y0 = 0.5*(YY[2]+YY[1]);
+	    double X0 = apr3( Y0, YY, XX );
+	    for(int i=Xf.size(); i>nmin; i--)
+	        {
+	        Xf[i] = Xf[i-1];
+	        Zf[i] = Zf[i-1];
+	        }
+	    Xf[nmin] = X0;
+	    Zf[nmin] = Y0;
+	    //Nf++;
+	    nmax++;
+	    nmin++;
+	    //nmax = Nf;
+	    //nmin = Nf;
+	    dCa = dMaxT( &Xf[0], &nmax );
+	    dX0 = dMinT( &Xf[0], &nmin );
+	    }
+
+	dCa -= dX0;
+	double dMnoz = 100./dCa;
+	
+	double dW1, dW2;
+	int iSter = 0;		// 1 - lower surface first, 0 - upper surface first
+	int NN = min( nmin, nmax );
+	if( nmax > nmin || nmax == 0 )
+		{
+		dW1 = dAverage( &Zf[0], nmin );
+		dW2 = dAverage( &Zf[nmin], Xf.size() - nmin );
+		if( dW2 > dW1 )iSter = 1;
+		NN = nmin;
+		}
+	else
+		{
+		dW1 = dAverage( &Zf[0], nmax );
+		dW2 = dAverage( &Zf[nmax], nmin - nmax );
+		if( dW2 > dW1 )iSter = 1;
+		NN = nmax;
+		}
+		
+	fprintf( stderr, "ReadDAT - Xfoil2Prf:\n" );
+	//fprintf( stderr, "Nf = %d NN = %d iSter = %d\n", Nf, NN, iSter );
+	fprintf( stderr, "max %d min %d\n", nmax, nmin );
+	fprintf( stderr, "X0  %f Ca  %f\n", dX0, dCa );
+	fflush( stderr );
+	
+	std::vector <double> Xfrob;
+	Xfrob.resize( Xf.size() );
+	for(unsigned int i=0; i<Xf.size(); i++ )Xfrob[i] = Xf[i];
+	unsigned int N = Xf.size();
+	//SortClean( &N, &Xfrob[0] );
+	
+	Xg.resize(N); 
+	Xd.resize(N); 
+	Zg.resize(N); 
+	Zd.resize(N);
+
+	if(iSter == 1)
+	{
+		for(unsigned int i=0; i<N; i++)
+		{
+			Xd[i] = Xfrob[i];
+			Zd[i] = inter1( &Xf[0], &Zf[0], NN+1, Xd[i] );
+			Xg[i] = Xd[i];
+			Zg[i] = inter1( &Xf[NN], &Zf[NN], Xf.size()-NN, Xg[i] );
+		}
+	}
+	else
+	{
+		for(unsigned int i=0; i<N; i++)
+		{
+			Xd[i] = Xfrob[i];
+			Zd[i] = inter1( &Xf[NN], &Zf[NN], Xf.size()-NN, Xd[i] );
+			Xg[i] = Xd[i];
+			Zg[i] = inter1( &Xf[0], &Zf[0], NN+1, Xg[i] );
+		}
+	}
+}
 
 /*
         Gets iType based on file extension
@@ -757,99 +960,6 @@ int AIRFOIL::Read_DAT( std::string fileName )
 	XFOIL2PRF();
 */
 	return 0;
-}
-
-void AIRFOIL::XFOIL2PRF( void )
-{
-	int nmax = Xf.size();
-	int nmin = Xf.size();
-	double dCa = dMaxT( &Xf[0], &nmax );
-	double dX0 = dMinT( &Xf[0], &nmin );
-	//fprintf(stderr,"Xf min %f %f %f\n",Xf[nmin-1],Xf[nmin],Xf[nmin+1]);
-	
-	if( Xf[nmin-1] == Xf[nmin] )		// nose correction
-	    {
-	    double XX[4], YY[4];
-	    for( int i=0; i<4; i++)
-	        {
-	        XX[i]=Xf[nmin-2+i];
-	        YY[i]=Zf[nmin-2+i];
-	        }
-	    double Y0 = 0.5*(YY[2]+YY[1]);
-	    double X0 = apr3( Y0, YY, XX );
-	    for(int i=Xf.size(); i>nmin; i--)
-	        {
-	        Xf[i] = Xf[i-1];
-	        Zf[i] = Zf[i-1];
-	        }
-	    Xf[nmin] = X0;
-	    Zf[nmin] = Y0;
-	    //Nf++;
-	    nmax++;
-	    nmin++;
-	    //nmax = Nf;
-	    //nmin = Nf;
-	    dCa = dMaxT( &Xf[0], &nmax );
-	    dX0 = dMinT( &Xf[0], &nmin );
-	    }
-	dCa -= dX0;
-	double dMnoz = 100./dCa;
-	
-	double dW1, dW2;
-	int iSter = 0;		// 1 - lower surface first, 0 - upper surface first
-	int NN = min( nmin, nmax );
-	if( nmax > nmin || nmax == 0 )
-		{
-		dW1 = dAverage( &Zf[0], nmin );
-		dW2 = dAverage( &Zf[nmin], Xf.size() - nmin );
-		if( dW2 > dW1 )iSter = 1;
-		NN = nmin;
-		}
-	else
-		{
-		dW1 = dAverage( &Zf[0], nmax );
-		dW2 = dAverage( &Zf[nmax], nmin - nmax );
-		if( dW2 > dW1 )iSter = 1;
-		NN = nmax;
-		}
-		
-	fprintf( stderr, "ReadDAT - Xfoil2Prf:\n" );
-	//fprintf( stderr, "Nf = %d NN = %d iSter = %d\n", Nf, NN, iSter );
-	fprintf( stderr, "max %d min %d\n", nmax, nmin );
-	fprintf( stderr, "X0  %f Ca  %f\n", dX0, dCa );
-	fflush( stderr );
-	
-	std::vector <double> Xfrob;
-	Xfrob.resize( Xf.size() );
-	for(unsigned int i=0; i<Xf.size(); i++ )Xfrob[i] = Xf[i];
-	unsigned int N = Xf.size();
-	//SortClean( &N, &Xfrob[0] );
-	
-	Xg.resize(N); 
-	Xd.resize(N); 
-	Zg.resize(N); 
-	Zd.resize(N);
-
-	if(iSter == 1)
-	{
-		for(unsigned int i=0; i<N; i++)
-		{
-			Xd[i] = Xfrob[i];
-			Zd[i] = inter1( &Xf[0], &Zf[0], NN+1, Xd[i] );
-			Xg[i] = Xd[i];
-			Zg[i] = inter1( &Xf[NN], &Zf[NN], Xf.size()-NN, Xg[i] );
-		}
-	}
-	else
-	{
-		for(unsigned int i=0; i<N; i++)
-		{
-			Xd[i] = Xfrob[i];
-			Zd[i] = inter1( &Xf[NN], &Zf[NN], Xf.size()-NN, Xd[i] );
-			Xg[i] = Xd[i];
-			Zg[i] = inter1( &Xf[0], &Zf[0], NN+1, Xg[i] );
-		}
-	}
 }
 
 int AIRFOIL::Write_DAT( std::string fileName )

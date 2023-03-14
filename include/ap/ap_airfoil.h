@@ -79,6 +79,7 @@ namespace ap
 		double apr3( double dX, double *dXX, double *dYY );
 		void SortClean( int *N, double *X );
 		void Sort1( int N, double dRA[] );
+		double L_interp(const std::vector <double> &x, const std::vector <double> &y, const double &xi); 
 
 		int ReadStr( FILE * stream, char *Par );
 		void ReadStrL( FILE * stream, char *Par , int *len);
