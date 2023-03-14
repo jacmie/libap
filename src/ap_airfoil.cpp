@@ -21,6 +21,7 @@
 
 #include <regex>
 #include <algorithm>
+#include <numeric>
 //#include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -143,7 +144,7 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 		int lineNr=0; 
 		double x1_, y1_, x2_, y2_;
 
-		// === Check number of columns and count data rows ===
+		// === Check number of columns, format and count data rows ===
 		while( !buffer.eof() ) {
 			getline(buffer, line);
 			if( 0 == line.length() ) continue;
@@ -178,7 +179,7 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 		}
 		
 		// === Check declared vs counted data rows ===
-		switch(type) { // one of the lines has incorrect format
+		switch(type) { 
 			case PRF_4: { if(x1.size() != n1) return 30; break; }
 			case PRF_3: { if(x1.size() != n1) return 30; break; }
 			case PRF_2: { if(x1.size() != n1) return 30; break; }
@@ -188,7 +189,7 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 		}
 
 		// === Check data end values ===
-		switch(type) { // one of the lines has incorrect format
+		switch(type) { 
 			case PRF_4: { 
 					if(x1[0] != 0.0) return 40; 
 					if(x1[x1.size()-1] != 100.0) return 40; 
@@ -479,7 +480,7 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			//sort( vec.begin(), vec.end() );
 			//Xf.erase( unique( Xf.begin(), Xf.end() ), Xf.end() );
 		
-
+			// === remove subsequent doubled rows ===
 			for(unsigned int i=0; i<Xf.size()-1; i++) {
 				if(Xf[i] == Xf[i+1]) { 
 					Xf.erase( Xf.begin()+i, Xf.begin()+i+1 ); 
@@ -489,16 +490,37 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 
 			Print2col(clog);
 			
-			unsigned int n05 = std::distance( Xf.begin(), std::min_element(Xf.begin(), Xf.end()) );
+			// === find minimum element ===
+			unsigned int nMin = std::distance( Xf.begin(), std::min_element(Xf.begin(), Xf.end()) );
 
-			if(Xf.size() == 2*n05+1) {
+			for(unsigned int i=0; i<=nMin; i++) clog << i << "\t" << Zf[i] << endl;
+			clog << nMin << endl;
+			for(unsigned int i=nMin; i<=Zf.size()-1; i++) clog << i << "\t" << Zf[i] << endl;
+			clog << Zf.size()-nMin << endl;
+
+
+			// === sort according to Xfoil convention ===
+			double front = std::accumulate(&Zf[0], &Zf[0]+nMin, 0.0);
+			double rear  = std::accumulate(&Zf[0]+nMin, &Zf[0]+Zf.size()-1, 0.0);
+			unsigned int nFront = nMin;
+			unsigned int nRear  = Zf.size() - nMin;
+			clog << front/nMin << "\t" << rear/(Zf.size()-nMin) << endl;
+			
+			if( front/nFront < rear/nRear ) {
+				std::reverse(Xf.begin(), Xf.end());
+				std::reverse(Zf.begin(), Zf.end());
+			}
+
+			Print2col(clog);
+
+			if(Xf.size() == 2*nMin+1) { // equal data division
 				clog << "no interpol " << endl;
 					Xd = Xg = Xf;
 					Zd = Zg = Zf;
 					clog << "Xg.size = " << Xg.size() << endl;
 
-					Xg.resize(n05 + 1);
-					Zg.resize(n05 + 1);
+					Xg.resize(nMin + 1);
+					Zg.resize(nMin + 1);
 					std::reverse(Xg.begin(), Xg.end());
 					std::reverse(Zg.begin(), Zg.end());
 					for(unsigned int i=0; i<Xg.size(); i++) {
@@ -506,15 +528,21 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 						Zg[i] *= 100.0;
 					}
 
-					Xd.erase(Xd.begin(), Xd.begin() + n05);
-					Zd.erase(Zd.begin(), Zd.begin() + n05);
+					Xd.erase(Xd.begin(), Xd.begin() + nMin);
+					Zd.erase(Zd.begin(), Zd.begin() + nMin);
 					for(unsigned int i=0; i<Xd.size(); i++) {
 						Xd[i] *= 100.0;
 						Zd[i] *= 100.0;
 					}
 			}
-			else { 
+			else { // interpolation needed
 				clog << "interpol " << endl;
+				
+				if( front/nFront < rear/nRear ) {
+				}
+				else {
+				}
+
 				PRF2XFOIL(); 
 			}
 

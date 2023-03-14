@@ -44,6 +44,7 @@ TEST(ap_airfoilTest, IO_operations) {
     airfoil.ReadStatus();	
 i*/
 	clog << "XFOIL" << endl;
+	//airfoil.Read("./airfoil_data/fx66h80.dat");
 	airfoil.Read("./airfoil_data/fx66h80_d0_r_ne.dat");
     airfoil.ReadStatus();	
 /*	

@@ -51,7 +51,6 @@ namespace ap
 		int Read_DAT( std::string fileName );
 		int Read_DAT_LEDNICER( std::string fileName );	// by Anna Sima
 
-		void ReadRow(int type, std::string &line, double &x1, double &y1, double &x2, double &y2);
 		int ReadColumns(const int type, std::stringstream &buffer, 
 			std::vector <double> &x1, std::vector <double> &y1, std::vector <double> &x2, std::vector <double> &y2, 
 			const unsigned int n1, const unsigned int n2);
