@@ -595,36 +595,19 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 
 						unsigned int d = std::distance(xdata.begin(), low);
 						clog << d << "\t" << xdata[std::distance(xdata.begin(), low)] << "\t" << Xg[i] << "\t";
-			
-						if(d==0)
-						{
-							xin[0] = xdata[d];
-							xin[1] = xdata[d+1];
-							xin[2] = xdata[d+2];
-							yin[0] = zdata[d];
-							yin[1] = zdata[d+1];
-							yin[2] = zdata[d+2];
-						}
+		
+						unsigned int shift = 0;
 
+						if(d==0) shift = -1;
 						if(d>0 && d<xdata.size()-1)
-						{
-							xin[0] = xdata[d-1];
-							xin[1] = xdata[d];
-							xin[2] = xdata[d+1];
-							yin[0] = zdata[d-1];
-							yin[1] = zdata[d];
-							yin[2] = zdata[d+1];
-						}
+						if(d==xdata.size()-1) shift = 1;
 						
-						if(d==xdata.size()-1)
-						{
-							xin[0] = xdata[d-2];
-							xin[1] = xdata[d-1];
-							xin[2] = xdata[d];
-							yin[0] = zdata[d-2];
-							yin[1] = zdata[d-1];
-							yin[2] = zdata[d];
-						}
+						xin[0] = xdata[d-1+shift];
+						xin[1] = xdata[d+shift];
+						xin[2] = xdata[d+1+shift];
+						yin[0] = zdata[d-1+shift];
+						yin[1] = zdata[d+shift];
+						yin[2] = zdata[d+1+shift];
 
 						Zd[i] = L_interp(xin, yin, Xg[i]);
 						
@@ -633,11 +616,74 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 					
 				}
 				else {
+					clog << "IN" << endl;
+					
+					Xd = Xf;
+					Zd = Zf;
+
+					Xd.erase(Xd.begin(), Xd.begin() + nMin);
+					Zd.erase(Zd.begin(), Zd.begin() + nMin);
+					for(unsigned int i=0; i<Xd.size(); i++) {
+						Xd[i] *= 100.0;
+						Zd[i] *= 100.0;
+					}
+
+					Xg = Xd;
+					Zg.assign(Xd.size(), 0.0);
+					Zg[0] = Zd[0];
+					Zg[Zd.size()-1] = Zd[Zd.size()-1];
+
+					std::vector <double> xdata;
+					std::vector <double> zdata;
+					xdata = Xf;
+					zdata = Zf;
+
+					xdata.resize(nMin+1);
+					zdata.resize(nMin+1);
+					for(unsigned int i=0; i<xdata.size(); i++) {
+						xdata[i] *= 100.0;
+						zdata[i] *= 100.0;
+					}
+					std::reverse(xdata.begin(), xdata.end());
+					std::reverse(zdata.begin(), zdata.end());
+
+					clog << endl;
+					for(unsigned int i=0; i<xdata.size(); i++)
+					{
+						clog << xdata[i] << "\t" << zdata[i] << endl;
+					}
+					clog << endl;
+
+					for(unsigned int i=1; i<Xd.size()-1; i++)
+					{
+						std::vector <double>::iterator low, up;
+  						low = std::upper_bound(xdata.begin(), xdata.end(), Xd[i]);
+
+						unsigned int d = std::distance(xdata.begin(), low);
+						clog << i << "\t" << d << "\t" << xdata[std::distance(xdata.begin(), low)] << "\t" << Xd[i] << "\t";
+		
+						unsigned int shift = 0;
+
+						if(d==0) shift = -1;
+						if(d>0 && d<xdata.size()-1)
+						if(d==xdata.size()-1) shift = 1;
+						
+						xin[0] = xdata[d-1+shift];
+						xin[1] = xdata[d+shift];
+						xin[2] = xdata[d+1+shift];
+						yin[0] = zdata[d-1+shift];
+						yin[1] = zdata[d+shift];
+						yin[2] = zdata[d+1+shift];
+
+						Zg[i] = L_interp(xin, yin, Xg[i]);
+						
+						clog << Zg[i] << endl;
 				}
-
+				
 				//PRF2XFOIL(); 
+				}
 			}
-
+			
 			Print4col(clog);
 
 			return XFOIL;
