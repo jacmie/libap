@@ -7,50 +7,26 @@
 
 using namespace std;
 
-TEST(ap_airfoilTest, airfoil_format_recognition) {
-	ap::AIRFOIL airfoil;
-
-	// default
-	EXPECT_DOUBLE_EQ(0, airfoil.GetReadType());
-	EXPECT_DOUBLE_EQ(ap::AIRFOIL_BY_CONTENT, airfoil.GetReadType());
-	
-	airfoil.SetReadType(1); // 0 - recognition by content, 1 - recognition by filename extention
-	
-	EXPECT_DOUBLE_EQ(1, airfoil.GetReadType());
-	EXPECT_DOUBLE_EQ(ap::AIRFOIL_BY_EXTENSION, airfoil.GetReadType());
-	
-	airfoil.SetReadType(ap::AIRFOIL_BY_CONTENT); // 0 - recognition by content, 1 - recognition by filename extention
-	
-	EXPECT_DOUBLE_EQ(0, airfoil.GetReadType());
-	EXPECT_DOUBLE_EQ(ap::AIRFOIL_BY_CONTENT, airfoil.GetReadType());
-}
-
 TEST(ap_airfoilTest, IO_operations) {
 
 	ap::AIRFOIL airfoil;
 
-	airfoil.SetReadType(ap::AIRFOIL_BY_CONTENT); // 0 - recognition by content, 1 - recognition by filename extention
-
 	clog << "PRF" << endl;
 	airfoil.Read("./airfoil_data/NN_1817.prf");
-    airfoil.ReadStatus();	
     	
 	clog << "PRF2" << endl;
 	airfoil.Read("./airfoil_data/CLARK-Y.PRF");
-    airfoil.ReadStatus();	
 
 	clog << "KOO" << endl;
 	airfoil.Read("./airfoil_data/cb3013.KOO");
-    airfoil.ReadStatus();	
 
 	clog << "XFOIL" << endl;
 	//airfoil.Read("./airfoil_data/fx66h80.dat");
 	airfoil.Read("./airfoil_data/fx66h80_d0_f.dat");
-    airfoil.ReadStatus();	
 	
 	clog << "LED" << endl;
 	airfoil.Read("./airfoil_data/rae104.dat");
-    airfoil.ReadStatus();	
+	
 	//Profil -> ReadNaca( (char*)AirfoilFile.c_str(), Vnr ); // generate NACA
 /*
 	std::vector <double> Xf;

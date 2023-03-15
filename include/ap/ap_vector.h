@@ -10,7 +10,6 @@
 
 namespace ap
 {
-
     //! Vector class
 	/*! 
 	 * VECTOR_3 originates as part of the Config Lib for Panukl software: 

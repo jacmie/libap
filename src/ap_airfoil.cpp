@@ -1,133 +1,108 @@
-/*********************************************************************/
-/*                                                                   */
-/*                Panukl package - (C) TGG 2002                      */
-/*             Config files library - (C) TGG 2015                   */
-/*                                                                   */
-/*********************************************************************/
-/*                          Warszawa, 2020                           */
-/*********************************************************************/
-/*                                                                   */
-/* File: airfoil.cpp                                                 */
-/*                                                                   */
-/* Author: T.Grabowski                                               */
-/*                                                                   */
-/* Contents - airfoil class                                          */
-/*                                                                   */ 
-/* Last update: 24.11.2020                                           */
-/*                                                                   */
-/*********************************************************************/
-/*                                                                   */
-/*                                                                   */
+// Part of All Purpose - ap library
 
 #include <regex>
 #include <algorithm>
 #include <numeric>
-//#include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <fstream>
 
 #include "ap_airfoil.h"
+#include "ap_naca.h"
 
 using namespace std;
 
 namespace ap
 {
-	AIRFOIL::AIRFOIL()
+	int AIRFOIL::Set(const std::string set_name, const std::vector <double> &set_xg, const std::vector <double> &set_zg, const std::vector <double> &set_xd, const std::vector <double> &set_zd)
 	{
+		name = set_name;
+		xg = set_xg;
+		zg = set_zg;
+		xd = set_xd;
+		zd = set_zd;
+
+		return 0;
 	}
 
-	void AIRFOIL::Clean()
+	int AIRFOIL::Read( std::string fileName )
 	{
-	}
+		int iType = ReadContent(fileName); 
 
-int AIRFOIL::Read( std::string fileName )
-{
-	Clean();
+		switch(iType) { // one of the lines has incorrect format
+			case PRF_4: { std::clog << "PRF_4" << std::endl; break; }
+			case PRF_3: { std::clog << "PRF_3" << std::endl; break; }
+			case PRF_2: { std::clog << "PRF_2" << std::endl; break; }
+			case KOO:   { std::clog << "KOO"   << std::endl; break; }
+			case XFOIL: { std::clog << "XFOIL" << std::endl; break; }
+			case L_DAT: { std::clog << "L_DAT" << std::endl; break; }
+		}
+		return 1;
 
-	int iType = -1;
-
-	if( iReadType == AIRFOIL_BY_CONTENT )   { iType = getiTypeByContent(fileName); }
-	if( iReadType == AIRFOIL_BY_EXTENSION ) { iType = getiTypeByExt(fileName); } 
-
-	//std::clog << "iType = " << iType << std::endl;
-	switch(iType) { // one of the lines has incorrect format
-		case PRF_4: { std::clog << "PRF_4" << std::endl; break; }
-		case PRF_3: { std::clog << "PRF_3" << std::endl; break; }
-		case PRF_2: { std::clog << "PRF_2" << std::endl; break; }
-		case KOO:   { std::clog << "KOO"   << std::endl; break; }
-		case XFOIL: { std::clog << "XFOIL" << std::endl; break; }
-		case L_DAT: { std::clog << "L_DAT" << std::endl; break; }
-	}
-	return 1;
-
-	// in case no type was detected finish
-	if(iType == -1) 
-	{
-		std::clog << "Unrecognized airfoil file type!!!" << std::endl;
-		return -1;
-	}
-			
-	return 0;
-}
-
-int AIRFOIL::Write( std::string fileName, int iTyp )
-{
-	switch( iTyp )
+		// in case no type was detected finish
+		if(iType == -1) 
 		{
-		default:
-		case 0:
-			if( Write_PRF( fileName ) )return -1;
-			break;
-/*		case 1:
-			if( Write_PRF_1( cFile ) )return -1;
-			break;
-		case 2:
-			if( Write_KOO( cFile ) )return -1;
-			break;
-*/		case 3:
-			if( Write_DAT( fileName ) )return -1;
-			break;
+			std::clog << "Unrecognized airfoil file type!!!" << std::endl;
+			return -1;
 		}
 			
-	return 0;
-}
+		return 0;
+	}
 
-int AIRFOIL::ReadNaca( long int iNACA, int NN )
-{
-	char cNACA[10];
-	sprintf(cNACA, "%04ld", iNACA );
-	return ReadNaca( cNACA );
-}
-
-int AIRFOIL::ReadNaca( std::string NACA, int NN )
-{
-	//Name = "NACA " + NACA;
-
-	NACA_PROFILE *NacaProfile = new NACA_PROFILE();
-	NacaProfile->setTE0( 1 );
-	NacaProfile->generate_naca( NACA, NN );
-	
-	Xf.resize(NacaProfile->N + 1); 
-	Zf.resize(NacaProfile->N + 1); 
-
-	for(unsigned int i=0; i<Xf.size(); i++)
+	int AIRFOIL::Write( std::string fileName, int iTyp )
+	{
+		switch( iTyp )
 		{
-		Xf[i] = NacaProfile->X[i];
-		Zf[i] = NacaProfile->Z[i];
+			default:
+			case 0:
+				if( Write_PRF( fileName ) )return -1;
+				break;
+	/*		case 1:
+				if( Write_PRF_1( cFile ) )return -1;
+				break;
+			case 2:
+				if( Write_KOO( cFile ) )return -1;
+				break;
+	*/		case 3:
+				if( Write_DAT( fileName ) )return -1;
+				break;
+			}
+			
+		return 0;
+	}
+
+	int AIRFOIL::GenerateNaca(unsigned int iNACA, int n)
+	{
+		char cNACA[10];
+		//sprintf(cNACA, "%04ld", iNACA );
+		return GenerateNaca(cNACA, n);
+	}
+
+	int AIRFOIL::GenerateNaca(std::string NACA, int n)
+	{
+		//Name = "NACA " + NACA;
+
+		NACA_PROFILE *NacaProfile = new NACA_PROFILE();
+		NacaProfile->setTE0( 1 );
+		NacaProfile->generate_naca(NACA, n);
+	
+		xf.resize(NacaProfile->N + 1); 
+		zf.resize(NacaProfile->N + 1); 
+
+		for(unsigned int i=0; i<xf.size(); i++)
+		{
+			xf[i] = NacaProfile->X[i];
+			zf[i] = NacaProfile->Z[i];
 		}
 		
-	//DELETE_(NacaProfile);
+		//DELETE_(NacaProfile);
 		
-	XFOIL2PRF();
+		XFOIL2PRF();
 	
-	return 0;
-}
+		return 0;
+	}
 
-	/*
-    	Gets iType based on file content - private
-	*/
 	int AIRFOIL::ReadColumns(const int type, std::stringstream &buffer, 
 		std::vector <double> &x1, std::vector <double> &y1, std::vector <double> &x2, std::vector <double> &y2, 
 		const unsigned int n1, const unsigned int n2)
@@ -267,7 +242,7 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 		return type;
 	}
 
-	int AIRFOIL::getiTypeByContent(std::string fileName)
+	int AIRFOIL::ReadContent(std::string fileName)
 	{
 		clog << "getiTypeByContent" << endl;
 
@@ -318,10 +293,10 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			name.erase(name.find_last_not_of(" \t\n\r\f\v") + 1);
 
 			if(PRF_4 == ReadColumns(PRF_4, buffer, x1, y1, x2, y2, n, 0) ) {
-				Xg = x1;
-				Zg = y1;
-				Xd = x2;
-				Zd = y2;
+				xg = x1;
+				zg = y1;
+				xd = x2;
+				zd = y2;
 
 				Print4col(clog);
 				/*
@@ -359,10 +334,10 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			unsigned int n = stoi(line); // convert second line to integer
 			
 			if(PRF_3 == ReadColumns(PRF_3, buffer, x1, y1, x2, y2, n, 0) ) { 
-				Xg = x1;
-				Zg = y1;
-				Xd = x2;
-				Zd = y2;
+				xg = x1;
+				zg = y1;
+				xd = x2;
+				zd = y2;
 
 				Print4col(clog);
 				
@@ -376,10 +351,10 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			getline(buffer, line); // first line is a number, can be whatever - read second line then
 			getline(buffer, line);
 			if(PRF_2 == ReadColumns(PRF_2, buffer, x1, y1, x2, y2, n, 0) ) {
-				Xg = x1;
-				Zg = y1;
-				Xd = x2;
-				Zd = y2;
+				xg = x1;
+				zg = y1;
+				xd = x2;
+				zd = y2;
 
 				Print4col(clog);
 				
@@ -403,11 +378,11 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			int n = stoi( line.substr(coma + 1) );
 		
 			if(KOO == ReadColumns(KOO, buffer, x1, y1, x2, y2, n, 0) ) {
-				Xf = x1;
-				Zf = y1;
-				for(unsigned int i=0; i<Xf.size(); i++) {
-					Xf[i] *= 0.01;
-					Zf[i] *= 0.01;
+				xf = x1;
+				zf = y1;
+				for(unsigned int i=0; i<xf.size(); i++) {
+					xf[i] *= 0.01;
+					zf[i] *= 0.01;
 				}
 
 				Print2col(clog);
@@ -442,8 +417,8 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			clog << n1 << "\t" << n2 << endl;
 			
 			if(L_DAT == ReadColumns(L_DAT, buffer, x1, y1, x2, y2, n1, n2) ) {
-				Xf = x1;
-				Zf = y1;
+				xf = x1;
+				zf = y1;
 
 				Print2col(clog);
 				XFOIL2PRF();
@@ -463,38 +438,38 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 		
 		if(XFOIL == ReadColumns(XFOIL, buffer, x1, y1, x2, y2, 0, 0) ) {
 			clog << "XFOIL" << endl;
-			Xf = x1;
-			Zf = y1;
+			xf = x1;
+			zf = y1;
 		
 			// === remove subsequent doubled rows ===
-			for(unsigned int i=0; i<Xf.size()-1; i++) {
-				if(Xf[i] == Xf[i+1]) { 
-					Xf.erase( Xf.begin()+i, Xf.begin()+i+1 ); 
-					Zf.erase( Zf.begin()+i, Zf.begin()+i+1 ); 
+			for(unsigned int i=0; i<xf.size()-1; i++) {
+				if(xf[i] == xf[i+1]) { 
+					xf.erase( xf.begin()+i, xf.begin()+i+1 ); 
+					zf.erase( zf.begin()+i, zf.begin()+i+1 ); 
 				}
 			}
 
 			Print2col(clog);
 			
 			// === find minimum element ===
-			unsigned int nMin = std::distance( Xf.begin(), std::min_element(Xf.begin(), Xf.end()) );
+			unsigned int nMin = std::distance( xf.begin(), std::min_element(xf.begin(), xf.end()) );
 
-			for(unsigned int i=0; i<=nMin; i++) clog << i << "\t" << Zf[i] << endl;
+			for(unsigned int i=0; i<=nMin; i++) clog << i << "\t" << zf[i] << endl;
 			clog << nMin << endl;
-			for(unsigned int i=nMin; i<=Zf.size()-1; i++) clog << i << "\t" << Zf[i] << endl;
-			clog << Zf.size()-nMin << endl;
+			for(unsigned int i=nMin; i<=zf.size()-1; i++) clog << i << "\t" << zf[i] << endl;
+			clog << zf.size()-nMin << endl;
 
 
 			// === sort according to Xfoil convention ===
-			double front = std::accumulate(&Zf[0], &Zf[0]+nMin, 0.0);
-			double rear  = std::accumulate(&Zf[0]+nMin, &Zf[0]+Zf.size()-1, 0.0);
+			double front = std::accumulate(&zf[0], &zf[0]+nMin, 0.0);
+			double rear  = std::accumulate(&zf[0]+nMin, &zf[0]+zf.size()-1, 0.0);
 			unsigned int nFront = nMin;
-			unsigned int nRear  = Zf.size() - nMin;
-			clog << front/nMin << "\t" << rear/(Zf.size()-nMin) << endl;
+			unsigned int nRear  = zf.size() - nMin;
+			clog << front/nMin << "\t" << rear/(zf.size()-nMin) << endl;
 			
 			if( front/nFront < rear/nRear ) {
-				std::reverse(Xf.begin(), Xf.end());
-				std::reverse(Zf.begin(), Zf.end());
+				std::reverse(xf.begin(), xf.end());
+				std::reverse(zf.begin(), zf.end());
 			}
 
 			Print2col(clog);
@@ -528,28 +503,28 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 
 	void AIRFOIL::XFOIL2PRF()
 	{
-			unsigned int nMin = std::distance( Xf.begin(), std::min_element(Xf.begin(), Xf.end()) );
+			unsigned int nMin = std::distance( xf.begin(), std::min_element(xf.begin(), xf.end()) );
 
-			if(Xf.size() == 2*nMin+1) { // equal data division
+			if(xf.size() == 2*nMin+1) { // equal data division
 				clog << "no interpol " << endl;
-					Xd = Xg = Xf;
-					Zd = Zg = Zf;
-					clog << "Xg.size = " << Xg.size() << endl;
+					xd = xg = xf;
+					zd = zg = zf;
+					clog << "Xg.size = " << xg.size() << endl;
 
-					Xg.resize(nMin + 1);
-					Zg.resize(nMin + 1);
-					std::reverse(Xg.begin(), Xg.end());
-					std::reverse(Zg.begin(), Zg.end());
-					for(unsigned int i=0; i<Xg.size(); i++) {
-						Xg[i] *= 100.0;
-						Zg[i] *= 100.0;
+					xg.resize(nMin + 1);
+					zg.resize(nMin + 1);
+					std::reverse(xg.begin(), xg.end());
+					std::reverse(zg.begin(), zg.end());
+					for(unsigned int i=0; i<xg.size(); i++) {
+						xg[i] *= 100.0;
+						zg[i] *= 100.0;
 					}
 
-					Xd.erase(Xd.begin(), Xd.begin() + nMin);
-					Zd.erase(Zd.begin(), Zd.begin() + nMin);
-					for(unsigned int i=0; i<Xd.size(); i++) {
-						Xd[i] *= 100.0;
-						Zd[i] *= 100.0;
+					xd.erase(xd.begin(), xd.begin() + nMin);
+					zd.erase(zd.begin(), zd.begin() + nMin);
+					for(unsigned int i=0; i<xd.size(); i++) {
+						xd[i] *= 100.0;
+						zd[i] *= 100.0;
 					}
 			}
 			else { // interpolation needed
@@ -569,30 +544,30 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 
 				clog << L_interp(xin, yin, 3) << endl;
 
-				clog << nMin << "\t" << 0.5*Xf.size() - 1 << endl;
+				clog << nMin << "\t" << 0.5*xf.size() - 1 << endl;
 				
-				if( nMin > 0.5*Xf.size() - 1 ) {
-					Xg = Xf;
-					Zg = Zf;
+				if( nMin > 0.5*xf.size() - 1 ) {
+					xg = xf;
+					zg = zf;
 
-					Xg.resize(nMin + 1);
-					Zg.resize(nMin + 1);
-					std::reverse(Xg.begin(), Xg.end());
-					std::reverse(Zg.begin(), Zg.end());
-					for(unsigned int i=0; i<Xg.size(); i++) {
-						Xg[i] *= 100.0;
-						Zg[i] *= 100.0;
+					xg.resize(nMin + 1);
+					zg.resize(nMin + 1);
+					std::reverse(xg.begin(), xg.end());
+					std::reverse(zg.begin(), zg.end());
+					for(unsigned int i=0; i<xg.size(); i++) {
+						xg[i] *= 100.0;
+						zg[i] *= 100.0;
 					}
 
-					Xd = Xg;
-					Zd.assign(Xd.size(), 0.0);
-					Zd[0] = Zg[0];
-					Zd[Zg.size()-1] = Zg[Zg.size()-1];
+					xd = xg;
+					zd.assign(xd.size(), 0.0);
+					zd[0] = zg[0];
+					zd[zg.size()-1] = zg[zg.size()-1];
 
 					std::vector <double> xdata;
 					std::vector <double> zdata;
-					xdata = Xf;
-					zdata = Zf;
+					xdata = xf;
+					zdata = zf;
 
 					xdata.erase(xdata.begin(), xdata.begin() + nMin);
 					zdata.erase(zdata.begin(), zdata.begin() + nMin);
@@ -601,15 +576,15 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 						zdata[i] *= 100.0;
 					}
 
-					for(unsigned int i=1; i<Xg.size()-1; i++)
+					for(unsigned int i=1; i<xg.size()-1; i++)
 					{
 						//clog << xdata[i] << "\t" << zdata[i] << endl;
 
 						std::vector <double>::iterator low, up;
-  						low = std::lower_bound(xdata.begin(), xdata.end(), Xg[i]);
+  						low = std::lower_bound(xdata.begin(), xdata.end(), xg[i]);
 
 						unsigned int d = std::distance(xdata.begin(), low);
-						clog << d << "\t" << xdata[std::distance(xdata.begin(), low)] << "\t" << Xg[i] << "\t";
+						clog << d << "\t" << xdata[std::distance(xdata.begin(), low)] << "\t" << xg[i] << "\t";
 		
 						unsigned int shift = 0;
 
@@ -624,34 +599,34 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 						yin[1] = zdata[d+shift];
 						yin[2] = zdata[d+1+shift];
 
-						Zd[i] = L_interp(xin, yin, Xg[i]);
+						zd[i] = L_interp(xin, yin, xg[i]);
 						
-						clog << Zd[i] << endl;
+						clog << zd[i] << endl;
 					}
 					
 				}
 				else {
 					clog << "IN" << endl;
 					
-					Xd = Xf;
-					Zd = Zf;
+					xd = xf;
+					zd = zf;
 
-					Xd.erase(Xd.begin(), Xd.begin() + nMin);
-					Zd.erase(Zd.begin(), Zd.begin() + nMin);
-					for(unsigned int i=0; i<Xd.size(); i++) {
-						Xd[i] *= 100.0;
-						Zd[i] *= 100.0;
+					xd.erase(xd.begin(), xd.begin() + nMin);
+					zd.erase(zd.begin(), zd.begin() + nMin);
+					for(unsigned int i=0; i<xd.size(); i++) {
+						xd[i] *= 100.0;
+						zd[i] *= 100.0;
 					}
 
-					Xg = Xd;
-					Zg.assign(Xd.size(), 0.0);
-					Zg[0] = Zd[0];
-					Zg[Zd.size()-1] = Zd[Zd.size()-1];
+					xg = xd;
+					zg.assign(xd.size(), 0.0);
+					zg[0] = zd[0];
+					zg[zd.size()-1] = zd[zd.size()-1];
 
 					std::vector <double> xdata;
 					std::vector <double> zdata;
-					xdata = Xf;
-					zdata = Zf;
+					xdata = xf;
+					zdata = zf;
 
 					xdata.resize(nMin+1);
 					zdata.resize(nMin+1);
@@ -669,13 +644,13 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 					}
 					clog << endl;
 
-					for(unsigned int i=1; i<Xd.size()-1; i++)
+					for(unsigned int i=1; i<xd.size()-1; i++)
 					{
 						std::vector <double>::iterator low, up;
-  						low = std::upper_bound(xdata.begin(), xdata.end(), Xd[i]);
+  						low = std::upper_bound(xdata.begin(), xdata.end(), xd[i]);
 
 						unsigned int d = std::distance(xdata.begin(), low);
-						clog << i << "\t" << d << "\t" << xdata[std::distance(xdata.begin(), low)] << "\t" << Xd[i] << "\t";
+						clog << i << "\t" << d << "\t" << xdata[std::distance(xdata.begin(), low)] << "\t" << xd[i] << "\t";
 		
 						unsigned int shift = 0;
 
@@ -690,126 +665,62 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 						yin[1] = zdata[d+shift];
 						yin[2] = zdata[d+1+shift];
 
-						Zg[i] = L_interp(xin, yin, Xg[i]);
+						zg[i] = L_interp(xin, yin, xg[i]);
 						
-						clog << Zg[i] << endl;
+						clog << zg[i] << endl;
 					}
 				}
 			}
 	}
 
-/*
-        Gets iType based on file extension
-*/
-int AIRFOIL::getiTypeByExt(std::string fileName)
-{
-	int iType;
-
-	//const char *pext = filename_ext( (const char*)fileName ); //!!!!!!!!!!!
-	char ext[4]; 
-	//for(int i=0; i<3; i++)ext[i] = toupper( pext[i+1] );// !!!!!!!!!!!!!!!1
-	ext[3] = '\0';
-
-	//fprintf(stderr,"cfile %s pext %s\n",cFile,pext);
-	fprintf( stderr, "ext %s\n", ext );
-
-	if( strcmp( ext, "PRF" ) == 0 )
-		{
-		iType = 0;
-		FILE *ff = fopen( fileName.c_str(), "r" );
-		if( ff )
-			{
-			int N;
-			ReadPar( ff, "%d", &N );
-			//int NN = nLines( ff ); !!!!!!!!!!!!!!!!!!!!!!!!!!!
-			//if( N != NN )iType = 1; !!!!!!!!!!!!!!!!!!!!!!!!!!!
-			//fprintf( stderr, "N %d NN %d typ %d\n", N, NN, iType );
-			fclose( ff );
-			}
-		else
-			iType=-1;
-		}
-	else if( strcmp( ext, "KOO" ) == 0 )
-		{
-		iType = 2;
-		}
-	else if( strcmp( ext, "DAT" ) == 0 )
-		{
-		// If both first numeric values are greater than 1, the file is lednicer format
-		iType = 3;
-		FILE *ff = fopen( fileName.c_str(), "r" );
-		if( ff )
-			{
-			char cc[512];
-			int iLen = 0;
-			double topCoords, bottomCoords;
-			// header - name
-			ReadStrL( ff, cc, &iLen );
-			// first line with numbers
-			ReadPar( ff, "%lf %lf", &topCoords, &bottomCoords );
-
-			if( topCoords > 1 && bottomCoords > 1 ) iType = 4;
-			fclose( ff );
-			}
-		else
-			iType=-1;
-		}
-	else
-		iType=-1;
-
-	return iType;
-}
-
 	// Reads particular formats - private
 
 	void AIRFOIL::PRF2XFOIL() {
-		for(unsigned int i=0; i<Xd.size(); i++) {           
-			Xf.push_back( Xd[Xd.size()-1-i]/100. );
-			Zf.push_back( Zd[Xd.size()-1-i]/100. );
+		for(unsigned int i=0; i<xd.size(); i++) {           
+			xf.push_back( xd[xd.size()-1-i]/100. );
+			zf.push_back( zd[xd.size()-1-i]/100. );
 		}
 	
-		for(unsigned int i=Xg.size(); i>1; i--) {
-			Xf.push_back( Xg[Xg.size()-i+1]/100. );
-			Zf.push_back( Zg[Xg.size()-i+1]/100. );
+		for(unsigned int i=xg.size(); i>1; i--) {
+			xf.push_back( xg[xg.size()-i+1]/100. );
+			zf.push_back( zg[xg.size()-i+1]/100. );
 		}
 	}
 
-int AIRFOIL::Write_PRF( std::string fileName )
-{
-	FILE  *ff;
-	ff = fopen( fileName.c_str(), "w" );
-	//fprintf(ff,"%d\t#\t%s\n", N, cName );
-	for(unsigned int i=0; i<Xg.size(); i++)
-		fprintf( ff, "%f %f %f %f\n", Xg[i], Zg[i], Xd[i], Zd[i] );
-	fclose(ff);
-
-	return 0;
-}
-
 	void AIRFOIL::Print2col(std::ostream &out) {
 		out << name << std::endl;
-		out << Xf.size() << std::endl;
-		for(unsigned int i=0; i<Xf.size(); i++) {
-			out << setw(12) << Xf[i] << setw(12) << Zf[i] << std::endl;
+		for(unsigned int i=0; i<xf.size(); i++) {
+			out << setw(12) << xf[i] << setw(12) << zf[i] << std::endl;
 		}
 	}
 
 	void AIRFOIL::Print4col(std::ostream &out) {
 		out << name << std::endl;
-		out << Xg.size() << std::endl;
-		for(unsigned int i=0; i<Xg.size(); i++) {
-			out << setw(12) << Xg[i] << setw(12) << Zg[i] << setw(12) << Xd[i] << setw(12) << Zd[i] << std::endl;
+		for(unsigned int i=0; i<xg.size(); i++) {
+			out << setw(12) << xg[i] << setw(12) << zg[i] << setw(12) << xd[i] << setw(12) << zd[i] << std::endl;
 		}
 	}
 
+int AIRFOIL::Write_PRF( std::string fileName )
+{
+/*	FILE  *ff;
+	ff = fopen( fileName.c_str(), "w" );
+	//fprintf(ff,"%d\t#\t%s\n", N, cName );
+	for(unsigned int i=0; i<Xg.size(); i++)
+		fprintf( ff, "%f %f %f %f\n", Xg[i], Zg[i], Xd[i], Zd[i] );
+	fclose(ff);*/
+
+	return 0;
+}
+
 int AIRFOIL::Write_DAT( std::string fileName )
 {
-	FILE  *ff;
+/*	FILE  *ff;
 	ff = fopen( fileName.c_str(), "w" );
 	fprintf(ff,"%s\n", fileName.c_str() );
 	for(unsigned int i=0; i<Xf.size(); i++)
 		fprintf( ff, " %f %f \n", Xf[i], Zf[i] );
-	fclose(ff);
+	fclose(ff);*/
 	
 	return 0;
 }
@@ -818,366 +729,5 @@ void AIRFOIL::TE_correct( void )
 {
      //  double zz = 0.5*(Zd[N-1]+Zg[N-1]);
        // Zd[N-1] = Zg[N-1] = zz;
-}
-
-// math routines
-
-double AIRFOIL::dAverage( double *dTab, int i1 )
-{
-	double dSum = 0.;
-	for( int i=0; i<i1; i++) dSum += dTab[i];
-	dSum = dSum / i1;
-	
-	return (dSum);
-}
-
-double AIRFOIL::tabmax( double* dTab, int n )
-{
-	double dWyn = dTab[0];
-	if(n>1)for( int i=1; i<n; i++ )dWyn = max( dWyn, dTab[i] );
-	return dWyn;
-}
-
-double AIRFOIL::tabmin( double* dTab, int n )
-{
-	double dWyn = dTab[0];
-	if(n>1)for( int i=1; i<n; i++ )dWyn = min( dWyn, dTab[i] );
-	return dWyn;
-}
-
-double AIRFOIL::dMaxT( double *dTab, int *i1 )
-{
-	int n = *i1;
-	*i1 = 0;
-	double dRob = dTab[0];
-	for( int i=0; i<n; i++)
-		{
-		dRob = max( dTab[i], dRob );
-		if( dRob == dTab[i] )*i1 = i;
-		}
-	return (dRob);
-}
-
-double AIRFOIL::dMinT( double *dTab, int *i1 )
-{
-	int n = *i1;
-	*i1 = 0;
-	double dRob = dTab[0];
-	for( int i=0; i<n; i++)
-		{
-		dRob = min( dTab[i], dRob );
-		if( dRob == dTab[i] )*i1 = i;
-		}
-	return (dRob);
-}
-
-void AIRFOIL::Check( int *nn, double *X, double *Z )
-{
-	int N = *nn;
-	for(int i=0; i<N-1; i++)
-    {
-    	if( X[i] == X[i+1] && Z[i] == Z[i+1] )
-     	{
-        	for( int ii=i; ii<N-1; ii++ )
-			{
-				X[ii]=X[ii+1];
-				Z[ii]=Z[ii+1];
-			}
-            N--;
-        }
-    }
-    
-	*nn = N;
-}
-
-unsigned long AIRFOIL::locate(double xx[], unsigned long n, double x )
-{
-	unsigned long j;
-	unsigned long ju,jm,jl;
-
-	int ascnd;
-	ascnd = ( xx[n-1] >= xx[0] );
-
-	if( ascnd )
-		{
-		if( x <= xx[0] )
-			j = 0;
-		else if ( x >= xx[n-1] )
-			j = n - 2;
-		else
-			{
-			jl = 0;
-			ju = n;
-			while ( ju-jl > 1)
-				{
-				jm = (ju+jl) >> 1;		// midpoint (ju+jl)/2
-				if( (x >= xx[jm]) == ascnd)
-					jl=jm;
-				else
-					ju=jm;
-				}
-			j = jl;
-			}
-		}
-	else
-		{
-		if( x >= xx[0] )
-			j = 0;
-		else if ( x <= xx[n-1] )
-			j = n - 2;
-		else
-			{
-			jl = 0;
-			ju = n;
-			while ( ju-jl > 1)
-				{
-				jm = (ju+jl) >> 1;		// midpoint (ju+jl)/2
-				if( (x >= xx[jm]) == ascnd)
-					jl=jm;
-				else
-					ju=jm;
-				}
-			j = jl;
-			}
-		}
-		
-	return j;
-		
-}
-
-/*
-	linear interpolation for one-dimensional array (no extrapolation)
-*/
-
-double AIRFOIL::inter1(double *xx, double *yy, unsigned long n, double x )
-{
-	unsigned long numer;
-	double y;
-	
-	if( (xx[n-1]-xx[0]) < 0. )
-    		{
-		x = min( x, xx[0] );
-		x = max( x, xx[n-1] );
-		}
-	 else
-    		{
-		x = max( x, xx[0] );
-		x = min( x, xx[n-1] );
-    		}
-	numer  = locate(xx, n, x );
-	//double aa = (yy[numer+1]-yy[numer])/(xx[numer+1]-xx[numer]);
-	//double bb = yy[numer] - aa*xx[numer];
-	//y = aa*x + bb;
-
-	y = yy[numer+1]*(x-xx[numer]) + yy[numer]*(xx[numer+1]-x);
-	y /= xx[numer+1]-xx[numer];
-
-	
-	return y;
-}
-
-double AIRFOIL::apr3( double dX, double *dXX, double *dYY )
-{
-	double X1 = dXX[0];
-	double X2 = dXX[1];
-	double X3 = dXX[2];
-	double X4 = dXX[3];
-	double F1 = dYY[0];
-	double F2 = dYY[1];
-	double F3 = dYY[2];
-	double F4 = dYY[3];
-	
-	double X13 = pow( X1, 3.0 );
-	double X23 = pow( X2, 3.0 );
-	double X33 = pow( X3, 3.0 );
-	double X43 = pow( X4, 3.0 );
-	
-	double Q1 = X33*(X2-X1) - X23*(X3-X1) + X13*(X3-X2);
-	double Q2 = X43*(X2-X1) - X23*(X4-X1) + X13*(X4-X2);
-	double Q3 = (X3-X2)*(X2-X1)*(X3-X1);
-	double Q4 = (X4-X2)*(X2-X1)*(X4-X1);
-	double Q5 = F3*(X2-X1) - F2*(X3-X1) + F1*(X3-X2);
-	double Q6 = F4*(X2-X1) - F2*(X4-X1) + F1*(X4-X2);
-	
-	double a3 = (Q3*Q6-Q4*Q5)/(Q2*Q3-Q1*Q4);
-	double a2 = (Q5-a3*Q1)/Q3;
-	double a1 = (F2-F1)/(X2-X1) - a3*(X23-X13)/(X2-X1) - a2*(X1+X2);
-	double a0 = F1 - a1*X1 - a2*X1*X1 - a3*X13;
-	
-	return( a0 + a1*dX + a2*dX*dX + a3*dX*dX*dX );
-}
-
-//
-//	Sorting routine with deleting the same values
-//
-
-	void AIRFOIL::SortClean( int *N, double *X )
-	{
-        int NN = *N;
-        Sort1( NN, X );
-    
-		for( int i=0; i<NN-1; i++ )
-        {
-    	    if( X[i] == X[i+1] )
-            {
-        	    for( int ii=i; ii<NN-1; ii++ )X[ii]=X[ii+1];
-                NN--;
-            }
-        }
-        
-		*N = NN;
-	}
-
-//
-//	Simply sorting routine
-//
-
-void AIRFOIL::Sort1( int N, double dRA[] )
-{
-	double T;
-	int i,j,k;
-
-	k = N;
-	while( k > 1 )
-		{
-		k = k/2;
-		for( j=0; j<(N-k); j++ )
-			for( i=j; i>=0; i-=k )
-				{
-				if( dRA[i] > dRA[i+k] )
-					{
-					T = dRA[i];
-					dRA[i] = dRA[i+k];
-					dRA[i+k] = T;
-					}
-				}
-		}
-}
-
-//	read line
-int AIRFOIL::ReadStr( FILE * stream, char *Par )
-{
-	ReadDummy( stream );
-
-	char cc;
-	int i;
-	
-	cc = fgetc( stream );
-	i = 0;
-	while ( cc != '\n' && cc != EOF && cc != 0xD ) 
-		{
-		Par[i] = cc;
-		cc = fgetc( stream);
-		i++;
-		}
-	if( cc == 0xD )
-		{
-		cc = fgetc( stream );
-		if( cc != 0xA )ungetc( cc, stream );
-		}
-	
-	Par[i]='\0';
-
-	int j;
-	for( j=i-1; j>0; j-- )
-		{
-		if( isblank(Par[j]) )
-			Par[j] = '\0';
-		else
-			break;
-		}
-		
-	char *cRob = new char[j+2];
-	std::strcpy( cRob, Par );
-	int i0 = 0;
-	for( int i=0; i<j+1; i++ )
-		{
-		if( isblank(cRob[i]) )
-			i0 = i+1;
-		else
-			break;
-		}
-	strcpy( Par, cRob+i0 );
-	delete [] cRob;
-
-	clog << "Par: " << Par << endl;
-
-	if( cc == EOF )return EOF;
-	return strlen( Par );	
-}
-
-void AIRFOIL::ReadStrL( FILE * stream, char *Par , int *len)
-{
-	char cc;
-	int i;
-	
-	cc = fgetc( stream );
-	i = 0;
-	while ( cc != '\n' && cc != EOF && cc != 0xD ) 
-		{
-		Par[i] = cc;
-		cc = fgetc( stream);
-		i++;
-		}
-	if( cc == 0xD )
-		{
-		cc = fgetc( stream );
-		if( cc != 0xA )ungetc(cc,stream);
-		}
-
-	Par[i]='\0';
-	if( cc == EOF )Par[i+1]=EOF;
-	*len = i;
-		
-}
-
-//	read up to four values from one line with comment
-int AIRFOIL::ReadPar( FILE *stream, const char *Format, void *Par )
-{
-	ReadDummy( stream );
-	fscanf( stream, Format, Par );			/* read value    */
-	return ReadComm( stream );
-}
-
-int AIRFOIL::ReadPar( FILE *stream, const char *Format, void *Par1, void *Par2 )
-{
-	ReadDummy( stream );
-	fscanf( stream, Format, Par1, Par2 );
-	return ReadComm( stream );
-}
-
-int AIRFOIL::ReadPar( FILE *stream, const char *Format, void *Par1, void *Par2, void *Par3 )
-{
-	ReadDummy( stream );
-	fscanf( stream, Format, Par1, Par2, Par3 );
-	return ReadComm( stream );
-}
-
-int AIRFOIL::ReadPar( FILE * stream, const char * Format, void *Par1, void *Par2, void *Par3, void *Par4 )
-{
-	ReadDummy( stream );
-	fscanf( stream, Format, Par1, Par2, Par3, Par4 );
-	return ReadComm( stream );
-}
-
-int AIRFOIL::ReadComm( FILE *stream )
-{
-	char a;
-	while ( a = fgetc( stream ) , ( a != '\n' && a != EOF ) );		/* omit comment */
-	if( a == EOF )return EOF;
-	return 0;	
-}
-
-void AIRFOIL::ReadDummy( FILE *stream )
-{
-	unsigned char ucRes = 1;
-	while ( ucRes )
-		{
-		char ch = fgetc(stream);
-		ucRes = (ch == '#');
-		ungetc(ch,stream);
-		//fseek( stream, -1, SEEK_CUR );
-		if( ucRes )ReadComm( stream );
-		}
 }
 }
