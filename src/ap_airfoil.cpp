@@ -223,7 +223,7 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 					}
 		}
 
-		// === Check data end values ===
+		// === Arrange data tables ===
 		switch(type) { // one of the lines has incorrect format
 			case PRF_3:  
 			case PRF_2: {
@@ -246,15 +246,22 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 					if(x1[0] != 1.0) { return 40; }
 					if(x1[x1.size()-1] != 1.0) { return 40; }
 					break;
-					}
-			case L_DAT: { 
-					if(x1[0] != 0.0 		&& x1[0] != 1.0) { return 40; }
-					if(x1[n1-1] != 0.0 		&& x1[n1-1] != 1.0) { return 40; }
-					if(x1[n1] != 0.0 		&& x1[n1] != 1.0) { return 40; }
-					if(x1[n1+n2-1] != 0.0 	&& x1[n1+n2-1] != 1.0) { return 40; }
-					//Devide for two tables!!!!! x2, y2
-					break; 
 					}*/
+			case L_DAT: { 
+					x2 = x1;
+					y2 = y1;
+					x1.resize(n1);
+					y1.resize(n1);
+					x2[0] = x1[0];
+					y2[0] = y1[0];
+					x2.erase(x2.begin(), x2.begin() + n1+1);
+					y2.erase(y2.begin(), y2.begin() + n1+1);
+					std::reverse(x1.begin(), x1.end());
+					std::reverse(y1.begin(), y1.end());
+					x1.insert(x1.end(), x2.begin(), x2.end());
+					y1.insert(y1.end(), y2.begin(), y2.end());
+					break; 
+					}
 		}
 
 		return type;
@@ -395,7 +402,20 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			std::size_t coma = line.find_first_of(","); //get number of lines
 			int n = stoi( line.substr(coma + 1) );
 		
-			if(KOO == ReadColumns(KOO, buffer, x1, y1, x2, y2, n, 0) ) return KOO;
+			if(KOO == ReadColumns(KOO, buffer, x1, y1, x2, y2, n, 0) ) {
+				Xf = x1;
+				Zf = y1;
+				for(unsigned int i=0; i<Xf.size(); i++) {
+					Xf[i] *= 0.01;
+					Zf[i] *= 0.01;
+				}
+
+				Print2col(clog);
+				XFOIL2PRF();
+				Print4col(clog);
+			
+				return KOO;
+			}
 		}
 
 		// DAT - lednicer
@@ -421,13 +441,19 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			ss >> n1 >> n2;
 			clog << n1 << "\t" << n2 << endl;
 			
-			if(L_DAT == ReadColumns(L_DAT, buffer, x1, y1, x2, y2, n1, n2) ) return L_DAT;
-			//int type = ReadColumns(L_DAT, buffer, x1, y1, x2, y2, n1, n2);
-			//clog << "type:" << type << endl;
-			//if(type) return 20; 
+			if(L_DAT == ReadColumns(L_DAT, buffer, x1, y1, x2, y2, n1, n2) ) {
+				Xf = x1;
+				Zf = y1;
+
+				Print2col(clog);
+				XFOIL2PRF();
+				Print4col(clog);
+
+				return L_DAT;
+			}
 		}
 	
-		// DAT - selig
+		// DAT - xfoil
 		// HEADER - name
 		// [2 cols]
 		// * values 0.0-1.0
@@ -439,46 +465,6 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			clog << "XFOIL" << endl;
 			Xf = x1;
 			Zf = y1;
-
-			/*
-    		std::vector<Person> vecOfPersons = { Person("aaa", 7), Person("kkk", 3), Person("aaa", 10), Person("kkk", 2) };
-		
-			std::sort(vecOfPersons.begin(), vecOfPersons.end(), [](const Person & first, const Person & sec) {
-        	if (first.m_name < sec.m_name)
-            	return true;
-        	else
-            	return false;
-    		});*/
-/*
-    		std::vector<Person>::iterator newEnd;
-    		newEnd = std::unique(vecOfPersons.begin(), vecOfPersons.end(), [](const Person & first, const Person & sec) {
-        	if (first.m_name == sec.m_name)
-            	return true;
-        	else
-            	return false;
-    		}); 
-  */  
-			/*
-    		vecOfPersons.erase( newEnd, vecOfPersons.end());
-    		std::cout << "After removing duplicate Persons List based on Name\n";
-    		std::for_each(vecOfPersons.begin(), vecOfPersons.end(), [](Person & obj) {
-        	std::cout<<obj.m_id<< " :: "<<obj.m_name<<std::endl;
-   		 	});*/
-
-    		//std::vector<Person>::iterator newEnd;
-    		/*std::unique(Xf.begin(), Xf.end(), [](double &first, double &sec) {
-        	if (first == sec) {
-    			//vecOfPersons.erase( newEnd, vecOfPersons.end());
-				Xf.erase( unique( first, sec );
-				//Zf.erase( unique( Xf.begin(), Xf.end() ), Xf.end() );
-
-            	return true;
-			}*/
-        	//else
-            //	return false;
-    		//}); 
-			//sort( vec.begin(), vec.end() );
-			//Xf.erase( unique( Xf.begin(), Xf.end() ), Xf.end() );
 		
 			// === remove subsequent doubled rows ===
 			for(unsigned int i=0; i<Xf.size()-1; i++) {
@@ -512,8 +498,37 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 			}
 
 			Print2col(clog);
-				
-			nMin = std::distance( Xf.begin(), std::min_element(Xf.begin(), Xf.end()) );
+			XFOIL2PRF();
+			Print4col(clog);
+
+			return XFOIL;
+		}
+
+		clog << "END getiTypeByContent" << endl;
+
+		return -1; // file type not found
+	}
+
+	double AIRFOIL::L_interp(const std::vector <double> &x, const std::vector <double> &y, const double &xi) {
+		double l, L = 0;
+
+		for(unsigned int i=0; i<x.size(); i++) {
+			l = 1;
+
+			for(unsigned int j=0; j<x.size(); j++) {
+				if(i == j) continue;
+				l *= ((xi - x[j])/(x[i] - x[j]));
+			}
+
+			L += l*y[i];
+		}
+
+		return L;
+	}
+
+	void AIRFOIL::XFOIL2PRF()
+	{
+			unsigned int nMin = std::distance( Xf.begin(), std::min_element(Xf.begin(), Xf.end()) );
 
 			if(Xf.size() == 2*nMin+1) { // equal data division
 				clog << "no interpol " << endl;
@@ -678,132 +693,10 @@ int AIRFOIL::ReadNaca( std::string NACA, int NN )
 						Zg[i] = L_interp(xin, yin, Xg[i]);
 						
 						clog << Zg[i] << endl;
-				}
-				
-				//PRF2XFOIL(); 
+					}
 				}
 			}
-			
-			Print4col(clog);
-
-			return XFOIL;
-		}
-
-		clog << "END getiTypeByContent" << endl;
-
-		return -1; // file type not found
 	}
-
-	double AIRFOIL::L_interp(const std::vector <double> &x, const std::vector <double> &y, const double &xi) {
-		double l, L = 0;
-
-		for(unsigned int i=0; i<x.size(); i++) {
-			l = 1;
-
-			for(unsigned int j=0; j<x.size(); j++) {
-				if(i == j) continue;
-				l *= ((xi - x[j])/(x[i] - x[j]));
-			}
-
-			L += l*y[i];
-		}
-
-		return L;
-	}
-
-void AIRFOIL::XFOIL2PRF( void )
-{
-	int nmax = Xf.size();
-	int nmin = Xf.size();
-	double dCa = dMaxT( &Xf[0], &nmax );
-	double dX0 = dMinT( &Xf[0], &nmin );
-	//fprintf(stderr,"Xf min %f %f %f\n",Xf[nmin-1],Xf[nmin],Xf[nmin+1]);
-	
-	if( Xf[nmin-1] == Xf[nmin] )		// nose correction
-	    {
-	    double XX[4], YY[4];
-	    for( int i=0; i<4; i++)
-	        {
-	        XX[i]=Xf[nmin-2+i];
-	        YY[i]=Zf[nmin-2+i];
-	        }
-	    double Y0 = 0.5*(YY[2]+YY[1]);
-	    double X0 = apr3( Y0, YY, XX );
-	    for(int i=Xf.size(); i>nmin; i--)
-	        {
-	        Xf[i] = Xf[i-1];
-	        Zf[i] = Zf[i-1];
-	        }
-	    Xf[nmin] = X0;
-	    Zf[nmin] = Y0;
-	    //Nf++;
-	    nmax++;
-	    nmin++;
-	    //nmax = Nf;
-	    //nmin = Nf;
-	    dCa = dMaxT( &Xf[0], &nmax );
-	    dX0 = dMinT( &Xf[0], &nmin );
-	    }
-
-	dCa -= dX0;
-	double dMnoz = 100./dCa;
-	
-	double dW1, dW2;
-	int iSter = 0;		// 1 - lower surface first, 0 - upper surface first
-	int NN = min( nmin, nmax );
-	if( nmax > nmin || nmax == 0 )
-		{
-		dW1 = dAverage( &Zf[0], nmin );
-		dW2 = dAverage( &Zf[nmin], Xf.size() - nmin );
-		if( dW2 > dW1 )iSter = 1;
-		NN = nmin;
-		}
-	else
-		{
-		dW1 = dAverage( &Zf[0], nmax );
-		dW2 = dAverage( &Zf[nmax], nmin - nmax );
-		if( dW2 > dW1 )iSter = 1;
-		NN = nmax;
-		}
-		
-	fprintf( stderr, "ReadDAT - Xfoil2Prf:\n" );
-	//fprintf( stderr, "Nf = %d NN = %d iSter = %d\n", Nf, NN, iSter );
-	fprintf( stderr, "max %d min %d\n", nmax, nmin );
-	fprintf( stderr, "X0  %f Ca  %f\n", dX0, dCa );
-	fflush( stderr );
-	
-	std::vector <double> Xfrob;
-	Xfrob.resize( Xf.size() );
-	for(unsigned int i=0; i<Xf.size(); i++ )Xfrob[i] = Xf[i];
-	unsigned int N = Xf.size();
-	//SortClean( &N, &Xfrob[0] );
-	
-	Xg.resize(N); 
-	Xd.resize(N); 
-	Zg.resize(N); 
-	Zd.resize(N);
-
-	if(iSter == 1)
-	{
-		for(unsigned int i=0; i<N; i++)
-		{
-			Xd[i] = Xfrob[i];
-			Zd[i] = inter1( &Xf[0], &Zf[0], NN+1, Xd[i] );
-			Xg[i] = Xd[i];
-			Zg[i] = inter1( &Xf[NN], &Zf[NN], Xf.size()-NN, Xg[i] );
-		}
-	}
-	else
-	{
-		for(unsigned int i=0; i<N; i++)
-		{
-			Xd[i] = Xfrob[i];
-			Zd[i] = inter1( &Xf[NN], &Zf[NN], Xf.size()-NN, Xd[i] );
-			Xg[i] = Xd[i];
-			Zg[i] = inter1( &Xf[0], &Zf[0], NN+1, Xg[i] );
-		}
-	}
-}
 
 /*
         Gets iType based on file extension

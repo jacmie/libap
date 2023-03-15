@@ -38,16 +38,16 @@ TEST(ap_airfoilTest, IO_operations) {
 	clog << "PRF2" << endl;
 	airfoil.Read("./airfoil_data/CLARK-Y.PRF");
     airfoil.ReadStatus();	
-
+*/
 	clog << "KOO" << endl;
 	airfoil.Read("./airfoil_data/cb3013.KOO");
     airfoil.ReadStatus();	
-i*/
+/*
 	clog << "XFOIL" << endl;
 	//airfoil.Read("./airfoil_data/fx66h80.dat");
 	airfoil.Read("./airfoil_data/fx66h80_d0_f.dat");
     airfoil.ReadStatus();	
-/*	
+	
 	clog << "LED" << endl;
 	airfoil.Read("./airfoil_data/rae104.dat");
     airfoil.ReadStatus();	
