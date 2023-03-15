@@ -31,18 +31,18 @@ TEST(ap_airfoilTest, IO_operations) {
 
 	airfoil.SetReadType(ap::AIRFOIL_BY_CONTENT); // 0 - recognition by content, 1 - recognition by filename extention
 
-//	clog << "PRF" << endl;
-//	airfoil.Read("./airfoil_data/NN_1817.prf");
-//    airfoil.ReadStatus();	
-/*    	
+	clog << "PRF" << endl;
+	airfoil.Read("./airfoil_data/NN_1817.prf");
+    airfoil.ReadStatus();	
+    	
 	clog << "PRF2" << endl;
 	airfoil.Read("./airfoil_data/CLARK-Y.PRF");
     airfoil.ReadStatus();	
-*/
+
 	clog << "KOO" << endl;
 	airfoil.Read("./airfoil_data/cb3013.KOO");
     airfoil.ReadStatus();	
-/*
+
 	clog << "XFOIL" << endl;
 	//airfoil.Read("./airfoil_data/fx66h80.dat");
 	airfoil.Read("./airfoil_data/fx66h80_d0_f.dat");
@@ -52,7 +52,7 @@ TEST(ap_airfoilTest, IO_operations) {
 	airfoil.Read("./airfoil_data/rae104.dat");
     airfoil.ReadStatus();	
 	//Profil -> ReadNaca( (char*)AirfoilFile.c_str(), Vnr ); // generate NACA
-
+/*
 	std::vector <double> Xf;
 	std::vector <double> Zf;
     

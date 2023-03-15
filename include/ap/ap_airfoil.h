@@ -45,11 +45,6 @@ namespace ap
 
 		// 0 - recognition by content, 1 - recognition by filename extention
 		bool iReadType = 0;	
-	
-		// read by format
-		int Read_KOO( std::string fileName );
-		int Read_DAT( std::string fileName );
-		int Read_DAT_LEDNICER( std::string fileName );	// by Anna Sima
 
 		int ReadColumns(const int type, std::stringstream &buffer, 
 			std::vector <double> &x1, std::vector <double> &y1, std::vector <double> &x2, std::vector <double> &y2, 

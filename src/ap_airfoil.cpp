@@ -786,11 +786,6 @@ int AIRFOIL::Write_PRF( std::string fileName )
 	return 0;
 }
 
-int AIRFOIL::Read_KOO( std::string fileName )
-{
-	return Read_DAT( fileName );
-}
-
 	void AIRFOIL::Print2col(std::ostream &out) {
 		out << name << std::endl;
 		out << Xf.size() << std::endl;
@@ -806,100 +801,6 @@ int AIRFOIL::Read_KOO( std::string fileName )
 			out << setw(12) << Xg[i] << setw(12) << Zg[i] << setw(12) << Xd[i] << setw(12) << Zd[i] << std::endl;
 		}
 	}
-
-int AIRFOIL::Read_DAT_LEDNICER( std::string fileName )	// by Anna Sima
-{
-	FILE  *ff;
-	ff = fopen( fileName.c_str(), "r" );
-	if( ff == NULL )
-		{
-		//sprintf( comment, "File: %s not found!\n", cFile );
-		fprintf( stderr, "File: %s not found!\n", fileName.c_str() );
-		return -1;
-		}
-//reads 1st line - profile name
-	//ReadStr( ff, cName );
-
-	float f1, f2;
-	int rowsPos, rowsNeg;
-
-	ReadPar(ff, "%f %f", &f1, &f2);
-	rowsPos = f1;
-	rowsNeg = f2;
-
-//makes empty arrays to store values from the file
-	Xf.resize(rowsPos+rowsNeg);
-	Zf.resize(rowsPos+rowsNeg);
-
-	//Nf = rowsPos+rowsNeg-1; //total number of points(rows) that will be in the end
-
-	for( int i=rowsPos-1; i>=0; i-- ) {
-	    ReadPar(ff, "%lf %lf",&Xf[i],&Zf[i]); //read all upper
-	}
-
-	for( int i=0; i<rowsNeg; i++ ) {
-	    ReadPar(ff, "%lf %lf",&Xf[rowsPos-1 + i],&Zf[rowsPos-1 + i]); //read all lower
-	}
-
-	fclose( ff );
-	
-	//Check( &Nf, &Xf[0], &Zf[0] );
-
-	XFOIL2PRF();
-
-	return 0;
-}
-
-int AIRFOIL::Read_DAT( std::string fileName )
-{
-	/*FILE  *ff;
-	ff = fopen( fileName.c_str(), "r" );
-	if( ff == NULL )
-		{
-		//sprintf( comment.c_str(), "File: %s not found!\n", fileName.c_str() );
-		fprintf( stderr, "File: %s not found!\n", fileName.c_str() );
-		return -1;
-		}
-
-	//Nf = nLines( ff ) - 1;
-	fclose( ff );
-	if( Xf.size() < 6 )
-		{
-		//sprintf( comment.c_str(), "File: %s - the number of rows is too small!\n", fileName.c_str() ); //!!!!!!!!!!!!!!!!!!!!!!!!
-		fprintf( stderr, "File: %s - the number of rows is too small!\n", fileName.c_str() );
-		return -1;
-		}
-		
-	Xf.resize(Nf+1);
-	Zf.resize(Nf+1);
-	ff = fopen( fileName.c_str(), "r" );
-	//ReadStr( ff, cName );
-	if( iType == 2 )
-		{
-		//int iLen = strlen( cName );
-		//for( int i=iLen; i>0; i-- )if( cName[i] == ',' )cName[i] = '\0';
-		}
-	for( int i=0; i<Nf; i++ )
-		if( iType == 2 )
-			{
-			//ReadStr( ff, cc );
-			//for( int ii=0; ii < (int)strlen( cc ); ii++)if( cc[ii] == ',' )cc[ii] = ' '; //!!!!!!!!!!!!!!!!!!!!!!
-			//sscanf( cc, "%lf %lf", &Xf[i], &Zf[i] ); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			}
-		else
-			if( ReadPar( ff, "%lf %lf", &Xf[i], &Zf[i] ) == EOF )
-				{
-				Nf = i;
-				break;
-				};
-	fclose( ff );
-	
-	Check( &Nf, &Xf[0], &Zf[0] );
-	
-	XFOIL2PRF();
-*/
-	return 0;
-}
 
 int AIRFOIL::Write_DAT( std::string fileName )
 {
