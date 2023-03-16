@@ -13,20 +13,34 @@ TEST(ap_airfoilTest, IO_operations) {
 
 	clog << "PRF" << endl;
 	airfoil.Read("./airfoil_data/NN_1817.prf");
+	airfoil.WriteDat("./airfoil_ref/ref_NN_1817.dat");
+	airfoil.WritePrf("./airfoil_ref/ref_NN_1817.prf");
     	
 	clog << "PRF2" << endl;
 	airfoil.Read("./airfoil_data/CLARK-Y.PRF");
+	airfoil.WriteDat("./airfoil_ref/ref_CLARK-Y.dat");
+	airfoil.WritePrf("./airfoil_ref/ref_CLARK-Y.prf");
 
 	clog << "KOO" << endl;
 	airfoil.Read("./airfoil_data/cb3013.KOO");
+	airfoil.WriteDat("./airfoil_ref/ref_cb3013.dat");
+	airfoil.WritePrf("./airfoil_ref/ref_cb3013.prf");
 
 	clog << "XFOIL" << endl;
-	//airfoil.Read("./airfoil_data/fx66h80.dat");
+	airfoil.Read("./airfoil_data/fx66h80.dat");
+	airfoil.WriteDat("./airfoil_ref/ref_fx66h80.dat");
+	airfoil.WritePrf("./airfoil_ref/ref_fx66h80.prf");
+	
 	airfoil.Read("./airfoil_data/fx66h80_d0_f.dat");
+	airfoil.WriteDat("./airfoil_ref/ref_fx66h80_d0_f.dat");
+	airfoil.WritePrf("./airfoil_ref/ref_fx66h80_d0_f.prf");
 	
 	clog << "LED" << endl;
 	airfoil.Read("./airfoil_data/rae104.dat");
+	airfoil.WriteDat("./airfoil_ref/ref_rae104.dat");
+	airfoil.WritePrf("./airfoil_ref/ref_rae104.prf");
 	
+
 	//Profil -> ReadNaca( (char*)AirfoilFile.c_str(), Vnr ); // generate NACA
 /*
 	std::vector <double> Xf;

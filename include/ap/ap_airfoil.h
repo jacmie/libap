@@ -24,9 +24,6 @@ namespace ap
 			const unsigned int n1, const unsigned int n2);
 		int ReadContent(std::string fileName);
 
-		int Write_PRF(std::string fileName);
-		int Write_DAT(std::string fileName);
-
 		// Transformations
 		void PRF2XFOIL();
 		void XFOIL2PRF();
@@ -51,9 +48,6 @@ namespace ap
 		//! Reads airfoil file
 		int Read(std::string fileName);
 
-		//! Saves airfoil file
-		int Write( std::string fileName, int iTyp=0 );
-
 		//! Generates NACA airfoil given by long int value (e.g. iNACA = 23012), \n NN - the number of points that define the airfoil geometry
 		int GenerateNaca(unsigned int iNACA, int n=100);
 
@@ -77,6 +71,10 @@ namespace ap
 
 		//! prints 4 column data
 		void Print4col(std::ostream &out);
+		
+		int WriteDat(std::string fileName, unsigned int precision=6);
+
+		int WritePrf(std::string fileName, unsigned int precision=6);
 		
 		void TE_correct();
 	};

@@ -50,28 +50,6 @@ namespace ap
 		return 0;
 	}
 
-	int AIRFOIL::Write( std::string fileName, int iTyp )
-	{
-		switch( iTyp )
-		{
-			default:
-			case 0:
-				if( Write_PRF( fileName ) )return -1;
-				break;
-	/*		case 1:
-				if( Write_PRF_1( cFile ) )return -1;
-				break;
-			case 2:
-				if( Write_KOO( cFile ) )return -1;
-				break;
-	*/		case 3:
-				if( Write_DAT( fileName ) )return -1;
-				break;
-			}
-			
-		return 0;
-	}
-
 	int AIRFOIL::GenerateNaca(unsigned int iNACA, int n)
 	{
 		char cNACA[10];
@@ -333,6 +311,9 @@ namespace ap
 		if( regex_match(line, integer) ) { // second line must be single integer - number of lines
 			unsigned int n = stoi(line); // convert second line to integer
 			
+			name = fileName.substr( fileName.find_last_of("\\/") + 1 );
+			name = name.substr( 0, name.find_last_of(".") );
+
 			if(PRF_3 == ReadColumns(PRF_3, buffer, x1, y1, x2, y2, n, 0) ) { 
 				xg = x1;
 				zg = y1;
@@ -375,6 +356,9 @@ namespace ap
 		if(regex_match(line, kooHeader))
 		{
 			std::size_t coma = line.find_first_of(","); //get number of lines
+			name = line.substr(0, coma);
+			name.erase(0, name.find_first_not_of(" \t\n\r\f\v"));
+			name.erase(name.find_last_not_of(" \t\n\r\f\v") + 1);
 			int n = stoi( line.substr(coma + 1) );
 		
 			if(KOO == ReadColumns(KOO, buffer, x1, y1, x2, y2, n, 0) ) {
@@ -404,9 +388,10 @@ namespace ap
 		clog << "LEDD" << endl;
 		buffer.str(buckup); 
 		getline(buffer, line);
-			clog << line << endl;
+		name = line;
+		name.erase(0, name.find_first_not_of(" \t\n\r\f\v"));
+		name.erase(name.find_last_not_of(" \t\n\r\f\v") + 1);
 		getline(buffer, line);
-			clog << line << endl;
 		if(regex_match(line, datNLines))
 		{
 			clog << line << endl;
@@ -435,7 +420,9 @@ namespace ap
 		clog << "XFOIL" << endl;
 		buffer.str(buckup); 
 		getline(buffer, line);
-		
+		name = line;
+		name.erase(0, name.find_first_not_of(" \t\n\r\f\v"));
+		name.erase(name.find_last_not_of(" \t\n\r\f\v") + 1);
 		if(XFOIL == ReadColumns(XFOIL, buffer, x1, y1, x2, y2, 0, 0) ) {
 			clog << "XFOIL" << endl;
 			xf = x1;
@@ -688,46 +675,45 @@ namespace ap
 	}
 
 	void AIRFOIL::Print2col(std::ostream &out) {
-		out << name << std::endl;
 		for(unsigned int i=0; i<xf.size(); i++) {
 			out << setw(12) << xf[i] << setw(12) << zf[i] << std::endl;
 		}
 	}
 
 	void AIRFOIL::Print4col(std::ostream &out) {
-		out << name << std::endl;
 		for(unsigned int i=0; i<xg.size(); i++) {
 			out << setw(12) << xg[i] << setw(12) << zg[i] << setw(12) << xd[i] << setw(12) << zd[i] << std::endl;
 		}
 	}
 
-int AIRFOIL::Write_PRF( std::string fileName )
-{
-/*	FILE  *ff;
-	ff = fopen( fileName.c_str(), "w" );
-	//fprintf(ff,"%d\t#\t%s\n", N, cName );
-	for(unsigned int i=0; i<Xg.size(); i++)
-		fprintf( ff, "%f %f %f %f\n", Xg[i], Zg[i], Xd[i], Zd[i] );
-	fclose(ff);*/
+	int AIRFOIL::WriteDat(std::string fileName, unsigned int precision)
+	{
+		ofstream out(fileName);
+		if(!out) return 1;
 
-	return 0;
-}
-
-int AIRFOIL::Write_DAT( std::string fileName )
-{
-/*	FILE  *ff;
-	ff = fopen( fileName.c_str(), "w" );
-	fprintf(ff,"%s\n", fileName.c_str() );
-	for(unsigned int i=0; i<Xf.size(); i++)
-		fprintf( ff, " %f %f \n", Xf[i], Zf[i] );
-	fclose(ff);*/
+		out << name << std::endl;
+		out << fixed << setprecision(precision);
+		Print2col(out);
+		out.close();
 	
-	return 0;
-}
+		return 0;
+	}
 
-void AIRFOIL::TE_correct( void )
-{
+	int AIRFOIL::WritePrf(std::string fileName, unsigned int precision) {
+		ofstream out(fileName);
+		if(!out) return 1;
+
+		out << setw(4) << xg.size() << "  #  " << name << std::endl;
+		out << fixed << setprecision(precision);
+		Print4col(out);
+		out.close();
+
+		return 0;
+	}
+
+	void AIRFOIL::TE_correct( void )
+	{
      //  double zz = 0.5*(Zd[N-1]+Zg[N-1]);
        // Zd[N-1] = Zg[N-1] = zz;
-}
+	}
 }
