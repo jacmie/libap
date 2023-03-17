@@ -85,6 +85,11 @@ namespace ap
 		std::vector <double> &x1, std::vector <double> &y1, std::vector <double> &x2, std::vector <double> &y2, 
 		const unsigned int n1, const unsigned int n2)
 	{
+		x1.resize(0);
+		y1.resize(0);
+		x2.resize(0);
+		y2.resize(0);
+
 		std::string rxNum("([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
 		std::string col2 = string(".*") + rxNum + string("\\s+") + rxNum + string(".*");
 		std::string col3 = col2 + rxNum + string("\\s+") + rxNum + string(".*");
@@ -223,6 +228,14 @@ namespace ap
 	int AIRFOIL::ReadContent(std::string fileName)
 	{
 		clog << "getiTypeByContent" << endl;
+		
+		name = "";
+		xf.resize(0);
+		zf.resize(0);
+		xg.resize(0);
+		zg.resize(0);
+		xd.resize(0);
+		zd.resize(0);
 
 		ifstream in(fileName);
     	if(!in) return 10; 	//couldn't read file
