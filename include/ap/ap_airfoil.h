@@ -25,8 +25,8 @@ namespace ap
 		int ReadContent(std::string fileName);
 
 		// Transformations
-		void PRF2XFOIL();
-		void XFOIL2PRF();
+		void Prf2Xfoil();
+		void Xfoil2Prf();
 
 		// Maths
 		double L_interp(const std::vector <double> &x, const std::vector <double> &y, const double &xi); 

@@ -68,7 +68,7 @@ namespace ap
 	
 		nacaAirfoil.GetVectors(xf, zf);
 		
-		XFOIL2PRF();
+		Xfoil2Prf();
 	
 		return 0;
 	}
@@ -281,26 +281,7 @@ namespace ap
 				xd = x2;
 				zd = y2;
 
-				Print4col(clog);
-				/*
-				double dCa = max( Xd[*std::max_element( Xd.begin(), Xd.end() )], Xg[*std::max_element( Xg.begin(), Xg.end() )] );
-				double dX0 = min( Xd[*std::min_element( Xd.begin(), Xd.end() )], Xg[*std::min_element( Xg.begin(), Xg.end() )] );
-
-				dCa -= dX0;
-				double dMnoz = 100./dCa;
-	
-				if( dCa < 80. || dCa > 120. )
-				for(unsigned int i=0; i<Xg.size(); i++) {
-					Xg[i] *= dMnoz;
-					Zg[i] *= dMnoz;
-					Xd[i] *= dMnoz;
-					Zd[i] *= dMnoz;
-				}*/
-				
-				//TE_correct();		
-				PRF2XFOIL();
-				Print2col(clog);
-
+				Prf2Xfoil();
 				return PRF_4;
 			}
 		}
@@ -325,11 +306,7 @@ namespace ap
 				xd = x2;
 				zd = y2;
 
-				Print4col(clog);
-				
-				PRF2XFOIL();
-				Print2col(clog);
-
+				Prf2Xfoil();
 				return PRF_3;
 			}
 		
@@ -342,11 +319,7 @@ namespace ap
 				xd = x2;
 				zd = y2;
 
-				Print4col(clog);
-				
-				PRF2XFOIL();
-				Print2col(clog);
-
+				Prf2Xfoil();
 				return PRF_2;
 			}
 		}
@@ -374,10 +347,7 @@ namespace ap
 					zf[i] *= 0.01;
 				}
 
-				Print2col(clog);
-				XFOIL2PRF();
-				Print4col(clog);
-			
+				Xfoil2Prf();
 				return KOO;
 			}
 		}
@@ -399,21 +369,16 @@ namespace ap
 		getline(buffer, line);
 		if(regex_match(line, datNLines))
 		{
-			clog << line << endl;
 			float n1, n2;
 			std::stringstream ss;
 			ss.str(line);
 			ss >> n1 >> n2;
-			clog << n1 << "\t" << n2 << endl;
 			
 			if(L_DAT == ReadColumns(L_DAT, buffer, x1, y1, x2, y2, n1, n2) ) {
 				xf = x1;
 				zf = y1;
 
-				Print2col(clog);
-				XFOIL2PRF();
-				Print4col(clog);
-
+				Xfoil2Prf();
 				return L_DAT;
 			}
 		}
@@ -464,14 +429,9 @@ namespace ap
 				std::reverse(zf.begin(), zf.end());
 			}
 
-			Print2col(clog);
-			XFOIL2PRF();
-			Print4col(clog);
-
+			Xfoil2Prf();
 			return XFOIL;
 		}
-
-		clog << "END getiTypeByContent" << endl;
 
 		return -1; // file type not found
 	}
@@ -493,7 +453,7 @@ namespace ap
 		return L;
 	}
 
-	void AIRFOIL::XFOIL2PRF()
+	void AIRFOIL::Xfoil2Prf()
 	{
 			unsigned int nMin = std::distance( xf.begin(), std::min_element(xf.begin(), xf.end()) );
 
@@ -665,9 +625,7 @@ namespace ap
 			}
 	}
 
-	// Reads particular formats - private
-
-	void AIRFOIL::PRF2XFOIL() {
+	void AIRFOIL::Prf2Xfoil() {
 		for(unsigned int i=0; i<xd.size(); i++) {           
 			xf.push_back( xd[xd.size()-1-i]/100. );
 			zf.push_back( zd[xd.size()-1-i]/100. );
@@ -720,4 +678,19 @@ namespace ap
      //  double zz = 0.5*(Zd[N-1]+Zg[N-1]);
        // Zd[N-1] = Zg[N-1] = zz;
 	}
+
+	/*
+				double dCa = max( Xd[*std::max_element( Xd.begin(), Xd.end() )], Xg[*std::max_element( Xg.begin(), Xg.end() )] );
+				double dX0 = min( Xd[*std::min_element( Xd.begin(), Xd.end() )], Xg[*std::min_element( Xg.begin(), Xg.end() )] );
+
+				dCa -= dX0;
+				double dMnoz = 100./dCa;
+	
+				if( dCa < 80. || dCa > 120. )
+				for(unsigned int i=0; i<Xg.size(); i++) {
+					Xg[i] *= dMnoz;
+					Zg[i] *= dMnoz;
+					Xd[i] *= dMnoz;
+					Zd[i] *= dMnoz;
+				}*/
 }
