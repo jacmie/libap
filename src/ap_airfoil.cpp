@@ -50,31 +50,32 @@ namespace ap
 		return 0;
 	}
 
-	int AIRFOIL::GenerateNaca(unsigned int iNACA, int n)
-	{
-		char cNACA[10];
-		//sprintf(cNACA, "%04ld", iNACA );
-		return GenerateNaca(cNACA, n);
+	int AIRFOIL::GenerateNaca(unsigned int iNACA, int n) {
+		std::string str;
+    	std::stringstream ss;
+    	ss << iNACA;
+    	ss >> str;
+		
+		return GenerateNaca(str, n);
 	}
 
-	int AIRFOIL::GenerateNaca(std::string NACA, int n)
-	{
-		//Name = "NACA " + NACA;
+	int AIRFOIL::GenerateNaca(std::string NACA, int n) {
+		name = "NACA " + NACA;
 
-		NACA_PROFILE *NacaProfile = new NACA_PROFILE();
-		NacaProfile->setTE0( 1 );
-		NacaProfile->generate_naca(NACA, n);
+		NACA_AIRFOIL nacaAirfoil;
+		nacaAirfoil.GenerateNaca(NACA, n);
 	
-		xf.resize(NacaProfile->N + 1); 
-		zf.resize(NacaProfile->N + 1); 
+		xf = nacaAirfoil.X;
+		zf = nacaAirfoil.Z;
+		/*
+		xf.resize(nacaAirfoil.N + 1); 
+		zf.resize(nacaAirfoil.N + 1); 
 
 		for(unsigned int i=0; i<xf.size(); i++)
 		{
-			xf[i] = NacaProfile->X[i];
-			zf[i] = NacaProfile->Z[i];
-		}
-		
-		//DELETE_(NacaProfile);
+			xf[i] = nacaAirfoil.X[i];
+			zf[i] = nacaAirfoil.Z[i];
+		}*/
 		
 		XFOIL2PRF();
 	

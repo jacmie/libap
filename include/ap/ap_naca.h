@@ -36,9 +36,8 @@
 #include <cmath>
 #include <cctype>
 
+#include <vector>
 #include <string>
-
-//#include "memfun.h"
 
 enum series { four_digit, five_digit };
 
@@ -46,14 +45,14 @@ enum series { four_digit, five_digit };
 
 struct NACA_AIRFOIL_DATA 
 {
-   const char *name;     ///< 4- or 5-digit airfoil code
-   double      maxor;    ///< the maximum camber
-   double      posmax;   ///< the location of maximum camber
-   double      thmax;    ///< the maximum thickness
-   double      k1;       ///< constant to determine the desired lift coefficient (5-digit serie)
-   enum series serie;    ///< type of serie - 4- or 5-digit
-   int         ireflex;  ///< reflex flag - if ireflex = 1, Cm should be close to 0 (5-digit serie)
-   int         iTE0;     ///< trailing edge flag, 1 - TE thickness equal to zero
+	std::string name;     ///< 4- or 5-digit airfoil code
+   	double      maxor;    ///< the maximum camber
+   	double      posmax;   ///< the location of maximum camber
+   	double      thmax;    ///< the maximum thickness
+   	double      k1;       ///< constant to determine the desired lift coefficient (5-digit serie)
+   	enum series serie;    ///< type of serie - 4- or 5-digit
+   	int         ireflex;  ///< reflex flag - if ireflex = 1, Cm should be close to 0 (5-digit serie)
+   	int         iTE0 = 1; ///< trailing edge flag, 1 - TE thickness equal to zero
 };
 
 /** NACA_PROFILE class to generate 4-digit and 5-digit naca airfoils \n
@@ -67,12 +66,11 @@ struct NACA_AIRFOIL_DATA
 */
 
 
-class NACA_PROFILE
+class NACA_AIRFOIL
 {
 private:
 	
 	double A[5];
-	
 	NACA_AIRFOIL_DATA data;
 	
 	int iWrite;
@@ -87,30 +85,30 @@ private:
 	void camber_four(double *yc, double *slope, double x, double maxor, double posmax);
 	void camber_five(double *yc, double *slope, double x, double maxor, double posmax, double k1, int iReflex);
 
-	void out_point(double x, double yc, double yt, double slope, int is_upper, FILE *fp);
+	void OutPoint(double x, double yc, double yt, double slope, int is_upper);
 
-	void get_params(struct NACA_AIRFOIL_DATA *data, std::string name);
+	void GetParams(std::string name);
 
-	void draw_surface(int ndiv, const struct NACA_AIRFOIL_DATA *data, FILE *fp);
+	void DrawSurface(int ndiv);
 
-	std::string check_name(std::string name);
+	std::string CheckName(std::string name);
 	
 	void ClearTabs( void );
 	void CreateTabs( int nn );
 
 public:
 	
-	NACA_PROFILE(void){ X=Z=0; };
-	~NACA_PROFILE(void);
+	NACA_AIRFOIL() = default;
   
 	int generate_naca(std::string name, int num, FILE *fp);  		///< generates naca airfoil coordinates (NN points) and stores it in file defined by stream "fp"
 	int generate_naca(std::string file_name, std::string NACA);   	///< generates naca airfoil coordinates (NN points) and stores it in file "file_name"
-	int generate_naca(std::string cNACA, int NN=100);        		///< generates naca airfoil coordinates (NN points) and stores it in vectores X and Z
-	
-	void setTE0( int TE = 1 )/** TE=1 forces the zero thickness trailing edge*/{ data.iTE0 = TE; };
 
-	double *X;	///< x coordinates vector
-	double *Z;	///< z coordinates vecotr
+	int GenerateNaca(std::string sNACA, unsigned int set_n=100);	///< generates naca airfoil coordinates (NN points) and stores it in vectores X and Z
+	
+	void SetTE0(int TE = 1)/** TE=1 forces the zero thickness trailing edge*/{ data.iTE0 = TE; };
+
+	std::vector <double> X;	///< x coordinates vector
+	std::vector <double> Z;	///< z coordinates vecotr
 	int N;		///< coordiantes vectors' size
 };
 

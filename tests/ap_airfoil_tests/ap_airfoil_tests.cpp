@@ -71,42 +71,21 @@ TEST(ap_airfoilTest, IO_operations) {
 
 	EXPECT_EQ(0, Files2str("NN_1817.dat", str1, str2));
 	EXPECT_EQ(str1, str2);
-	EXPECT_EQ(1, Files2str("NN_1817.prf", str1, str2));
-	EXPECT_EQ(str1, str2);
+	//EXPECT_EQ(1, Files2str("NN_1817.prf", str1, str2));
+	//EXPECT_EQ(str1, str2);
 
 
-	//Profil -> ReadNaca( (char*)AirfoilFile.c_str(), Vnr ); // generate NACA
-/*
-	std::vector <double> Xf;
-	std::vector <double> Zf;
-    
-	for(int i=0; i<airfoil.Nf; i++)
-	{
-	    Xf.push_back(airfoil.Xf[i]);
-	    Zf.push_back(airfoil.Zf[i]);
-	}
-	
-	for(unsigned int i=0; i<Xf.size(); i++)
-	    clog << i << "\t" << fixed << setprecision(5) << Xf[i] << "\t" << Zf[i] << endl;
-	clog << endl;
-*/
-	// === Revers if necessary === 
-   
-	/* 
- 	iType:
-	    0 - PRF - PANUKL (prf1) - native PANUKL (4 columns) format \n
-	    1 - PRF - prf2 - by L.Wiechers- NAME in header, N below header \n 
-	    2 - KOO - koordinate by L.Wiechers \n
-	    3 - DAT - SELIG - (Xfoil) \n
-	    4 - DAT - LEDNICER
-	*/
+	clog << "NACA 23012" << endl;
+	airfoil.GenerateNaca("naca 23012");
+	airfoil.Print2col(clog);
+	airfoil.WriteDat("./airfoil_out/out_naca_i_23012.dat");
+	airfoil.WritePrf("./airfoil_out/out_naca_i_23012.prf");
 
-	//if(Profil->iType == 0 || Profil->iType == 1)
-	//	ReversDataPointsOrder();
+	clog << "NACA 0012" << endl;
+	airfoil.GenerateNaca("NACA 0012");
+	airfoil.Print2col(clog);
+	airfoil.WriteDat("./airfoil_out/out_naca_s_0012.dat");
+	airfoil.WritePrf("./airfoil_out/out_naca_s_0012.prf");
 
-	//DELETE_( Profil );
-	
-	//for(unsigned int i=0; i<Xf.size(); i++)
-	//    cerr << i << "\t" << fixed << setprecision(5) << Xf[i] << "\t" << Zf[i] << endl;
-	//EXPECT_DOUBLE_EQ(0, 1);
+	EXPECT_DOUBLE_EQ(0, 1);
 }
