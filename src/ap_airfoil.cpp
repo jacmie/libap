@@ -691,8 +691,7 @@ namespace ap
 		}
 	}
 
-	int AIRFOIL::WriteDat(std::string fileName, unsigned int precision)
-	{
+	int AIRFOIL::WriteDat(std::string fileName, unsigned int precision) {
 		ofstream out(fileName);
 		if(!out) return 1;
 
