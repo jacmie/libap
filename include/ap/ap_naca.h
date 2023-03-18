@@ -65,21 +65,17 @@ struct NACA_AIRFOIL_DATA
     included to PanuklConfigLib 20.11.2020
 */
 
-
 class NACA_AIRFOIL
 {
-private:
-	
-	double A[5];
-	NACA_AIRFOIL_DATA data;
-	
-	int iWrite;
-	int iLicz;
+	double A_[5];
+	NACA_AIRFOIL_DATA data_;
+
+	std::vector <double> x_;	///< x coordinates vector
+	std::vector <double> z_;	///< z coordinates vecotr
 
 	double sqr(double x) { return x*x; };
 	double cube(double x) { return x*x*x; };
 	
-	double xcoord( double angle);
 	double ytfunc( double x, double thmax );
 
 	void camber_four(double *yc, double *slope, double x, double maxor, double posmax);
@@ -92,24 +88,26 @@ private:
 	void DrawSurface(int ndiv);
 
 	std::string CheckName(std::string name);
-	
-	void ClearTabs( void );
-	void CreateTabs( int nn );
 
 public:
-	
+
+	//! Default constructor
 	NACA_AIRFOIL() = default;
-  
-	int generate_naca(std::string name, int num, FILE *fp);  		///< generates naca airfoil coordinates (NN points) and stores it in file defined by stream "fp"
-	int generate_naca(std::string file_name, std::string NACA);   	///< generates naca airfoil coordinates (NN points) and stores it in file "file_name"
 
-	int GenerateNaca(std::string sNACA, unsigned int set_n=100);	///< generates naca airfoil coordinates (NN points) and stores it in vectores X and Z
+	//! Forces zero thickness trailing edge
+	void SetTE0(bool TE = true) { data_.iTE0 = TE; };
+
+ 	//! Generates NACA airfoil coordinates and stores it in vectores x and z
+	int GenerateNaca(std::string sNACA, unsigned int set_n=100);
+
+	//! Gets vector of x coordinates
+	std::vector <double> GetXvector() { return x_; }
 	
-	void SetTE0(int TE = 1)/** TE=1 forces the zero thickness trailing edge*/{ data.iTE0 = TE; };
-
-	std::vector <double> X;	///< x coordinates vector
-	std::vector <double> Z;	///< z coordinates vecotr
-	int N;		///< coordiantes vectors' size
+	//! Gets vector of z coordinates
+	std::vector <double> GetZvector() { return z_; }
+	
+	//! Gets vectors x and z coordinates
+	void GetVectors(std::vector <double> &get_x, std::vector <double> &get_z) { get_x = x_; get_z = z_; }
 };
 
-#endif /*AP_NACA_H*/
+#endif // AP_NACA_H

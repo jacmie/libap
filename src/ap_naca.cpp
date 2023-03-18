@@ -34,24 +34,17 @@
 #include <iostream>
 #include <string.h>
 
-double NACA_AIRFOIL::xcoord(double angle)
-{
-   return 0.5 + cos(angle)/2.0;
-}
-
 double NACA_AIRFOIL::ytfunc(double x, double thmax)
 {
    if (x == 1.0) return 0.0;
 
-   double y = A[4];
-   for( int i=1; i<4; i++ )
-	y = y*x + A[4-i];
-   y = y*x + A[0] * sqrt(x);
+   double y = A_[4];
+   for( int i=1; i<4; i++ ) {
+		y = y*x + A_[4-i];
+   }
+   y = y*x + A_[0] * sqrt(x);
    
    return 5. * thmax * y;
-
-//   return thmax * (1.4845*sqrt(x) - 0.63*x - 1.758*sqr(x)+
-//		       1.4215*cube(x) - 0.5075*sqr(sqr(x)));
 }
 
 void NACA_AIRFOIL::camber_four(double *yc, double *slope,
@@ -106,78 +99,68 @@ void NACA_AIRFOIL::OutPoint(double x, double yc, double yt, double slope, int is
    double xloc, yloc, h;
  
 #ifdef Debug
-   fprintf(stderr, " >>> x: %.4g\tcamber: %.3g\tthickness: %.3g\n", x, yc, yt);
+   fprintf(stderr, " >>> x: %.4g\tcamber: %.3g\tthickness: %.3g\n", xc, yc, yt);
 #endif
 
    h = sqrt(1+sqr(slope));
    if (is_upper) {
-      xloc = x - yt*slope/h;
+      xloc = x  - yt*slope/h;
       yloc = yc + yt/h;
    }
    else {
-      xloc = x + yt*slope/h;
+      xloc = x  + yt*slope/h;
       yloc = yc - yt/h;
    }
    		
-   	X.push_back(xloc);
-	Z.push_back(yloc);
-
-   /* Save results into file */
-   	/*if( iLicz < N )
-   		{
-   		X[iLicz] = xloc;
-   		Z[iLicz] = yloc;
-   		}*/
-//   	else
-  // 		fprintf(stderr, "%5.5f %5.5f %d\n", xloc, yloc, iLicz);
+   	x_.push_back(xloc);
+	z_.push_back(yloc);
 }
 
 #define dig(c) ((c)-'0')
 
 void NACA_AIRFOIL::GetParams(std::string name)
 {
-   	A[0] = 0.2969;
-   	A[1] = -0.126;
-   	A[2] = -0.3516;
-   	A[3] = 0.2843;
+   	A_[0] = 0.2969;
+   	A_[1] = -0.126;
+   	A_[2] = -0.3516;
+   	A_[3] = 0.2843;
    
-   	if( data.iTE0 == 0 ) 	A[4] = -0.1015;
-   	else					A[4] = -0.1036;
+   	if( data_.iTE0 == 0 ) 	A_[4] = -0.1015;
+   	else					A_[4] = -0.1036;
    
-   	data.name = name;
+   	data_.name = name;
    	if(name.length() == 4) {
-      	data.serie = four_digit;
-      	data.maxor = dig(name[0])/100.0;
-      	data.posmax = dig(name[1])/10.0;
+      	data_.serie = four_digit;
+      	data_.maxor = dig(name[0])/100.0;
+      	data_.posmax = dig(name[1])/10.0;
 	  	std::clog << "th = " << 0.01*stoi(name.substr(2)) << std::endl;
-      	data.thmax = 0.01*stoi(name.substr(2)); 
+      	data_.thmax = 0.01*stoi(name.substr(2)); 
     }
    	else {
       	int d1, d2, d3;
 
-      	data.serie = five_digit;
-	  	std::clog << "th = " << 0.01*stoi(name.substr(3)) << std::endl;
-      	data.thmax = 0.01*stoi(name.substr(3));
+      	data_.serie = five_digit;
+      	data_.thmax = 0.01*stoi(name.substr(3));
       	d1 = dig(name[0]); 
       	d2 = dig(name[1]);
       	d3 = dig(name[2]);
-      	data.posmax = d2/20.0;
-      	data.ireflex = d3;
+      	data_.posmax = d2/20.0;
+      	data_.ireflex = d3;
 	
       	if( d3 == 0 || d3 == 1 ) {
         	int code = d1*100 + d2*10 + d3;
         	switch (code) {
-        		case 210: data.maxor=0.0580; data.k1=361.4; break;
-	        	case 220: data.maxor=0.1260; data.k1=51.64; break;
-    	    	case 230: data.maxor=0.2025; data.k1=15.957;break;
-        		case 240: data.maxor=0.2900; data.k1=6.643; break;
-        		case 250: data.maxor=0.3910; data.k1=3.23;  break;
+        		case 210: data_.maxor=0.0580; data_.k1=361.4; break;
+	        	case 220: data_.maxor=0.1260; data_.k1=51.64; break;
+    	    	case 230: data_.maxor=0.2025; data_.k1=15.957;break;
+        		case 240: data_.maxor=0.2900; data_.k1=6.643; break;
+        		case 250: data_.maxor=0.3910; data_.k1=3.23;  break;
         	
-	        	case 211: data.maxor=0.0621; data.k1=28.51; break; // approximated data from www.pdas.com
-    	    	case 221: data.maxor=0.1300; data.k1=51.99; break;
-        		case 231: data.maxor=0.2170; data.k1=15.793;break;
-	        	case 241: data.maxor=0.3180; data.k1=6.52;  break;
-    	    	case 251: data.maxor=0.4410; data.k1=3.191; break;
+	        	case 211: data_.maxor=0.0621; data_.k1=28.51; break; // approximated data from www.pdas.com
+    	    	case 221: data_.maxor=0.1300; data_.k1=51.99; break;
+        		case 231: data_.maxor=0.2170; data_.k1=15.793;break;
+	        	case 241: data_.maxor=0.3180; data_.k1=6.52;  break;
+    	    	case 251: data_.maxor=0.4410; data_.k1=3.191; break;
         	
         		default: break;
         	}
@@ -190,22 +173,22 @@ void NACA_AIRFOIL::GetParams(std::string name)
 
 void NACA_AIRFOIL::DrawSurface(int ndiv)
 {
-	X.resize(0);
-	Z.resize(0);
+	x_.resize(0);
+	z_.resize(0);
 
    	double ainc = M_PI / (ndiv-1);
    	int i=0, inc=1;
    	double x, yt, yc, slope;
  
    	while (i >= 0) {
-		x  = xcoord(i * ainc);
-      	yt = ytfunc(x, data.thmax);
+		x  = 0.5 + cos(i*ainc)/2.0; //xcoord(i * ainc);
+      	yt = ytfunc(x, data_.thmax);
 
-      	if(data.serie == four_digit) {
-			camber_four(&yc, &slope, x, data.maxor, data.posmax);
+      	if(data_.serie == four_digit) {
+			camber_four(&yc, &slope, x, data_.maxor, data_.posmax);
 	  	}
       	else {
-		 	camber_five(&yc, &slope, x, data.maxor, data.posmax, data.k1, data.ireflex); 
+		 	camber_five(&yc, &slope, x, data_.maxor, data_.posmax, data_.k1, data_.ireflex); 
 	  	}
 
       	OutPoint(x, yc, yt, slope, inc==1);
@@ -218,9 +201,7 @@ void NACA_AIRFOIL::DrawSurface(int ndiv)
    	}
 }
 
-/*
- * Check to see if this is a valid name for an NACA section
- */
+// Check to see if this is a valid name for an NACA section
 std::string NACA_AIRFOIL::CheckName(std::string name)
 {
    	// Trim off possible leading "naca" 
@@ -268,8 +249,6 @@ std::string NACA_AIRFOIL::CheckName(std::string name)
 
 int NACA_AIRFOIL::GenerateNaca(std::string sNACA, unsigned int set_n)
 {
-	//unsigned int n = 2*set_n - 1; // must be odd
-
 	std::string name = CheckName(sNACA);
 
 	if(0 == name.length()) {
@@ -277,52 +256,8 @@ int NACA_AIRFOIL::GenerateNaca(std::string sNACA, unsigned int set_n)
 		return 1;
 	}
 
-   iWrite = 0;
-   iLicz = 0;
-
    GetParams(name);
-   
    DrawSurface(set_n);
-   
-   return 0;
-}
-
-int NACA_AIRFOIL::generate_naca(std::string fileName, std::string NACA)
-{
-	FILE *fp = fopen( fileName.c_str(), "w" );
-	
-	std::string name;
-
-	if(!(name == CheckName(NACA))) 
-		{
-		fprintf(stderr, "%s is not a valid NACA section name.\n", NACA.c_str() );
-		return -1;
-		}
-	else
-		{
-		fprintf( stderr, "NACA %s - cname %s\n", NACA.c_str(), name.c_str() );
-		}
-
-	return generate_naca(name, 160, fp);
-}
-
-int NACA_AIRFOIL::generate_naca(std::string name, int num, FILE *fp)
-{
-   iWrite = 1;
-
-   GetParams(name);
-   
-   //fprintf(fp, "NACA %s\n", name);
-
-#ifdef Debug
-   fprintf(stderr, "%s:\n  camber: %g\n   thickness: %g\n   max_camber_pos: %g\n   series: %s\n",
-	   data.name, data.maxor, data.thmax, data.posmax,
-	   ((data.serie == four_digit)? "four digit" : "five digit"));
-#endif
-    
-   DrawSurface(num);
-   
-   fclose (fp);
    
    return 0;
 }

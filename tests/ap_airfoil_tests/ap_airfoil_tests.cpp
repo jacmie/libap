@@ -79,13 +79,21 @@ TEST(ap_airfoilTest, IO_operations) {
 	airfoil.GenerateNaca("naca 23012");
 	airfoil.Print2col(clog);
 	airfoil.WriteDat("./airfoil_out/out_naca_i_23012.dat");
+	EXPECT_EQ(0, Files2str("naca_i_23012.dat", str1, str2));
+	EXPECT_EQ(str1, str2);
 	airfoil.WritePrf("./airfoil_out/out_naca_i_23012.prf");
+	EXPECT_EQ(0, Files2str("naca_i_23012.prf", str1, str2));
+	EXPECT_EQ(str1, str2);
 
 	clog << "NACA 0012" << endl;
 	airfoil.GenerateNaca("NACA 0012");
 	airfoil.Print2col(clog);
 	airfoil.WriteDat("./airfoil_out/out_naca_s_0012.dat");
+	EXPECT_EQ(0, Files2str("naca_s_0012.dat", str1, str2));
+	EXPECT_EQ(str1, str2);
 	airfoil.WritePrf("./airfoil_out/out_naca_s_0012.prf");
+	EXPECT_EQ(0, Files2str("naca_s_0012.prf", str1, str2));
+	EXPECT_EQ(str1, str2);
 
-	EXPECT_DOUBLE_EQ(0, 1);
+	//EXPECT_DOUBLE_EQ(0, 1);
 }

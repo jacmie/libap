@@ -60,22 +60,13 @@ namespace ap
 	}
 
 	int AIRFOIL::GenerateNaca(std::string NACA, int n) {
-		name = "NACA " + NACA;
+		if(NACA.size() <= 5) name = "NACA " + NACA;
+		else name = NACA;
 
 		NACA_AIRFOIL nacaAirfoil;
 		nacaAirfoil.GenerateNaca(NACA, n);
 	
-		xf = nacaAirfoil.X;
-		zf = nacaAirfoil.Z;
-		/*
-		xf.resize(nacaAirfoil.N + 1); 
-		zf.resize(nacaAirfoil.N + 1); 
-
-		for(unsigned int i=0; i<xf.size(); i++)
-		{
-			xf[i] = nacaAirfoil.X[i];
-			zf[i] = nacaAirfoil.Z[i];
-		}*/
+		nacaAirfoil.GetVectors(xf, zf);
 		
 		XFOIL2PRF();
 	
