@@ -15,72 +15,14 @@ using namespace std;
 
 namespace ap
 {
-	int AIRFOIL::Set(const std::string set_name, const std::vector <double> &set_xg, const std::vector <double> &set_zg, const std::vector <double> &set_xd, const std::vector <double> &set_zd)
-	{
-		name = set_name;
-		xg = set_xg;
-		zg = set_zg;
-		xd = set_xd;
-		zd = set_zd;
-
-		return 0;
-	}
-
-	int AIRFOIL::Read( std::string fileName )
-	{
-		int iType = ReadContent(fileName); 
-
-		switch(iType) { // one of the lines has incorrect format
-			case PRF_4: { std::clog << "PRF_4" << std::endl; break; }
-			case PRF_3: { std::clog << "PRF_3" << std::endl; break; }
-			case PRF_2: { std::clog << "PRF_2" << std::endl; break; }
-			case KOO:   { std::clog << "KOO"   << std::endl; break; }
-			case XFOIL: { std::clog << "XFOIL" << std::endl; break; }
-			case L_DAT: { std::clog << "L_DAT" << std::endl; break; }
-		}
-		return 1;
-
-		// in case no type was detected finish
-		if(iType == -1) 
-		{
-			std::clog << "Unrecognized airfoil file type!!!" << std::endl;
-			return -1;
-		}
-			
-		return 0;
-	}
-
-	int AIRFOIL::GenerateNaca(unsigned int iNACA, int n) {
-		std::string str;
-    	std::stringstream ss;
-    	ss << iNACA;
-    	ss >> str;
-		
-		return GenerateNaca(str, n);
-	}
-
-	int AIRFOIL::GenerateNaca(std::string NACA, int n) {
-		if(NACA.size() <= 5) name = "NACA " + NACA;
-		else name = NACA;
-
-		NACA_AIRFOIL nacaAirfoil;
-		nacaAirfoil.GenerateNaca(NACA, n);
-	
-		nacaAirfoil.GetVectors(xf, zf);
-		
-		Xfoil2Prf();
-	
-		return 0;
-	}
-
 	int AIRFOIL::ReadColumns(const int type, std::stringstream &buffer, 
-		std::vector <double> &x1, std::vector <double> &y1, std::vector <double> &x2, std::vector <double> &y2, 
+		std::vector <double> &x1, std::vector <double> &z1, std::vector <double> &x2, std::vector <double> &z2, 
 		const unsigned int n1, const unsigned int n2)
 	{
 		x1.resize(0);
-		y1.resize(0);
+		z1.resize(0);
 		x2.resize(0);
-		y2.resize(0);
+		z2.resize(0);
 
 		std::string rxNum("([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
 		std::string col2 = string(".*") + rxNum + string("\\s+") + rxNum + string(".*");
@@ -91,7 +33,6 @@ namespace ap
 		regex rxcol4(col4);
 
 		std::string line;
-		int lineNr=0; 
 		double x1_, y1_, x2_, y2_;
 
 		// === Check number of columns, format and count data rows ===
@@ -101,11 +42,11 @@ namespace ap
 			
 			switch(type) { // one of the lines has incorrect format
 				case PRF_4: { if(!regex_match(line, rxcol4)) return 20; break; }
-				case PRF_3: { if(!regex_match(line, rxcol3)) return 20; break; }
-				case PRF_2: { if(!regex_match(line, rxcol2)) return 20; break; }
-				case KOO:   { if(!regex_match(line, rxcol2)) return 20; break; }
-				case XFOIL: { if(!regex_match(line, rxcol2)) return 20; break; }
-				case L_DAT: { if(!regex_match(line, rxcol2)) return 20; break; }
+				case PRF_3: { if(!regex_match(line, rxcol3)) return 21; break; }
+				case PRF_2: { if(!regex_match(line, rxcol2)) return 22; break; }
+				case KOO:   { if(!regex_match(line, rxcol2)) return 23; break; }
+				case XFOIL: { if(!regex_match(line, rxcol2)) return 24; break; }
+				case L_DAT: { if(!regex_match(line, rxcol2)) return 25; break; }
 			}
 		
 			// --- read row of data ---
@@ -119,97 +60,109 @@ namespace ap
 
 			// --- store the row of data ---
 			x1.push_back(x1_);
-			y1.push_back(y1_);
+			z1.push_back(y1_);
 			if(type == PRF_4) {
 				x2.push_back(x2_);
-				y2.push_back(y2_);
+				z2.push_back(y2_);
 			}
-			
-			lineNr++;
 		}
 		
 		// === Check declared vs counted data rows ===
 		switch(type) { 
 			case PRF_4: { if(x1.size() != n1) return 30; break; }
-			case PRF_3: { if(x1.size() != n1) return 30; break; }
-			case PRF_2: { if(x1.size() != n1) return 30; break; }
-			case KOO:   { if(x1.size() != n1+1) return 30; break; }
+			case PRF_3: { if(x1.size() != n1) return 31; break; }
+			case PRF_2: { if(x1.size() != n1) return 32; break; }
+			case KOO:   { if(x1.size() != n1+1) return 33; break; }
 			case XFOIL: { break; } // no declared nr of data rows
-			case L_DAT: { if(x1.size() != n1+n2) return 30; break; }
+			case L_DAT: { if(x1.size() != n1+n2) return 35; break; }
 		}
 
 		// === Check data end values ===
-		switch(type) { 
-			case PRF_4: { 
+		if(restrictiveCheck) {
+			switch(type) { 
+				case PRF_4: { 
 					if(x1[0] != 0.0) return 40; 
 					if(x1[x1.size()-1] != 100.0) return 40; 
 					if(x2[0] != 0.0) return 40; 
 					if(x2[x1.size()-1] != 100.0) return 40; 
 					break; 
 					}
-			case PRF_3:  
-			case PRF_2: { 
-					if(x1[0] != 0.0) { return 40; }
-					if(x1[x1.size()-1] != 100.0) { return 40; }
+				case PRF_3:  
+				case PRF_2: { 
+					if(x1[0] != 0.0) { return 42; }
+					if(x1[x1.size()-1] != 100.0) { return 42; }
 					break; 
 					}
-			case KOO:   { 
-					if(x1[0] != 100.0) { return 40; }
-					if(x1[x1.size()-1] != 100.0) { return 40; }
+				case KOO:   { 
+					if(x1[0] != 100.0) { return 43; }
+					if(x1[x1.size()-1] != 100.0) { return 43; }
 					break; 
 					}
-			case XFOIL: {
-				//	if(x1[0] != 1.0) { return 40; }
-				//	if(x1[x1.size()-1] != 1.0) { return 40; }
+				case XFOIL: {
+					if(x1[0] != 1.0) { return 44; }
+					if(x1[x1.size()-1] != 1.0) { return 44; }
 					break;
 					}
-			case L_DAT: { 
-					if(x1[0] != 0.0 		&& x1[0] != 1.0) { return 40; }
-					if(x1[n1-1] != 0.0 		&& x1[n1-1] != 1.0) { return 40; }
-					if(x1[n1] != 0.0 		&& x1[n1] != 1.0) { return 40; }
-					if(x1[n1+n2-1] != 0.0 	&& x1[n1+n2-1] != 1.0) { return 40; }
-					//Devide for two tables!!!!! x2, y2
+				case L_DAT: { 
+					if(x1[0] != 0.0 		&& x1[0] != 1.0) { return 45; }
+					if(x1[n1-1] != 0.0 		&& x1[n1-1] != 1.0) { return 45; }
+					if(x1[n1] != 0.0 		&& x1[n1] != 1.0) { return 45; }
+					if(x1[n1+n2-1] != 0.0 	&& x1[n1+n2-1] != 1.0) { return 45; }
 					break; 
 					}
+			}
 		}
 
 		// === Arrange data tables ===
-		switch(type) { // one of the lines has incorrect format
+		clog << " === Arrange data tables ===" << endl;
+		switch(type) {
+			case PRF_4: { break; }  
 			case PRF_3:  
 			case PRF_2: {
 					x2 = x1;
-					y2 = y1;
+					z2 = z1;
 					x1.resize(0.5*n1 + 1);
-					y1.resize(0.5*n1 + 1);
+					z1.resize(0.5*n1 + 1);
 					x2.erase(x2.begin(), x2.begin() + 0.5*n1);
-					y2.erase(y2.begin(), y2.begin() + 0.5*n1);
+					z2.erase(z2.begin(), z2.begin() + 0.5*n1);
 					x2[0] = x1[0];
-					y2[0] = y1[0];
+					z2[0] = z1[0];
 					break; 
 					}
-/*			case KOO:   { 
-					if(x1[0] != 100.0) { return 40; }
-					if(x1[x1.size()-1] != 100.0) { return 40; }
+			case KOO: { 
+					for(unsigned int i=0; i<x1.size(); i++) {
+						x1[i] *= 0.01;
+						z1[i] *= 0.01;
+					}
 					break; 
 					}
 			case XFOIL: {
-					if(x1[0] != 1.0) { return 40; }
-					if(x1[x1.size()-1] != 1.0) { return 40; }
-					break;
-					}*/
+					// find minimum element
+					unsigned int nMin = std::distance( x1.begin(), std::min_element(x1.begin(), x1.end()) );
+					// sort according to Xfoil convention
+					double front = std::accumulate(&z1[0], &z1[0]+nMin, 0.0);
+					double rear  = std::accumulate(&z1[0]+nMin, &z1[0]+z1.size()-1, 0.0);
+					unsigned int nFront = nMin;
+					unsigned int nRear  = z1.size() - nMin;
+					if( front/nFront < rear/nRear ) {
+						std::reverse(x1.begin(), x1.end());
+						std::reverse(z1.begin(), z1.end());
+					} 
+					break; 
+					}
 			case L_DAT: { 
 					x2 = x1;
-					y2 = y1;
+					z2 = z1;
 					x1.resize(n1);
-					y1.resize(n1);
+					z1.resize(n1);
 					x2[0] = x1[0];
-					y2[0] = y1[0];
+					z2[0] = z1[0];
 					x2.erase(x2.begin(), x2.begin() + n1+1);
-					y2.erase(y2.begin(), y2.begin() + n1+1);
+					z2.erase(z2.begin(), z2.begin() + n1+1);
 					std::reverse(x1.begin(), x1.end());
-					std::reverse(y1.begin(), y1.end());
+					std::reverse(z1.begin(), z1.end());
 					x1.insert(x1.end(), x2.begin(), x2.end());
-					y1.insert(y1.end(), y2.begin(), y2.end());
+					z1.insert(z1.end(), z2.begin(), z2.end());
 					break; 
 					}
 		}
@@ -217,10 +170,8 @@ namespace ap
 		return type;
 	}
 
-	int AIRFOIL::ReadContent(std::string fileName)
+	int AIRFOIL::Read(std::string fileName)
 	{
-		clog << "getiTypeByContent" << endl;
-		
 		name = "";
 		xf.resize(0);
 		zf.resize(0);
@@ -228,6 +179,11 @@ namespace ap
 		zg.resize(0);
 		xd.resize(0);
 		zd.resize(0);
+	
+		std::vector <double> x1;
+		std::vector <double> y1;
+		std::vector <double> x2;
+		std::vector <double> y2;
 
 		ifstream in(fileName);
     	if(!in) return 10; 	//couldn't read file
@@ -251,11 +207,6 @@ namespace ap
 		regex prfHeader("\\d+\\s+#\\s+.+");						// number_of_lines # name (e.g. "18	#	NACA 0012	")
 		regex kooHeader(".+\\s+,\\s+\\d+");						// name , number_of_lines-1
 		regex datNLines("\\s*\\d+\\.\\s*\\d+\\.\\s*");			// 31.  31.
-	
-		std::vector <double> x1;
-		std::vector <double> y1;
-		std::vector <double> x2;
-		std::vector <double> y2;
 
 		// read first line
 		// PRF
@@ -270,8 +221,7 @@ namespace ap
 			buffer >> n; // get declared number of lines
 			getline(buffer, line); //read the header line till the end
 			
-			unsigned int n_name = line.find_first_of("#");
-			name = line.substr(n_name + 1);
+			name = line.substr(line.find_first_of("#") + 1);
 			name.erase(0, name.find_first_not_of(" \t\n\r\f\v"));
 			name.erase(name.find_last_not_of(" \t\n\r\f\v") + 1);
 
@@ -330,7 +280,6 @@ namespace ap
 		// * values 0-100
 		buffer.str(buckup); 
 		getline(buffer, line);
-		// check if header matches koo - name , number_of_line
 		if(regex_match(line, kooHeader))
 		{
 			std::size_t coma = line.find_first_of(","); //get number of lines
@@ -342,10 +291,7 @@ namespace ap
 			if(KOO == ReadColumns(KOO, buffer, x1, y1, x2, y2, n, 0) ) {
 				xf = x1;
 				zf = y1;
-				for(unsigned int i=0; i<xf.size(); i++) {
-					xf[i] *= 0.01;
-					zf[i] *= 0.01;
-				}
+				RemoveDoubleDataRows(xf, zf);
 
 				Xfoil2Prf();
 				return KOO;
@@ -360,7 +306,6 @@ namespace ap
 		// [empty line]
 		// [2 cols]
 		// * values from 0 to 1
-		clog << "LEDD" << endl;
 		buffer.str(buckup); 
 		getline(buffer, line);
 		name = line;
@@ -377,6 +322,7 @@ namespace ap
 			if(L_DAT == ReadColumns(L_DAT, buffer, x1, y1, x2, y2, n1, n2) ) {
 				xf = x1;
 				zf = y1;
+				RemoveDoubleDataRows(xf, zf);
 
 				Xfoil2Prf();
 				return L_DAT;
@@ -387,47 +333,15 @@ namespace ap
 		// HEADER - name
 		// [2 cols]
 		// * values 0.0-1.0
-		clog << "XFOIL" << endl;
 		buffer.str(buckup); 
 		getline(buffer, line);
 		name = line;
 		name.erase(0, name.find_first_not_of(" \t\n\r\f\v"));
 		name.erase(name.find_last_not_of(" \t\n\r\f\v") + 1);
 		if(XFOIL == ReadColumns(XFOIL, buffer, x1, y1, x2, y2, 0, 0) ) {
-			clog << "XFOIL" << endl;
 			xf = x1;
 			zf = y1;
-		
-			// === remove subsequent doubled rows ===
-			for(unsigned int i=0; i<xf.size()-1; i++) {
-				if(xf[i] == xf[i+1]) { 
-					xf.erase( xf.begin()+i, xf.begin()+i+1 ); 
-					zf.erase( zf.begin()+i, zf.begin()+i+1 ); 
-				}
-			}
-
-			Print2col(clog);
-			
-			// === find minimum element ===
-			unsigned int nMin = std::distance( xf.begin(), std::min_element(xf.begin(), xf.end()) );
-
-			for(unsigned int i=0; i<=nMin; i++) clog << i << "\t" << zf[i] << endl;
-			clog << nMin << endl;
-			for(unsigned int i=nMin; i<=zf.size()-1; i++) clog << i << "\t" << zf[i] << endl;
-			clog << zf.size()-nMin << endl;
-
-
-			// === sort according to Xfoil convention ===
-			double front = std::accumulate(&zf[0], &zf[0]+nMin, 0.0);
-			double rear  = std::accumulate(&zf[0]+nMin, &zf[0]+zf.size()-1, 0.0);
-			unsigned int nFront = nMin;
-			unsigned int nRear  = zf.size() - nMin;
-			clog << front/nMin << "\t" << rear/(zf.size()-nMin) << endl;
-			
-			if( front/nFront < rear/nRear ) {
-				std::reverse(xf.begin(), xf.end());
-				std::reverse(zf.begin(), zf.end());
-			}
+			RemoveDoubleDataRows(xf, zf);
 
 			Xfoil2Prf();
 			return XFOIL;
@@ -436,6 +350,7 @@ namespace ap
 		return -1; // file type not found
 	}
 
+	// Lagrange interpolation
 	double AIRFOIL::L_interp(const std::vector <double> &x, const std::vector <double> &y, const double &xi) {
 		double l, L = 0;
 
@@ -451,6 +366,29 @@ namespace ap
 		}
 
 		return L;
+	}
+
+	// Remove subsequent doubled rows
+	void AIRFOIL::RemoveDoubleDataRows(std::vector <double> &x, std::vector <double> &z)
+	{
+		for(unsigned int i=0; i<x.size()-1; i++) {
+			if(x[i] == x[i+1]) { 
+				x.erase( x.begin()+i, x.begin()+i+1 ); 
+				z.erase( z.begin()+i, z.begin()+i+1 ); 
+			}
+		}
+	}
+
+	void AIRFOIL::Prf2Xfoil() {
+		for(unsigned int i=0; i<xd.size(); i++) {           
+			xf.push_back( xd[xd.size()-1-i]/100. );
+			zf.push_back( zd[xd.size()-1-i]/100. );
+		}
+	
+		for(unsigned int i=xg.size(); i>1; i--) {
+			xf.push_back( xg[xg.size()-i+1]/100. );
+			zf.push_back( zg[xg.size()-i+1]/100. );
+		}
 	}
 
 	void AIRFOIL::Xfoil2Prf()
@@ -624,18 +562,41 @@ namespace ap
 				}
 			}
 	}
-
-	void AIRFOIL::Prf2Xfoil() {
-		for(unsigned int i=0; i<xd.size(); i++) {           
-			xf.push_back( xd[xd.size()-1-i]/100. );
-			zf.push_back( zd[xd.size()-1-i]/100. );
-		}
 	
-		for(unsigned int i=xg.size(); i>1; i--) {
-			xf.push_back( xg[xg.size()-i+1]/100. );
-			zf.push_back( zg[xg.size()-i+1]/100. );
-		}
+	int AIRFOIL::Set(const std::string set_name, const std::vector <double> &set_xg, const std::vector <double> &set_zg, const std::vector <double> &set_xd, const std::vector <double> &set_zd)
+	{
+		name = set_name;
+		xg = set_xg;
+		zg = set_zg;
+		xd = set_xd;
+		zd = set_zd;
+
+		return 0;
 	}
+
+	int AIRFOIL::GenerateNaca(unsigned int iNACA, int n) {
+		std::string str;
+    	std::stringstream ss;
+    	ss << iNACA;
+    	ss >> str;
+		
+		return GenerateNaca(str, n);
+	}
+
+	int AIRFOIL::GenerateNaca(std::string NACA, int n) {
+		if(NACA.size() <= 5) name = "NACA " + NACA;
+		else name = NACA;
+
+		NACA_AIRFOIL nacaAirfoil;
+		nacaAirfoil.GenerateNaca(NACA, n);
+	
+		nacaAirfoil.GetVectors(xf, zf);
+		
+		Xfoil2Prf();
+	
+		return 0;
+	}
+
 
 	void AIRFOIL::Print2col(std::ostream &out) {
 		for(unsigned int i=0; i<xf.size(); i++) {

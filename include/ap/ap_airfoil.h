@@ -17,20 +17,6 @@ namespace ap
 	*/
 	class AIRFOIL
 	{
-		enum airfoilFileType {PRF_4=0, PRF_3, PRF_2, KOO, XFOIL, L_DAT};
-
-		int ReadColumns(const int type, std::stringstream &buffer, 
-			std::vector <double> &x1, std::vector <double> &y1, std::vector <double> &x2, std::vector <double> &y2, 
-			const unsigned int n1, const unsigned int n2);
-		int ReadContent(std::string fileName);
-
-		// Transformations
-		void Prf2Xfoil();
-		void Xfoil2Prf();
-
-		// Maths
-		double L_interp(const std::vector <double> &x, const std::vector <double> &y, const double &xi); 
-
 		std::string name;
 
 		std::vector <double> xf;  ///< x coordinates (Xfoil format)
@@ -41,9 +27,31 @@ namespace ap
 		std::vector <double> zg;  ///< z coordinates of upper contour (prf points)
 		std::vector <double> zd;  ///< z coordinates of lower contour (prf points)
 
+		enum airfoilFileType {PRF_4=0, PRF_3, PRF_2, KOO, XFOIL, L_DAT};
+
+		bool restrictiveCheck = 0;
+
+		int ReadColumns(const int type, std::stringstream &buffer, 
+			std::vector <double> &x1, std::vector <double> &z1, std::vector <double> &x2, std::vector <double> &z2, 
+			const unsigned int n1, const unsigned int n2);
+
+		// Maths
+		double L_interp(const std::vector <double> &x, const std::vector <double> &y, const double &xi); 
+		
+		// Utils
+		void RemoveDoubleDataRows(std::vector <double> &x, std::vector <double> &z);
+
+		// Transformations
+		void Prf2Xfoil();
+		void Xfoil2Prf();
+
 	public:
 	
 		AIRFOIL() = default;
+
+		//! Sets flag for restrictive check of data that is read.
+		//! Deffault false, allows end values different then 0 and 1 for Xfoil and 0 100 for Prf.
+		void RestrictiveCheck(bool setFlag=0) { restrictiveCheck = setFlag; }
 
 		//! Reads airfoil file
 		int Read(std::string fileName);
