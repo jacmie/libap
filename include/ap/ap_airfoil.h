@@ -36,14 +36,15 @@ namespace ap
 			const unsigned int n1, const unsigned int n2);
 
 		// Maths
+		void SetInterpolationData(std::vector <double> &xin, std::vector <double> &yin, std::vector <double> &xdata, std::vector <double> &zdata, double &xinterp);
 		double L_interp(const std::vector <double> &x, const std::vector <double> &y, const double &xi); 
 		
 		// Utils
 		void RemoveDoubleDataRows(std::vector <double> &x, std::vector <double> &z);
-
-		// Transformations
-		void Prf2Xfoil();
-		void Xfoil2Prf();
+		void ReversTabs(std::vector <double> &x, std::vector <double> &z);
+		void ResizeTabs(std::vector <double> &x, std::vector <double> &z, const unsigned int &setSize); 
+		void ScaleTabs(std::vector <double> &x, std::vector <double> &z, const double &scale);
+		void EraseTabsElements(std::vector <double> &x, std::vector <double> &z, const unsigned int &toElem);
 
 	public:
 	
@@ -55,6 +56,10 @@ namespace ap
 
 		//! Reads airfoil file
 		int Read(std::string fileName);
+
+		// Transformations
+		void Prf2Xfoil();
+		void Xfoil2Prf();
 
 		//! Generates NACA airfoil given by long int value (e.g. iNACA = 23012), \n NN - the number of points that define the airfoil geometry
 		int GenerateNaca(unsigned int iNACA, int n=100);

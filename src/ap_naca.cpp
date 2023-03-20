@@ -25,8 +25,6 @@ namespace ap
    	
 		unsigned int len = name.length();
 
-		std::clog << name << " " << len << std::endl;
-
 	   	if(len < 4 || len > 5) return 0;
    
 	   	if(len == 4) {

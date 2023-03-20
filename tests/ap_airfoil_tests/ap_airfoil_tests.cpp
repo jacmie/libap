@@ -131,7 +131,6 @@ TEST(ap_airfoilTest, NACA) {
 	ap::AIRFOIL airfoil;
 
 	airfoil.GenerateNaca("naca 23012");
-	airfoil.Print2col(clog);
 	airfoil.WriteDat("./airfoil_out/out_naca_i_23012.dat");
 	EXPECT_EQ(0, Files2str("naca_i_23012.dat", str1, str2));
 	EXPECT_EQ(str1, str2);
@@ -140,7 +139,6 @@ TEST(ap_airfoilTest, NACA) {
 	EXPECT_EQ(str1, str2);
 
 	airfoil.GenerateNaca("NACA 0012");
-	airfoil.Print2col(clog);
 	airfoil.WriteDat("./airfoil_out/out_naca_s_0012.dat");
 	EXPECT_EQ(0, Files2str("naca_s_0012.dat", str1, str2));
 	EXPECT_EQ(str1, str2);
