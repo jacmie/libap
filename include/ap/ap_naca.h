@@ -63,6 +63,9 @@ namespace ap
 		void SetTE0(bool TE = true) { data_.iTE0 = TE; };
 
  		//! Generates NACA airfoil coordinates and stores it in vectores x and z
+		int GenerateNaca(unsigned int iNACA, unsigned int set_n=100);
+ 		
+		//! Generates NACA airfoil coordinates and stores it in vectores x and z
 		int GenerateNaca(std::string sNACA, unsigned int set_n=100);
 
 		//! Gets vector of x coordinates

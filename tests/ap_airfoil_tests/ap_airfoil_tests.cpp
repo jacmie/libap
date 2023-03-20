@@ -93,6 +93,11 @@ TEST(ap_airfoilTest, AIRFOIL_XFOIL) {
 	EXPECT_EQ(0, Files2str("fx66h80_d0_f.prf", str1, str2));
 	EXPECT_EQ(str1, str2);
 	
+	airfoil.Prf2Xfoil(); // heal by interpolation
+	airfoil.WriteDat("./airfoil_out/out_fx66h80_d0_f_heal.dat");
+	EXPECT_EQ(0, Files2str("fx66h80_d0_f_heal.dat", str1, str2));
+	EXPECT_EQ(str1, str2);
+	
 	EXPECT_EQ(4, airfoil.Read("./airfoil_data/fx66h80_d0_r.dat"));
 	airfoil.WriteDat("./airfoil_out/out_fx66h80_d0_r.dat");
 	EXPECT_EQ(0, Files2str("fx66h80_d0_r.dat", str1, str2));
@@ -102,11 +107,16 @@ TEST(ap_airfoilTest, AIRFOIL_XFOIL) {
 	EXPECT_EQ(str1, str2);
 	
 	EXPECT_EQ(4, airfoil.Read("./airfoil_data/fx66h80_d0_r_ne.dat"));
-	airfoil.WriteDat("./airfoil_out/out_fx66h80_d0_r_ne.dat"); // heal !!!!!
+	airfoil.WriteDat("./airfoil_out/out_fx66h80_d0_r_ne.dat");
 	EXPECT_EQ(0, Files2str("fx66h80_d0_r_ne.dat", str1, str2));
 	EXPECT_EQ(str1, str2);
 	airfoil.WritePrf("./airfoil_out/out_fx66h80_d0_r_ne.prf");
 	EXPECT_EQ(0, Files2str("fx66h80_d0_r_ne.prf", str1, str2));
+	EXPECT_EQ(str1, str2);
+	
+	airfoil.Prf2Xfoil(); // heal by interpolation
+	airfoil.WriteDat("./airfoil_out/out_fx66h80_d0_r_ne_heal.dat");
+	EXPECT_EQ(0, Files2str("fx66h80_d0_r_ne_heal.dat", str1, str2));
 	EXPECT_EQ(str1, str2);
 }
 
@@ -125,18 +135,24 @@ TEST(ap_airfoilTest, AIRFOIL_L_DAT) {
 	EXPECT_EQ(str1, str2);
 }
 
-TEST(ap_airfoilTest, NACA) {
+TEST(ap_airfoilTest, NACA_from_int) {
 	std::string str1, str2;
 
 	ap::AIRFOIL airfoil;
 
-	airfoil.GenerateNaca("naca 23012");
+	airfoil.GenerateNaca(23012);
 	airfoil.WriteDat("./airfoil_out/out_naca_i_23012.dat");
 	EXPECT_EQ(0, Files2str("naca_i_23012.dat", str1, str2));
 	EXPECT_EQ(str1, str2);
 	airfoil.WritePrf("./airfoil_out/out_naca_i_23012.prf");
 	EXPECT_EQ(0, Files2str("naca_i_23012.prf", str1, str2));
 	EXPECT_EQ(str1, str2);
+}
+
+TEST(ap_airfoilTest, NACA_from_str) {
+	std::string str1, str2;
+
+	ap::AIRFOIL airfoil;
 
 	airfoil.GenerateNaca("NACA 0012");
 	airfoil.WriteDat("./airfoil_out/out_naca_s_0012.dat");

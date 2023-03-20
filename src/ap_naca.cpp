@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <sstream>
 #include <string.h>
 
 namespace ap
@@ -211,6 +212,15 @@ namespace ap
    		}
 	}
 
+	int NACA_AIRFOIL::GenerateNaca(unsigned int iNACA, unsigned int set_n) {
+		std::string str;
+    	std::stringstream ss;
+    	ss << iNACA;
+    	ss >> str;
+		
+		return GenerateNaca(str, set_n);
+	}
+	
 	int NACA_AIRFOIL::GenerateNaca(std::string sNACA, unsigned int set_n)
 	{
 		std::string name = CheckName(sNACA);

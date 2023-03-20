@@ -417,6 +417,9 @@ namespace ap
 	}
 
 	void AIRFOIL::Prf2Xfoil() {
+		xf.resize(0);
+		zf.resize(0);
+		
 		for(unsigned int i=0; i<xd.size(); i++) {           
 			xf.push_back( xd[xd.size()-1-i]/100. );
 			zf.push_back( zd[xd.size()-1-i]/100. );
@@ -430,79 +433,84 @@ namespace ap
 
 	void AIRFOIL::Xfoil2Prf()
 	{
-			unsigned int nMin = std::distance( xf.begin(), std::min_element(xf.begin(), xf.end()) );
+		xg.resize(0);
+		zg.resize(0);
+		xd.resize(0);
+		zd.resize(0);
+		
+		unsigned int nMin = std::distance( xf.begin(), std::min_element(xf.begin(), xf.end()) );
 
-			if(xf.size() == 2*nMin+1) { // equal data division
-					xd = xg = xf;
-					zd = zg = zf;
+		if(xf.size() == 2*nMin+1) { // equal data division
+				xd = xg = xf;
+				zd = zg = zf;
 
-					ResizeTabs(xg, zg, nMin+1);
-					ReversTabs(xg, zg);
-					ScaleTabs(xg, zg, 100);
+				ResizeTabs(xg, zg, nMin+1);
+				ReversTabs(xg, zg);
+				ScaleTabs(xg, zg, 100);
 
-					EraseTabsElements(xd, zd, nMin);
-					ScaleTabs(xd, zd, 100);
-			}
-			else { // interpolation needed
-				std::vector <double> xin;
-				std::vector <double> yin;
-				xin.resize(3);
-				yin.resize(3);
+				EraseTabsElements(xd, zd, nMin);
+				ScaleTabs(xd, zd, 100);
+		}
+		else { // interpolation needed
+			std::vector <double> xin;
+			std::vector <double> yin;
+			xin.resize(3);
+			yin.resize(3);
+			
+			if( nMin > 0.5*xf.size() - 1 ) {
+				xg = xf;
+				zg = zf;
+
+				ResizeTabs(xg, zg, nMin+1);
+				ReversTabs(xg, zg);
+				ScaleTabs(xg, zg, 100);
+
+				xd = xg;
+				zd.assign(xd.size(), 0.0);
+				zd[0] = zg[0];
+				zd[zg.size()-1] = zg[zg.size()-1];
+
+				std::vector <double> xdata;
+				std::vector <double> zdata;
+				xdata = xf;
+				zdata = zf;
+
+				EraseTabsElements(xdata, zdata, nMin);
+				ScaleTabs(xdata, zdata, 100);
+
+				for(unsigned int i=1; i<xg.size()-1; i++) {
+					SetInterpolationData(xin, yin, xdata, zdata, xg[i]);
+					zd[i] = L_interp(xin, yin, xg[i]);
+				}
 				
-				if( nMin > 0.5*xf.size() - 1 ) {
-					xg = xf;
-					zg = zf;
+			}
+			else {
+				xd = xf;
+				zd = zf;
 
-					ResizeTabs(xg, zg, nMin+1);
-					ReversTabs(xg, zg);
-					ScaleTabs(xg, zg, 100);
+				EraseTabsElements(xd, zd, nMin);
+				ScaleTabs(xd, zd, 100);
 
-					xd = xg;
-					zd.assign(xd.size(), 0.0);
-					zd[0] = zg[0];
-					zd[zg.size()-1] = zg[zg.size()-1];
+				xg = xd;
+				zg.assign(xd.size(), 0.0);
+				zg[0] = zd[0];
+				zg[zd.size()-1] = zd[zd.size()-1];
 
-					std::vector <double> xdata;
-					std::vector <double> zdata;
-					xdata = xf;
-					zdata = zf;
+				std::vector <double> xdata;
+				std::vector <double> zdata;
+				xdata = xf;
+				zdata = zf;
 
-					EraseTabsElements(xdata, zdata, nMin);
-					ScaleTabs(xdata, zdata, 100);
+				ResizeTabs(xdata, zdata, nMin+1);
+				ScaleTabs(xdata, zdata, 100);
+				ReversTabs(xdata, zdata);
 
-					for(unsigned int i=1; i<xg.size()-1; i++) {
-						SetInterpolationData(xin, yin, xdata, zdata, xg[i]);
-						zd[i] = L_interp(xin, yin, xg[i]);
-					}
-					
-				}
-				else {
-					xd = xf;
-					zd = zf;
-
-					EraseTabsElements(xd, zd, nMin);
-					ScaleTabs(xd, zd, 100);
-
-					xg = xd;
-					zg.assign(xd.size(), 0.0);
-					zg[0] = zd[0];
-					zg[zd.size()-1] = zd[zd.size()-1];
-
-					std::vector <double> xdata;
-					std::vector <double> zdata;
-					xdata = xf;
-					zdata = zf;
-
-					ResizeTabs(xdata, zdata, nMin+1);
-					ScaleTabs(xdata, zdata, 100);
-					ReversTabs(xdata, zdata);
-
-					for(unsigned int i=1; i<xd.size()-1; i++) {
-						SetInterpolationData(xin, yin, xdata, zdata, xd[i]);
-						zg[i] = L_interp(xin, yin, xg[i]);
-					}
+				for(unsigned int i=1; i<xd.size()-1; i++) {
+					SetInterpolationData(xin, yin, xdata, zdata, xd[i]);
+					zg[i] = L_interp(xin, yin, xg[i]);
 				}
 			}
+		}
 	}
 	
 	int AIRFOIL::Set(const std::string set_name, const std::vector <double> &set_xg, const std::vector <double> &set_zg, const std::vector <double> &set_xd, const std::vector <double> &set_zd)
