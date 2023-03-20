@@ -57,8 +57,10 @@ namespace ap
 		//! Reads airfoil file
 		int Read(std::string fileName);
 
-		// Transformations
+		//! Transformation from Prf format to Xfoil format
 		void Prf2Xfoil();
+		
+		//! Transformation from Xfoil format to Prf format
 		void Xfoil2Prf();
 
 		//! Generates NACA airfoil given by long int value (e.g. iNACA = 23012), \n NN - the number of points that define the airfoil geometry
@@ -79,17 +81,23 @@ namespace ap
 		//! Get airfoil data - four columns, prf format
 		int Get(std::string get_name, std::vector <double> &get_xg, std::vector <double> &get_zg, std::vector <double> &get_xd, std::vector <double> &get_zd);
 
-		//! prints 2 column data
+		//! Prints 2 column data
 		void Print2col(std::ostream &out);
 
-		//! prints 4 column data
+		//! Prints 4 column data
 		void Print4col(std::ostream &out);
 		
+		//! Write airfoil in Xfoil format
 		int WriteDat(std::string fileName, unsigned int precision=6);
 
+		//! Write airfoil in Prf format
 		int WritePrf(std::string fileName, unsigned int precision=6);
 		
-		void TE_correct();
+		//! Close TE gap
+		int TE_close(double blend);
+	
+		//! Normalize airfoil
+		void Normalize();
 	};
 }
 

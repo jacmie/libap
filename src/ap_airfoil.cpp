@@ -583,24 +583,50 @@ namespace ap
 		return 0;
 	}
 
-	void AIRFOIL::TE_correct( void )
+	int AIRFOIL::TE_close(double blend)
 	{
-     //  double zz = 0.5*(Zd[N-1]+Zg[N-1]);
-       // Zd[N-1] = Zg[N-1] = zz;
+     	//  double zz = 0.5*(Zd[N-1]+Zg[N-1]);
+       	// Zd[N-1] = Zg[N-1] = zz;
+	   	return 0;
 	}
 
-	/*
-				double dCa = max( Xd[*std::max_element( Xd.begin(), Xd.end() )], Xg[*std::max_element( Xg.begin(), Xg.end() )] );
-				double dX0 = min( Xd[*std::min_element( Xd.begin(), Xd.end() )], Xg[*std::min_element( Xg.begin(), Xg.end() )] );
+	void AIRFOIL::Normalize()
+	{
+		unsigned int nMin = std::distance( xf.begin(), std::min_element(xf.begin(), xf.end()) );
+		unsigned int nMax = std::distance( xf.begin(), std::max_element(xf.begin(), xf.end()) );
+/*	
+		double A, B;
+		unsigned int last = Xf.size()-1;
 
-				dCa -= dX0;
-				double dMnoz = 100./dCa;
+		LinearFunction(Xf[MinXid], Zf[MinXid], 0.5*(Xf[0] + Xf[last]), 0.5*(Zf[0] + Zf[last]), A, B);	
 	
-				if( dCa < 80. || dCa > 120. )
-				for(unsigned int i=0; i<Xg.size(); i++) {
-					Xg[i] *= dMnoz;
-					Zg[i] *= dMnoz;
-					Xd[i] *= dMnoz;
-					Zd[i] *= dMnoz;
-				}*/
+		RotatePointRad(-atan(A), Xf[i], Zf[i]);
+*/
+		double dX0 = xf[nMin];
+		double dZ0 = zf[nMin];
+		double dCa = xf[nMax] - dX0;
+		
+		std::clog << "dCa = " << dCa << std::endl;
+		std::clog << "dX0 = " << dX0 << std::endl;
+		std::clog << "dZ0 = " << dZ0 << std::endl;
+		
+		for(unsigned int i=0; i<xf.size(); i++) {
+			xf[i] = (xf[i] - dX0)/dCa;
+			zf[i] = (zf[i] - dZ0)/dCa;
+		}
+
+		dCa *= 1;
+		dX0 *= 100;
+		dZ0 *= 100;
+		std::clog << "dCa = " << dCa << std::endl;
+		std::clog << "dX0 = " << dX0 << std::endl;
+		std::clog << "dZ0 = " << dZ0 << std::endl;
+	
+		for(unsigned int i=0; i<xg.size(); i++) {
+			xg[i] = (xg[i] - dX0)/dCa;
+			zg[i] = (zg[i] - dZ0)/dCa;
+			xd[i] = (xd[i] - dX0)/dCa;
+			zd[i] = (zd[i] - dZ0)/dCa;
+		}
+	}
 }
