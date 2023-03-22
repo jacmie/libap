@@ -8,14 +8,12 @@
 
 namespace ap
 {
-	/** NACA_PROFILE class to generate 4-digit and 5-digit naca airfoils \n
-	    \n
-	    Created by Alexandre Naaman (hoser@step.polymtl.ca)  30-08-1995 \n
-	    Code clean-up, modifications to include more 5-digit sections: \n
-	    Shamim Mohamed (shamim@synopsys.com) 8-09-1995 \n
-	    corrected & modified to encapsulate into C++ class \n
-	    by Tomasz Grabowski (tgrab@meil.pw.edu.pl) Jan.2012 \n
-	    included to PanuklConfigLib 20.11.2020
+	//! NACA airfoils class
+	/*! 
+	 * Generates 4-digit and 5-digit naca airfoils. \n 
+	 * ap::NACA_AIRFOIL originates from part of the Config Lib for Panukl software: 
+	 * https://itlims-zsis.meil.pw.edu.pl/software/PANUKL/2020/Config_API/index.html
+	 * created by T.Grabowski.\n\n
 	*/
 	class NACA_AIRFOIL
 	{
@@ -61,21 +59,44 @@ namespace ap
 		NACA_AIRFOIL() = default;
 
 		//! Forces zero thickness trailing edge
+		/*!
+		 * \param TE - flag for zero TE thickness, default true 
+		 */
 		void SetTE0(bool TE = true) { data_.iTE0 = TE; };
 
  		//! Generates NACA airfoil coordinates and stores it in vectores x and z
+		/*!
+		 * \param iNACA - NACA airfoil number 
+		 * \param set_n - number of points generated along airfoil chord, separately for upper and lower surfaces  
+		 * \return 0 on success 
+		 */
 		int GenerateNaca(unsigned int iNACA, unsigned int set_n=100);
  		
 		//! Generates NACA airfoil coordinates and stores it in vectores x and z
+		/*!
+		 * \param sNACA - NACA airfoil number alone, or with prefix NACA eg.: "2412", "naca 0012", or "NACA 23012"  
+		 * \param set_n - number of points generated along airfoil chord, separately for upper and lower surfaces  
+		 * \return 0 on success 
+		 */
 		int GenerateNaca(std::string sNACA, unsigned int set_n=100);
 
-		//! Gets vector of x coordinates
+		//! Gets data vector of x coordinates
+		/*!
+		 * \return x vector of data points 
+		 */
 		std::vector <double> GetXvector() { return x_; }
 	
-		//! Gets vector of z coordinates
+		//! Gets data vector of z coordinates
+		/*!
+		 * \return z vector of data points 
+		 */
 		std::vector <double> GetZvector() { return z_; }
 	
-		//! Gets vectors x and z coordinates
+		//! Gets data vectors x and z of coordinates
+		/*!
+		 * \param get_x - x vector of data points 
+		 * \param get_z - z vector of data points 
+		 */
 		void GetVectors(std::vector <double> &get_x, std::vector <double> &get_z) { get_x = x_; get_z = z_; }
 	};
 }

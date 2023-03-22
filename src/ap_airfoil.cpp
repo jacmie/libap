@@ -547,21 +547,22 @@ namespace ap
 		get_zd = zd;
 	}
 
-	int AIRFOIL::GenerateNaca(unsigned int iNACA, int n) {
+	int AIRFOIL::GenerateNaca(unsigned int iNACA, int set_n) {
 		std::string str;
     	std::stringstream ss;
     	ss << iNACA;
     	ss >> str;
 		
-		return GenerateNaca(str, n);
+		return GenerateNaca(str, set_n);
 	}
 
-	int AIRFOIL::GenerateNaca(std::string NACA, int n) {
-		if(NACA.size() <= 5) name = "NACA " + NACA;
-		else name = NACA;
+	int AIRFOIL::GenerateNaca(std::string sNACA, int set_n) {
+		if(sNACA.size() <= 5) name = "NACA " + sNACA;
+		else name = sNACA;
 
 		NACA_AIRFOIL nacaAirfoil;
-		nacaAirfoil.GenerateNaca(NACA, n);
+		int ret = nacaAirfoil.GenerateNaca(sNACA, set_n);
+		if(ret) return ret;
 		nacaAirfoil.GetVectors(xf, zf);
 		
 		Xfoil2Prf();
@@ -611,7 +612,7 @@ namespace ap
 		C = -A - B;
 	}
 
-	int AIRFOIL::TEclose(double blend)
+	void AIRFOIL::TEclose(double blend)
 	{
 		using namespace std;
 
@@ -631,8 +632,6 @@ namespace ap
 		for(unsigned int j=xf.size()-1; j>i; j--) {	zf[j] = A*xf[j]*xf[j] + B*xf[j] + C; }
 	   
 		Xfoil2Prf();
-
-		return 0;
 	}
 	
 	void AIRFOIL::Normalize()

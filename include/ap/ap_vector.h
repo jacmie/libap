@@ -68,6 +68,7 @@ namespace ap
 
 		//! Copy constructor from array 
 		/*!
+		 * \param n - vector size
 		 * \param a - array to copy
 		 * \sa Set(unsigned int size, real a[], bool rFlag) 
 		 */
@@ -259,6 +260,7 @@ namespace ap
 		/*!
 		 * \param n - size of the array
 		 * \param a - array to witch the VECTOR_3 values are copied
+		 * \param rFlag - resize flag
 		 * \return Returns 0 on success, or 1 on failure if the array and VECTOR_3 size are not equal. 
 		 */
     	bool Get(const unsigned int n, real a[], const bool rFlag=1) 

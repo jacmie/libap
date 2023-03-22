@@ -88,6 +88,7 @@ namespace ap
 
 		//! Copy constructor from array (one dimensional) 
 		/*!
+		 * \param n - matrix size 2 or 3
 		 * \param A - array to copy
 		 * \sa Set(const unsigned int n, real A[], const bool rFlag=1) 
 		 */
@@ -102,6 +103,7 @@ namespace ap
     	
 		//! Copy constructor from array of pointers (two dimensional) 
 		/*!
+		 * \param n - matrix size 2 or 3
 		 * \param A - array to copy
 		 * \sa Set(const unsigned int n, real **A, const bool rFlag=1) 
 		 */
@@ -109,7 +111,7 @@ namespace ap
   
 		//! Assignment operator
 		/*!
-		 * \param v - MATRIX_3x3 to assign
+		 * \param A - MATRIX_3x3 to assign
 		 * \sa MATRIX_3x3(const MATRIX_3x3 &A)
 		 */
     	MATRIX_3x3& operator =(const MATRIX_3x3 &A)
@@ -171,7 +173,7 @@ namespace ap
 		
 		//! Set values from other MATRIX_3x3 
 		/*!
-		 * \param v - MATRIX_3x3 witch is assigned to the current MATRIX_3x3
+		 * \param A - MATRIX_3x3 witch is assigned to the current MATRIX_3x3
 		 */
     	void Set(const MATRIX_3x3 &A) 
 		{ 
@@ -247,6 +249,7 @@ namespace ap
 
 		//! Copies components values from the array (one dimensional)
 		/*!
+		 * \param n - matrix size 2 or 3
 		 * \param A - one dimensional array witch is assigned to the MATRIX_3x3 by rows
 		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the MATRIX_3x3 is allowed
 		 * \return Returns 0 on success, or 1 on failure. The result depends if the MATRIX_3x3 has same size as the array and the resize flags set. 
@@ -291,6 +294,7 @@ namespace ap
 		
 		//! Copies components values from the array of pointers (two dimensional)
 		/*!
+		 * \param n - size of matrix 2 or 3
 		 * \param A - two dimensional array of pointers witch values are assigned to the MATRIX_3x3 by rows
 		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the MATRIX_3x3 is allowed
 		 * \return Returns 0 on success, or 1 on failure. The result depends if the VECTOR_3 has same size as the array and the resize flags set. 
@@ -450,7 +454,7 @@ namespace ap
 		
 		//! Get values to standard vector (one dimensional)
 		/*!
-		 * \param v - std::vector to witch the MATRIX_3x3 values are copied by rows
+		 * \param A - std::vector to witch the MATRIX_3x3 values are copied by rows
 		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the std::vector is allowed
 		 * \return Returns 0 on success, or 1 on failure. The result depends if the std::vector had to be resized and the values set for the resizing flags.
 		 * \sa SetGolobalResizeFlag(bool val)
@@ -479,7 +483,7 @@ namespace ap
 
 		//! Get values to standard vector (two dimensional)
 		/*!
-		 * \param v - std::vector to witch the MATRIX_3x3 values are copied
+		 * \param A - std::vector to witch the MATRIX_3x3 values are copied
 		 * \param rFlag - resize flag, with global resize flag <b>rgFlag</b> indicates if resizing of the std::vector is allowed
 		 * \return Returns 0 on success, or 1 on failure. The result depends if the std::vector had to be resized and the values set for the resizing flags.
 		 * \sa SetGolobalResizeFlag(bool val)
@@ -512,6 +516,7 @@ namespace ap
 		/*!
 		 * \param n - size of the array
 		 * \param A - array to witch the MATRIX_3x3 values are copied
+		 * \param rFlag - resize flag
 		 * \return Returns 0 on success, or 1 on failure if the array and MATRIX_3x3 sizes don't match. 
 		 */
     	bool Get(const unsigned int n, real A[], const bool rFlag=1) 
@@ -553,6 +558,7 @@ namespace ap
 		/*!
 		 * \param n - size of the array
 		 * \param A - array of pointers to witch the MATRIX_3x3 values are copied
+		 * \param rFlag - resize flag
 		 * \return Returns 0 on success, or 1 on failure if the array and MATRIX_3x3 sizes don't match. 
 		 */
     	bool Get(const unsigned int n, real **A, const bool rFlag=1) 
