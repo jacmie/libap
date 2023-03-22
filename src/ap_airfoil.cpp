@@ -8,8 +8,10 @@
 #include <sstream>
 #include <fstream>
 
-#include "ap_airfoil.h"
+#include "ap_basicMath.h"
 #include "ap_naca.h"
+
+#include "ap_airfoil.h"
 
 namespace ap
 {
@@ -513,15 +515,36 @@ namespace ap
 		}
 	}
 	
-	int AIRFOIL::Set(const std::string set_name, const std::vector <double> &set_xg, const std::vector <double> &set_zg, const std::vector <double> &set_xd, const std::vector <double> &set_zd)
-	{
+	void AIRFOIL::Set(const std::string set_name, const std::vector <double> &set_xf, const std::vector <double> &set_zf) {
+		name = set_name;
+		xf = set_xf;
+		zf = set_zf;
+
+		Xfoil2Prf();
+	}
+	
+	void AIRFOIL::Set(const std::string set_name, const std::vector <double> &set_xg, const std::vector <double> &set_zg, const std::vector <double> &set_xd, const std::vector <double> &set_zd) {
 		name = set_name;
 		xg = set_xg;
 		zg = set_zg;
 		xd = set_xd;
 		zd = set_zd;
 
-		return 0;
+		Prf2Xfoil();
+	}
+		
+	void AIRFOIL::Get(std::string &get_name, std::vector <double> &get_xf, std::vector <double> &get_zf) {
+		get_name = name;
+		get_xf = xf;
+		get_zf = zf;
+	}	
+		
+	void AIRFOIL::Get(std::string &get_name, std::vector <double> &get_xg, std::vector <double> &get_zg, std::vector <double> &get_xd, std::vector <double> &get_zd) {
+		get_name = name;
+		get_xg = xg;
+		get_zg = zg;
+		get_xd = xd;
+		get_zd = zd;
 	}
 
 	int AIRFOIL::GenerateNaca(unsigned int iNACA, int n) {
@@ -545,7 +568,6 @@ namespace ap
 	
 		return 0;
 	}
-
 
 	void AIRFOIL::Print2col(std::ostream &out) {
 		for(unsigned int i=0; i<xf.size(); i++) {
@@ -583,50 +605,93 @@ namespace ap
 		return 0;
 	}
 
-	int AIRFOIL::TE_close(double blend)
-	{
-     	//  double zz = 0.5*(Zd[N-1]+Zg[N-1]);
-       	// Zd[N-1] = Zg[N-1] = zz;
-	   	return 0;
+	void Parabole(double xb, double zb, double fprim, double &A, double &B, double &C) {
+		A = (zb + fprim - xb*fprim) / (-xb*xb + 2*xb - 1);
+		B = fprim - 2*A*xb;
+		C = -A - B;
 	}
 
+	int AIRFOIL::TEclose(double blend)
+	{
+		using namespace std;
+
+		unsigned int i;
+		double A, B, C;
+
+		for(i=0; i<xf.size(); i++) { if(xf[i] < blend) break; }
+		i += 2;
+		LinearFunction(xf[i], zf[i], xf[i+1], zf[i+1], A, B);
+		Parabole(xf[i], zf[i], atan(A), A, B, C);
+		for(unsigned int j=0; j<i; j++) { zf[j] = A*xf[j]*xf[j] + B*xf[j] + C; }
+
+		for(i=xf.size()-1; i>0; i--) { if(xf[i] < blend) break; }
+		i -= 2;
+		LinearFunction(xf[i], zf[i], xf[i-1], zf[i-1], A, B);
+		Parabole(xf[i], zf[i], atan(A), A, B, C);
+		for(unsigned int j=xf.size()-1; j>i; j--) {	zf[j] = A*xf[j]*xf[j] + B*xf[j] + C; }
+	   
+		Xfoil2Prf();
+
+		return 0;
+	}
+	
 	void AIRFOIL::Normalize()
 	{
+		// --- Shift to LE(0,0) ---
 		unsigned int nMin = std::distance( xf.begin(), std::min_element(xf.begin(), xf.end()) );
-		unsigned int nMax = std::distance( xf.begin(), std::max_element(xf.begin(), xf.end()) );
-/*	
-		double A, B;
-		unsigned int last = Xf.size()-1;
+		double xMin = xf[nMin];
+		double zMin = zf[nMin];
 
-		LinearFunction(Xf[MinXid], Zf[MinXid], 0.5*(Xf[0] + Xf[last]), 0.5*(Zf[0] + Zf[last]), A, B);	
-	
-		RotatePointRad(-atan(A), Xf[i], Zf[i]);
-*/
-		double dX0 = xf[nMin];
-		double dZ0 = zf[nMin];
-		double dCa = xf[nMax] - dX0;
+		for(unsigned int i=0; i<xf.size(); i++) {
+			xf[i] -= xMin;
+			zf[i] -= zMin;
+		}
+		for(unsigned int i=0; i<xg.size(); i++) {
+			xg[i] -= xMin*100;
+			zg[i] -= zMin*100;
+			xd[i] -= xMin*100;
+			zd[i] -= zMin*100;
+		}
+
+		// --- Derotate ---
+		unsigned int nMax = std::distance( xf.begin(), std::max_element(xf.begin(), xf.end()) );
+		double A, B;
 		
-		std::clog << "dCa = " << dCa << std::endl;
-		std::clog << "dX0 = " << dX0 << std::endl;
-		std::clog << "dZ0 = " << dZ0 << std::endl;
+		LinearFunction(xf[nMin], zf[nMin], xf[nMax], zf[nMax], A, B);	
+		for(unsigned int i=0; i<xf.size(); i++) {
+			RotatePointRad(-atan(A), xf[i], zf[i]);
+		}
+		for(unsigned int i=0; i<xg.size(); i++) {
+			RotatePointRad(-atan(A), xg[i], zg[i]);
+			RotatePointRad(-atan(A), xd[i], zd[i]);
+		}
+
+		// --- Scale ---
+		nMax = std::distance( xf.begin(), std::max_element(xf.begin(), xf.end()) );
+		double xMax = xf[nMax];
 		
 		for(unsigned int i=0; i<xf.size(); i++) {
-			xf[i] = (xf[i] - dX0)/dCa;
-			zf[i] = (zf[i] - dZ0)/dCa;
+			xf[i] /= xMax;
+			zf[i] /= xMax;
+		}
+		for(unsigned int i=0; i<xg.size(); i++) {
+			xg[i] /= xMax;
+			zg[i] /= xMax;
+			xd[i] /= xMax;
+			zd[i] /= xMax;
 		}
 
-		dCa *= 1;
-		dX0 *= 100;
-		dZ0 *= 100;
-		std::clog << "dCa = " << dCa << std::endl;
-		std::clog << "dX0 = " << dX0 << std::endl;
-		std::clog << "dZ0 = " << dZ0 << std::endl;
-	
-		for(unsigned int i=0; i<xg.size(); i++) {
-			xg[i] = (xg[i] - dX0)/dCa;
-			zg[i] = (zg[i] - dZ0)/dCa;
-			xd[i] = (xd[i] - dX0)/dCa;
-			zd[i] = (zd[i] - dZ0)/dCa;
-		}
+		// --- Exact First/Last value ---
+		xf[0] = xf[xf.size()-1] = 1.0;
+		zf[0] = zf[xf.size()-1] = 0.0;
+		
+		xg[0] = 0.0;
+		zg[0] = 0.0;
+		xd[0] = 0.0;
+		zd[0] = 0.0;
+		xg[xg.size()-1] = 100.0;
+		zg[xg.size()-1] = 0.0;
+		xd[xd.size()-1] = 100.0;
+		zd[xd.size()-1] = 0.0;
 	}
 }

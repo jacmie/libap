@@ -70,16 +70,16 @@ namespace ap
 		int GenerateNaca(std::string NACA, int n=100);
 
 		//! Set airfoil data - two columns, Xfoil format
-		int Set(const std::string set_name, const std::vector <double> &set_xf, const std::vector <double> &set_zf);
+		void Set(const std::string set_name, const std::vector <double> &set_xf, const std::vector <double> &set_zf);
 		
 		//! Set airfoil data - four columns, prf format
-		int Set(const std::string set_name, const std::vector <double> &set_xg, const std::vector <double> &set_zg, const std::vector <double> &set_xd, const std::vector <double> &set_zd);
+		void Set(const std::string set_name, const std::vector <double> &set_xg, const std::vector <double> &set_zg, const std::vector <double> &set_xd, const std::vector <double> &set_zd);
 		
 		//! Get airfoil data - two columns, Xfoil format
-		int Get(std::string get_name, std::vector <double> &get_xf, std::vector <double> &get_zf);
+		void Get(std::string &get_name, std::vector <double> &get_xf, std::vector <double> &get_zf);
 		
 		//! Get airfoil data - four columns, prf format
-		int Get(std::string get_name, std::vector <double> &get_xg, std::vector <double> &get_zg, std::vector <double> &get_xd, std::vector <double> &get_zd);
+		void Get(std::string &get_name, std::vector <double> &get_xg, std::vector <double> &get_zg, std::vector <double> &get_xd, std::vector <double> &get_zd);
 
 		//! Prints 2 column data
 		void Print2col(std::ostream &out);
@@ -94,7 +94,7 @@ namespace ap
 		int WritePrf(std::string fileName, unsigned int precision=6);
 		
 		//! Close TE gap
-		int TE_close(double blend);
+		int TEclose(double blend=0.8);
 	
 		//! Normalize airfoil
 		void Normalize();

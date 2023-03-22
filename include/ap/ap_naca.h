@@ -53,6 +53,7 @@ namespace ap
 		
 		void OutPoint(double x, double yc, double yt, double slope, int is_upper);
 		void DrawSurface(int ndiv);
+		void Normalize();
 
 	public:
 

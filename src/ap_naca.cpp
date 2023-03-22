@@ -1,11 +1,14 @@
 // Part of All Purpose - ap library
 
-#include "ap_naca.h"
-
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <sstream>
 #include <string.h>
+
+#include "ap_basicMath.h"
+
+#include "ap_naca.h"
 
 namespace ap
 {
@@ -211,6 +214,41 @@ namespace ap
     	  	else i += inc;
    		}
 	}
+	
+	void NACA_AIRFOIL::Normalize()
+	{
+		// --- Shift to LE(0,0) ---
+		unsigned int nMin = std::distance( x_.begin(), std::min_element(x_.begin(), x_.end()) );
+		double xMin = x_[nMin];
+		double zMin = z_[nMin];
+
+		for(unsigned int i=0; i<x_.size(); i++) {
+			x_[i] -= xMin;
+			z_[i] -= zMin;
+		}
+
+		// --- Derotate ---
+		unsigned int nMax = std::distance( x_.begin(), std::max_element(x_.begin(), x_.end()) );
+		double A, B;
+		
+		LinearFunction(x_[nMin], z_[nMin], x_[nMax], z_[nMax], A, B);	
+		for(unsigned int i=0; i<x_.size(); i++) {
+			RotatePointRad(-atan(A), x_[i], z_[i]);
+		}
+
+		// --- Scale ---
+		nMax = std::distance( x_.begin(), std::max_element(x_.begin(), x_.end()) );
+		double xMax = x_[nMax];
+		
+		for(unsigned int i=0; i<x_.size(); i++) {
+			x_[i] /= xMax;
+			z_[i] /= xMax;
+		}
+
+		// --- Exact First/Last value ---
+		x_[0] = x_[x_.size()-1] = 1.0;
+		z_[0] = z_[x_.size()-1] = 0.0;
+	}
 
 	int NACA_AIRFOIL::GenerateNaca(unsigned int iNACA, unsigned int set_n) {
 		std::string str;
@@ -232,6 +270,7 @@ namespace ap
 
 	   	if( GetParams(name) ) return 1;
    		DrawSurface(set_n);
+		Normalize();
    
 	   	return 0;
 	}

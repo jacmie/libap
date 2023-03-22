@@ -163,26 +163,34 @@ TEST(ap_airfoilTest, AIRFOIL_L_DAT) {
 	EXPECT_EQ(str1, str2);
 }
 
+TEST(ap_airfoilTest, AIRFOIL_TEclose) {
+	std::string str1, str2;
+
+	ap::AIRFOIL airfoil;
+	airfoil.RestrictiveCheck(true);
+
+	EXPECT_EQ(0, airfoil.Read("./airfoil_data/NN_1817.prf"));
+	airfoil.TEclose();
+	
+	airfoil.WriteDat("./airfoil_out/out_NN_1817_TE0.dat");
+	EXPECT_EQ(0, Files2str("NN_1817_TE0.dat", str1, str2));
+	EXPECT_EQ(str1, str2);
+	airfoil.WritePrf("./airfoil_out/out_NN_1817_TE0.prf");
+	EXPECT_EQ(0, Files2str("NN_1817_TE0.prf", str1, str2));
+	EXPECT_EQ(str1, str2);
+}
+
 TEST(ap_airfoilTest, AIRFOIL_Normalize) {
 	std::string str1, str2;
 
 	ap::AIRFOIL airfoil;
 	airfoil.GenerateNaca("naca 24012");
 	airfoil.Normalize();
-	airfoil.Print2col(std::clog);
-	
+
 	airfoil.WriteDat("./airfoil_out/out_naca_s_24012.dat");
 	EXPECT_EQ(0, Files2str("naca_s_24012.dat", str1, str2));
 	EXPECT_EQ(str1, str2);
 	airfoil.WritePrf("./airfoil_out/out_naca_s_24012.prf");
 	EXPECT_EQ(0, Files2str("naca_s_24012.prf", str1, str2));
 	EXPECT_EQ(str1, str2);
-/*
-	EXPECT_EQ(5, airfoil.Read("./airfoil_data/rae104.dat"));
-	airfoil.WriteDat("./airfoil_out/out_rae104.dat");
-	EXPECT_EQ(0, Files2str("rae104.dat", str1, str2));
-	EXPECT_EQ(str1, str2);
-	airfoil.WritePrf("./airfoil_out/out_rae104.prf");
-	EXPECT_EQ(0, Files2str("rae104.prf", str1, str2));
-	EXPECT_EQ(str1, str2);*/
 }
