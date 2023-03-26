@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "ap_basicMath.h"
 #include "ap_vector.h"
 #include "ap_matrix.h"
 
@@ -8,6 +9,156 @@
 
 using namespace std;
 using namespace ap;
+
+TEST(ap_basicMath_tests, set_rotate_point_rad) {
+	double x = 0.5;
+	double y = 0.5;
+	SetRotatePointRad(135*M_PI/180, x, y);
+
+	// simplified comparison due to the trigonometric functions inaccuracy
+	EXPECT_EQ(-0.5, float(x)); 
+	EXPECT_EQ( 0.5, float(y));
+}
+
+TEST(ap_basicMath_tests, set_rotate_point_deg) {
+	double x = 0.5;
+	double y = 0.5;
+	SetRotatePointDeg(135, x, y);
+
+	// simplified comparison due to the trigonometric functions inaccuracy
+	EXPECT_EQ(-0.5, float(x)); 
+	EXPECT_EQ( 0.5, float(y));
+}
+
+TEST(ap_basicMath_tests, set_rotate_point_ref_rad) {
+	double x = 0.5;
+	double y = 0.0;
+	SetRotatePointRefRad(270*M_PI/180, 0.5, 0.5, x, y);
+
+	// simplified comparison due to the trigonometric functions inaccuracy
+	EXPECT_EQ(0.5, float(x)); 
+	EXPECT_EQ(0.0, float(y));
+}
+
+TEST(ap_basicMath_tests, set_rotate_point_ref_deg) {
+	double x = 0.5;
+	double y = 0.0;
+	SetRotatePointRefDeg(270, 0.5, 0.5, x, y);
+
+	// simplified comparison due to the trigonometric functions inaccuracy
+	EXPECT_EQ(0.5, float(x)); 
+	EXPECT_EQ(0.0, float(y));
+}
+
+TEST(ap_basicMath_tests, rotate_point_rad) {
+	double x = 0.5;
+	double y = 0.5;
+	RotatePointRad(90*M_PI/180, x, y);
+
+	// simplified comparison due to the trigonometric functions inaccuracy
+	EXPECT_EQ(-0.5, float(x)); 
+	EXPECT_EQ( 0.5, float(y));
+}
+
+TEST(ap_basicMath_tests, rotate_point_deg) {
+	double x = 0.5;
+	double y = 0.5;
+	RotatePointDeg(90, x, y);
+
+	// simplified comparison due to the trigonometric functions inaccuracy
+	EXPECT_EQ(-0.5, float(x)); 
+	EXPECT_EQ( 0.5, float(y));
+}
+
+TEST(ap_basicMath_tests, rotate_point_ref_rad) {
+	double x = 0.5;
+	double y = 0.0;
+	RotatePointRefRad(270*M_PI/180, 0.5, 0.5, x, y);
+
+	// simplified comparison due to the trigonometric functions inaccuracy
+	EXPECT_EQ(0.0, float(x)); 
+	EXPECT_EQ(0.5, float(y));
+}
+
+TEST(ap_basicMath_tests, rotate_point_ref_deg) {
+	double x = 0.5;
+	double y = 0.0;
+	RotatePointRefDeg(270, 0.5, 0.5, x, y);
+
+	// simplified comparison due to the trigonometric functions inaccuracy
+	EXPECT_EQ(0.0, float(x)); 
+	EXPECT_EQ(0.5, float(y));
+}
+
+TEST(ap_basicMath_tests, linear_function_two_points) {
+	double A, B;
+	EXPECT_EQ(0, LinearFunction(0, 1, 2, 3, A, B));
+
+	// simplified comparison due to the trigonometric functions inaccuracy
+	EXPECT_EQ(1.0, A); 
+	EXPECT_EQ(1.0, B);
+}
+
+TEST(ap_basicMath_tests, linear_function_point_angle) {
+	double A, B;
+	EXPECT_EQ(0, LinearFunction(0, 1, 45, A, B));
+
+	// simplified comparison due to the trigonometric functions inaccuracy
+	EXPECT_EQ(1.0, float(A)); 
+	EXPECT_EQ(1.0, B);
+}
+
+TEST(ap_basicMath_tests, lines_intersection) {
+	double x, y;
+	EXPECT_EQ(0, LinesIntersection(0.5, 0, -2, 5, x, y));
+
+	EXPECT_EQ(2.0, x); 
+	EXPECT_EQ(1.0, y);
+}
+
+TEST(ap_basicMath_tests, parabola_with_slope_at_point) {
+	double A, B, C;
+	Parabola(0, 0, 1, 2, 0, 0.5, A, B, C);
+
+	EXPECT_EQ(1.5, A); 
+	EXPECT_EQ(0.5, B);
+	EXPECT_EQ(0.0, C);
+}
+
+TEST(ap_basicMath_tests, circle_from_three_points) {
+	double A, B, R;
+	Circle(1, 1, 2, 4, 5, 3, A, B, R);
+
+	EXPECT_EQ(3.0, A); 
+	EXPECT_EQ(2.0, B);
+	// simplified comparison due to the sqrt function inaccuracy
+	EXPECT_EQ(5.0, float(R*R));
+}
+
+TEST(ap_basicMath_tests, arc_to_bezier) {
+	double x2, y2, x3, y3;
+	EXPECT_EQ(0, Arc2Bezier(1, 0, x2, y2, x3, y3, 0, 1, 0, 0));
+
+	EXPECT_EQ(1.0, x2); 
+	EXPECT_EQ(0.41421356237309515, y2); 
+	EXPECT_EQ(0.41421356237309515, x3); 
+	EXPECT_EQ(1.0, y3); 
+}
+
+TEST(ap_basicMath_tests, distance) {
+	EXPECT_EQ(sqrt(2), Distance(1, 2, 0, 2, 1, 0));
+}
+
+/* TO DO
+int    A_x(int n, double *C, double **dH, double *Xo);
+double detA(int n, double **A);
+int    Scale_A(int n, double *X, double **H);
+int    x_yT(int n, double *x, double *y, double **A);
+double xT_A_y(int n, double *x, double **A, double *y, double **C);
+double xT_y(int n, double *x, double *y);
+
+int Gauss(int n, double **A, double *X, double *D);
+int Gauss_Jordan(int n, double **A, double *D);*/
 
 TEST(ap_basicMath_tests, VECTOR_3_assign_operator) {
 	VECTOR_3 <double> v;

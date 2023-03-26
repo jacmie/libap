@@ -3,7 +3,9 @@
 #include <cmath>
 #include <iostream>
 
-void SetRotatePointRad(double AngRad, double &x, double &y)
+#include "ap_basicMath.h"
+
+void ap::SetRotatePointRad(double AngRad, double &x, double &y)
 {
 	double r = sqrt( x*x + y*y );
 	
@@ -11,28 +13,28 @@ void SetRotatePointRad(double AngRad, double &x, double &y)
     y = r * sin(AngRad);
 }
 
-void SetRotatePointDeg(double AngDeg, double &x, double &y)
+void ap::SetRotatePointDeg(double AngDeg, double &x, double &y)
 {
 	SetRotatePointRad(AngDeg*M_PI/180, x, y);
 }
 
-void SetRotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y)
+void ap::SetRotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y)
 {
     x -= xRef;
     y -= yRef;
 
-    SetRotatePointRad(AngRad, x, y);
+	ap::SetRotatePointRad(AngRad, x, y);
 
     x += xRef;
     y += yRef;
 }
 
-void SetRotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y)
+void ap::SetRotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y)
 {
     SetRotatePointRefRad(AngDeg*M_PI/180, xRef, yRef, x, y);
 }
 
-void RotatePointRad(double AngRad, double &x, double &y)
+void ap::RotatePointRad(double AngRad, double &x, double &y)
 {
 	double xx = x*cos(AngRad) - y*sin(AngRad);
 	double yy = x*sin(AngRad) + y*cos(AngRad);
@@ -41,12 +43,12 @@ void RotatePointRad(double AngRad, double &x, double &y)
 	y = yy;
 }
 
-void RotatePointDeg(double AngDeg, double &x, double &y)
+void ap::RotatePointDeg(double AngDeg, double &x, double &y)
 {
 	RotatePointRad(AngDeg*M_PI/180, x, y);
 }
 
-void RotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y)
+void ap::RotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y)
 {
 	x -= xRef;
 	y -= yRef;
@@ -61,12 +63,12 @@ void RotatePointRefRad(double AngRad, double xRef, double yRef, double &x, doubl
     y += yRef;
 }
 
-void RotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y)
+void ap::RotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y)
 {
 	RotatePointRefRad(AngDeg*M_PI/180, xRef, yRef, x, y);
 }
 
-bool LinearFunction(double x1, double y1, double x2, double y2, double &A, double &B)
+bool ap::LinearFunction(double x1, double y1, double x2, double y2, double &A, double &B)
 {
     if(x2 - x1 == 0) return 1;
 
@@ -76,7 +78,7 @@ bool LinearFunction(double x1, double y1, double x2, double y2, double &A, doubl
     return 0;
 }
 
-bool LinearFunction(double x1, double y1, double fiDeg, double &A, double &B)
+bool ap::LinearFunction(double x1, double y1, double fiDeg, double &A, double &B)
 {
     if(fmod(fiDeg+90., 180.) == 0) return 1;  
 
@@ -86,7 +88,7 @@ bool LinearFunction(double x1, double y1, double fiDeg, double &A, double &B)
     return 0;
 }
 
-bool LinesCrossing(double A1, double B1, double A2, double B2, double &x, double &y)
+bool ap::LinesIntersection(double A1, double B1, double A2, double B2, double &x, double &y)
 {
     if(A1 == A2) return 1;
 
@@ -96,14 +98,14 @@ bool LinesCrossing(double A1, double B1, double A2, double B2, double &x, double
     return 0;
 }
 
-void Parabola(double x1, double y1, double x2, double y2, double x3, double yprim, double &A, double &B, double &C)
+void ap::Parabola(double x1, double y1, double x2, double y2, double x3, double yprim, double &A, double &B, double &C)
 {
     A = (y2 - y1 + x1*yprim - x2*yprim) / (x2*x2 - x1*x1 + 2*x1*x3 - 2*x2*x3);
     B = yprim - 2*A*x3;
     C = y1 - x1*yprim + 2*A*x1*x3 - A*x1*x1;
 }
 
-void Circle(double x1, double y1, double x2, double y2, double x3, double y3, double &A, double &B, double &R)
+void ap::Circle(double x1, double y1, double x2, double y2, double x3, double y3, double &A, double &B, double &R)
 {
 	double dX2 = x2 - x1;
 	double dX3 = x3 - x1;
@@ -117,14 +119,12 @@ void Circle(double x1, double y1, double x2, double y2, double x3, double y3, do
 	R = sqrt((A - x1)*(A - x1) + (B - y1)*(B - y1));
 }
 
-bool Arc2Bezier(double x1, double y1, double &x2, double &y2, double &x3, double &y3, double x4, double y4, double xCirc, double yCirc)
+bool ap::Arc2Bezier(double x1, double y1, double &x2, double &y2, double &x3, double &y3, double x4, double y4, double xCirc, double yCirc)
 {
-	/*
-	Sources:
-	https://stackoverflow.com/questions/734076/how-to-best-approximate-a-geometrical-arc-with-a-bezier-curve
-	https://hansmuller-flex.blogspot.com/2011/10/more-about-approximating-circular-arcs.html?showComment=1498749617507#c2109832351939371205
-	file:///tmp/mozilla_JM0/11812-Article%20Text-33790-1-10-20150414.pdf
-	*/
+	//Sources:
+	//https://stackoverflow.com/questions/734076/how-to-best-approximate-a-geometrical-arc-with-a-bezier-curve
+	//https://hansmuller-flex.blogspot.com/2011/10/more-about-approximating-circular-arcs.html?showComment=1498749617507#c2109832351939371205
+	//file:///tmp/mozilla_JM0/11812-Article%20Text-33790-1-10-20150414.pdf
 
 	//For arcs < 90deg
 	
@@ -149,12 +149,12 @@ bool Arc2Bezier(double x1, double y1, double &x2, double &y2, double &x3, double
     return 0;
 }
 
-double LeastSquares(double x1, double y1, double z1, double x2, double y2, double z2)
+double ap::Distance(double x1, double y1, double z1, double x2, double y2, double z2)
 {
 	return sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) + (z1-z2)*(z1-z2) );
 }
 
-int A_x(int n, double *C, double **dH, double *Xo)
+int ap::A_x(int n, double *C, double **dH, double *Xo)
 {    
     for(int x=0; x<n; x++)
     {
@@ -170,7 +170,7 @@ int A_x(int n, double *C, double **dH, double *Xo)
 	return 1;
 }
 
-double detA(int n, double **A)
+double ap::detA(int n, double **A)
 {
     int k=0, g=0;
     double plus=0, minus=0, m1=1, m2=1;
@@ -215,7 +215,7 @@ double detA(int n, double **A)
     return plus - minus;
 }
 
-int Gauss(int n, double **A, double *X, double *D)
+int ap::Gauss(int n, double **A, double *X, double *D)
 {
     int nmax;
     double amax, b, c, lambda;
@@ -306,7 +306,7 @@ int Gauss(int n, double **A, double *X, double *D)
 	return 1;
 }
 
-int Gauss_Jordan(int n, double **A, double *D)
+int ap::Gauss_Jordan(int n, double **A, double *D)
 {
     int nmax, flag=1;
     double amax, b, c, lambda;
@@ -382,7 +382,7 @@ int Gauss_Jordan(int n, double **A, double *D)
     return flag;
 }
 
-int Scale_A(int n, double *X, double *dF, double **H)
+int ap::Scale_A(int n, double *X, double **H)
 {
     double sum, Hbis[3][3];
    
@@ -445,7 +445,7 @@ int Scale_A(int n, double *X, double *dF, double **H)
 	return 1;
 }
 
-int x_yT(int n, double *x, double *y, double **A)
+int ap::x_yT(int n, double *x, double *y, double **A)
 {    
     for(int i=0; i<n; i++)  
     {
@@ -456,7 +456,7 @@ int x_yT(int n, double *x, double *y, double **A)
 	return 1;
 }
 
-double xT_A_y(int n, double *x, double **A, double *y, double **C) 
+double ap::xT_A_y(int n, double *x, double **A, double *y, double **C) 
 {
     for(int i=0; i<n; i++) 
     {
@@ -475,7 +475,7 @@ double xT_A_y(int n, double *x, double **A, double *y, double **C)
     return H;
 }
 
-double xT_y(int n, double *x, double *y)
+double ap::xT_y(int n, double *x, double *y)
 {
     double r = 0;
     
