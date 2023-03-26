@@ -48,54 +48,6 @@ int main(int argc, char *argv[])
 	{
 		clog << SubGet.Var[i].Name << "\t" << SubGet.Var[i].Value << endl;
 	}
-
-	//+++ CONVENTIONS +++
-	/*
-	
-	Errors:
-	0 - OK
-	1 - Error of type
-	2 - Error of type...
-	
-	*/
-	
-	//+++ BASIC FUNCTIONS +++
-	
-	// *** Console ***
-	//OK
-	
-	// *** JMmath ***
-
-	clog << endl << "*** JMmath ***" << endl << endl;
-
-    ofstream mout("TestDir/JMmath/Circle.xls");
-
-    unsigned int ndiv = 36;
-    double dFi = 360/(ndiv-1);
-    double Fi  = 0;
-    double x, y;
-
-    clog << "Id\t" << "Fi\t" << "x\t" << "y" << endl; 
-
-    for(unsigned int i=0; i<=ndiv; i++)
-    {    	
-        x = 1.0;
-        y = 0.0;
-
-		RotatePointRefDeg(Fi, 1.0, 1.0, x, y);
-            
-        clog << i << "\t" << fixed << setprecision(1) << Fi << setprecision(3) << "\t" << x << "\t" << y << endl; 	
-        mout << fixed << setprecision(6) << x << "\t" << y << endl;
-
-        Fi += dFi;    
-	}
-
-    mout.close();
-
-	double A, B, R;
-	Circle(2.0, 1.0, 0.0, 5.0, -1.0, 2.0, A, B, R);
-	clog << endl << "A\t" << "B\t" << "R" << endl;
-	clog << A << "\t" << B << "\t" << R*R << endl;
 	
     // *** JMfilesHandling ***
 

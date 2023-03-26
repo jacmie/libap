@@ -5,56 +5,56 @@
 
 #include "ap_basicMath.h"
 
-void ap::SetRotatePointRad(double AngRad, double &x, double &y)
+void ap::SetRotatePointRad(double angRad, double &x, double &y)
 {
 	double r = sqrt( x*x + y*y );
 	
-	x = r * cos(AngRad);
-    y = r * sin(AngRad);
+	x = r * cos(angRad);
+    y = r * sin(angRad);
 }
 
-void ap::SetRotatePointDeg(double AngDeg, double &x, double &y)
+void ap::SetRotatePointDeg(double angDeg, double &x, double &y)
 {
-	SetRotatePointRad(AngDeg*M_PI/180, x, y);
+	SetRotatePointRad(angDeg*M_PI/180, x, y);
 }
 
-void ap::SetRotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y)
+void ap::SetRotatePointRefRad(double angRad, double xRef, double yRef, double &x, double &y)
 {
     x -= xRef;
     y -= yRef;
 
-	ap::SetRotatePointRad(AngRad, x, y);
+	ap::SetRotatePointRad(angRad, x, y);
 
     x += xRef;
     y += yRef;
 }
 
-void ap::SetRotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y)
+void ap::SetRotatePointRefDeg(double angDeg, double xRef, double yRef, double &x, double &y)
 {
-    SetRotatePointRefRad(AngDeg*M_PI/180, xRef, yRef, x, y);
+    SetRotatePointRefRad(angDeg*M_PI/180, xRef, yRef, x, y);
 }
 
-void ap::RotatePointRad(double AngRad, double &x, double &y)
+void ap::RotatePointRad(double angRad, double &x, double &y)
 {
-	double xx = x*cos(AngRad) - y*sin(AngRad);
-	double yy = x*sin(AngRad) + y*cos(AngRad);
+	double xx = x*cos(angRad) - y*sin(angRad);
+	double yy = x*sin(angRad) + y*cos(angRad);
 	
 	x = xx;
 	y = yy;
 }
 
-void ap::RotatePointDeg(double AngDeg, double &x, double &y)
+void ap::RotatePointDeg(double angDeg, double &x, double &y)
 {
-	RotatePointRad(AngDeg*M_PI/180, x, y);
+	RotatePointRad(angDeg*M_PI/180, x, y);
 }
 
-void ap::RotatePointRefRad(double AngRad, double xRef, double yRef, double &x, double &y)
+void ap::RotatePointRefRad(double angRad, double xRef, double yRef, double &x, double &y)
 {
 	x -= xRef;
 	y -= yRef;
 
-	double xx = x*cos(AngRad) - y*sin(AngRad);
-	double yy = x*sin(AngRad) + y*cos(AngRad);
+	double xx = x*cos(angRad) - y*sin(angRad);
+	double yy = x*sin(angRad) + y*cos(angRad);
 	
 	x = xx;
 	y = yy;	
@@ -63,9 +63,9 @@ void ap::RotatePointRefRad(double AngRad, double xRef, double yRef, double &x, d
     y += yRef;
 }
 
-void ap::RotatePointRefDeg(double AngDeg, double xRef, double yRef, double &x, double &y)
+void ap::RotatePointRefDeg(double angDeg, double xRef, double yRef, double &x, double &y)
 {
-	RotatePointRefRad(AngDeg*M_PI/180, xRef, yRef, x, y);
+	RotatePointRefRad(angDeg*M_PI/180, xRef, yRef, x, y);
 }
 
 bool ap::LinearFunction(double x1, double y1, double x2, double y2, double &A, double &B)
@@ -98,11 +98,11 @@ bool ap::LinesIntersection(double A1, double B1, double A2, double B2, double &x
     return 0;
 }
 
-void ap::Parabola(double x1, double y1, double x2, double y2, double x3, double yprim, double &A, double &B, double &C)
+void ap::Parabola(double x1, double y1, double x2, double y2, double x3, double yPrim, double &A, double &B, double &C)
 {
-    A = (y2 - y1 + x1*yprim - x2*yprim) / (x2*x2 - x1*x1 + 2*x1*x3 - 2*x2*x3);
-    B = yprim - 2*A*x3;
-    C = y1 - x1*yprim + 2*A*x1*x3 - A*x1*x1;
+    A = (y2 - y1 + x1*yPrim - x2*yPrim) / (x2*x2 - x1*x1 + 2*x1*x3 - 2*x2*x3);
+    B = yPrim - 2*A*x3;
+    C = y1 - x1*yPrim + 2*A*x1*x3 - A*x1*x1;
 }
 
 void ap::Circle(double x1, double y1, double x2, double y2, double x3, double y3, double &A, double &B, double &R)
