@@ -24,5 +24,5 @@ endmacro()
 build_test(ap_basicMath_tests ap_basicMath_tests.cpp ap)
 build_test(ap_discretization_tests ap_discretization_tests.cpp ap)
 build_test(ap_airfoil_tests ap_airfoil_tests.cpp ap)
-
+build_test(ap_substitute_tests ap_substitute_tests.cpp ap)
 

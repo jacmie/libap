@@ -5,83 +5,66 @@
 #include <iostream>
 #include <sstream>
 
-SUBSTITUTE::SUBSTITUTE()
-{
+ap::SUBSTITUTE::SUBSTITUTE(std::string inFile, std::string outFile, char mark, char endMark) {
+	Init(inFile, outFile, mark, endMark); 
 }
 
-SUBSTITUTE::SUBSTITUTE(std::string InFile, std::string OutFile, char Mark, char EndMark)
-{
-	Init(InFile, OutFile, Mark, EndMark); 
-}
-
-
-void SUBSTITUTE::Init(std::string InFile, std::string OutFile, char Mark, char EndMark)
-{
-    InPut	= InFile;
-    OutPut	= OutFile;
+void ap::SUBSTITUTE::Init(std::string inFile, std::string outFile, char mark, char endMark) {
+    inPut	  = inFile;
+    outPut	  = outFile;
     
-    Prompt    = Mark;
-	EndPrompt = EndMark;
+    prompt    = mark;
+	endPrompt = endMark;
 	
-	if(EndMark == ' ')
-		EndFlag = 0;
-	else
-		EndFlag = 1;
+	if(endMark == ' ')	endFlag = 0;
+	else				endFlag = 1;
 	
-	Var.resize(0);
-	OutVar.resize(0);
+	var.resize(0);
+	outVar.resize(0);
 }
 
-int SUBSTITUTE::AddVariable(std::string Name, std::string Value)
-{
-    if(Name.length() == 0)
-    {
+int ap::SUBSTITUTE::AddVariable(std::string name, std::string value) {
+    if(name.length() == 0) {
         std::clog << "Name length equal to 0!!! The Variable NOT added!!!" << std::endl;
         return 1;
     }
 
-    if(Value.length() == 0)
-    {
+    if(value.length() == 0) {
         std::clog << "Value length equal to 0!!! The Variable NOT added!!!" << std::endl;
         return 1;
     }
 
-	VARIABLE TempVar;
-	TempVar.Name  = Name;
-	TempVar.Value = Value;
+	VARIABLE tempVar;
+	tempVar.name  = name;
+	tempVar.value = value;
 
-	Var.push_back(TempVar);
+	var.push_back(tempVar);
 
     return 0;
 }
 
-int SUBSTITUTE::AddVariable(std::string Name, double Value)
-{
-	std::string Str;
+int ap::SUBSTITUTE::AddVariable(std::string name, double value) {
+	std::string str;
 	std::stringstream ss;
 	ss.precision(16);
-	ss << Value;
-	ss >> Str;
+	ss << value;
+	ss >> str;
    
-	return AddVariable(Name, Str);
+	return AddVariable(name, str);
 }
 
-int SUBSTITUTE::StripFromMarks(std::string &ToStrip)
-{
-	if(ToStrip[0] == Prompt) ToStrip = ToStrip.substr(1); 
-	else
-	{
+int ap::SUBSTITUTE::StripFromMarks(std::string &toStrip) {
+	if(toStrip[0] == prompt) toStrip = toStrip.substr(1); 
+	else {
 		std::clog << "Wrong Variable Start Mark!!!" << std::endl;
 		return 3;
 	}
 	
-	if(EndPrompt != ' ' && EndPrompt != 9 && EndPrompt != 10 && EndPrompt != 11 && EndPrompt != 12 && EndPrompt != 13) // Ommit if EndPrompt is a whitespace
-	{
-		unsigned int Size = ToStrip.size();
+	if(endPrompt != ' ' && endPrompt != 9 && endPrompt != 10 && endPrompt != 11 && endPrompt != 12 && endPrompt != 13) { // Ommit if endPrompt is a whitespace
+		unsigned int size = toStrip.size();
 
-		if(ToStrip[Size-1] == EndPrompt) ToStrip = ToStrip.substr(0, Size-1); 
-		else
-		{
+		if(toStrip[size-1] == endPrompt) toStrip = toStrip.substr(0, size-1); 
+		else {
 			std::clog << "Wrong Variable End Mark!!!" << std::endl;
 			return 3;
 		}
@@ -90,18 +73,15 @@ int SUBSTITUTE::StripFromMarks(std::string &ToStrip)
 	return 0;
 }
 
-int SUBSTITUTE::Insert()
-{
+int ap::SUBSTITUTE::Insert() {
     // *** Clean Marks ***
     
-    for(unsigned int i=0; i<Var.size(); i++)
-    {
-        if(Var[i].Name[0] == Prompt) Var[i].Name = Var[i].Name.substr(1); 
+    for(unsigned int i=0; i<var.size(); i++) {
+        if(var[i].name[0] == prompt) var[i].name = var[i].name.substr(1); 
        
-		if(EndPrompt != ' ' && EndPrompt != 9 && EndPrompt != 10 && EndPrompt != 11 && EndPrompt != 12 && EndPrompt != 13) // Ommit if EndPrompt is a whitespace
-		{
-			unsigned int Size = Var[i].Name.size();
-			if(Var[i].Name[Size-1] == EndPrompt) Var[i].Name = Var[i].Name.substr(0, Size-1); 
+		if(endPrompt != ' ' && endPrompt != 9 && endPrompt != 10 && endPrompt != 11 && endPrompt != 12 && endPrompt != 13) { // Ommit if EndPrompt is a whitespace
+			unsigned int size = var[i].name.size();
+			if(var[i].name[size-1] == endPrompt) var[i].name = var[i].name.substr(0, size-1); 
 		}
     }
     
@@ -110,51 +90,41 @@ int SUBSTITUTE::Insert()
 	int  len, pos;
     std::string line;
 	
-    std::ifstream in(InPut);
+    std::ifstream in(inPut);
 	
-	if(!in)
-    {
+	if(!in) {
         std::clog << "Can't open Input file!!!" << std::endl;
 		return 1;
     }
 	
-    std::ofstream out(OutPut);
+    std::ofstream out(outPut);
     
-    if(!out)
-    {
+    if(!out) {
         std::clog << "Can't write Output file!!!" << std::endl;
         return 2;
     }
 
-    while(!in.eof())
-    {
+    while(!in.eof()) {
 		getline(in, line);
-		
 		pos = 0;
 		
-        for(unsigned int l=0; l<line.length(); l++)
-		{ 
-			pos = line.find_first_of(Prompt, pos);
+        for(unsigned int l=0; l<line.length(); l++) { 
+			pos = line.find_first_of(prompt, pos);
 				
-			if(pos == -1)
-			{
+			if(pos == -1) {
 				out << line << std::endl;
 				break;
 			}
 			
-			else
-			{
+			else {
 				out << line.substr(0, pos);
-				
                 unsigned int i;
 
-				for(i=0; i<Var.size(); i++)
-				{
-					len = strlen(Var[i].Name.c_str());
+				for(i=0; i<var.size(); i++) {
+					len = strlen(var[i].name.c_str());
 					
-					if(EndFlag == 0 && !strcmp(line.substr(pos+1, len).c_str(), Var[i].Name.c_str())) //empty space separator
-					{
-						out << Var[i].Value;
+					if(endFlag == 0 && !strcmp(line.substr(pos+1, len).c_str(), var[i].name.c_str())) { //empty space separator
+						out << var[i].value;
 
 						if( (pos + 1 + len + 1) == int(line.length()) )  out << std::endl;
 
@@ -163,9 +133,8 @@ int SUBSTITUTE::Insert()
 						break;
 					}
 					
-					if(EndFlag == 1 && !strcmp(line.substr(pos+1, len).c_str(), Var[i].Name.c_str()) && line[pos+len+1] == EndPrompt) //end mark present
-					{
-						out << Var[i].Value;
+					if(endFlag == 1 && !strcmp(line.substr(pos+1, len).c_str(), var[i].name.c_str()) && line[pos+len+1] == endPrompt) { //end mark present
+						out << var[i].value;
 						
                         if( (pos + 1 + len + 1) == int(line.length()) )  out << std::endl;
 
@@ -175,9 +144,8 @@ int SUBSTITUTE::Insert()
 					}
 				}
 
-                if(i == Var.size()) // No Variable after Prompt
-                {
-                    out << Prompt;
+                if(i == var.size()) { // No Variable after prompt
+                    out << prompt;
                     line = line.substr(pos + 1);
                 }   
 			}
@@ -190,124 +158,97 @@ int SUBSTITUTE::Insert()
 	return 0;
 }
 
-int SUBSTITUTE::Extract()
-{
-    //*** Clean Marks ***
-    
-    for(unsigned int i=0; i<Var.size(); i++)
-    {
-        if(Var[i].Name[0] == Prompt) Var[i].Name = Var[i].Name.substr(1); 
+int ap::SUBSTITUTE::Extract() {
+    // *** Clean Marks ***
+    for(unsigned int i=0; i<var.size(); i++) {
+        if(var[i].name[0] == prompt) var[i].name = var[i].name.substr(1); 
        
-		if(EndPrompt != ' ' && EndPrompt != 9 && EndPrompt != 10 && EndPrompt != 11 && EndPrompt != 12 && EndPrompt != 13) // Ommit if EndPrompt is a whitespace
-		{
-			unsigned int Size = Var[i].Name.size();
-			if(Var[i].Name[Size-1] == EndPrompt) Var[i].Name = Var[i].Name.substr(0, Size-1); 
+		if(endPrompt != ' ' && endPrompt != 9 && endPrompt != 10 && endPrompt != 11 && endPrompt != 12 && endPrompt != 13) { // Ommit if EndPrompt is a whitespace
+			unsigned int size = var[i].name.size();
+			if(var[i].name[size-1] == endPrompt) var[i].name = var[i].name.substr(0, size-1); 
 		}
     }
 
-    //*** Find Position of the Variables ***
-    
+    // *** Find Position of the Variables ***
     std::string line, word;
-	unsigned int line_nr=0, word_nr;
-	OUT_VARIABLE SingleVar;
+	unsigned int lineNr=0, wordNr;
+	OUT_VARIABLE singleVar;
 
-    std::ifstream in(InPut);
+    std::ifstream in(inPut);
 	if(!in) return 1;
 	
-    std::ifstream in2(OutPut);
+    std::ifstream in2(outPut);
     if(!in2) return 2;
     
-    while(!in.eof())
-    {
+    while(!in.eof()) {
 		getline(in, line);
 
 		std::stringstream ss;
 		ss.str(line);
 
-		word_nr = 0;
+		wordNr = 0;
 		
-		while(!ss.eof()) //till the end of the line
-		{
+		while(!ss.eof()) { //till the end of the line
 			ss >> word;
-			word_nr++;
+			wordNr++;
 			
-			if(word[0] == Prompt) 
-			{
-				//clog << "Line: " << line_nr << "\tWord: " << word_nr << "\t" << word << endl;
-                //clog << "#" << line << "#" << endl;
-
-				SingleVar.LineNr = line_nr;
-				SingleVar.WordNr = word_nr;
-				SingleVar.Word   = word;
+			if(word[0] == prompt) {
+				singleVar.lineNr = lineNr;
+				singleVar.wordNr = wordNr;
+				singleVar.word   = word;
                 
-				OutVar.push_back(SingleVar);
+				outVar.push_back(singleVar);
             
                 word = "";
 			}
 		}
 		
-		line_nr++;
+		lineNr++;
     }
  
 	// *** Strip OutVar from Marks ***
-	
-	for(unsigned int i=0; i<OutVar.size(); i++)
-	{
-		if( StripFromMarks(OutVar[i].Word) ) return 3;
+	for(unsigned int i=0; i<outVar.size(); i++) {
+		if( StripFromMarks(outVar[i].word) ) return 3;
 	}
 
 	// *** Compare Var with OutVar ***
+	std::vector <unsigned int> list;
+	list.resize( var.size() );
 
-	std::vector <unsigned int> List;
-	List.resize( Var.size() );
+	for(unsigned int i=0; i<var.size(); i++) {
+		unsigned int match = 0;
 
-	for(unsigned int i=0; i<Var.size(); i++)
-	{
-		unsigned int Match = 0;
-
-		for(unsigned int j=0; j<OutVar.size(); j++)	
-		{
-			if( 0 == Var[i].Name.compare(OutVar[j].Word) ) 
-			{
-				List[i] = j;
-				Match++;
+		for(unsigned int j=0; j<outVar.size(); j++)	{
+			if( 0 == var[i].name.compare(outVar[j].word) ) {
+				list[i] = j;
+				match++;
 			}
 		}
 
-		if(Match == 0)
-		{
-			std::clog << "No Output Varible: " << Var[i].Name << "!!!" << std::endl;
+		if(match == 0) {
+			std::clog << "No Output Varible: " << var[i].name << "!!!" << std::endl;
 			return 4;
 		}
 
-		if(Match > 1)
-		{
-			std::clog << "Too many Output Varibles: " << Var[i].Name << "!!!" << std::endl;
+		if(match > 1) {
+			std::clog << "Too many Output Varibles: " << var[i].name << "!!!" << std::endl;
 			return 5;
 		}
 	}
 
 	// *** Extract ***
-
-	for(unsigned int i=0; i<Var.size(); i++)
-	{
+	for(unsigned int i=0; i<var.size(); i++) {
 		in2.clear();
 		in2.seekg (0, std::ios::beg);
 
-		for(unsigned int j=0; j<=OutVar[List[i]].LineNr; j++)	
-		{
-			getline(in2, line);
-		}
+		for(unsigned int j=0; j<=outVar[list[i]].lineNr; j++) { getline(in2, line);	}
 
 		std::stringstream ss;
 		ss.str(line);
 		
-		for(unsigned int j=0; j<OutVar[List[i]].WordNr-1; j++)	
-		{
-			ss >> word;
-		}
+		for(unsigned int j=0; j<outVar[list[i]].wordNr-1; j++) { ss >> word; }
 
-		ss >> Var[i].Value;
+		ss >> var[i].value;
 	}
 
     in2.close();

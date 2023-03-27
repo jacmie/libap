@@ -4,41 +4,45 @@
 #include <string>
 #include <vector>
 
-struct VARIABLE
-{  
-    std::string Name;
-    std::string Value;
-};
-
-struct OUT_VARIABLE
-{  
-	unsigned int LineNr;
-	unsigned int WordNr;
-    std::string Word;
-};
+namespace ap {
 
 class SUBSTITUTE
 {
-	std::string InPut;
-	std::string OutPut;
-    char Prompt, EndPrompt;
-    bool EndFlag;
-	std::vector <OUT_VARIABLE> OutVar;
+	struct VARIABLE
+	{  
+    	std::string name;
+    	std::string value;
+	};
 
-	unsigned int AllLinesNr = 0;
+	struct OUT_VARIABLE
+	{  
+		unsigned int lineNr;
+		unsigned int wordNr;
+    	std::string  word;
+	};
+
+	std::string inPut;
+	std::string outPut;
+    char prompt, endPrompt;
+    bool endFlag;
+	std::vector <OUT_VARIABLE> outVar;
+
+	unsigned int allLinesNr = 0;
     
 	public:
 	
-	std::vector <VARIABLE> Var;
-       
-    SUBSTITUTE();
-    SUBSTITUTE(std::string InFile, std::string OutFile, char Mark = '@', char EndMark = ' ');
-    void Init(std::string InFile, std::string OutFile, char Mark = '@', char EndMark = ' ');
-	int  AddVariable(std::string Name, std::string Value);
-	int  AddVariable(std::string Name, double Value);
-	int  StripFromMarks(std::string &ToStrip);
+	std::vector <VARIABLE> var;
+
+    SUBSTITUTE() = default;
+    SUBSTITUTE(std::string inFile, std::string outFile, char mark = '@', char endMark = ' ');
+    void Init(std::string inFile, std::string outFile, char mark = '@', char endMark = ' ');
+	int  AddVariable(std::string name, std::string value);
+	int  AddVariable(std::string name, double value);
+	int  StripFromMarks(std::string &toStrip);
 	int  Insert();
     int  Extract();
 };
+
+} // namespace ap
 
 #endif

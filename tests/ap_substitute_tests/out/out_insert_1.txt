@@ -1,0 +1,123 @@
+# *****************************************
+# *                                       *
+# *  Automatically generated config file  *
+# *                                       *
+# *****************************************
+#
+/*
+Each section in this file begins by keyword "begin" and ends by keyword "end".
+Keyword "begin" could be extended (e.g. "begin_wing0") by name of section:
+wing*, fuselage, connections, connections_V.
+In the main section reference values (up to row "*****")
+can be omitted - then they will be computed using main wing section (section "wing0").
+The geometry is defined in the axis system defined as follows:
+	origin in fuselage nose, leading edge point of main wing (in the symmetry plane),
+	it should be the most forward point of the aircraft body,
+	axis x - backward, usually longwise the Mean Aerodynamic Chord (MAC)
+	axis y - on the right wing,
+	axis z - up.
+The geometry should be defined to satisfy positive X coordinates for all aircraft body.
+*/
+#######################
+/*
+Version section ("begin_version")
+   version number
+   End of version section ("end")
+ */
+#######################
+begin_version
+3
+end
+#######################
+/*
+Main section ("begin")
+	reference area
+	MAC
+	wing span
+	X coordinate of quarter of MAC		(it is the point, which is the pole
+	Z coordinate of quarter of MAC		 for moments calculation)
+	scale coefficient
+*****
+	name of the output grid file (without extension - default extension [.inp] will be added)
+	number of wings with defined chord wise partition
+	number of wings without defined chord wise partition
+	optional symmetry flag:
+		0 (default if flag doesn't exist) - symmetrical object
+		1 - right part
+		-1 - left part
+The end of main section ("end")
+*/
+#######################
+begin
+*****
+Bla
+1
+0
+0
+end
+#######################
+/*
+WING Section ("begin_wing*")
+   is wing active ( 1- active, 2 - not active)
+   wing type (FromSections - build from sections,  FromModules - build from modules, Nacelle - nacelle)
+   name
+   create wing as: (Master, Slave, Independent)
+   compute fuselage-wing intersection: 0 - no, 1 - yes
+   the fuselage longeron number (according to definition of sections in the fuselage geometry file) which begins the wing
+   wing surface to create (All, Top, Bottom)
+   rib type (Open, External, Both)
+   <rest of wing definition ( see documentation )>
+   End of wing section ("end")
+ */
+#######################
+begin_wing0
+0
+FromModules
+Bla
+Master
+0
+0
+All
+External
+2
+Root	1	444	0.5	1	111	0	CLARKY.DAT
+Line	1	444	0	0	222	0.2	5	0	CLARKY.DAT
+Linear 333end_wing
+#######################
+/*
+FUSELAGE 555 ("begin_fuselage")
+   does the fuselage exist: 1 - fuselage exists, 0 - doesn't exist
+   is the fuselage active:  1 - active, 0 - not active
+   type of fuselage: FromFile - from file, FromParams - automatically generated
+   <type = FromFile>
+   name of the fuselage sections data file (default extension [.f])
+   <type = FromParams> (see documentation)
+   number of additional sections computed automatically
+   "x" coordinates of additional sections
+End of fuselage section ("end")
+*/
+#######################
+begin_fuselage
+0
+0
+end_fuselage
+#######################
+/*
+CONNECTIONS section ("begin_connections")
+ number of connections - ICon
+ definitions of successive connections (ICon times)
+     type ( Horizontal, Vertical)
+     annotation
+     number of the 1st wing (vertical)
+     number of the 2nd wing (horizontal)
+     number of wing 1 rib connected to wing 2	(0-0, 1-last)
+     number of wing 2 rib connected to wing 1
+     number of wing 2 longeron connected to leading point of wing 1
+     number of wing 2 longeron connected to trailing point of wing 1
+     wing 2 surface for modification (0-bottom or exterior, 1-top or interior)
+End ("end")
+*/
+#######################
+begin_connections
+0
+end
