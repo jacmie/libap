@@ -32,9 +32,7 @@ var dir_883e42a949afd9b16c9901393356ea2e =
       [ "NACA_AIRFOIL", "classap_1_1_n_a_c_a___a_i_r_f_o_i_l.html", "classap_1_1_n_a_c_a___a_i_r_f_o_i_l" ]
     ] ],
     [ "ap_substitute.h", "ap__substitute_8h.html", [
-      [ "VARIABLE", "struct_v_a_r_i_a_b_l_e.html", "struct_v_a_r_i_a_b_l_e" ],
-      [ "OUT_VARIABLE", "struct_o_u_t___v_a_r_i_a_b_l_e.html", "struct_o_u_t___v_a_r_i_a_b_l_e" ],
-      [ "SUBSTITUTE", "class_s_u_b_s_t_i_t_u_t_e.html", "class_s_u_b_s_t_i_t_u_t_e" ]
+      [ "SUBSTITUTE", "classap_1_1_s_u_b_s_t_i_t_u_t_e.html", "classap_1_1_s_u_b_s_t_i_t_u_t_e" ]
     ] ],
     [ "ap_vector.h", "ap__vector_8h.html", "ap__vector_8h" ],
     [ "ap_xfoil.h", "ap__xfoil_8h.html", "ap__xfoil_8h" ]

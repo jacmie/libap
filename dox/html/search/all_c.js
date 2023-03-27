@@ -8,8 +8,7 @@ var searchData=
   ['lenyz_165',['LenYZ',['../classap_1_1_v_e_c_t_o_r__3.html#a6e5c873176c139ae4ffdcfee5f9595ab',1,'ap::VECTOR_3']]],
   ['less_166',['Less',['../class_g_l___t_e_c_h___f_o_n_t.html#a491751fc56b0d2bd8072286203775c55',1,'GL_TECH_FONT']]],
   ['linearfunction_167',['LinearFunction',['../namespaceap.html#a3c0b4d8f06a43d13a0aca8ea0f836ab7',1,'ap::LinearFunction(double x1, double y1, double x2, double y2, double &amp;A, double &amp;B)'],['../namespaceap.html#a5c3cb9663ee628109b4a6268f595e500',1,'ap::LinearFunction(double x1, double y1, double fiDeg, double &amp;A, double &amp;B)']]],
-  ['linenr_168',['LineNr',['../struct_o_u_t___v_a_r_i_a_b_l_e.html#ad31afcb14d06cfd42cd1dbbab97f7a86',1,'OUT_VARIABLE']]],
-  ['linesintersection_169',['LinesIntersection',['../namespaceap.html#a70620df8ddc89540968b5868d4ed8cef',1,'ap']]],
-  ['logs_5foff_170',['logs_off',['../class_d_i_a_l_o_g_s.html#a657a7f611dc035ab82bdec01ba096f5a',1,'DIALOGS']]],
-  ['logs_5fon_171',['logs_on',['../class_d_i_a_l_o_g_s.html#a1c55fb35ed4adebe94ca1f34e9f1c2b2',1,'DIALOGS']]]
+  ['linesintersection_168',['LinesIntersection',['../namespaceap.html#a70620df8ddc89540968b5868d4ed8cef',1,'ap']]],
+  ['logs_5foff_169',['logs_off',['../class_d_i_a_l_o_g_s.html#a657a7f611dc035ab82bdec01ba096f5a',1,'DIALOGS']]],
+  ['logs_5fon_170',['logs_on',['../class_d_i_a_l_o_g_s.html#a1c55fb35ed4adebe94ca1f34e9f1c2b2',1,'DIALOGS']]]
 ];

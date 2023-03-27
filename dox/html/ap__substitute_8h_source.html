@@ -93,66 +93,79 @@ $(document).ready(function(){initNavTree('ap__substitute_8h_source.html',''); in
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="struct_v_a_r_i_a_b_l_e.html">    7</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_v_a_r_i_a_b_l_e.html">VARIABLE</a></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{  </div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="struct_v_a_r_i_a_b_l_e.html#ab8bd558e82bb7f5c2d2bc65281317439">    9</a></span>&#160;    std::string <a class="code" href="struct_v_a_r_i_a_b_l_e.html#ab8bd558e82bb7f5c2d2bc65281317439">Name</a>;</div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="struct_v_a_r_i_a_b_l_e.html#a266ddbfdc8e7514450c02b7dab2f0ca5">   10</a></span>&#160;    std::string <a class="code" href="struct_v_a_r_i_a_b_l_e.html#a266ddbfdc8e7514450c02b7dab2f0ca5">Value</a>;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;};</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="struct_o_u_t___v_a_r_i_a_b_l_e.html">   13</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_o_u_t___v_a_r_i_a_b_l_e.html">OUT_VARIABLE</a></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{  </div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="struct_o_u_t___v_a_r_i_a_b_l_e.html#ad31afcb14d06cfd42cd1dbbab97f7a86">   15</a></span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="struct_o_u_t___v_a_r_i_a_b_l_e.html#ad31afcb14d06cfd42cd1dbbab97f7a86">LineNr</a>;</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="struct_o_u_t___v_a_r_i_a_b_l_e.html#af71c18c13aab3570d118b683c8c8831c">   16</a></span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="struct_o_u_t___v_a_r_i_a_b_l_e.html#af71c18c13aab3570d118b683c8c8831c">WordNr</a>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="struct_o_u_t___v_a_r_i_a_b_l_e.html#aafe930b99569dccc1b577b3c9d38b196">   17</a></span>&#160;    std::string <a class="code" href="struct_o_u_t___v_a_r_i_a_b_l_e.html#aafe930b99569dccc1b577b3c9d38b196">Word</a>;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;};</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="class_s_u_b_s_t_i_t_u_t_e.html">   20</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_s_u_b_s_t_i_t_u_t_e.html">SUBSTITUTE</a></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;{</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    std::string InPut;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    std::string OutPut;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">char</span> Prompt, EndPrompt;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordtype">bool</span> EndFlag;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    std::vector &lt;OUT_VARIABLE&gt; OutVar;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> AllLinesNr = 0;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="class_s_u_b_s_t_i_t_u_t_e.html#ae569ed0bcdec396cd97a3cab91234d77">   32</a></span>&#160;    std::vector &lt;VARIABLE&gt; <a class="code" href="class_s_u_b_s_t_i_t_u_t_e.html#ae569ed0bcdec396cd97a3cab91234d77">Var</a>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;       </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="class_s_u_b_s_t_i_t_u_t_e.html#a7f4882853055fef85348749b71dac294">SUBSTITUTE</a>();</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="class_s_u_b_s_t_i_t_u_t_e.html#a7f4882853055fef85348749b71dac294">SUBSTITUTE</a>(std::string InFile, std::string OutFile, <span class="keywordtype">char</span> Mark = <span class="charliteral">&#39;@&#39;</span>, <span class="keywordtype">char</span> EndMark = <span class="charliteral">&#39; &#39;</span>);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_s_u_b_s_t_i_t_u_t_e.html#a3ca5ab3832c042c859a6ee44b9216e01">Init</a>(std::string InFile, std::string OutFile, <span class="keywordtype">char</span> Mark = <span class="charliteral">&#39;@&#39;</span>, <span class="keywordtype">char</span> EndMark = <span class="charliteral">&#39; &#39;</span>);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="class_s_u_b_s_t_i_t_u_t_e.html#adf9d5d3caa01256f85c5e80d64f724b6">AddVariable</a>(std::string Name, std::string Value);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="class_s_u_b_s_t_i_t_u_t_e.html#adf9d5d3caa01256f85c5e80d64f724b6">AddVariable</a>(std::string Name, <span class="keywordtype">double</span> Value);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="class_s_u_b_s_t_i_t_u_t_e.html#a1c6016b141c9c8021f6ba15b07daeb8d">StripFromMarks</a>(std::string &amp;ToStrip);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="class_s_u_b_s_t_i_t_u_t_e.html#ade3bd6e445e627c447a98ed4fcba66f6">Insert</a>();</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="class_s_u_b_s_t_i_t_u_t_e.html#ab51b8fee197cd69021c5fdd2eb9ce1f0">Extract</a>();</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;};</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceap.html">ap</a> {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html">   15</a></span>&#160;<span class="keyword">class </span><a class="code" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html">SUBSTITUTE</a></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;{</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">struct </span>VARIABLE</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    {  </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        std::string name;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        std::string value;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    };</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keyword">struct </span>OUT_VARIABLE</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    {  </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> lineNr;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> wordNr;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        std::string  word;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    };</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    std::string inPut;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    std::string outPut;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordtype">char</span> prompt, endPrompt;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordtype">bool</span> endFlag;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    std::vector &lt;OUT_VARIABLE&gt; outVar;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> allLinesNr = 0;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#aef30918bd20678ba706cd087c7c8543d">   45</a></span>&#160;    std::vector &lt;VARIABLE&gt; <a class="code" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#aef30918bd20678ba706cd087c7c8543d">var</a>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#acd3f3c34ad6b10c0a07541693a2aab84">SUBSTITUTE</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#acd3f3c34ad6b10c0a07541693a2aab84">SUBSTITUTE</a>(std::string inFile, std::string outFile, <span class="keywordtype">char</span> mark = <span class="charliteral">&#39;@&#39;</span>, <span class="keywordtype">char</span> endMark = <span class="charliteral">&#39; &#39;</span>);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#a58dbdd56f16aab1b049313a0253730b9">Init</a>(std::string inFile, std::string outFile, <span class="keywordtype">char</span> mark = <span class="charliteral">&#39;@&#39;</span>, <span class="keywordtype">char</span> endMark = <span class="charliteral">&#39; &#39;</span>);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#af6b5b924c815295b675e28aa401271ba">AddVariable</a>(std::string name, std::string value);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#af6b5b924c815295b675e28aa401271ba">AddVariable</a>(std::string name, <span class="keywordtype">double</span> value);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#a9522024ab236eea56df4e0d37a60a284">StripFromMarks</a>(std::string &amp;toStrip);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#ada04dc9e3ea1dd9bb582e15872a5bd75">Insert</a>();</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#ae1d6e49d993361774e5e1beec70b231b">Extract</a>();</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;};</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;} <span class="comment">// namespace ap</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="astruct_v_a_r_i_a_b_l_e_html_a266ddbfdc8e7514450c02b7dab2f0ca5"><div class="ttname"><a href="struct_v_a_r_i_a_b_l_e.html#a266ddbfdc8e7514450c02b7dab2f0ca5">VARIABLE::Value</a></div><div class="ttdeci">std::string Value</div><div class="ttdef"><b>Definition:</b> ap_substitute.h:10</div></div>
-<div class="ttc" id="astruct_o_u_t___v_a_r_i_a_b_l_e_html_aafe930b99569dccc1b577b3c9d38b196"><div class="ttname"><a href="struct_o_u_t___v_a_r_i_a_b_l_e.html#aafe930b99569dccc1b577b3c9d38b196">OUT_VARIABLE::Word</a></div><div class="ttdeci">std::string Word</div><div class="ttdef"><b>Definition:</b> ap_substitute.h:17</div></div>
-<div class="ttc" id="astruct_v_a_r_i_a_b_l_e_html_ab8bd558e82bb7f5c2d2bc65281317439"><div class="ttname"><a href="struct_v_a_r_i_a_b_l_e.html#ab8bd558e82bb7f5c2d2bc65281317439">VARIABLE::Name</a></div><div class="ttdeci">std::string Name</div><div class="ttdef"><b>Definition:</b> ap_substitute.h:9</div></div>
-<div class="ttc" id="astruct_v_a_r_i_a_b_l_e_html"><div class="ttname"><a href="struct_v_a_r_i_a_b_l_e.html">VARIABLE</a></div><div class="ttdef"><b>Definition:</b> ap_substitute.h:7</div></div>
-<div class="ttc" id="aclass_s_u_b_s_t_i_t_u_t_e_html_ae569ed0bcdec396cd97a3cab91234d77"><div class="ttname"><a href="class_s_u_b_s_t_i_t_u_t_e.html#ae569ed0bcdec396cd97a3cab91234d77">SUBSTITUTE::Var</a></div><div class="ttdeci">std::vector&lt; VARIABLE &gt; Var</div><div class="ttdef"><b>Definition:</b> ap_substitute.h:32</div></div>
-<div class="ttc" id="astruct_o_u_t___v_a_r_i_a_b_l_e_html_ad31afcb14d06cfd42cd1dbbab97f7a86"><div class="ttname"><a href="struct_o_u_t___v_a_r_i_a_b_l_e.html#ad31afcb14d06cfd42cd1dbbab97f7a86">OUT_VARIABLE::LineNr</a></div><div class="ttdeci">unsigned int LineNr</div><div class="ttdef"><b>Definition:</b> ap_substitute.h:15</div></div>
-<div class="ttc" id="aclass_s_u_b_s_t_i_t_u_t_e_html"><div class="ttname"><a href="class_s_u_b_s_t_i_t_u_t_e.html">SUBSTITUTE</a></div><div class="ttdef"><b>Definition:</b> ap_substitute.h:20</div></div>
-<div class="ttc" id="astruct_o_u_t___v_a_r_i_a_b_l_e_html"><div class="ttname"><a href="struct_o_u_t___v_a_r_i_a_b_l_e.html">OUT_VARIABLE</a></div><div class="ttdef"><b>Definition:</b> ap_substitute.h:13</div></div>
-<div class="ttc" id="aclass_s_u_b_s_t_i_t_u_t_e_html_ade3bd6e445e627c447a98ed4fcba66f6"><div class="ttname"><a href="class_s_u_b_s_t_i_t_u_t_e.html#ade3bd6e445e627c447a98ed4fcba66f6">SUBSTITUTE::Insert</a></div><div class="ttdeci">int Insert()</div></div>
-<div class="ttc" id="astruct_o_u_t___v_a_r_i_a_b_l_e_html_af71c18c13aab3570d118b683c8c8831c"><div class="ttname"><a href="struct_o_u_t___v_a_r_i_a_b_l_e.html#af71c18c13aab3570d118b683c8c8831c">OUT_VARIABLE::WordNr</a></div><div class="ttdeci">unsigned int WordNr</div><div class="ttdef"><b>Definition:</b> ap_substitute.h:16</div></div>
-<div class="ttc" id="aclass_s_u_b_s_t_i_t_u_t_e_html_a7f4882853055fef85348749b71dac294"><div class="ttname"><a href="class_s_u_b_s_t_i_t_u_t_e.html#a7f4882853055fef85348749b71dac294">SUBSTITUTE::SUBSTITUTE</a></div><div class="ttdeci">SUBSTITUTE()</div></div>
-<div class="ttc" id="aclass_s_u_b_s_t_i_t_u_t_e_html_adf9d5d3caa01256f85c5e80d64f724b6"><div class="ttname"><a href="class_s_u_b_s_t_i_t_u_t_e.html#adf9d5d3caa01256f85c5e80d64f724b6">SUBSTITUTE::AddVariable</a></div><div class="ttdeci">int AddVariable(std::string Name, std::string Value)</div></div>
-<div class="ttc" id="aclass_s_u_b_s_t_i_t_u_t_e_html_a1c6016b141c9c8021f6ba15b07daeb8d"><div class="ttname"><a href="class_s_u_b_s_t_i_t_u_t_e.html#a1c6016b141c9c8021f6ba15b07daeb8d">SUBSTITUTE::StripFromMarks</a></div><div class="ttdeci">int StripFromMarks(std::string &amp;ToStrip)</div></div>
-<div class="ttc" id="aclass_s_u_b_s_t_i_t_u_t_e_html_ab51b8fee197cd69021c5fdd2eb9ce1f0"><div class="ttname"><a href="class_s_u_b_s_t_i_t_u_t_e.html#ab51b8fee197cd69021c5fdd2eb9ce1f0">SUBSTITUTE::Extract</a></div><div class="ttdeci">int Extract()</div></div>
-<div class="ttc" id="aclass_s_u_b_s_t_i_t_u_t_e_html_a3ca5ab3832c042c859a6ee44b9216e01"><div class="ttname"><a href="class_s_u_b_s_t_i_t_u_t_e.html#a3ca5ab3832c042c859a6ee44b9216e01">SUBSTITUTE::Init</a></div><div class="ttdeci">void Init(std::string InFile, std::string OutFile, char Mark='@', char EndMark=' ')</div></div>
+<div class="ttc" id="aclassap_1_1_s_u_b_s_t_i_t_u_t_e_html"><div class="ttname"><a href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html">ap::SUBSTITUTE</a></div><div class="ttdoc">Parser for substituting (inserting, or deriving) values of variables in files.</div><div class="ttdef"><b>Definition:</b> ap_substitute.h:15</div></div>
+<div class="ttc" id="aclassap_1_1_s_u_b_s_t_i_t_u_t_e_html_a58dbdd56f16aab1b049313a0253730b9"><div class="ttname"><a href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#a58dbdd56f16aab1b049313a0253730b9">ap::SUBSTITUTE::Init</a></div><div class="ttdeci">void Init(std::string inFile, std::string outFile, char mark='@', char endMark=' ')</div><div class="ttdoc">Init function.</div></div>
+<div class="ttc" id="aclassap_1_1_s_u_b_s_t_i_t_u_t_e_html_acd3f3c34ad6b10c0a07541693a2aab84"><div class="ttname"><a href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#acd3f3c34ad6b10c0a07541693a2aab84">ap::SUBSTITUTE::SUBSTITUTE</a></div><div class="ttdeci">SUBSTITUTE()=default</div><div class="ttdoc">Default constructor.</div></div>
+<div class="ttc" id="anamespaceap_html"><div class="ttname"><a href="namespaceap.html">ap</a></div><div class="ttdef"><b>Definition:</b> ap_airfoil.h:8</div></div>
+<div class="ttc" id="aclassap_1_1_s_u_b_s_t_i_t_u_t_e_html_ada04dc9e3ea1dd9bb582e15872a5bd75"><div class="ttname"><a href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#ada04dc9e3ea1dd9bb582e15872a5bd75">ap::SUBSTITUTE::Insert</a></div><div class="ttdeci">int Insert()</div><div class="ttdoc">Inserts variables values to the output file.</div></div>
+<div class="ttc" id="aclassap_1_1_s_u_b_s_t_i_t_u_t_e_html_a9522024ab236eea56df4e0d37a60a284"><div class="ttname"><a href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#a9522024ab236eea56df4e0d37a60a284">ap::SUBSTITUTE::StripFromMarks</a></div><div class="ttdeci">int StripFromMarks(std::string &amp;toStrip)</div><div class="ttdoc">Strips string from marks.</div></div>
+<div class="ttc" id="aclassap_1_1_s_u_b_s_t_i_t_u_t_e_html_aef30918bd20678ba706cd087c7c8543d"><div class="ttname"><a href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#aef30918bd20678ba706cd087c7c8543d">ap::SUBSTITUTE::var</a></div><div class="ttdeci">std::vector&lt; VARIABLE &gt; var</div><div class="ttdoc">Map of varibles.</div><div class="ttdef"><b>Definition:</b> ap_substitute.h:45</div></div>
+<div class="ttc" id="aclassap_1_1_s_u_b_s_t_i_t_u_t_e_html_af6b5b924c815295b675e28aa401271ba"><div class="ttname"><a href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#af6b5b924c815295b675e28aa401271ba">ap::SUBSTITUTE::AddVariable</a></div><div class="ttdeci">int AddVariable(std::string name, std::string value)</div><div class="ttdoc">Adds variable to the ap::SUBSTITUTE object.</div></div>
+<div class="ttc" id="aclassap_1_1_s_u_b_s_t_i_t_u_t_e_html_ae1d6e49d993361774e5e1beec70b231b"><div class="ttname"><a href="classap_1_1_s_u_b_s_t_i_t_u_t_e.html#ae1d6e49d993361774e5e1beec70b231b">ap::SUBSTITUTE::Extract</a></div><div class="ttdeci">int Extract()</div><div class="ttdoc">Extracts variables values from the output file.</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_883e42a949afd9b16c9901393356ea2e.html">ap</a></li><li class="navelem"><a class="el" href="ap__substitute_8h.html">ap_substitute.h</a></li>
-    <li class="footer">Generated on Sun Mar 26 2023 23:16:54 for libap by
+    <li class="footer">Generated on Mon Mar 27 2023 22:03:38 for libap by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

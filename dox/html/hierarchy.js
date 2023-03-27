@@ -13,9 +13,7 @@ var hierarchy =
     [ "GNUPLOT", "class_g_n_u_p_l_o_t.html", null ],
     [ "ap::MATRIX_3x3< real >", "classap_1_1_m_a_t_r_i_x__3x3.html", null ],
     [ "ap::NACA_AIRFOIL", "classap_1_1_n_a_c_a___a_i_r_f_o_i_l.html", null ],
-    [ "OUT_VARIABLE", "struct_o_u_t___v_a_r_i_a_b_l_e.html", null ],
-    [ "SUBSTITUTE", "class_s_u_b_s_t_i_t_u_t_e.html", null ],
-    [ "VARIABLE", "struct_v_a_r_i_a_b_l_e.html", null ],
+    [ "ap::SUBSTITUTE", "classap_1_1_s_u_b_s_t_i_t_u_t_e.html", null ],
     [ "ap::VECTOR_3< real >", "classap_1_1_v_e_c_t_o_r__3.html", null ],
     [ "XFOIL", "class_x_f_o_i_l.html", null ]
 ];

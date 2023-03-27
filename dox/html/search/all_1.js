@@ -2,7 +2,7 @@ var searchData=
 [
   ['a_1',['A',['../class_g_l___t_e_c_h___f_o_n_t.html#a299c373069357c5254fff76afc226010',1,'GL_TECH_FONT']]],
   ['a_5fx_2',['A_x',['../namespaceap.html#a70642ef37faf9693a1eb48f2906180f3',1,'ap']]],
-  ['addvariable_3',['AddVariable',['../class_s_u_b_s_t_i_t_u_t_e.html#adf9d5d3caa01256f85c5e80d64f724b6',1,'SUBSTITUTE::AddVariable(std::string Name, std::string Value)'],['../class_s_u_b_s_t_i_t_u_t_e.html#a39e67db8ef0c19df8de30388aa5458cf',1,'SUBSTITUTE::AddVariable(std::string Name, double Value)']]],
+  ['addvariable_3',['AddVariable',['../classap_1_1_s_u_b_s_t_i_t_u_t_e.html#af6b5b924c815295b675e28aa401271ba',1,'ap::SUBSTITUTE::AddVariable(std::string name, std::string value)'],['../classap_1_1_s_u_b_s_t_i_t_u_t_e.html#a39f6aa497e90a1e2058e125f4af341d2',1,'ap::SUBSTITUTE::AddVariable(std::string name, double value)']]],
   ['airfoil_4',['AIRFOIL',['../classap_1_1_a_i_r_f_o_i_l.html',1,'ap::AIRFOIL'],['../class_x_f_o_i_l.html#a9aea51010cf27ae4620c798c9d74c6cf',1,'XFOIL::Airfoil()'],['../classap_1_1_a_i_r_f_o_i_l.html#a7c155f9dd8d4732e81dbf243a76e2ae5',1,'ap::AIRFOIL::AIRFOIL()']]],
   ['airfoil_5fin1_5',['airfoil_in1',['../class_x_f_o_i_l.html#a767da083d976de3c0407e3b702b25a1d',1,'XFOIL']]],
   ['airfoil_5fin2_6',['airfoil_in2',['../class_x_f_o_i_l.html#a1cd118eb5f7f54af4aa3e422aa0583f7',1,'XFOIL']]],

@@ -9,8 +9,5 @@ var annotated_dup =
     [ "GL_TECH_FONT", "class_g_l___t_e_c_h___f_o_n_t.html", "class_g_l___t_e_c_h___f_o_n_t" ],
     [ "GL_TEXT_LINE", "class_g_l___t_e_x_t___l_i_n_e.html", "class_g_l___t_e_x_t___l_i_n_e" ],
     [ "GNUPLOT", "class_g_n_u_p_l_o_t.html", "class_g_n_u_p_l_o_t" ],
-    [ "OUT_VARIABLE", "struct_o_u_t___v_a_r_i_a_b_l_e.html", "struct_o_u_t___v_a_r_i_a_b_l_e" ],
-    [ "SUBSTITUTE", "class_s_u_b_s_t_i_t_u_t_e.html", "class_s_u_b_s_t_i_t_u_t_e" ],
-    [ "VARIABLE", "struct_v_a_r_i_a_b_l_e.html", "struct_v_a_r_i_a_b_l_e" ],
     [ "XFOIL", "class_x_f_o_i_l.html", "class_x_f_o_i_l" ]
 ];

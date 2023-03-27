@@ -7,7 +7,6 @@
 #include "JMfilesHandling.h"
 #include "JMGnuPlotPipe.h"
 #include "JMexternalExe.h"
-#include "JMsubstitute.h"
 #include "JMfilter.h"
 #include "JMdialogs.h"
 
@@ -22,32 +21,6 @@
 int main(int argc, char *argv[])
 {
 	using namespace std;
-	
-    // *** JMsubstite ***
-
-	clog << endl << "*** JMsubstitute ***" << endl << endl;
-
-	// === Derieve ===
-	
-	SUBSTITUTE SubGet("/home/jm/C++/Core/FlowTree/projects/tutorials/1_Basic/Tut-BasicTemplate.dat", "/home/jm/ramdisk/TutBasic.dat", '@', '&');
-	
-	//SubGet.AddVariable("Out", 0);
-	/*SubD.AddVariable("@AoA&", 0);
-	SubD.AddVariable("@CD", 0);
-	SubD.AddVariable("CM&", 0);
-    SubD.AddVariable("", 0);*/
-
-    //SUBSTITUTE SubD("/home/JM/C++/Core/FlowTree/FT_Projects/SqTemplate.dat", "/home/JM/C++/Core/FlowTree/FT_Projects/SqOut.dat", '@', '&');
-	//SubD.AddVariable("SqRes", 0);
-
-    clog << endl;
-
-	SubGet.Extract();
-
-	for(unsigned int i=0; i<SubGet.Var.size(); i++)
-	{
-		clog << SubGet.Var[i].Name << "\t" << SubGet.Var[i].Value << endl;
-	}
 	
     // *** JMfilesHandling ***
 
@@ -524,58 +497,6 @@ int main(int argc, char *argv[])
 	ExeCreateProcess(Arg);
 
 #endif
-
-	// *** JMsubstite ***
-
-	clog << endl << "*** JMsubstitute ***" << endl << endl;
-
-	// === Insert ===
-	
-	//SUBSTITUTE Sub("TestDir/JMsubstitute/Sub.txt", "TestDir/JMsubstitute/SubOut.txt", '%');
-	SUBSTITUTE Sub("TestDir/JMsubstitute/Sub2.txt", "TestDir/JMsubstitute/SubOut.txt", '@', '&');
-
-    clog << endl;
-
-	Sub.AddVariable("0", 111);
-	Sub.AddVariable("1", 222);
-	Sub.AddVariable("uno", 333);
-	Sub.AddVariable("due", "444");
-	Sub.AddVariable("tre", "555");
-    Sub.AddVariable("ff", "");
-    Sub.AddVariable("mod", "modify");
-	Sub.AddVariable("naca", 2412);
-
-    for(unsigned int i=0; i<Sub.Var.size(); i++)   
-    {
-        clog << Sub.Var[i].Name << "\t" << Sub.Var[i].Value << endl;
-    }
-    clog << endl;
-
-    Sub.Insert();
-	
-    clog << endl;
-
-	// === Derieve ===
-	
-	SUBSTITUTE SubD("TestDir/JMsubstitute/XfoilDataTemplate.dat", "TestDir/JMsubstitute/XfoilData.dat", '@', '&');
-	
-	SubD.AddVariable("@CL", 0);
-	SubD.AddVariable("@AoA&", 0);
-	SubD.AddVariable("@CD", 0);
-	SubD.AddVariable("CM&", 0);
-    SubD.AddVariable("", 0);
-
-    //SUBSTITUTE SubD("/home/JM/C++/Core/FlowTree/FT_Projects/SqTemplate.dat", "/home/JM/C++/Core/FlowTree/FT_Projects/SqOut.dat", '@', '&');
-	//SubD.AddVariable("SqRes", 0);
-
-    clog << endl;
-
-	SubD.Extract();
-
-	for(unsigned int i=0; i<SubD.Var.size(); i++)
-	{
-		clog << SubD.Var[i].Name << "\t" << SubD.Var[i].Value << endl;
-	}
 
 	// *** Filters ***
 	
