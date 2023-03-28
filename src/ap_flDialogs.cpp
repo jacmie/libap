@@ -14,6 +14,8 @@
 #include <FL/fl_draw.H>
 #include <FL/fl_ask.H>
 
+namespace ap {
+
 DIALOG_WIN::DIALOG_WIN(int W, int H, const char *l) : Fl_Window(W, H, l) 
 {
 }
@@ -568,3 +570,4 @@ const char* DIALOGS::password(const char *fmt, const char *defstr, ...)
 	return r;
 }
 
+}

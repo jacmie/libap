@@ -9,10 +9,14 @@
 	#include <grp.h>
 	#include <sys/stat.h>
 	
-	int  GetUserGroups(std::vector <gid_t> &Groups);
-	int  CheckPermissions(std::string Path, std::vector <bool> &Results);
+namespace ap {
+	int GetUserGroups(std::vector <gid_t> &groups);
+	int CheckPermissions(std::string path, std::vector <bool> &results);
+} // namespace ap
 #endif
 
-std::string Browse(const char *Filt, int DialogType, bool AskOverwriteFlag=1);
-	
+namespace ap {
+std::string Browse(const char *filt, int dialogType, bool askOverwriteFlag=1);
+} // namespace ap
+
 #endif //AP_FILES_HANDLING_H

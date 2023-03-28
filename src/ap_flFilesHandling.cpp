@@ -15,61 +15,59 @@
 
 #include "ap_flDialogs.h"
 
-std::string Browse_FileExists(std::string FileName, bool AskOverwriteFlag)
-{
+namespace ap {
+
+std::string Browse_FileExists(std::string fileName, bool askOverwriteFlag) {
 	namespace fs = std::filesystem;
 
-    DIALOGS Dialog;
+    DIALOGS dialog;
 
-    if(AskOverwriteFlag && fs::exists(FileName) && !Dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", FileName.c_str()) ) FileName = ""; //Canceled
-    return FileName;
+    if(askOverwriteFlag && fs::exists(fileName) && !dialog.choice_s("File exists:\n%s\n\nDo you want to overwrite it?", fileName.c_str()) ) fileName = ""; //Canceled
+    return fileName;
 }
 
-std::string Browse(const char *Filt, int DialogType, bool AskOverwriteFlag)
-{
+std::string Browse(const char *filter, int dialogType, bool askOverwriteFlag) {
     Fl_Native_File_Chooser *ch = new Fl_Native_File_Chooser();
-    ch -> filter(Filt);
-    ch -> type(DialogType);
+    ch -> filter(filter);
+    ch -> type(dialogType);
     ch -> show();
 
-    std::string FileName;
+    std::string fileName;
 
-    if(ch -> filename())    FileName = ch -> filename();
-    else                    FileName = ""; //Canceled
+    if(ch -> filename())    fileName = ch -> filename();
+    else                    fileName = ""; //Canceled
 
-    if(DialogType == 4 && FileName.length() > 0) // Check Extension while saving
-    {
-	    // === Extract Choosen Filter ===
+    if(dialogType == 4 && fileName.length() > 0) { // Check Extension while saving
+	    // === Extract Chosen Filter ===
 
-    	int Start, End=0;
-    	std::string FilterExtension;
-    	std::string Filter = ch -> filter();
+    	int start, end=0;
+    	std::string filterExtension;
+    	std::string filter = ch -> filter();
 
     	for(int i=0; i<=ch->filter_value(); i++)
     	{
-    		Start = Filter.find_first_of('*', End);
-    		End   = Filter.find_first_of ('\n', Start);
+    		start = filter.find_first_of('*', end);
+    		end   = filter.find_first_of ('\n', start);
 		
-    		FilterExtension = Filter.substr(Start+1, End-Start-1);
+    		filterExtension = filter.substr(start+1, end-start-1);
     	}
 	
     	// === Extract File Extension ===
 	
-    	int Id = FileName.find_last_of('.');
+    	int id = fileName.find_last_of('.');
 
-    	if(Id<0) return Browse_FileExists(FileName + FilterExtension, AskOverwriteFlag); // No extension, add
-        if(Id>=0 && !boost::iequals(FileName.substr(Id), FilterExtension)) return Browse_FileExists(FileName + FilterExtension, AskOverwriteFlag); // Extension different than in the filter, add
+    	if(id<0) return Browse_FileExists(fileName + filterExtension, askOverwriteFlag); // No extension, add
+        if(id>=0 && !boost::iequals(fileName.substr(id), filterExtension)) return Browse_FileExists(fileName + filterExtension, askOverwriteFlag); // Extension different than in the filter, add
 
-        return Browse_FileExists(FileName, AskOverwriteFlag);
+        return Browse_FileExists(fileName, askOverwriteFlag);
     }
 
-    return FileName;
+    return fileName;
 }
 
 #ifndef WIN32
 
-int GetUserGroups(std::vector <gid_t> &Groups)
-{
+int GetUserGroups(std::vector <gid_t> &Groups) {
 	int GroupsNr = 1;
 	std::string UserName;
 
@@ -89,161 +87,138 @@ int GetUserGroups(std::vector <gid_t> &Groups)
 	return 0;
 }
 
-int CheckPermissions(std::string Path, std::vector <bool> &Results)
-{
+int CheckPermissions(std::string path, std::vector <bool> &results) {
 	namespace fs = std::filesystem;
 
-    DIALOGS Dialog;
+    DIALOGS dialog;
 
 	// === Get the File info ===
 	
-	struct stat Info;
+	struct stat info;
 
-	if( -1 == stat(Path.c_str(), &Info) )
-	{
-        Dialog.message("File Permissions couldn't be checked!!!");
+	if( -1 == stat(path.c_str(), &info) ) {
+        dialog.message("File Permissions couldn't be checked!!!");
 		return 1;
 	}
 
-	struct passwd *pw = getpwuid(Info.st_uid);
-	struct group  *gr = getgrgid(Info.st_gid);
+	struct passwd *pw = getpwuid(info.st_uid);
+	struct group  *gr = getgrgid(info.st_gid);
 
-	if( pw == NULL || gr == NULL )
-	{
-        Dialog.message("File Permissions couldn't be checked!!!");
+	if( pw == NULL || gr == NULL ) {
+        dialog.message("File Permissions couldn't be checked!!!");
 		return 1;
 	}
 
-	std::string FileOwner = pw->pw_name;
-	std::string FileGroup = gr->gr_name;
+	std::string fileOwner = pw->pw_name;
+	std::string fileGroup = gr->gr_name;
 
-	fs::perms Perms = fs::status(Path).permissions();
+	fs::perms perms = fs::status(path).permissions();
 	
 	// === Get User info ===
 	
-	std::vector <gid_t> Groups;
-	GetUserGroups(Groups);
+	std::vector <gid_t> groups;
+	GetUserGroups(groups);
 
-	bool ReadPermRes 	= 0;
-	bool WritePermRes	= 0;
-	bool ExePermRes		= 0;
+	bool readPermRes 	= 0;
+	bool writePermRes	= 0;
+	bool exePermRes		= 0;
 
 	// === Check the Permissions ===
 
-	std::string UserGroupsName;
+	std::string userGroupsName;
 
 	// --- Read ---
 	
-	if( (Perms & fs::perms::others_read) != fs::perms::none )
-	{
-		ReadPermRes	= 1;
+	if( (perms & fs::perms::others_read) != fs::perms::none ) {
+		readPermRes	= 1;
 	}
 
-	else
-	{
-		if( (Perms & fs::perms::group_read) != fs::perms::none )
-		{
-			for(unsigned int g=0; g<Groups.size(); g++) 
-			{
-				gr = getgrgid(Groups[g]);
-				UserGroupsName = gr->gr_name;
+	else {
+		if( (perms & fs::perms::group_read) != fs::perms::none ) {
+			for(unsigned int g=0; g<groups.size(); g++) {
+				gr = getgrgid(groups[g]);
+				userGroupsName = gr->gr_name;
 
-				if( !UserGroupsName.compare(FileGroup) ) 
-				{
-					ReadPermRes = 1; 
+				if( !userGroupsName.compare(fileGroup) ) {
+					readPermRes = 1; 
 					break;
 				}
 			}
 		}
 		
-		else
-		{
-	 		if( (Perms & fs::perms::owner_read) != fs::perms::none)
-			{
-				if( !FileOwner.compare(getenv("USER")) ) ReadPermRes = 1; 
+		else {
+	 		if( (perms & fs::perms::owner_read) != fs::perms::none) {
+				if( !fileOwner.compare(getenv("USER")) ) readPermRes = 1; 
 			}
 		}
 	} 
 
 	// --- Write ---
 	
-	if( (Perms & fs::perms::others_write) != fs::perms::none )
-	{
-		WritePermRes = 1;
+	if( (perms & fs::perms::others_write) != fs::perms::none ) {
+		writePermRes = 1;
 	}
 
-	else
-	{
-		if( (Perms & fs::perms::group_write) != fs::perms::none )
-		{
-			for(unsigned int g=0; g<Groups.size(); g++) 
-			{
-				gr = getgrgid(Groups[g]);
-				UserGroupsName = gr->gr_name;
+	else {
+		if( (perms & fs::perms::group_write) != fs::perms::none ) {
+			for(unsigned int g=0; g<groups.size(); g++) {
+				gr = getgrgid(groups[g]);
+				userGroupsName = gr->gr_name;
 
-				if( !UserGroupsName.compare(FileGroup) ) 
-				{
-					WritePermRes = 1; 
+				if( !userGroupsName.compare(fileGroup) ) {
+					writePermRes = 1; 
 					break;
 				}
 			}
 		}
 		
-		else
-		{
-	 		if( (Perms & fs::perms::owner_write) != fs::perms::none)
-			{
-				if( !FileOwner.compare(getenv("USER")) ) WritePermRes = 1; 
+		else {
+	 		if( (perms & fs::perms::owner_write) != fs::perms::none) {
+				if( !fileOwner.compare(getenv("USER")) ) writePermRes = 1; 
 			}
 		}
 	} 
 
 	// --- Execute ---
 
-	if( (Perms & fs::perms::others_exec) != fs::perms::none )
-	{
-		ExePermRes = 1;
+	if( (perms & fs::perms::others_exec) != fs::perms::none ) {
+		exePermRes = 1;
 	}
 
-	else
-	{
-		if( (Perms & fs::perms::group_exec) != fs::perms::none )
-		{
-			for(unsigned int g=0; g<Groups.size(); g++) 
-			{
-				gr = getgrgid(Groups[g]);
-				UserGroupsName = gr->gr_name;
+	else {
+		if( (perms & fs::perms::group_exec) != fs::perms::none ) {
+			for(unsigned int g=0; g<groups.size(); g++) {
+				gr = getgrgid(groups[g]);
+				userGroupsName = gr->gr_name;
 
-				if( !UserGroupsName.compare(FileGroup) ) 
-				{
-					ExePermRes = 1; 
+				if( !userGroupsName.compare(fileGroup) ) {
+					exePermRes = 1; 
 					break;
 				}
 			}
 		}
 		
-		else
-		{
-	 		if( (Perms & fs::perms::owner_exec) != fs::perms::none)
-			{
-				if( !FileOwner.compare(getenv("USER")) ) ExePermRes = 1; 
+		else {
+	 		if( (perms & fs::perms::owner_exec) != fs::perms::none) {
+				if( !fileOwner.compare(getenv("USER")) ) exePermRes = 1; 
 			}
 		}
 	} 
 
 	// === Resuslts ===
 	
-    if(Results.size() < 3)
-	{
-        Dialog.message("Permissions results table too small!!!");
+    if(results.size() < 3) {
+        dialog.message("Permissions results table too small!!!");
 		return 1; 
 	}
 
-    Results[0] = ReadPermRes;
-    Results[1] = WritePermRes;
-    Results[2] = ExePermRes;
+    results[0] = readPermRes;
+    results[1] = writePermRes;
+    results[2] = exePermRes;
 	
 	return 0;
 }
 
 #endif
+
+} // namespace ap

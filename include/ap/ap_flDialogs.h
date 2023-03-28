@@ -11,18 +11,16 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Window.H>
 
-class DIALOG_WIN : public Fl_Window 
-{
-	public:
- 
+namespace ap {
+
+struct DIALOG_WIN : public Fl_Window {
 	int *win_close;
 
 	DIALOG_WIN(int W, int H, const char *l=0);
   	void hide();
 };
 
-class DIALOG_FORM
-{
+class DIALOG_FORM {
 	int  button_val[3] = {0, 1, 2};
 	
 	Fl_Box 		*icon;
@@ -167,5 +165,7 @@ class DIALOGS
 	int innards(const char* fmt, const char *b0, const char *b1, const char *b2);
 	const char* input_innards(const char* fmt, const char* defstr, uchar type);
 };
+
+} // namespace ap
 
 #endif //AP_DIALOGS_H
