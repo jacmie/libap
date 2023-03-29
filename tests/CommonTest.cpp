@@ -21,52 +21,6 @@
 int main(int argc, char *argv[])
 {
 	using namespace std;
-	
-    // *** JMfilesHandling ***
-
-	clog << endl << "*** JMfilesHandling ***" << endl << endl;
-	
-#ifndef _WIN32
-    clog << "Permissions:" << endl;
-
-    std::vector <bool> PermResults;
-    PermResults.resize(3);
-    
-    clog << "./TestDir/JMsubstitute/XfoilData.dat\t" << CheckPermissions("./TestDir/JMsubstitute/XfoilData.dat", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
-    clog << "./TestDir/JMsubstitute/Sub.txt\t" << CheckPermissions("./TestDir/JMsubstitute/Sub.txt", PermResults) << "\t" << PermResults[0] << "\t" << PermResults[1] << "\t" << PermResults[2] << endl;
-#endif
-	
-    //std::string FilePath = Browse("All files \t*.{dat,txt}\nData files \t*.dat\nText files \t*.txt", 0);
-    //clog << Browse("Lickey \t*.lk", 4) << endl;
-    //clog << endl << FilePath << endl << endl;
-	
-    // *** JMdialogs ***
-
-	clog << endl << "*** JMdialogs ***" << endl << endl;
-
-	//DIALOGS Dialog;
-
-    //Dialog.alert("%s", "bala");
-    /*Dialog.alert("Alert ps!!!");
-    Dialog.alert("Alert %s_%i!!!", "Blab", 989);
-    
-	Dialog.form_label("Kra_kra");
-	Dialog.message_box(FL_NO_BOX);
-	Dialog.message_color(FL_BLACK, 92);
-	Dialog.icon_image(&OM_logo);
-    Dialog.message("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 %f 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e\n3e3e3e3e3e3e 3e3eee3Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3e 3e3eee3!!!", 2.222222222);
-	
-	Dialog.icon_label("?!?");
-	Dialog.icon_file("./FlowTree_40.xpm", 1);
-    clog << Dialog.choice_s("Simple %s/%s:", "Yes", "No") << endl;
-	clog << Dialog.choice("%s Asce3e3e %s e3e3e3e 3e 33e 3e3e3er2r2ttt 222       2r2r2r2rr2r2r  2r2r 2r2tt2t2?1?", "Cancel", "No", "Yes", "Terefere", "RERERE") << endl;
-	
-	Dialog.icon_file("./IV_logo_gray_40.xpm");
-    clog << Dialog.input("Hello World e 3e 3e3eeeeeeeeeeeeee3e3e3 3e3 e3e3 e3e3e3e3eeee 3e3e3e3eee  3e3e3e3e3e3e 3e3eee3\n2r222r 22ty2t2t 2r r2r2r 22r2r 2 r2rr  2r22!!!", "BLAB") << endl; 
-	
-	Dialog.form_color(FL_BLUE);
-    clog << Dialog.password("Hello World!!!", "BLOB") << endl;
-	*/
 
 	// *** JMconvert ***
 

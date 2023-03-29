@@ -9,9 +9,7 @@ var dir_883e42a949afd9b16c9901393356ea2e =
     [ "ap_externalExe.h", "ap__external_exe_8h.html", "ap__external_exe_8h" ],
     [ "ap_filter.h", "ap__filter_8h.html", "ap__filter_8h" ],
     [ "ap_flDialogs.h", "ap__fl_dialogs_8h.html", [
-      [ "DIALOG_WIN", "class_d_i_a_l_o_g___w_i_n.html", "class_d_i_a_l_o_g___w_i_n" ],
-      [ "DIALOG_FORM", "class_d_i_a_l_o_g___f_o_r_m.html", "class_d_i_a_l_o_g___f_o_r_m" ],
-      [ "DIALOGS", "class_d_i_a_l_o_g_s.html", "class_d_i_a_l_o_g_s" ]
+      [ "DIALOGS", "classap_1_1_d_i_a_l_o_g_s.html", "classap_1_1_d_i_a_l_o_g_s" ]
     ] ],
     [ "ap_flFilesHandling.h", "ap__fl_files_handling_8h.html", "ap__fl_files_handling_8h" ],
     [ "ap_glFLTKcolor.h", "ap__gl_f_l_t_kcolor_8h.html", "ap__gl_f_l_t_kcolor_8h" ],

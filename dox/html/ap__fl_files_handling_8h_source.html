@@ -98,23 +98,36 @@ $(document).ready(function(){initNavTree('ap__fl_files_handling_8h_source.html',
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">    #include &lt;grp.h&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">    #include &lt;sys/stat.h&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="ap__fl_files_handling_8h.html#a31d39117cd2f815ea56dd690993192d4">GetUserGroups</a>(std::vector &lt;gid_t&gt; &amp;Groups);</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="ap__fl_files_handling_8h.html#a95d759f6ff65f0e0c230e4bf62265b5a">CheckPermissions</a>(std::string Path, std::vector &lt;bool&gt; &amp;Results);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceap.html">ap</a> {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    </div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;std::string <a class="code" href="ap__fl_files_handling_8h.html#a5f4f5f742aa5b907876d7cd314d2f60c">Browse</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *Filt, <span class="keywordtype">int</span> DialogType, <span class="keywordtype">bool</span> AskOverwriteFlag=1);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#endif //AP_FILES_HANDLING_H</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="namespaceap.html#ad4fa7dfaddd91be8069f932e8c37e3c4">GetUserGroups</a>(std::vector &lt;gid_t&gt; &amp;groups);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="namespaceap.html#acb3cbe730051f800e220c17440c47ae5">CheckPermissions</a>(std::string path, std::vector &lt;bool&gt; &amp;results);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;} <span class="comment">// namespace ap</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceap.html">ap</a> {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    std::string <a class="code" href="namespaceap.html#a44a6242b0bb58bc17b5ca5be1f0f45b1">Browse</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filt, <span class="keywordtype">int</span> dialogType, <span class="keywordtype">bool</span> askOverwriteFlag=1);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;} <span class="comment">// namespace ap</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#endif //AP_FILES_HANDLING_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aap__fl_files_handling_8h_html_a5f4f5f742aa5b907876d7cd314d2f60c"><div class="ttname"><a href="ap__fl_files_handling_8h.html#a5f4f5f742aa5b907876d7cd314d2f60c">Browse</a></div><div class="ttdeci">std::string Browse(const char *Filt, int DialogType, bool AskOverwriteFlag=1)</div></div>
-<div class="ttc" id="aap__fl_files_handling_8h_html_a31d39117cd2f815ea56dd690993192d4"><div class="ttname"><a href="ap__fl_files_handling_8h.html#a31d39117cd2f815ea56dd690993192d4">GetUserGroups</a></div><div class="ttdeci">int GetUserGroups(std::vector&lt; gid_t &gt; &amp;Groups)</div></div>
-<div class="ttc" id="aap__fl_files_handling_8h_html_a95d759f6ff65f0e0c230e4bf62265b5a"><div class="ttname"><a href="ap__fl_files_handling_8h.html#a95d759f6ff65f0e0c230e4bf62265b5a">CheckPermissions</a></div><div class="ttdeci">int CheckPermissions(std::string Path, std::vector&lt; bool &gt; &amp;Results)</div></div>
+<div class="ttc" id="anamespaceap_html_acb3cbe730051f800e220c17440c47ae5"><div class="ttname"><a href="namespaceap.html#acb3cbe730051f800e220c17440c47ae5">ap::CheckPermissions</a></div><div class="ttdeci">int CheckPermissions(std::string path, std::vector&lt; bool &gt; &amp;results)</div><div class="ttdoc">Checks permitions to the file.</div></div>
+<div class="ttc" id="anamespaceap_html"><div class="ttname"><a href="namespaceap.html">ap</a></div><div class="ttdef"><b>Definition:</b> ap_airfoil.h:8</div></div>
+<div class="ttc" id="anamespaceap_html_ad4fa7dfaddd91be8069f932e8c37e3c4"><div class="ttname"><a href="namespaceap.html#ad4fa7dfaddd91be8069f932e8c37e3c4">ap::GetUserGroups</a></div><div class="ttdeci">int GetUserGroups(std::vector&lt; gid_t &gt; &amp;groups)</div><div class="ttdoc">Gets user groups.</div></div>
+<div class="ttc" id="anamespaceap_html_a44a6242b0bb58bc17b5ca5be1f0f45b1"><div class="ttname"><a href="namespaceap.html#a44a6242b0bb58bc17b5ca5be1f0f45b1">ap::Browse</a></div><div class="ttdeci">std::string Browse(const char *filt, int dialogType, bool askOverwriteFlag=1)</div><div class="ttdoc">File, or directory dialog window.</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_883e42a949afd9b16c9901393356ea2e.html">ap</a></li><li class="navelem"><a class="el" href="ap__fl_files_handling_8h.html">ap_flFilesHandling.h</a></li>
-    <li class="footer">Generated on Mon Mar 27 2023 22:03:38 for libap by
+    <li class="footer">Generated on Wed Mar 29 2023 22:13:49 for libap by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('ap__fl_files_handling_8h.html',''); in
 
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">ap_flFilesHandling.h File Reference</div>  </div>
@@ -110,103 +111,30 @@ Include dependency graph for ap_flFilesHandling.h:</div>
 </div>
 <p><a href="ap__fl_files_handling_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceap"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceap.html">ap</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a31d39117cd2f815ea56dd690993192d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ap__fl_files_handling_8h.html#a31d39117cd2f815ea56dd690993192d4">GetUserGroups</a> (std::vector&lt; gid_t &gt; &amp;Groups)</td></tr>
-<tr class="separator:a31d39117cd2f815ea56dd690993192d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95d759f6ff65f0e0c230e4bf62265b5a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ap__fl_files_handling_8h.html#a95d759f6ff65f0e0c230e4bf62265b5a">CheckPermissions</a> (std::string Path, std::vector&lt; bool &gt; &amp;Results)</td></tr>
-<tr class="separator:a95d759f6ff65f0e0c230e4bf62265b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f4f5f742aa5b907876d7cd314d2f60c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ap__fl_files_handling_8h.html#a5f4f5f742aa5b907876d7cd314d2f60c">Browse</a> (const char *Filt, int DialogType, bool AskOverwriteFlag=1)</td></tr>
-<tr class="separator:a5f4f5f742aa5b907876d7cd314d2f60c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4fa7dfaddd91be8069f932e8c37e3c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceap.html#ad4fa7dfaddd91be8069f932e8c37e3c4">ap::GetUserGroups</a> (std::vector&lt; gid_t &gt; &amp;groups)</td></tr>
+<tr class="memdesc:ad4fa7dfaddd91be8069f932e8c37e3c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets user groups.  <a href="namespaceap.html#ad4fa7dfaddd91be8069f932e8c37e3c4">More...</a><br /></td></tr>
+<tr class="separator:ad4fa7dfaddd91be8069f932e8c37e3c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb3cbe730051f800e220c17440c47ae5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceap.html#acb3cbe730051f800e220c17440c47ae5">ap::CheckPermissions</a> (std::string path, std::vector&lt; bool &gt; &amp;results)</td></tr>
+<tr class="memdesc:acb3cbe730051f800e220c17440c47ae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks permitions to the file.  <a href="namespaceap.html#acb3cbe730051f800e220c17440c47ae5">More...</a><br /></td></tr>
+<tr class="separator:acb3cbe730051f800e220c17440c47ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44a6242b0bb58bc17b5ca5be1f0f45b1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceap.html#a44a6242b0bb58bc17b5ca5be1f0f45b1">ap::Browse</a> (const char *filt, int dialogType, bool askOverwriteFlag=1)</td></tr>
+<tr class="memdesc:a44a6242b0bb58bc17b5ca5be1f0f45b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">File, or directory dialog window.  <a href="namespaceap.html#a44a6242b0bb58bc17b5ca5be1f0f45b1">More...</a><br /></td></tr>
+<tr class="separator:a44a6242b0bb58bc17b5ca5be1f0f45b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a5f4f5f742aa5b907876d7cd314d2f60c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f4f5f742aa5b907876d7cd314d2f60c">&#9670;&nbsp;</a></span>Browse()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string Browse </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>Filt</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>DialogType</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>AskOverwriteFlag</em> = <code>1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a95d759f6ff65f0e0c230e4bf62265b5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a95d759f6ff65f0e0c230e4bf62265b5a">&#9670;&nbsp;</a></span>CheckPermissions()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int CheckPermissions </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>Path</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; bool &gt; &amp;&#160;</td>
-          <td class="paramname"><em>Results</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a31d39117cd2f815ea56dd690993192d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31d39117cd2f815ea56dd690993192d4">&#9670;&nbsp;</a></span>GetUserGroups()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int GetUserGroups </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; gid_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>Groups</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_883e42a949afd9b16c9901393356ea2e.html">ap</a></li><li class="navelem"><a class="el" href="ap__fl_files_handling_8h.html">ap_flFilesHandling.h</a></li>
-    <li class="footer">Generated on Mon Mar 27 2023 22:03:38 for libap by
+    <li class="footer">Generated on Wed Mar 29 2023 22:13:49 for libap by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
