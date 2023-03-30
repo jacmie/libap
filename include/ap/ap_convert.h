@@ -1,5 +1,7 @@
 #include <string>
 
+namespace ap {
+
 int Ch2int(char Ch);
 char int2Ch(int i);
 std::string Ch2Str(char Ch, int Pos);
@@ -25,3 +27,5 @@ char *d2Cstr(double d);
 double Str2d(std::string Str);
 std::string d2Str(double d);
 std::string d2Str(std::string format, double d);
+
+} // namespace ap

@@ -3,7 +3,7 @@
 #include <cmath>
 #include <iostream>
 
-void Discretization(int n, int paneling_type, double factor, double maxVal, double *Val)
+void ap::Discretization(int n, int paneling_type, double factor, double maxVal, double *Val)
 {
     double di = 1.0/(n-1);
     double CosPart, LinearPart;
@@ -31,7 +31,7 @@ void Discretization(int n, int paneling_type, double factor, double maxVal, doub
 }
 
 template <class REAL> 
-bool Discretization(unsigned int n, REAL factor, std::vector <REAL> &Val, bool paneling_type, REAL maxVal)
+bool ap::Discretization(unsigned int n, REAL factor, std::vector <REAL> &Val, bool paneling_type, REAL maxVal)
 {
 	if(factor <= 0)
 	{
@@ -92,5 +92,5 @@ bool Discretization(unsigned int n, REAL factor, std::vector <REAL> &Val, bool p
 	return 0;
 }
 
-template bool Discretization <float> (unsigned int n, float factor, std::vector <float> &Val, bool paneling_type, float maxVal);
-template bool Discretization <double> (unsigned int n, double factor, std::vector <double> &Val, bool paneling_type, double maxVal);
+template bool ap::Discretization <float> (unsigned int n, float factor, std::vector <float> &Val, bool paneling_type, float maxVal);
+template bool ap::Discretization <double> (unsigned int n, double factor, std::vector <double> &Val, bool paneling_type, double maxVal);

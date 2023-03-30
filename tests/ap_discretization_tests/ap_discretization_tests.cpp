@@ -1,37 +1,41 @@
 #include <gtest/gtest.h>
+#include "../compare_files.h"
 
 #include "ap_discretization.h"
 
-#include <iostream>
-#include <fstream>
-
 using namespace std;
-/*
-TEST(HelloTest, BasicAssertions) {
-  // Expect two strings not to be equal.
-  EXPECT_STRNE("hello", "world");
-  // Expect equality.
-  EXPECT_EQ(7 * 6, 42);
-}*/
+using namespace ap;
 
-TEST(ap_discretizationTest, BasicAssertions) {
-	// Expect two strings not to be equal.
-    EXPECT_STRNE("hello", "world");
-    // Expect equality.
-    EXPECT_EQ(7 * 6, 42);
+TEST(ap_discretization_tests, sin_function_discretization) {
+	vector <double> distro;
+	distro.resize(20);
 
-	clog << endl << "*** JMdiscretization ***" << endl << endl;
-
-	ofstream out("ap_discretization.xls");
-
-	vector <double> Distro;
-	Discretization <double> (40, 2.0, Distro, 1, 7);
+	Discretization(distro.size(), 2, 0.8, 3.0, &distro[0]);
 	
-	for(unsigned int i=0; i<Distro.size(); i++)
-	{
-		clog << i << "\t" << fixed << setprecision(4) << Distro[i] << endl;
-		out << fixed << setprecision(4) << Distro[i] << "\t" << 1 << endl;
+	ofstream out("./out/out_discretization_sin.xls");
+	for(unsigned int i=0; i<distro.size(); i++) {
+		out << fixed << setprecision(4) << distro[i] << "\t" << 1 << endl;
 	}
 	
 	out.close();
+	
+	std::string str1, str2;
+	EXPECT_EQ(0, Files2str("discretization_sin.xls", str1, str2));
+	EXPECT_EQ(str1, str2);
+}
+
+TEST(ap_discretization_tests, exp_function_discretization) {
+	vector <double> distro;
+	EXPECT_EQ(0, Discretization <double> (40, 2.0, distro, 1, 7));
+	
+	ofstream out("./out/out_discretization_exp.xls");
+	for(unsigned int i=0; i<distro.size(); i++) {
+		out << fixed << setprecision(4) << distro[i] << "\t" << 1 << endl;
+	}
+	
+	out.close();
+	
+	std::string str1, str2;
+	EXPECT_EQ(0, Files2str("discretization_exp.xls", str1, str2));
+	EXPECT_EQ(str1, str2);
 }

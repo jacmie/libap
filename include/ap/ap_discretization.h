@@ -5,9 +5,13 @@
 
 #include <vector>
 
+namespace ap {
+
 void Discretization(int n, int paneling_type, double factor, double maxVal, double *Val);
 
 template <class REAL> 
 bool Discretization(unsigned int n, REAL factor, std::vector <REAL> &Val, bool paneling_type=0, REAL maxVal=1.0);
+
+} // namespace ap
 
 #endif

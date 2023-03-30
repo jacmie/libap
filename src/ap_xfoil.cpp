@@ -7,6 +7,8 @@
 
 #include <cstring> // refactor and remove !!!!
 
+using namespace ap;
+
 XFOIL::XFOIL()
 {
 	T	= 0;

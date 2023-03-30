@@ -5,6 +5,8 @@
 #include <sstream>
 #include <string>
 
+namespace ap {
+
 // === int ===
 
 int Ch2int(char Ch)
@@ -167,3 +169,5 @@ std::string d2Str(std::string format, double d)
    sprintf(Cstr, format.c_str(), d);
    return std::string(Cstr);
 }
+
+} // namespace ap
