@@ -3,15 +3,8 @@
 #include "JMbezier.h"
 #include "JMbspline.h"
 #include "JMbezierAirfoil.h"
-#include "JMdiscretization.h"
-#include "JMfilesHandling.h"
 #include "JMGnuPlotPipe.h"
 #include "JMexternalExe.h"
-#include "JMfilter.h"
-#include "JMdialogs.h"
-
-#include <FL/Fl_XPM_Image.H>
-#include "Logo.h"
 
 #ifdef _WIN32
 	//#include "JMconsole.h"
@@ -395,48 +388,6 @@ int main(int argc, char *argv[])
 	ExeCreateProcess(Arg);
 
 #endif
-
-	// *** Filters ***
-	
-	clog << endl << "*** JMfilter ***" << endl << endl;
-	
-	double P[10];
-    
-    P[0] = -0.00693;
-    P[1] = 0.00248;	
-    P[2] = 0.00436;	
-    P[3] = 0.00401;
-    P[4] = 0.00644;	
-    P[5] = 0.00793;
-    P[6] = 0.00315;	
-    P[7] = 0.00753;
-    P[8] = 0.00729;	
-    P[9] = 0.01088;
-	
-	//for(int i=0; i<10; i++) //Constant value
-	//	P[i] = 1;
-	 
-	FILTER Filt(10, 7, 1);
-	//Filt.Filter(P, 0);
-	Filt.FilterRange(0, P, 0);
-		
-	ofstream fout("TestDir/JMfilter/FilterOut.xls");
-	
-	for(int i=0; i<10; i++)
-	{
-		clog << i << "\t" << P[i] << "\t" << Filt.Xfiltered[i] << endl;
-		fout << i << "\t" << P[i] << "\t" << Filt.Xfiltered[i] << endl;
-	}
-	
-	clog << endl;
-	fout.close();
-	
-	GnuPlot.NrOfDataCloumns = 2;
-	//GnuPlot.Plot2D("TestDir/JMfilter/FilterOut.xls");
-   
-	// ************
-	
-	clog << endl << "THE END" << endl << endl;
 		
 	return EXIT_SUCCESS;
 }

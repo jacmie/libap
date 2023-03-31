@@ -95,37 +95,46 @@ $(document).ready(function(){initNavTree('ap__filter_8h_source.html',''); initRe
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="struct_f_i_l_t_e_r.html">    9</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_f_i_l_t_e_r.html">FILTER</a></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="struct_f_i_l_t_e_r.html#a0868cd1ae8968902eccb7b272ab59a71">   11</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="struct_f_i_l_t_e_r.html#a0868cd1ae8968902eccb7b272ab59a71">n</a>, <a class="code" href="struct_f_i_l_t_e_r.html#a7dec0c180fb430e3ad5266918de83ebf">fn</a>;</div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="struct_f_i_l_t_e_r.html#a85498bd0e31bffc41d3f2208f963f47b">   12</a></span>&#160;    std::vector &lt;double&gt; <a class="code" href="struct_f_i_l_t_e_r.html#a85498bd0e31bffc41d3f2208f963f47b">filter</a>;</div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="struct_f_i_l_t_e_r.html#a54b01f12543e060ff6c838b7e50d2ec6">   13</a></span>&#160;    std::vector &lt;double&gt; <a class="code" href="struct_f_i_l_t_e_r.html#a54b01f12543e060ff6c838b7e50d2ec6">Xfiltered</a>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <a class="code" href="struct_f_i_l_t_e_r.html#a0374fd4b13b0e288aa3d2ce55764bddf">FILTER</a>(<span class="keywordtype">int</span> array_n, <span class="keywordtype">int</span> filter_n, <span class="keywordtype">double</span> amplitude);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <a class="code" href="struct_f_i_l_t_e_r.html#a798ff61603957830fe6dd094264d593c">~FILTER</a>();</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="struct_f_i_l_t_e_r.html#a6a10735ab473a20fa0c3e295d7badcb0">Filter</a>(std::vector &lt;double&gt; &amp;Xinput, <span class="keywordtype">bool</span> overwrite);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="struct_f_i_l_t_e_r.html#a8b4999299afb81f2cddcf700f3380c97">FilterRange</a>(<span class="keywordtype">int</span> shift, <span class="keywordtype">double</span> *Xinput, <span class="keywordtype">bool</span> overwrite);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="struct_f_i_l_t_e_r.html#a9ac8ed8d9a606da4b18dd956bee67e81">Print</a>(std::ofstream &amp;out);</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;};</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceap.html">ap</a> {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="structap_1_1_f_i_l_t_e_r.html">   12</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structap_1_1_f_i_l_t_e_r.html">FILTER</a></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="structap_1_1_f_i_l_t_e_r.html#adeccdc490c101036496d14559c572288">   14</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structap_1_1_f_i_l_t_e_r.html#adeccdc490c101036496d14559c572288">n</a>, <a class="code" href="structap_1_1_f_i_l_t_e_r.html#a195e18a5ecc181ce9843cda5808eabd9">fn</a>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="structap_1_1_f_i_l_t_e_r.html#aa6e6b86bcbf6a7d90e295defcbebd22c">   15</a></span>&#160;    std::vector &lt;double&gt; <a class="code" href="structap_1_1_f_i_l_t_e_r.html#aa6e6b86bcbf6a7d90e295defcbebd22c">filter</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="structap_1_1_f_i_l_t_e_r.html#a2b427b69b11e7423dcd39681daded638">   16</a></span>&#160;    std::vector &lt;double&gt; <a class="code" href="structap_1_1_f_i_l_t_e_r.html#a2b427b69b11e7423dcd39681daded638">xFiltered</a>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="code" href="structap_1_1_f_i_l_t_e_r.html#a395a99db486641a51f57bb0530ad147a">FILTER</a>(<span class="keywordtype">int</span> array_n, <span class="keywordtype">int</span> filter_n, <span class="keywordtype">double</span> amplitude);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structap_1_1_f_i_l_t_e_r.html#a89306370cfbc62af7130d3eb1691e394">Filter</a>(std::vector &lt;double&gt; &amp;xInput, <span class="keywordtype">bool</span> overwrite);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structap_1_1_f_i_l_t_e_r.html#a12776474ca8527c3921dd131b43e1074">FilterRange</a>(<span class="keywordtype">int</span> shift, <span class="keywordtype">double</span> *xInput, <span class="keywordtype">bool</span> overwrite);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structap_1_1_f_i_l_t_e_r.html#ad75d0fd1467372bb57bfe04a7b754dbf">Print</a>(std::ofstream &amp;out);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;};</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;} <span class="comment">// namespace ap</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="astruct_f_i_l_t_e_r_html_a6a10735ab473a20fa0c3e295d7badcb0"><div class="ttname"><a href="struct_f_i_l_t_e_r.html#a6a10735ab473a20fa0c3e295d7badcb0">FILTER::Filter</a></div><div class="ttdeci">int Filter(std::vector&lt; double &gt; &amp;Xinput, bool overwrite)</div></div>
-<div class="ttc" id="astruct_f_i_l_t_e_r_html_a0374fd4b13b0e288aa3d2ce55764bddf"><div class="ttname"><a href="struct_f_i_l_t_e_r.html#a0374fd4b13b0e288aa3d2ce55764bddf">FILTER::FILTER</a></div><div class="ttdeci">FILTER(int array_n, int filter_n, double amplitude)</div></div>
-<div class="ttc" id="astruct_f_i_l_t_e_r_html_a798ff61603957830fe6dd094264d593c"><div class="ttname"><a href="struct_f_i_l_t_e_r.html#a798ff61603957830fe6dd094264d593c">FILTER::~FILTER</a></div><div class="ttdeci">~FILTER()</div></div>
-<div class="ttc" id="astruct_f_i_l_t_e_r_html_a7dec0c180fb430e3ad5266918de83ebf"><div class="ttname"><a href="struct_f_i_l_t_e_r.html#a7dec0c180fb430e3ad5266918de83ebf">FILTER::fn</a></div><div class="ttdeci">int fn</div><div class="ttdef"><b>Definition:</b> ap_filter.h:11</div></div>
-<div class="ttc" id="astruct_f_i_l_t_e_r_html_a54b01f12543e060ff6c838b7e50d2ec6"><div class="ttname"><a href="struct_f_i_l_t_e_r.html#a54b01f12543e060ff6c838b7e50d2ec6">FILTER::Xfiltered</a></div><div class="ttdeci">std::vector&lt; double &gt; Xfiltered</div><div class="ttdef"><b>Definition:</b> ap_filter.h:13</div></div>
-<div class="ttc" id="astruct_f_i_l_t_e_r_html_a8b4999299afb81f2cddcf700f3380c97"><div class="ttname"><a href="struct_f_i_l_t_e_r.html#a8b4999299afb81f2cddcf700f3380c97">FILTER::FilterRange</a></div><div class="ttdeci">int FilterRange(int shift, double *Xinput, bool overwrite)</div></div>
-<div class="ttc" id="astruct_f_i_l_t_e_r_html"><div class="ttname"><a href="struct_f_i_l_t_e_r.html">FILTER</a></div><div class="ttdef"><b>Definition:</b> ap_filter.h:9</div></div>
-<div class="ttc" id="astruct_f_i_l_t_e_r_html_a85498bd0e31bffc41d3f2208f963f47b"><div class="ttname"><a href="struct_f_i_l_t_e_r.html#a85498bd0e31bffc41d3f2208f963f47b">FILTER::filter</a></div><div class="ttdeci">std::vector&lt; double &gt; filter</div><div class="ttdef"><b>Definition:</b> ap_filter.h:12</div></div>
-<div class="ttc" id="astruct_f_i_l_t_e_r_html_a0868cd1ae8968902eccb7b272ab59a71"><div class="ttname"><a href="struct_f_i_l_t_e_r.html#a0868cd1ae8968902eccb7b272ab59a71">FILTER::n</a></div><div class="ttdeci">int n</div><div class="ttdef"><b>Definition:</b> ap_filter.h:11</div></div>
-<div class="ttc" id="astruct_f_i_l_t_e_r_html_a9ac8ed8d9a606da4b18dd956bee67e81"><div class="ttname"><a href="struct_f_i_l_t_e_r.html#a9ac8ed8d9a606da4b18dd956bee67e81">FILTER::Print</a></div><div class="ttdeci">void Print(std::ofstream &amp;out)</div></div>
+<div class="ttc" id="astructap_1_1_f_i_l_t_e_r_html_a12776474ca8527c3921dd131b43e1074"><div class="ttname"><a href="structap_1_1_f_i_l_t_e_r.html#a12776474ca8527c3921dd131b43e1074">ap::FILTER::FilterRange</a></div><div class="ttdeci">int FilterRange(int shift, double *xInput, bool overwrite)</div><div class="ttdoc">Filter the input in range.</div></div>
+<div class="ttc" id="astructap_1_1_f_i_l_t_e_r_html_adeccdc490c101036496d14559c572288"><div class="ttname"><a href="structap_1_1_f_i_l_t_e_r.html#adeccdc490c101036496d14559c572288">ap::FILTER::n</a></div><div class="ttdeci">int n</div><div class="ttdef"><b>Definition:</b> ap_filter.h:14</div></div>
+<div class="ttc" id="astructap_1_1_f_i_l_t_e_r_html_a89306370cfbc62af7130d3eb1691e394"><div class="ttname"><a href="structap_1_1_f_i_l_t_e_r.html#a89306370cfbc62af7130d3eb1691e394">ap::FILTER::Filter</a></div><div class="ttdeci">int Filter(std::vector&lt; double &gt; &amp;xInput, bool overwrite)</div><div class="ttdoc">Filter the input.</div></div>
+<div class="ttc" id="anamespaceap_html"><div class="ttname"><a href="namespaceap.html">ap</a></div><div class="ttdef"><b>Definition:</b> ap_airfoil.h:8</div></div>
+<div class="ttc" id="astructap_1_1_f_i_l_t_e_r_html_a195e18a5ecc181ce9843cda5808eabd9"><div class="ttname"><a href="structap_1_1_f_i_l_t_e_r.html#a195e18a5ecc181ce9843cda5808eabd9">ap::FILTER::fn</a></div><div class="ttdeci">int fn</div><div class="ttdef"><b>Definition:</b> ap_filter.h:14</div></div>
+<div class="ttc" id="astructap_1_1_f_i_l_t_e_r_html_a2b427b69b11e7423dcd39681daded638"><div class="ttname"><a href="structap_1_1_f_i_l_t_e_r.html#a2b427b69b11e7423dcd39681daded638">ap::FILTER::xFiltered</a></div><div class="ttdeci">std::vector&lt; double &gt; xFiltered</div><div class="ttdef"><b>Definition:</b> ap_filter.h:16</div></div>
+<div class="ttc" id="astructap_1_1_f_i_l_t_e_r_html_aa6e6b86bcbf6a7d90e295defcbebd22c"><div class="ttname"><a href="structap_1_1_f_i_l_t_e_r.html#aa6e6b86bcbf6a7d90e295defcbebd22c">ap::FILTER::filter</a></div><div class="ttdeci">std::vector&lt; double &gt; filter</div><div class="ttdef"><b>Definition:</b> ap_filter.h:15</div></div>
+<div class="ttc" id="astructap_1_1_f_i_l_t_e_r_html"><div class="ttname"><a href="structap_1_1_f_i_l_t_e_r.html">ap::FILTER</a></div><div class="ttdoc">One dimensional filter.</div><div class="ttdef"><b>Definition:</b> ap_filter.h:12</div></div>
+<div class="ttc" id="astructap_1_1_f_i_l_t_e_r_html_ad75d0fd1467372bb57bfe04a7b754dbf"><div class="ttname"><a href="structap_1_1_f_i_l_t_e_r.html#ad75d0fd1467372bb57bfe04a7b754dbf">ap::FILTER::Print</a></div><div class="ttdeci">void Print(std::ofstream &amp;out)</div><div class="ttdoc">Passes results to the standard output stream.</div></div>
+<div class="ttc" id="astructap_1_1_f_i_l_t_e_r_html_a395a99db486641a51f57bb0530ad147a"><div class="ttname"><a href="structap_1_1_f_i_l_t_e_r.html#a395a99db486641a51f57bb0530ad147a">ap::FILTER::FILTER</a></div><div class="ttdeci">FILTER(int array_n, int filter_n, double amplitude)</div><div class="ttdoc">Filter constructor.</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_883e42a949afd9b16c9901393356ea2e.html">ap</a></li><li class="navelem"><a class="el" href="ap__filter_8h.html">ap_filter.h</a></li>
-    <li class="footer">Generated on Fri Mar 31 2023 23:03:17 for libap by
+    <li class="footer">Generated on Sat Apr 1 2023 00:28:20 for libap by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

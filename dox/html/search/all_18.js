@@ -2,7 +2,7 @@ var searchData=
 [
   ['x_317',['X',['../class_g_l___t_e_c_h___f_o_n_t.html#a6252eeb1fc1fbf679dcb14585ea220e7',1,'GL_TECH_FONT::X()'],['../classap_1_1_v_e_c_t_o_r__3.html#a407c9931206b1c3a7b2f949940319e47',1,'ap::VECTOR_3::x()']]],
   ['x_5fyt_318',['x_yT',['../namespaceap.html#ac1fdff1d1f02f186d2b8b6fcc2609b74',1,'ap']]],
-  ['xfiltered_319',['Xfiltered',['../struct_f_i_l_t_e_r.html#a54b01f12543e060ff6c838b7e50d2ec6',1,'FILTER']]],
+  ['xfiltered_319',['xFiltered',['../structap_1_1_f_i_l_t_e_r.html#a2b427b69b11e7423dcd39681daded638',1,'ap::FILTER']]],
   ['xfoil_320',['XFOIL',['../class_x_f_o_i_l.html',1,'XFOIL'],['../class_x_f_o_i_l.html#affeb1cd0db8bdf3f57b8ffc53b30809d',1,'XFOIL::XFOIL()']]],
   ['xfoil2prf_321',['Xfoil2Prf',['../classap_1_1_a_i_r_f_o_i_l.html#a292e54ad902b85390d6d808af84d1f0c',1,'ap::AIRFOIL']]],
   ['xfoiliter_322',['XfoilIter',['../class_x_f_o_i_l.html#a91196911cacf0814f7b0aff01246a57d',1,'XFOIL']]],
