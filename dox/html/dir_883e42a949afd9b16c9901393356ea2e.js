@@ -5,7 +5,7 @@ var dir_883e42a949afd9b16c9901393356ea2e =
     ] ],
     [ "ap_basicMath.h", "ap__basic_math_8h.html", "ap__basic_math_8h" ],
     [ "ap_convert.h", "ap__convert_8h.html", "ap__convert_8h" ],
-    [ "ap_discretization.h", "ap__discretization_8h.html", "ap__discretization_8h" ],
+    [ "ap_distribution.h", "ap__distribution_8h.html", "ap__distribution_8h" ],
     [ "ap_externalExe.h", "ap__external_exe_8h.html", "ap__external_exe_8h" ],
     [ "ap_filter.h", "ap__filter_8h.html", "ap__filter_8h" ],
     [ "ap_flDialogs.h", "ap__fl_dialogs_8h.html", [

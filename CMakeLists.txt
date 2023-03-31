@@ -13,7 +13,7 @@ set(INDEPENDENT_HEADERS
     ap_airfoil.h    
     ap_basicMath.h
     ap_convert.h
-    ap_discretization.h
+    ap_distribution.h
     ap_externalExe.h
     ap_filter.h
     ap_gnuplotPipe.h
@@ -38,7 +38,7 @@ set(INDEPENDENT_SRC
     ap_airfoil.cpp  
     ap_basicMath.cpp
     ap_convert.cpp
-    ap_discretization.cpp
+    ap_distribution.cpp
     ap_externalExe.cpp
     ap_filter.cpp
     ap_gnuplotPipe.cpp

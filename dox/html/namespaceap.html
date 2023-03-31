@@ -85,6 +85,7 @@ $(document).ready(function(){initNavTree('namespaceap.html',''); initResizable()
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">ap Namespace Reference</div>  </div>
@@ -111,6 +112,14 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classap_1_1_v_e_c_t_o_r__3.html">VECTOR_3</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector class.  <a href="classap_1_1_v_e_c_t_o_r__3.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:abf94cccd10d222114567df3026ddcfe0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceap.html#abf94cccd10d222114567df3026ddcfe0">paneling</a> { <a class="el" href="namespaceap.html#abf94cccd10d222114567df3026ddcfe0a29cf6fa09b05ae88d3578e8867f11207">LEFT</a> =0, 
+<a class="el" href="namespaceap.html#abf94cccd10d222114567df3026ddcfe0a0a28aa3fd6cdc6ec4c782f266ac91913">CENTER</a>, 
+<a class="el" href="namespaceap.html#abf94cccd10d222114567df3026ddcfe0a7ee242d7be783fdf49218813c4b2d8ac">RIGHT</a>
+ }</td></tr>
+<tr class="separator:abf94cccd10d222114567df3026ddcfe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -246,11 +255,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a982762a387cdfedafb7369a34cd6f4af"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceap.html#a982762a387cdfedafb7369a34cd6f4af">d2Str</a> (std::string format, double d)</td></tr>
 <tr class="memdesc:a982762a387cdfedafb7369a34cd6f4af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert from double to std::string with sprintf like format.  <a href="namespaceap.html#a982762a387cdfedafb7369a34cd6f4af">More...</a><br /></td></tr>
 <tr class="separator:a982762a387cdfedafb7369a34cd6f4af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26dd0034fc77058aecfd96b25a485cee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceap.html#a26dd0034fc77058aecfd96b25a485cee">Discretization</a> (int n, int paneling_type, double factor, double maxVal, double *Val)</td></tr>
-<tr class="separator:a26dd0034fc77058aecfd96b25a485cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41398a4bf468dba4b1519f1cfa9ccc33"><td class="memTemplParams" colspan="2">template&lt;class REAL &gt; </td></tr>
-<tr class="memitem:a41398a4bf468dba4b1519f1cfa9ccc33"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceap.html#a41398a4bf468dba4b1519f1cfa9ccc33">Discretization</a> (unsigned int n, REAL factor, std::vector&lt; REAL &gt; &amp;Val, bool paneling_type=0, REAL maxVal=1.0)</td></tr>
-<tr class="separator:a41398a4bf468dba4b1519f1cfa9ccc33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9bdf99ec95f39d65cd824abc3f8754a"><td class="memTemplParams" colspan="2">template&lt;class real &gt; </td></tr>
+<tr class="memitem:aa9bdf99ec95f39d65cd824abc3f8754a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceap.html#aa9bdf99ec95f39d65cd824abc3f8754a">sinDistribution</a> (unsigned int n, real factor, std::vector&lt; real &gt; &amp;distrib, int paneling_type=1, real range=1)</td></tr>
+<tr class="memdesc:aa9bdf99ec95f39d65cd824abc3f8754a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates distribution.  <a href="namespaceap.html#aa9bdf99ec95f39d65cd824abc3f8754a">More...</a><br /></td></tr>
+<tr class="separator:aa9bdf99ec95f39d65cd824abc3f8754a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a896c18bc7f2f4999588aaa1b027f5665"><td class="memTemplParams" colspan="2">template&lt;class real &gt; </td></tr>
+<tr class="memitem:a896c18bc7f2f4999588aaa1b027f5665"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceap.html#a896c18bc7f2f4999588aaa1b027f5665">expDistribution</a> (unsigned int n, real factor, std::vector&lt; real &gt; &amp;distrib, int paneling_type=1, real range=1)</td></tr>
+<tr class="memdesc:a896c18bc7f2f4999588aaa1b027f5665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates distribution.  <a href="namespaceap.html#a896c18bc7f2f4999588aaa1b027f5665">More...</a><br /></td></tr>
+<tr class="separator:a896c18bc7f2f4999588aaa1b027f5665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4fa7dfaddd91be8069f932e8c37e3c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceap.html#ad4fa7dfaddd91be8069f932e8c37e3c4">GetUserGroups</a> (std::vector&lt; gid_t &gt; &amp;groups)</td></tr>
 <tr class="memdesc:ad4fa7dfaddd91be8069f932e8c37e3c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets user groups.  <a href="namespaceap.html#ad4fa7dfaddd91be8069f932e8c37e3c4">More...</a><br /></td></tr>
 <tr class="separator:ad4fa7dfaddd91be8069f932e8c37e3c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -417,6 +429,26 @@ Functions</h2></td></tr>
 <tr class="memdesc:a30281a8bd9a37d04ea91f849dbb4f9b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">print to std:ostream  <a href="namespaceap.html#a30281a8bd9a37d04ea91f849dbb4f9b4">More...</a><br /></td></tr>
 <tr class="separator:a30281a8bd9a37d04ea91f849dbb4f9b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="abf94cccd10d222114567df3026ddcfe0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf94cccd10d222114567df3026ddcfe0">&#9670;&nbsp;</a></span>paneling</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespaceap.html#abf94cccd10d222114567df3026ddcfe0">ap::paneling</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="abf94cccd10d222114567df3026ddcfe0a29cf6fa09b05ae88d3578e8867f11207"></a>LEFT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abf94cccd10d222114567df3026ddcfe0a0a28aa3fd6cdc6ec4c782f266ac91913"></a>CENTER&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abf94cccd10d222114567df3026ddcfe0a7ee242d7be783fdf49218813c4b2d8ac"></a>RIGHT&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a70642ef37faf9693a1eb48f2906180f3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a70642ef37faf9693a1eb48f2906180f3">&#9670;&nbsp;</a></span>A_x()</h2>
@@ -1004,100 +1036,6 @@ On most platforms, each filter is available to the user via a pulldown menu in t
 
 </div>
 </div>
-<a id="a26dd0034fc77058aecfd96b25a485cee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26dd0034fc77058aecfd96b25a485cee">&#9670;&nbsp;</a></span>Discretization() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ap::Discretization </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>paneling_type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>factor</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>maxVal</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double *&#160;</td>
-          <td class="paramname"><em>Val</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a41398a4bf468dba4b1519f1cfa9ccc33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41398a4bf468dba4b1519f1cfa9ccc33">&#9670;&nbsp;</a></span>Discretization() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class REAL &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">bool ap::Discretization </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">REAL&#160;</td>
-          <td class="paramname"><em>factor</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>Val</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>paneling_type</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">REAL&#160;</td>
-          <td class="paramname"><em>maxVal</em> = <code>1.0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="af60ef6d10db611fa9e173b0d248859df"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af60ef6d10db611fa9e173b0d248859df">&#9670;&nbsp;</a></span>Distance()</h2>
 
@@ -1163,6 +1101,76 @@ template&lt;class REAL &gt; </div>
 <dl class="section note"><dt>Note</dt><dd>Use z=0 to compute distance in 2D space <br  />
  </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>Distance value between two points. </dd></dl>
+
+</div>
+</div>
+<a id="a896c18bc7f2f4999588aaa1b027f5665"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a896c18bc7f2f4999588aaa1b027f5665">&#9670;&nbsp;</a></span>expDistribution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class real &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ap::expDistribution </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>factor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; real &gt; &amp;&#160;</td>
+          <td class="paramname"><em>distrib</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>paneling_type</em> = <code>1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>range</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generates distribution. </p>
+<p>Based on exp() function projection. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>- number of distribution points </td></tr>
+    <tr><td class="paramname">factor</td><td>- coefficient of distribution density in range (0, infinity)<ul>
+<li>(0, 1) - distribution denser to the center (paneling_type==CENTER), or denser to right (paneling_type!=CENTER)</li>
+<li>1 - linear distribution</li>
+<li>(1, oo) - distribution denser to the ends (paneling_type==CENTER), or denser to left (paneling_type!=CENTER) </li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">distrib</td><td>- returned vector of distribution </td></tr>
+    <tr><td class="paramname">paneling_type</td><td>- different paneling types:<ul>
+<li>if(1) - Center: ** * * * * **</li>
+<li>else - Side: ** * * * * </li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">range</td><td>- specifies range of the distribution, form 0 to the value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, fails when the factor is negative, or equal to 0. </dd></dl>
 
 </div>
 </div>
@@ -3364,6 +3372,75 @@ template&lt;typename real &gt; </div>
 
 </div>
 </div>
+<a id="aa9bdf99ec95f39d65cd824abc3f8754a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9bdf99ec95f39d65cd824abc3f8754a">&#9670;&nbsp;</a></span>sinDistribution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class real &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void ap::sinDistribution </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>factor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; real &gt; &amp;&#160;</td>
+          <td class="paramname"><em>distrib</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>paneling_type</em> = <code>1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>range</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generates distribution. </p>
+<p>Based on sin() function projection. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>- number of distribution points </td></tr>
+    <tr><td class="paramname">factor</td><td>- coefficient of distribution density in range &lt;0, 1&gt;<ul>
+<li>0 - linear distribution</li>
+<li>1 - fully non linear distribution </li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">distrib</td><td>- returned vector of distribution </td></tr>
+    <tr><td class="paramname">paneling_type</td><td>- different paneling types:<ul>
+<li>0 - Left side: ** * * * *</li>
+<li>1 - Center: ** * * * * **</li>
+<li>2 - Right side: * * * * ** </li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">range</td><td>- specifies range of the distribution, form 0 to the value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a47557346159231d77c4fcd9030e21124"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a47557346159231d77c4fcd9030e21124">&#9670;&nbsp;</a></span>Str2Cstr()</h2>
 
@@ -3576,7 +3653,7 @@ template&lt;typename real &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespaceap.html">ap</a></li>
-    <li class="footer">Generated on Fri Mar 31 2023 20:39:40 for libap by
+    <li class="footer">Generated on Fri Mar 31 2023 23:03:17 for libap by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

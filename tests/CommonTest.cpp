@@ -22,62 +22,6 @@ int main(int argc, char *argv[])
 {
 	using namespace std;
 
-	// *** JMconvert ***
-
-	clog << endl << "*** JMconvert ***" << endl << endl;
-
-    clog.precision(30);
-    clog.unsetf(std::ios::fixed);
-
-    char ChReal[] = {"0.125"};
-    //char ChReal[] = {"0.123456789123456789123456789"}; 
-    std::string StrReal = string(ChReal);
-
-    float fReal = 0.25;
-    //float fReal = 1350.1234567891234567912345678;
-	
-    clog << "Cstr2f\t" << "ch: " << ChReal  << "\tf : " << Cstr2f(ChReal)         << endl;
-    clog << "f2Cstr\t" << "f : " << fReal   << "\tch: " << f2Cstr("%.4f", fReal)  << endl;
-    clog << "f2Cstr\t" << "f : " << fReal   << "\tch: " << f2Cstr(fReal)          << endl;
-    clog << "Str2f \t" << "s : " << StrReal << "\tf : " << Str2f(StrReal)         << endl;
-    clog << "f2Str \t" << "f : " << fReal   << "\ts : " << f2Str(fReal)           << endl;    
-    clog << "f2Str \t" << "f : " << fReal   << "\ts : " << f2Str("%.4f", fReal)   << endl;
-    clog << endl;
-
-    //double dReal = 0.25;
-    double dReal = 1350.1234567891234567912345678; 
-
-	clog << "Cstr2d\t" << "ch: " << ChReal  << "\td : " << Cstr2d(ChReal)         << endl;
-    clog << "d2Cstr\t" << "d : " << dReal   << "\tch: " << d2Cstr("%.4f", dReal)  << endl;
-    clog << "d2Cstr\t" << "d : " << dReal   << "\tch: " << d2Cstr(dReal)          << endl;
-    clog << "Str2d \t" << "s : " << StrReal << "\td : " << Str2d(StrReal)         << endl;
-    clog << "d2Str \t" << "d : " << dReal   << "\ts : " << d2Str(dReal)           << endl;    
-    clog << "d2Str \t" << "d : " << dReal   << "\ts : " << d2Str("%.4f", dReal)   << endl;
-    clog << endl;
-
-    clog.precision(3);
-	
-	//*** JMdiscretization ***
-	
-	clog << endl << "*** JMdiscretization ***" << endl << endl;
-
-	ofstream discret_out("TestDir/Discretization/Discretization.xls");
-
-	vector <double> Distro;
-	Discretization <double> (40, 2.0, Distro, 1, 7);
-	
-	for(unsigned int i=0; i<Distro.size(); i++)
-	{
-		clog << i << "\t" << fixed << setprecision(4) << Distro[i] << endl;
-		discret_out << fixed << setprecision(4) << Distro[i] << "\t" << 1 << endl;
-	}
-	
-	discret_out.close();
-	
-	GNUPLOT GnuPlotDiscret;
-	GnuPlotDiscret.NrOfDataCloumns = 1;
-	//GnuPlotDiscret.Plot2D("TestDir/Discretization/Discretization.xls");
-
 	//+++ ADVANCED FUNCTIONS +++
 	
 	// *** JMxfoil ***

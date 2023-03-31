@@ -15,7 +15,7 @@ var searchData=
   ['ap_5fairfoil_2eh_13',['ap_airfoil.h',['../ap__airfoil_8h.html',1,'']]],
   ['ap_5fbasicmath_2eh_14',['ap_basicMath.h',['../ap__basic_math_8h.html',1,'']]],
   ['ap_5fconvert_2eh_15',['ap_convert.h',['../ap__convert_8h.html',1,'']]],
-  ['ap_5fdiscretization_2eh_16',['ap_discretization.h',['../ap__discretization_8h.html',1,'']]],
+  ['ap_5fdistribution_2eh_16',['ap_distribution.h',['../ap__distribution_8h.html',1,'']]],
   ['ap_5fexternalexe_2eh_17',['ap_externalExe.h',['../ap__external_exe_8h.html',1,'']]],
   ['ap_5ffilter_2eh_18',['ap_filter.h',['../ap__filter_8h.html',1,'']]],
   ['ap_5ffldialogs_2eh_19',['ap_flDialogs.h',['../ap__fl_dialogs_8h.html',1,'']]],
