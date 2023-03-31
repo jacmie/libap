@@ -13,8 +13,8 @@ var searchData=
   ['input_5fcolor_466',['input_color',['../classap_1_1_d_i_a_l_o_g_s.html#a923fd31b2633904e544c0a52b7a2e4b6',1,'ap::DIALOGS']]],
   ['input_5ffont_467',['input_font',['../classap_1_1_d_i_a_l_o_g_s.html#ad53bd6d35534647ee936af3cdd898e2f',1,'ap::DIALOGS']]],
   ['insert_468',['Insert',['../classap_1_1_s_u_b_s_t_i_t_u_t_e.html#ada04dc9e3ea1dd9bb582e15872a5bd75',1,'ap::SUBSTITUTE']]],
-  ['int2ch_469',['int2Ch',['../ap__convert_8h.html#a885ec79c9a0098f93cd8221b6d57710e',1,'ap_convert.h']]],
-  ['int2cstr_470',['int2Cstr',['../ap__convert_8h.html#a04b6a9f47524f1c033dc9a80adedcb36',1,'ap_convert.h']]],
-  ['int2str_471',['int2Str',['../ap__convert_8h.html#a6854b6f2584a3dda976c4cd7783a5c8c',1,'ap_convert.h']]],
+  ['int2ch_469',['int2Ch',['../namespaceap.html#a0f2eb040b6d405a8560dee6ebd38c8e4',1,'ap']]],
+  ['int2cstr_470',['int2Cstr',['../namespaceap.html#ac4eefc44925bd0cb500a4ddea1c82df7',1,'ap']]],
+  ['int2str_471',['int2Str',['../namespaceap.html#a80ae06a922b88f32714cb436edccfd64',1,'ap']]],
   ['isnan_472',['IsNan',['../classap_1_1_v_e_c_t_o_r__3.html#a47ac9571358b224beab9ec30390800d1',1,'ap::VECTOR_3']]]
 ];

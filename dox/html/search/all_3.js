@@ -4,8 +4,8 @@ var searchData=
   ['call_42',['Call',['../ap__external_exe_8h.html#a003eacd2ed18dbad58975199e513863e',1,'ap_externalExe.h']]],
   ['cd_43',['CD',['../class_x_f_o_i_l.html#ad341bf400403b3113ae59d5b7a623695',1,'XFOIL']]],
   ['cdp_44',['CDp',['../class_x_f_o_i_l.html#a8fa50cacb1f040e3b3d034cc6a6c68ff',1,'XFOIL']]],
-  ['ch2int_45',['Ch2int',['../ap__convert_8h.html#a733727cf81aafcf8a6203e1aac96b57b',1,'ap_convert.h']]],
-  ['ch2str_46',['Ch2Str',['../ap__convert_8h.html#a5fe2b9065d960a13fbea593712893c6d',1,'ap_convert.h']]],
+  ['ch2int_45',['Ch2int',['../namespaceap.html#ac35dabe6b01739a57b7555544a6ef37f',1,'ap']]],
+  ['ch2str_46',['Ch2Str',['../namespaceap.html#a0eadb90f985146724f1377109a07bc58',1,'ap']]],
   ['checkpermissions_47',['CheckPermissions',['../namespaceap.html#acb3cbe730051f800e220c17440c47ae5',1,'ap']]],
   ['choice_48',['choice',['../classap_1_1_d_i_a_l_o_g_s.html#a0e0a536a81ab07acb566239f6707fc46',1,'ap::DIALOGS']]],
   ['choice_5fn_49',['choice_n',['../classap_1_1_d_i_a_l_o_g_s.html#a30d20db2bd44ade32a215ab765f714a0',1,'ap::DIALOGS']]],
@@ -24,8 +24,8 @@ var searchData=
   ['cs_62',['CS',['../class_g_l___g_e_o_m_e_t_r_y___o_b_j_e_c_t.html#abeef741bc3b52082e24070574455dae3',1,'GL_GEOMETRY_OBJECT']]],
   ['cspointsize_63',['CSpointSize',['../class_g_l___g_e_o_m_e_t_r_y___o_b_j_e_c_t.html#adbabf9012a2c7e46087ab51f4a140802',1,'GL_GEOMETRY_OBJECT']]],
   ['cssize_64',['CSsize',['../class_g_l___g_e_o_m_e_t_r_y___o_b_j_e_c_t.html#aa48c1432d7a4fb3f9c9c733d14f09fe8',1,'GL_GEOMETRY_OBJECT']]],
-  ['cstr2d_65',['Cstr2d',['../ap__convert_8h.html#a008f3bf671ddfd7938e33f6e0728109d',1,'ap_convert.h']]],
-  ['cstr2f_66',['Cstr2f',['../ap__convert_8h.html#a68b18c9717a8b6d823277304f340e957',1,'ap_convert.h']]],
-  ['cstr2int_67',['Cstr2int',['../ap__convert_8h.html#ace3990d0e3259f51e92d329dd844165e',1,'ap_convert.h']]],
-  ['cstr2str_68',['Cstr2Str',['../ap__convert_8h.html#a01fed5f12982b007b16dc40d3cb8b111',1,'ap_convert.h']]]
+  ['cstr2d_65',['Cstr2d',['../namespaceap.html#acf46551ccf9d5bc6cc7f5df7fa84dbf0',1,'ap']]],
+  ['cstr2f_66',['Cstr2f',['../namespaceap.html#a3d03a29df5e1fda6865df90331b981f6',1,'ap']]],
+  ['cstr2int_67',['Cstr2int',['../namespaceap.html#ad0685839a329b2f6ce69b2e65b1c6ad3',1,'ap']]],
+  ['cstr2str_68',['Cstr2Str',['../namespaceap.html#a685c9c56dbe132bc83aa6eef159cfb87',1,'ap']]]
 ];

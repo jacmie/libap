@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('ap__discretization_8h.html',''); initR
 
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -103,6 +104,11 @@ Include dependency graph for ap_discretization.h:</div>
 </div>
 <p><a href="ap__discretization_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceap"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceap.html">ap</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a525335710b53cb064ca56b936120431e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ap__discretization_8h.html#a525335710b53cb064ca56b936120431e">_USE_MATH_DEFINES</a></td></tr>
@@ -110,11 +116,11 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aeb082777879b63fea76b75584a1f25f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ap__discretization_8h.html#aeb082777879b63fea76b75584a1f25f8">Discretization</a> (int n, int paneling_type, double factor, double maxVal, double *Val)</td></tr>
-<tr class="separator:aeb082777879b63fea76b75584a1f25f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af858cdec0ef9ac55cdebdc8b85f9e50e"><td class="memTemplParams" colspan="2">template&lt;class REAL &gt; </td></tr>
-<tr class="memitem:af858cdec0ef9ac55cdebdc8b85f9e50e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="ap__discretization_8h.html#af858cdec0ef9ac55cdebdc8b85f9e50e">Discretization</a> (unsigned int n, REAL factor, std::vector&lt; REAL &gt; &amp;Val, bool paneling_type=0, REAL maxVal=1.0)</td></tr>
-<tr class="separator:af858cdec0ef9ac55cdebdc8b85f9e50e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26dd0034fc77058aecfd96b25a485cee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceap.html#a26dd0034fc77058aecfd96b25a485cee">ap::Discretization</a> (int n, int paneling_type, double factor, double maxVal, double *Val)</td></tr>
+<tr class="separator:a26dd0034fc77058aecfd96b25a485cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41398a4bf468dba4b1519f1cfa9ccc33"><td class="memTemplParams" colspan="2">template&lt;class REAL &gt; </td></tr>
+<tr class="memitem:a41398a4bf468dba4b1519f1cfa9ccc33"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceap.html#a41398a4bf468dba4b1519f1cfa9ccc33">ap::Discretization</a> (unsigned int n, REAL factor, std::vector&lt; REAL &gt; &amp;Val, bool paneling_type=0, REAL maxVal=1.0)</td></tr>
+<tr class="separator:a41398a4bf468dba4b1519f1cfa9ccc33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a525335710b53cb064ca56b936120431e"></a>
@@ -131,108 +137,13 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="aeb082777879b63fea76b75584a1f25f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb082777879b63fea76b75584a1f25f8">&#9670;&nbsp;</a></span>Discretization() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Discretization </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>paneling_type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>factor</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>maxVal</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double *&#160;</td>
-          <td class="paramname"><em>Val</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af858cdec0ef9ac55cdebdc8b85f9e50e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af858cdec0ef9ac55cdebdc8b85f9e50e">&#9670;&nbsp;</a></span>Discretization() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class REAL &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Discretization </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">REAL&#160;</td>
-          <td class="paramname"><em>factor</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>Val</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>paneling_type</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">REAL&#160;</td>
-          <td class="paramname"><em>maxVal</em> = <code>1.0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_883e42a949afd9b16c9901393356ea2e.html">ap</a></li><li class="navelem"><a class="el" href="ap__discretization_8h.html">ap_discretization.h</a></li>
-    <li class="footer">Generated on Wed Mar 29 2023 22:13:49 for libap by
+    <li class="footer">Generated on Fri Mar 31 2023 20:39:40 for libap by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

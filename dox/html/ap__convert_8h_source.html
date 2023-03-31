@@ -89,55 +89,80 @@ $(document).ready(function(){initNavTree('ap__convert_8h_source.html',''); initR
 <div class="contents">
 <a href="ap__convert_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keywordtype">int</span> <a class="code" href="ap__convert_8h.html#a733727cf81aafcf8a6203e1aac96b57b">Ch2int</a>(<span class="keywordtype">char</span> Ch);</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keywordtype">char</span> <a class="code" href="ap__convert_8h.html#a885ec79c9a0098f93cd8221b6d57710e">int2Ch</a>(<span class="keywordtype">int</span> i);</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;std::string <a class="code" href="ap__convert_8h.html#a5fe2b9065d960a13fbea593712893c6d">Ch2Str</a>(<span class="keywordtype">char</span> Ch, <span class="keywordtype">int</span> Pos);</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;std::string <a class="code" href="ap__convert_8h.html#a01fed5f12982b007b16dc40d3cb8b111">Cstr2Str</a>(<span class="keywordtype">char</span> *Cstr);</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="ap__convert_8h.html#a35604e152b13404c3ac0ccdf6b6d4d53">Str2Cstr</a>(std::string Str);</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keywordtype">int</span> <a class="code" href="ap__convert_8h.html#ace3990d0e3259f51e92d329dd844165e">Cstr2int</a>(<span class="keywordtype">char</span> *Cstr);</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="ap__convert_8h.html#a04b6a9f47524f1c033dc9a80adedcb36">int2Cstr</a>(<span class="keywordtype">int</span> i);</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;std::string <a class="code" href="ap__convert_8h.html#a6854b6f2584a3dda976c4cd7783a5c8c">int2Str</a>(<span class="keywordtype">int</span> i);</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keywordtype">int</span> <a class="code" href="ap__convert_8h.html#a2ead239ba7662c3734b9af5cb33c6bd5">Str2int</a>(std::string str);</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceap.html">ap</a> {</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespaceap.html#ac35dabe6b01739a57b7555544a6ef37f">Ch2int</a>(<span class="keywordtype">char</span> Ch);</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keywordtype">char</span> <a class="code" href="namespaceap.html#a0f2eb040b6d405a8560dee6ebd38c8e4">int2Ch</a>(<span class="keywordtype">int</span> i);</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;std::string <a class="code" href="namespaceap.html#a0eadb90f985146724f1377109a07bc58">Ch2Str</a>(<span class="keywordtype">char</span> Ch, <span class="keywordtype">int</span> Pos);</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keywordtype">float</span> <a class="code" href="ap__convert_8h.html#a68b18c9717a8b6d823277304f340e957">Cstr2f</a>(<span class="keywordtype">char</span> *Cstr);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="ap__convert_8h.html#a6d3c770c718c9c3f72d473dcbaca3ade">f2Cstr</a>(std::string format, <span class="keywordtype">float</span> f);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="ap__convert_8h.html#a6d3c770c718c9c3f72d473dcbaca3ade">f2Cstr</a>(<span class="keywordtype">float</span> f);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keywordtype">float</span> <a class="code" href="ap__convert_8h.html#ae18b2ed98e9f9e3d9ab8bebaf961f9b7">Str2f</a>(std::string Str);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;std::string <a class="code" href="ap__convert_8h.html#afbaaf26f552cc4de4f2151c9dcbbb081">f2Str</a>(<span class="keywordtype">float</span> f);</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;std::string <a class="code" href="ap__convert_8h.html#afbaaf26f552cc4de4f2151c9dcbbb081">f2Str</a>(std::string format, <span class="keywordtype">float</span> f);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;std::string <a class="code" href="namespaceap.html#a685c9c56dbe132bc83aa6eef159cfb87">Cstr2Str</a>(<span class="keywordtype">char</span> *Cstr);</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="namespaceap.html#a47557346159231d77c4fcd9030e21124">Str2Cstr</a>(std::string Str);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keywordtype">double</span> <a class="code" href="ap__convert_8h.html#a008f3bf671ddfd7938e33f6e0728109d">Cstr2d</a>(<span class="keywordtype">char</span> *Cstr);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="ap__convert_8h.html#abf0c306dc37c647d2d7ee79638b09849">d2Cstr</a>(std::string format, <span class="keywordtype">double</span> d);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="ap__convert_8h.html#abf0c306dc37c647d2d7ee79638b09849">d2Cstr</a>(<span class="keywordtype">double</span> d);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keywordtype">double</span> <a class="code" href="ap__convert_8h.html#ae76c7bb4fa0e47b31782db89862382df">Str2d</a>(std::string Str);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;std::string <a class="code" href="ap__convert_8h.html#a8a499e41aafdb6ed33cc3bb2a60fe8dc">d2Str</a>(<span class="keywordtype">double</span> d);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;std::string <a class="code" href="ap__convert_8h.html#a8a499e41aafdb6ed33cc3bb2a60fe8dc">d2Str</a>(std::string format, <span class="keywordtype">double</span> d);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespaceap.html#ad0685839a329b2f6ce69b2e65b1c6ad3">Cstr2int</a>(<span class="keywordtype">char</span> *Cstr);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="namespaceap.html#ac4eefc44925bd0cb500a4ddea1c82df7">int2Cstr</a>(<span class="keywordtype">int</span> i);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;std::string <a class="code" href="namespaceap.html#a80ae06a922b88f32714cb436edccfd64">int2Str</a>(<span class="keywordtype">int</span> i);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespaceap.html#adeff5228a604a1811f8a2efc1502d7f4">Str2int</a>(std::string str);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">float</span> <a class="code" href="namespaceap.html#a3d03a29df5e1fda6865df90331b981f6">Cstr2f</a>(<span class="keywordtype">char</span> *Cstr);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="namespaceap.html#a0e8c8133f98507ba7d4587e7e1fd2eb1">f2Cstr</a>(std::string format, <span class="keywordtype">float</span> f);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="namespaceap.html#a0e8c8133f98507ba7d4587e7e1fd2eb1">f2Cstr</a>(<span class="keywordtype">float</span> f);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">float</span> <a class="code" href="namespaceap.html#acecaef7e1f7a3afda897d994cb436bc0">Str2f</a>(std::string Str);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;std::string <a class="code" href="namespaceap.html#a74d83688f8d10f42888261dbb495239f">f2Str</a>(<span class="keywordtype">float</span> f);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;std::string <a class="code" href="namespaceap.html#a74d83688f8d10f42888261dbb495239f">f2Str</a>(std::string format, <span class="keywordtype">float</span> f);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespaceap.html#acf46551ccf9d5bc6cc7f5df7fa84dbf0">Cstr2d</a>(<span class="keywordtype">char</span> *Cstr);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="namespaceap.html#a020dce46835f5b6442bf5b0c37ccf835">d2Cstr</a>(std::string format, <span class="keywordtype">double</span> d);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="namespaceap.html#a020dce46835f5b6442bf5b0c37ccf835">d2Cstr</a>(<span class="keywordtype">double</span> d);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespaceap.html#a2e91115c75000108215c9ce18ad38abf">Str2d</a>(std::string Str);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;std::string <a class="code" href="namespaceap.html#a347fd9f34e30fa6bcdde125ab0f8acc7">d2Str</a>(<span class="keywordtype">double</span> d);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;std::string <a class="code" href="namespaceap.html#a347fd9f34e30fa6bcdde125ab0f8acc7">d2Str</a>(std::string format, <span class="keywordtype">double</span> d);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;} <span class="comment">// namespace ap</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aap__convert_8h_html_a01fed5f12982b007b16dc40d3cb8b111"><div class="ttname"><a href="ap__convert_8h.html#a01fed5f12982b007b16dc40d3cb8b111">Cstr2Str</a></div><div class="ttdeci">std::string Cstr2Str(char *Cstr)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a6854b6f2584a3dda976c4cd7783a5c8c"><div class="ttname"><a href="ap__convert_8h.html#a6854b6f2584a3dda976c4cd7783a5c8c">int2Str</a></div><div class="ttdeci">std::string int2Str(int i)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a68b18c9717a8b6d823277304f340e957"><div class="ttname"><a href="ap__convert_8h.html#a68b18c9717a8b6d823277304f340e957">Cstr2f</a></div><div class="ttdeci">float Cstr2f(char *Cstr)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a8a499e41aafdb6ed33cc3bb2a60fe8dc"><div class="ttname"><a href="ap__convert_8h.html#a8a499e41aafdb6ed33cc3bb2a60fe8dc">d2Str</a></div><div class="ttdeci">std::string d2Str(double d)</div></div>
-<div class="ttc" id="aap__convert_8h_html_ae76c7bb4fa0e47b31782db89862382df"><div class="ttname"><a href="ap__convert_8h.html#ae76c7bb4fa0e47b31782db89862382df">Str2d</a></div><div class="ttdeci">double Str2d(std::string Str)</div></div>
-<div class="ttc" id="aap__convert_8h_html_ace3990d0e3259f51e92d329dd844165e"><div class="ttname"><a href="ap__convert_8h.html#ace3990d0e3259f51e92d329dd844165e">Cstr2int</a></div><div class="ttdeci">int Cstr2int(char *Cstr)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a35604e152b13404c3ac0ccdf6b6d4d53"><div class="ttname"><a href="ap__convert_8h.html#a35604e152b13404c3ac0ccdf6b6d4d53">Str2Cstr</a></div><div class="ttdeci">char * Str2Cstr(std::string Str)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a885ec79c9a0098f93cd8221b6d57710e"><div class="ttname"><a href="ap__convert_8h.html#a885ec79c9a0098f93cd8221b6d57710e">int2Ch</a></div><div class="ttdeci">char int2Ch(int i)</div></div>
-<div class="ttc" id="aap__convert_8h_html_abf0c306dc37c647d2d7ee79638b09849"><div class="ttname"><a href="ap__convert_8h.html#abf0c306dc37c647d2d7ee79638b09849">d2Cstr</a></div><div class="ttdeci">char * d2Cstr(std::string format, double d)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a733727cf81aafcf8a6203e1aac96b57b"><div class="ttname"><a href="ap__convert_8h.html#a733727cf81aafcf8a6203e1aac96b57b">Ch2int</a></div><div class="ttdeci">int Ch2int(char Ch)</div></div>
-<div class="ttc" id="aap__convert_8h_html_afbaaf26f552cc4de4f2151c9dcbbb081"><div class="ttname"><a href="ap__convert_8h.html#afbaaf26f552cc4de4f2151c9dcbbb081">f2Str</a></div><div class="ttdeci">std::string f2Str(float f)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a2ead239ba7662c3734b9af5cb33c6bd5"><div class="ttname"><a href="ap__convert_8h.html#a2ead239ba7662c3734b9af5cb33c6bd5">Str2int</a></div><div class="ttdeci">int Str2int(std::string str)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a04b6a9f47524f1c033dc9a80adedcb36"><div class="ttname"><a href="ap__convert_8h.html#a04b6a9f47524f1c033dc9a80adedcb36">int2Cstr</a></div><div class="ttdeci">char * int2Cstr(int i)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a008f3bf671ddfd7938e33f6e0728109d"><div class="ttname"><a href="ap__convert_8h.html#a008f3bf671ddfd7938e33f6e0728109d">Cstr2d</a></div><div class="ttdeci">double Cstr2d(char *Cstr)</div></div>
-<div class="ttc" id="aap__convert_8h_html_ae18b2ed98e9f9e3d9ab8bebaf961f9b7"><div class="ttname"><a href="ap__convert_8h.html#ae18b2ed98e9f9e3d9ab8bebaf961f9b7">Str2f</a></div><div class="ttdeci">float Str2f(std::string Str)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a5fe2b9065d960a13fbea593712893c6d"><div class="ttname"><a href="ap__convert_8h.html#a5fe2b9065d960a13fbea593712893c6d">Ch2Str</a></div><div class="ttdeci">std::string Ch2Str(char Ch, int Pos)</div></div>
-<div class="ttc" id="aap__convert_8h_html_a6d3c770c718c9c3f72d473dcbaca3ade"><div class="ttname"><a href="ap__convert_8h.html#a6d3c770c718c9c3f72d473dcbaca3ade">f2Cstr</a></div><div class="ttdeci">char * f2Cstr(std::string format, float f)</div></div>
+<div class="ttc" id="anamespaceap_html_a2e91115c75000108215c9ce18ad38abf"><div class="ttname"><a href="namespaceap.html#a2e91115c75000108215c9ce18ad38abf">ap::Str2d</a></div><div class="ttdeci">double Str2d(std::string Str)</div><div class="ttdoc">Convert from std::string to double.</div></div>
+<div class="ttc" id="anamespaceap_html_a020dce46835f5b6442bf5b0c37ccf835"><div class="ttname"><a href="namespaceap.html#a020dce46835f5b6442bf5b0c37ccf835">ap::d2Cstr</a></div><div class="ttdeci">char * d2Cstr(std::string format, double d)</div><div class="ttdoc">Convert from double to C string with sprintf like format.</div></div>
+<div class="ttc" id="anamespaceap_html"><div class="ttname"><a href="namespaceap.html">ap</a></div><div class="ttdef"><b>Definition:</b> ap_airfoil.h:8</div></div>
+<div class="ttc" id="anamespaceap_html_a0e8c8133f98507ba7d4587e7e1fd2eb1"><div class="ttname"><a href="namespaceap.html#a0e8c8133f98507ba7d4587e7e1fd2eb1">ap::f2Cstr</a></div><div class="ttdeci">char * f2Cstr(std::string format, float f)</div><div class="ttdoc">Convert from float to C string with sprintf like format.</div></div>
+<div class="ttc" id="anamespaceap_html_a685c9c56dbe132bc83aa6eef159cfb87"><div class="ttname"><a href="namespaceap.html#a685c9c56dbe132bc83aa6eef159cfb87">ap::Cstr2Str</a></div><div class="ttdeci">std::string Cstr2Str(char *Cstr)</div><div class="ttdoc">Convert from C string to std::string.</div></div>
+<div class="ttc" id="anamespaceap_html_acf46551ccf9d5bc6cc7f5df7fa84dbf0"><div class="ttname"><a href="namespaceap.html#acf46551ccf9d5bc6cc7f5df7fa84dbf0">ap::Cstr2d</a></div><div class="ttdeci">double Cstr2d(char *Cstr)</div><div class="ttdoc">Convert from C string to double.</div></div>
+<div class="ttc" id="anamespaceap_html_ad0685839a329b2f6ce69b2e65b1c6ad3"><div class="ttname"><a href="namespaceap.html#ad0685839a329b2f6ce69b2e65b1c6ad3">ap::Cstr2int</a></div><div class="ttdeci">int Cstr2int(char *Cstr)</div><div class="ttdoc">Convert from C string to int.</div></div>
+<div class="ttc" id="anamespaceap_html_a3d03a29df5e1fda6865df90331b981f6"><div class="ttname"><a href="namespaceap.html#a3d03a29df5e1fda6865df90331b981f6">ap::Cstr2f</a></div><div class="ttdeci">float Cstr2f(char *Cstr)</div><div class="ttdoc">Convert from C string to float.</div></div>
+<div class="ttc" id="anamespaceap_html_adeff5228a604a1811f8a2efc1502d7f4"><div class="ttname"><a href="namespaceap.html#adeff5228a604a1811f8a2efc1502d7f4">ap::Str2int</a></div><div class="ttdeci">int Str2int(std::string str)</div><div class="ttdoc">Convert from std::string to int.</div></div>
+<div class="ttc" id="anamespaceap_html_a0eadb90f985146724f1377109a07bc58"><div class="ttname"><a href="namespaceap.html#a0eadb90f985146724f1377109a07bc58">ap::Ch2Str</a></div><div class="ttdeci">std::string Ch2Str(char Ch, int Pos)</div><div class="ttdoc">Convert from char character to std::string.</div></div>
+<div class="ttc" id="anamespaceap_html_ac4eefc44925bd0cb500a4ddea1c82df7"><div class="ttname"><a href="namespaceap.html#ac4eefc44925bd0cb500a4ddea1c82df7">ap::int2Cstr</a></div><div class="ttdeci">char * int2Cstr(int i)</div><div class="ttdoc">Convert from int to C string.</div></div>
+<div class="ttc" id="anamespaceap_html_a80ae06a922b88f32714cb436edccfd64"><div class="ttname"><a href="namespaceap.html#a80ae06a922b88f32714cb436edccfd64">ap::int2Str</a></div><div class="ttdeci">std::string int2Str(int i)</div><div class="ttdoc">Convert from int to std::string.</div></div>
+<div class="ttc" id="anamespaceap_html_a47557346159231d77c4fcd9030e21124"><div class="ttname"><a href="namespaceap.html#a47557346159231d77c4fcd9030e21124">ap::Str2Cstr</a></div><div class="ttdeci">char * Str2Cstr(std::string Str)</div><div class="ttdoc">Convert from std::string to C string.</div></div>
+<div class="ttc" id="anamespaceap_html_ac35dabe6b01739a57b7555544a6ef37f"><div class="ttname"><a href="namespaceap.html#ac35dabe6b01739a57b7555544a6ef37f">ap::Ch2int</a></div><div class="ttdeci">int Ch2int(char Ch)</div><div class="ttdoc">Convert from char character to int.</div></div>
+<div class="ttc" id="anamespaceap_html_a347fd9f34e30fa6bcdde125ab0f8acc7"><div class="ttname"><a href="namespaceap.html#a347fd9f34e30fa6bcdde125ab0f8acc7">ap::d2Str</a></div><div class="ttdeci">std::string d2Str(double d)</div><div class="ttdoc">Convert from double to std::string.</div></div>
+<div class="ttc" id="anamespaceap_html_a74d83688f8d10f42888261dbb495239f"><div class="ttname"><a href="namespaceap.html#a74d83688f8d10f42888261dbb495239f">ap::f2Str</a></div><div class="ttdeci">std::string f2Str(float f)</div><div class="ttdoc">Convert from float to std::string.</div></div>
+<div class="ttc" id="anamespaceap_html_acecaef7e1f7a3afda897d994cb436bc0"><div class="ttname"><a href="namespaceap.html#acecaef7e1f7a3afda897d994cb436bc0">ap::Str2f</a></div><div class="ttdeci">float Str2f(std::string Str)</div><div class="ttdoc">Convert from std::string to float.</div></div>
+<div class="ttc" id="anamespaceap_html_a0f2eb040b6d405a8560dee6ebd38c8e4"><div class="ttname"><a href="namespaceap.html#a0f2eb040b6d405a8560dee6ebd38c8e4">ap::int2Ch</a></div><div class="ttdeci">char int2Ch(int i)</div><div class="ttdoc">Convert from int to char character.</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_883e42a949afd9b16c9901393356ea2e.html">ap</a></li><li class="navelem"><a class="el" href="ap__convert_8h.html">ap_convert.h</a></li>
-    <li class="footer">Generated on Wed Mar 29 2023 22:13:49 for libap by
+    <li class="footer">Generated on Fri Mar 31 2023 20:39:40 for libap by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -30,7 +30,9 @@ var menudata={children:[
 {text:"b",url:"namespacemembers.html#index_b"},
 {text:"c",url:"namespacemembers.html#index_c"},
 {text:"d",url:"namespacemembers.html#index_d"},
+{text:"f",url:"namespacemembers.html#index_f"},
 {text:"g",url:"namespacemembers.html#index_g"},
+{text:"i",url:"namespacemembers.html#index_i"},
 {text:"l",url:"namespacemembers.html#index_l"},
 {text:"o",url:"namespacemembers.html#index_o"},
 {text:"p",url:"namespacemembers.html#index_p"},
@@ -42,7 +44,9 @@ var menudata={children:[
 {text:"b",url:"namespacemembers_func.html#index_b"},
 {text:"c",url:"namespacemembers_func.html#index_c"},
 {text:"d",url:"namespacemembers_func.html#index_d"},
+{text:"f",url:"namespacemembers_func.html#index_f"},
 {text:"g",url:"namespacemembers_func.html#index_g"},
+{text:"i",url:"namespacemembers_func.html#index_i"},
 {text:"l",url:"namespacemembers_func.html#index_l"},
 {text:"o",url:"namespacemembers_func.html#index_o"},
 {text:"p",url:"namespacemembers_func.html#index_p"},
@@ -132,21 +136,6 @@ var menudata={children:[
 {text:"Files",url:"files.html",children:[
 {text:"File List",url:"files.html"},
 {text:"File Members",url:"globals.html",children:[
-{text:"All",url:"globals.html",children:[
-{text:"_",url:"globals.html#index__5F"},
-{text:"c",url:"globals.html#index_c"},
-{text:"d",url:"globals.html#index_d"},
-{text:"e",url:"globals.html#index_e"},
-{text:"f",url:"globals.html#index_f"},
-{text:"i",url:"globals.html#index_i"},
-{text:"p",url:"globals.html#index_p"},
-{text:"s",url:"globals.html#index_s"}]},
-{text:"Functions",url:"globals_func.html",children:[
-{text:"c",url:"globals_func.html#index_c"},
-{text:"d",url:"globals_func.html#index_d"},
-{text:"e",url:"globals_func.html#index_e"},
-{text:"f",url:"globals_func.html#index_f"},
-{text:"i",url:"globals_func.html#index_i"},
-{text:"p",url:"globals_func.html#index_p"},
-{text:"s",url:"globals_func.html#index_s"}]},
+{text:"All",url:"globals.html"},
+{text:"Functions",url:"globals_func.html"},
 {text:"Macros",url:"globals_defs.html"}]}]}]}

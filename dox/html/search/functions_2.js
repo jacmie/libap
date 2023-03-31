@@ -2,8 +2,8 @@ var searchData=
 [
   ['c_383',['C',['../class_g_l___t_e_c_h___f_o_n_t.html#abbb3d8ba780fe889eb3857779af2753d',1,'GL_TECH_FONT']]],
   ['call_384',['Call',['../ap__external_exe_8h.html#a003eacd2ed18dbad58975199e513863e',1,'ap_externalExe.h']]],
-  ['ch2int_385',['Ch2int',['../ap__convert_8h.html#a733727cf81aafcf8a6203e1aac96b57b',1,'ap_convert.h']]],
-  ['ch2str_386',['Ch2Str',['../ap__convert_8h.html#a5fe2b9065d960a13fbea593712893c6d',1,'ap_convert.h']]],
+  ['ch2int_385',['Ch2int',['../namespaceap.html#ac35dabe6b01739a57b7555544a6ef37f',1,'ap']]],
+  ['ch2str_386',['Ch2Str',['../namespaceap.html#a0eadb90f985146724f1377109a07bc58',1,'ap']]],
   ['checkpermissions_387',['CheckPermissions',['../namespaceap.html#acb3cbe730051f800e220c17440c47ae5',1,'ap']]],
   ['choice_388',['choice',['../classap_1_1_d_i_a_l_o_g_s.html#a0e0a536a81ab07acb566239f6707fc46',1,'ap::DIALOGS']]],
   ['choice_5fn_389',['choice_n',['../classap_1_1_d_i_a_l_o_g_s.html#a30d20db2bd44ade32a215ab765f714a0',1,'ap::DIALOGS']]],
@@ -17,8 +17,8 @@ var searchData=
   ['colorindex2rgb_397',['ColorIndex2RGB',['../ap__gl_f_l_t_kcolor_8h.html#a15c25eb85176b2f2c9a3e105d49e3713',1,'ap_glFLTKcolor.h']]],
   ['coma_398',['Coma',['../class_g_l___t_e_c_h___f_o_n_t.html#a818e26e5c2d8ae586a4b003b378f97e4',1,'GL_TECH_FONT']]],
   ['convergence_399',['Convergence',['../class_x_f_o_i_l.html#a54207970b6725951985be94fd5a0e6bc',1,'XFOIL']]],
-  ['cstr2d_400',['Cstr2d',['../ap__convert_8h.html#a008f3bf671ddfd7938e33f6e0728109d',1,'ap_convert.h']]],
-  ['cstr2f_401',['Cstr2f',['../ap__convert_8h.html#a68b18c9717a8b6d823277304f340e957',1,'ap_convert.h']]],
-  ['cstr2int_402',['Cstr2int',['../ap__convert_8h.html#ace3990d0e3259f51e92d329dd844165e',1,'ap_convert.h']]],
-  ['cstr2str_403',['Cstr2Str',['../ap__convert_8h.html#a01fed5f12982b007b16dc40d3cb8b111',1,'ap_convert.h']]]
+  ['cstr2d_400',['Cstr2d',['../namespaceap.html#acf46551ccf9d5bc6cc7f5df7fa84dbf0',1,'ap']]],
+  ['cstr2f_401',['Cstr2f',['../namespaceap.html#a3d03a29df5e1fda6865df90331b981f6',1,'ap']]],
+  ['cstr2int_402',['Cstr2int',['../namespaceap.html#ad0685839a329b2f6ce69b2e65b1c6ad3',1,'ap']]],
+  ['cstr2str_403',['Cstr2Str',['../namespaceap.html#a685c9c56dbe132bc83aa6eef159cfb87',1,'ap']]]
 ];
