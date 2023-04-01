@@ -22,6 +22,8 @@ macro(build_test TESTNAME FILES LIBRARIES)
 endmacro()
 
 build_test(ap_basicMath_tests ap_basicMath_tests.cpp ap)
+build_test(ap_bezierPoint_tests ap_bezierPoint_tests.cpp ap)
+build_test(ap_bezier_tests ap_bezier_tests.cpp ap)
 build_test(ap_convert_tests ap_convert_tests.cpp ap)
 build_test(ap_distribution_tests ap_distribution_tests.cpp ap)
 build_test(ap_filter_tests ap_filter_tests.cpp ap)

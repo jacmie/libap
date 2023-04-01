@@ -12,6 +12,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(INDEPENDENT_HEADERS
     ap_airfoil.h    
     ap_basicMath.h
+    ap_bezier.h
+    ap_bezierAirfoil.h
+    ap_bezierPoint.h
+    ap_bspline.h
     ap_convert.h
     ap_distribution.h
     ap_externalExe.h
@@ -37,6 +41,9 @@ set(GL_HEADERS
 set(INDEPENDENT_SRC
     ap_airfoil.cpp  
     ap_basicMath.cpp
+    ap_bezier.cpp
+    ap_bezierAirfoil.cpp
+    ap_bspline.cpp
     ap_convert.cpp
     ap_distribution.cpp
     ap_externalExe.cpp
