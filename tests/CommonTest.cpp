@@ -186,66 +186,6 @@ int main(int argc, char *argv[])
 	GnuPlott.NrOfDataCloumns = 2;
 	//GnuPlott.Plot2D("TestDir/JMbspline/Bspline.xls");
 
-	// *** BezierAirfoil ***
-	
-	clog << endl << "*** BezierAirfoil ***" << endl << endl;
-	
-	BEZIER_AIRFOIL Airfoil2b;
-    Airfoil2b.Init2b(6, 60);
-    Airfoil2b.Init2b(6, 60, 7, 50);
-
-	BEZIER_AIRFOIL Airfoil4b;
-    Airfoil4b.Init4b(4, 60, 5, 40);
-	//Airfoil4b.Init4b(4, 60, 3, 30, 3, 40, 4, 50);
-
-	clog << "- Set LEcircle" << endl;
-    Airfoil2b.SetLEcircle(0.01, -0.02, 0.0, 0.0, 0.01, 0.02);
-    //Airfoil2b.SetLEcircle(0.01, -0.02, 0.0, 0.0, 0.01, 0.02, 11);
-    clog << "LEcircX: " << Airfoil2b.LEcircX << "\tLEcircY: " << Airfoil2b.LEcircY << "\tLEcircR: " << Airfoil2b.LEcircR << endl;
-    Airfoil4b.SetLEcircle(0.01, -0.02, 0.0, 0.0, 0.01, 0.02, 11);
-    clog << "LEcircX: " << Airfoil4b.LEcircX << "\tLEcircY: " << Airfoil4b.LEcircY << "\tLEcircR: " << Airfoil4b.LEcircR << endl;
-   /* 
-	Airfoil4b.SplineBR.PrintPoints(clog);
-    Airfoil4b.SplineBF.PrintPoints(clog);
-    Airfoil4b.SplineTF.PrintPoints(clog);
-    Airfoil4b.SplineTR.PrintPoints(clog);
-*/
-    clog << "- Set TE" << endl;
-	//Airfoil2b.SetTEpoint(1.0, 0.0);
-    Airfoil2b.SetTEpointB(1.0, -0.001,  0.02);
-    Airfoil2b.SetTEpointT(1.0,  0.001, -0.02);
-    Airfoil4b.SetTEpointB(1.0, -0.001,  0.02);
-    Airfoil4b.SetTEpointT(1.0,  0.001, -0.02);
-  /*  
-	Airfoil4b.SplineBR.PrintPoints(clog);
-    Airfoil4b.SplineBF.PrintPoints(clog);
-    Airfoil4b.SplineTF.PrintPoints(clog);
-    Airfoil4b.SplineTR.PrintPoints(clog);
-*/	
-    clog << "- Set Min/Max Th" << endl;
-	Airfoil2b.SetMaxTh(0.3, 0.05);
-	Airfoil2b.SetMinTh(0.3, -0.05);
-    Airfoil4b.SetMaxTh(0.3, 0.05);
-	Airfoil4b.SetMinTh(0.3, -0.05);
-/*	
-	Airfoil4b.SplineBR.PrintPoints(clog);
-    Airfoil4b.SplineBF.PrintPoints(clog);
-    Airfoil4b.SplineTF.PrintPoints(clog);
-    Airfoil4b.SplineTR.PrintPoints(clog);
-*/
-    Airfoil2b.PrintOutPoints("TestDir/JMbezierAirfoil/BezierAiroilPoints.xls");
-	
-	clog << "- Init Splines" << endl << endl;
-
-    Airfoil2b.InitAirfoilSplinePoints();
-    Airfoil4b.InitAirfoilSplinePoints();
-
-    Airfoil2b.PrintOutPoints("TestDir/JMbezierAirfoil/BezierAiroil2bPoints.xls");
-    Airfoil4b.PrintOutPoints("TestDir/JMbezierAirfoil/BezierAiroil4bPoints.xls");
-
-	Airfoil2b.PrintOutVertex("TestDir/JMbezierAirfoil/BezierAiroil2bVertex.xls", "Airfoil2b");
-	Airfoil4b.PrintOutVertex("TestDir/JMbezierAirfoil/BezierAiroil4bVertex.xls", "Airfoil4b");
-	
 	// *** JMGnuPlotPipe ***
 
 	clog << endl << "*** JMGnuPlotPipe ***" << endl << endl;

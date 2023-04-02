@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "../compare_files.h"
 
 #include "ap_substitute.h"
 
@@ -7,25 +8,6 @@
 
 using namespace std;
 using namespace ap;
-
-int Files2str(const std::string &fileName, std::string &str1, std::string &str2)
-{
-	ifstream in1("./ref/ref_" + fileName);
-	if(!in1) return 1;
-	std::stringstream buf1;
-	buf1 << in1.rdbuf();
-	str1 = buf1.str();
-	in1.close();
-
-	ifstream in2("./out/out_" + fileName);
-	if(!in2) return 2;
-	std::stringstream buf2;
-	buf2 << in2.rdbuf();
-	str2 = buf2.str();
-	in2.close();
-
-	return 0;
-}
 
 TEST(ap_substitute_tests, insert_1) {
 	SUBSTITUTE sub("./data/insert_1.txt", "./out/out_insert_1.txt", '%');

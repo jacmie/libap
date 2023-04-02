@@ -7,6 +7,7 @@
 
 namespace ap {
 
+//! Bezier curves class
 template <class REAL> class BEZIER
 {
     public:
