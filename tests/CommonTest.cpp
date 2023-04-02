@@ -15,8 +15,6 @@ int main(int argc, char *argv[])
 {
 	using namespace std;
 
-	//+++ ADVANCED FUNCTIONS +++
-	
 	// *** JMxfoil ***
 	
 	clog << endl << "*** JMxfoil ***" << endl << endl;
@@ -90,101 +88,6 @@ int main(int argc, char *argv[])
 	
 	else
 		clog << errors << endl;
-	
-	// *** JMbspline ***
-	
-	clog << endl << "*** JMbspline ***" << endl << endl;
-	
-    unsigned int poles  = 9;
-    unsigned int degree = 2;
-    unsigned int type   = PEACEWISE; //QUASI_UNIFORM;
-    unsigned int vertex = 222;
-    
-    clog << "poles  = " << poles  << endl;
-    clog << "degree = " << degree << endl;
-    clog << "vertex = " << vertex << endl;
-    clog << "type   = " << type   << endl << endl;
-    
-	B_SPLINE <double> Bs(poles, degree, type);
-
-    Bs.P[0].x = 1.0;
-	Bs.P[0].y = 2.0;
-    Bs.P[0].z = 1.0;
-  
-    Bs.P[1].x = 0.0;
-    Bs.P[1].y = 2.0;
-    Bs.P[1].z = 1.0;
-    
-    Bs.P[2].x = 0.0;
-    Bs.P[2].y = 1.0;
-    Bs.P[2].z = 0.5;
-    
-    Bs.P[3].x = 0.0;
-    Bs.P[3].y = 0.0;
-    Bs.P[3].z = 0.0;
-     
-	Bs.P[4].x = 1.0;
-	Bs.P[4].y = 0.0;
-    Bs.P[4].z = 0.0;
- 	
-    Bs.P[5].x = 2.0;
-    Bs.P[5].y = 0.0;
-    Bs.P[5].z = 0.0;
-    
-    Bs.P[6].x = 2.0;
-    Bs.P[6].y = 1.0;
-    Bs.P[6].z = 0.5;
-    
-    Bs.P[7].x = 2.0;
-    Bs.P[7].y = 2.0;
-    Bs.P[7].z = 1.0;
-	
-    Bs.P[8].x = 1.0;
-    Bs.P[8].y = 2.0;
-    Bs.P[8].z = 1.0;
-	
-	clog << "P:" << endl;
-    Bs.PrintPoints(clog);
-    clog << endl;
-
-	// --- Bezier vertexes ---
-    
-	clog << "V:" << endl;
-    Bs.VertexesSeq(vertex);
-	Bs.PrintVertexes(clog);	
-    clog << endl;
-
-    // --- Write results ---
-    
-	ofstream bsout("TestDir/JMbspline/Bspline.xls");
-    bsout << fixed << setprecision(6);
-	//Bs.PrintPoints(bsout);
-    Bs.PrintVertexes(bsout);
-    bsout.close();
-	
-	// --- Curve Length ---
-	
-	clog << "L = " << Bs.Length() << endl << endl;
-	
-	// --- P coordinate Min, Max ---
-	
-	Bs.PMinMax(0, Min, Max);
-	clog << "Min/Max (X):\t" << Min << "\t" << Max << endl << endl;
-	
-	// --- Point t & point from X ---
-	/*	
-    double X, Y, Z;
-    
-    clog << "t(X=1.4) = " << Bez.tVertex(0, 1.4) << "% coef." << endl; //X
-    Bez.Vertex(Bez.tVertex(0, 1.4), X, Y, Z);
-    clog << "X\t" << "Y\t" << "Z" << endl;
-    clog << X << "\t" << Y << "\t" << Z << endl;
-    //out << endl << X << "\t" << Y << "\t" << Z << endl;
-    */
-	
-	GNUPLOT GnuPlott;
-	GnuPlott.NrOfDataCloumns = 2;
-	//GnuPlott.Plot2D("TestDir/JMbspline/Bspline.xls");
 
 	// *** JMGnuPlotPipe ***
 
