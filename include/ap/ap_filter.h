@@ -1,9 +1,6 @@
 #ifndef AP_FILTER_H
 #define AP_FILTER_H
 
-#define _USE_MATH_DEFINES
-
-#include <fstream>
 #include <vector>
 
 namespace ap {

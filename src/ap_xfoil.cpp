@@ -7,60 +7,26 @@
 
 #include <cstring> // refactor and remove !!!!
 
-using namespace ap;
-
-XFOIL::XFOIL()
-{
-	T	= 0;
-	T_x	= 0;
-	F	= 0;
-	F_x = 0;
-	
-	Xhinge = 0.8;
-	Yhinge = 0.5;
-	FlapAngle = 0;
-	
-	Gap      = 0;
-	GapBlend = 0.9;
-	
-	FoilMix  = 0.5;
-		
-	PparN = 160;
-	PparP = 0.8; //1.0
-	PparT = 0.8; //0.15
-	PparR = 0.1; //0.2
-	
-	Filt  = 1;
-	
-	Ncrit = 9;
-	Vacc  = 0.001;
-	
-	Re = 200000;
-	Ma = 0;
-	XfoilIter = 40;
-	
-	//global_pipe_command = "./Xfoil > Xfoil.log";
-    global_pipe_command = "Xfoil > Xfoil.log";
-}
+namespace ap {
 
 void XFOIL::PrintParams(std::ostream &out)
 {
 	using namespace std;
 
-	out << "Gap = " << Gap << endl;
-	out << "GapBlend = " << GapBlend << endl;
+	out << "Gap = " << gap << endl;
+	out << "GapBlend = " << gapBlend << endl;
 	
-	out << "FoilMix = " << FoilMix << endl;
+	out << "FoilMix = " << foilMix << endl;
 		
 	out << "PparN = " << PparN << endl;
 	out << "PparP = " << PparP << endl;
 	out << "PparT = " << PparT << endl;
 	out << "PparR = " << PparR << endl;
 	
-	out << "Filt  = " << Filt << endl;
+	out << "Filt  = " << filt << endl;
 	
 	out << "Ncrit = " << Ncrit << endl;
-	out << "Vacc  = " << Vacc << endl;
+	out << "Vacc  = " << vacc << endl;
 	
 	out << "Re    = " << Re << endl;
 	out << "Ma    = " << Ma << endl;
@@ -94,7 +60,7 @@ int XFOIL::MakeAirfoil(std::string airfoil_in, std::string airfoil_out, std::str
     fputs("SAVE ", pXfoil);
     fputs(airfoil_out.c_str(), pXfoil);
     fputs("\n", pXfoil);
-	fputs("Y\n", pXfoil);	//POTWIRDZENIE NADPISYWANIA!!!
+	fputs("Y\n", pXfoil);	// Overwrite confirmation!
     fputs("QUIT\n", pXfoil);
     
 	fputs("echo", pXfoil);
@@ -133,7 +99,7 @@ int XFOIL::Mixing(std::string airfoil_in1, std::string airfoil_in2, std::string 
     fputs("F\n", pXfoil);
     fputs(airfoil_in2.c_str(), pXfoil);
     fputs("\n", pXfoil);
-    fputs(d2Cstr(FoilMix), pXfoil);
+    fputs(d2Cstr(foilMix), pXfoil);
     fputs("\n", pXfoil);
     fputs(airfoil_out.c_str(), pXfoil);
     fputs("\n", pXfoil);
@@ -144,7 +110,7 @@ int XFOIL::Mixing(std::string airfoil_in1, std::string airfoil_in2, std::string 
 	fputs("SAVE ", pXfoil);
     fputs(airfoil_out.c_str(), pXfoil);
     fputs("\n", pXfoil);
-	fputs("Y\n", pXfoil);	//POTWIRDZENIE NADPISYWANIA!!!
+	fputs("Y\n", pXfoil);	// Overwrite confirmation!
     fputs("QUIT\n", pXfoil);
 	
 	fflush(pXfoil);
@@ -208,7 +174,7 @@ int XFOIL::ModifyAirfoil(std::string airfoil_in, std::string airfoil_out, std::s
 	fputs("SAVE ", pXfoil);
     fputs(airfoil_out.c_str(), pXfoil);
     fputs("\n", pXfoil);
-	fputs("Y\n", pXfoil);	//POTWIRDZENIE NADPISYWANIA!!!
+	fputs("Y\n", pXfoil);	// Overwrite confirmation!
     fputs("QUIT\n", pXfoil);
 	
 	fflush(pXfoil);
@@ -243,12 +209,12 @@ int XFOIL::Flap(std::string airfoil_in, std::string airfoil_out, std::string pip
 		pGap(pXfoil);
 	fputs("GDES\n", pXfoil);
 		fputs("FLAP\n", pXfoil); 
-        fputs(d2Cstr(Xhinge), pXfoil);
+        fputs(d2Cstr(xHinge), pXfoil);
 		fputs("\n", pXfoil); 
         fputs("999\n", pXfoil);
-        fputs(d2Cstr(Yhinge), pXfoil);
+        fputs(d2Cstr(yHinge), pXfoil);
         fputs("\n", pXfoil);
-		fputs(d2Cstr(FlapAngle), pXfoil);
+		fputs(d2Cstr(flapAngle), pXfoil);
         fputs("\n", pXfoil);
     fputs("CADD\n\n\n\n", pXfoil);
     fputs("EXEC\n\n", pXfoil);
@@ -257,7 +223,7 @@ int XFOIL::Flap(std::string airfoil_in, std::string airfoil_out, std::string pip
 	fputs("SAVE ", pXfoil);
     fputs(airfoil_out.c_str(), pXfoil);
     fputs("\n", pXfoil);
-	fputs("Y\n", pXfoil);	//POTWIRDZENIE NADPISYWANIA!!!
+	fputs("Y\n", pXfoil);	// Overwrite confirmation!
     fputs("QUIT\n", pXfoil);
 	
 	fflush(pXfoil);
@@ -267,7 +233,7 @@ int XFOIL::Flap(std::string airfoil_in, std::string airfoil_out, std::string pip
 	return 0;
 }
 
-int XFOIL::Analyz(bool FlowFlag, double Flow, std::string airfoil_in, std::string aero_dat, std::string pipe_command)
+int XFOIL::Analyz(bool flowFlag, double flow, std::string airfoil_in, std::string aero_dat, std::string pipe_command)
 {       
 	std::string command = global_pipe_command;
 
@@ -292,7 +258,7 @@ int XFOIL::Analyz(bool FlowFlag, double Flow, std::string airfoil_in, std::strin
     fputs("PANE\n", pXfoil);
     
     fputs("MDES\n", pXfoil);  
-    fputs(d2Cstr(Filt), pXfoil);
+    fputs(d2Cstr(filt), pXfoil);
 	fputs("\n", pXfoil);
     fputs("EXEC\n\n", pXfoil);
     
@@ -304,18 +270,18 @@ int XFOIL::Analyz(bool FlowFlag, double Flow, std::string airfoil_in, std::strin
     fputs(int2Cstr(Ncrit), pXfoil);
 	fputs("\n", pXfoil);
 	fputs("VACC\n", pXfoil);  
-    fputs(d2Cstr(Vacc), pXfoil);
+    fputs(d2Cstr(vacc), pXfoil);
     fputs("\n\n", pXfoil);
 	
 	char FlowCh[8];
 	
-	if(FlowFlag)
+	if(flowFlag)
 		strcpy(FlowCh, "a ");
 	else
 		strcpy(FlowCh, "c ");
 		
 	fputs(FlowCh, pXfoil); 
-    fputs(d2Cstr(Flow), pXfoil);
+    fputs(d2Cstr(flow), pXfoil);
 	fputs("\n", pXfoil);
 	fputs("VISC ", pXfoil);  
     fputs(d2Cstr(Re), pXfoil);
@@ -327,17 +293,17 @@ int XFOIL::Analyz(bool FlowFlag, double Flow, std::string airfoil_in, std::strin
     fputs(int2Cstr(XfoilIter), pXfoil);
 	fputs("\n", pXfoil);
 	fputs(FlowCh, pXfoil);  
-    fputs(d2Cstr(Flow), pXfoil);
+    fputs(d2Cstr(flow), pXfoil);
 	fputs("\n", pXfoil);
     fputs("INIT\n", pXfoil);
     fputs(FlowCh, pXfoil);  
-    fputs(d2Cstr(Flow), pXfoil);
+    fputs(d2Cstr(flow), pXfoil);
 	fputs("\n", pXfoil);
     fputs("PACC\n", pXfoil);
 	fputs(aero_dat.c_str(), pXfoil);
     fputs("\n\n", pXfoil);
     fputs(FlowCh, pXfoil);   
-    fputs(d2Cstr(Flow), pXfoil);
+    fputs(d2Cstr(flow), pXfoil);
 	fputs("\n", pXfoil);
     fputs("PACC\n", pXfoil);
 	fputs("y\n\n", pXfoil);
@@ -491,9 +457,11 @@ void XFOIL::pGap(FILE *pXfoil)
 {
 	fputs("GDES\n", pXfoil);
 	fputs("TGAP\n", pXfoil);
-	fputs(d2Cstr(Gap), pXfoil);
+	fputs(d2Cstr(gap), pXfoil);
 	fputs("\n", pXfoil);
-	fputs(d2Cstr(GapBlend), pXfoil);
+	fputs(d2Cstr(gapBlend), pXfoil);
 	fputs("\n", pXfoil);
 	fputs("X\n\n\n", pXfoil);
 }
+
+} // namespace ap

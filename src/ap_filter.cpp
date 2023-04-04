@@ -1,6 +1,9 @@
-#include <ap_filter.h>
+#define _USE_MATH_DEFINES
 
+#include <fstream>
 #include <cmath>
+
+#include "ap_filter.h"
 
 namespace ap {
 

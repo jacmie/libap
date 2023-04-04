@@ -1,8 +1,3 @@
-#include "JMxfoil.h"
-#include "JMairfoilTransform.h"
-#include "JMbezier.h"
-#include "JMbspline.h"
-#include "JMbezierAirfoil.h"
 #include "JMGnuPlotPipe.h"
 #include "JMexternalExe.h"
 
@@ -14,81 +9,7 @@
 int main(int argc, char *argv[])
 {
 	using namespace std;
-
-	// *** JMxfoil ***
 	
-	clog << endl << "*** JMxfoil ***" << endl << endl;
-	
-	XFOIL CreateFoil;
-	
-#ifdef _WIN32
-	CreateFoil.global_pipe_command = "TestDir\\JMxfoil\\Xfoil.exe > TestDir\\JMxfoil\\Xfoil.log";
-#else
-	CreateFoil.global_pipe_command = "./TestDir/JMxfoil/Xfoil.exe > /TestDir/JMxfoil/Xfoil.log";
-#endif
-
-	clog << "- Make Airfoil" << endl;
-	CreateFoil.MakeAirfoil("NACA 23012", "TestDir/JMxfoil/NACA23012.dat");
-	CreateFoil.MakeAirfoil("NACA 2412", "TestDir/JMxfoil/NACA2412.dat");
-	
-	clog << "- Mix Airfoils" << endl;
-	CreateFoil.Mixing("TestDir/JMxfoil/NACA23012.dat", "TestDir/JMxfoil/NACA2412.dat", "TestDir/JMxfoil/AirfoilMix.dat");
-	
-	clog << "- Modify Airfoil" << endl;
-	CreateFoil.T   = 0.1;
-	CreateFoil.T_x = 0.3;
-	CreateFoil.F   = 0.0;
-	CreateFoil.F_x = 0.4;
-	CreateFoil.ModifyAirfoil("LOAD TestDir/JMxfoil/AirfoilMix.dat", "TestDir/JMxfoil/AirfoilMixMod.dat");
-	
-	clog << "- Analyz Airfoil" << endl;
-	
-#ifdef _WIN32
-	DelFile("TestDir\\JMxfoil\\XfoilData.dat");
-	CreateFoil.Analyz(1, 3, "LOAD TestDir/JMxfoil/NACA2412.dat", "TestDir/JMxfoil/XfoilData.dat", "TestDir\\JMxfoil\\Xfoil > TestDir\\JMxfoil\\XfoilAnalyze.log");
-#else	
-	DelFile("TestDir/JMxfoil/XfoilData.dat");
-	CreateFoil.Analyz(1, 3, "LOAD TestDir/JMxfoil/NACA2412.dat", "TestDir/JMxfoil/XfoilData.dat", "./TestDir/JMxfoil/Xfoil > ./TestDir/JMxfoil/XfoilAnalyze.log");
-#endif
-
-	//CreateFoil.Re = 300000;																			//For Error
-	//CreateFoil.Analyz(1, 16, "LOAD TestDir/JMxfoil/NACA0012coarse.dat", "TestDir/JMxfoil/XfoilData.dat");	//For Error
-	
-	clog << "- Analyz Convergence" << endl;
-	
-	int err_nr;
-	string errors = "0";
-	CreateFoil.Convergence("TestDir/JMxfoil/XfoilAnalyze.log", err_nr, errors);
-	clog << "err_nr = " << err_nr << endl;
-
-	if(err_nr == 0)
-	{
-		if(0 == CreateFoil.GetData((char *) "TestDir/JMxfoil/XfoilData.dat"))
-		{
-			clog << "Alfa\t";
-			clog << "CL\t";
-			clog << "CD\t";
-			clog << "CDp\t";
-			clog << "CM\t";
-			clog << "Top_Xtr\t";
-			clog << "Bot_Xtr" << endl;
-			
-			clog << CreateFoil.Alfa << "\t";
-			clog << CreateFoil.CL << "\t";
-			clog << CreateFoil.CD << "\t";
-			clog << CreateFoil.CDp << "\t";
-			clog << CreateFoil.CM << "\t";
-			clog << CreateFoil.Top_Xtr << "\t";
-			clog << CreateFoil.Bot_Xtr << endl;
-		}
-		
-		else
-			clog << "Xfoil data reading error!!!" << endl;
-	}
-	
-	else
-		clog << errors << endl;
-
 	// *** JMGnuPlotPipe ***
 
 	clog << endl << "*** JMGnuPlotPipe ***" << endl << endl;
