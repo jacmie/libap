@@ -3,7 +3,9 @@
 
 #include <string>
 
-class GNUPLOT
+namespace ap {
+
+class GNUPLOT_PIPE
 {
 	public:
 	
@@ -13,10 +15,12 @@ class GNUPLOT
 	
 	std::string GnuPlotDir;
 	
-	GNUPLOT();
+	GNUPLOT_PIPE();
 	int Plot2D(std::string DataFile);
 	int Plot3D(std::string DataFile);
 	void PlotFromPlt(std::string PltFile);
 };
+
+} // namespace ap
 
 #endif //GNUPLOT_PIPE_H

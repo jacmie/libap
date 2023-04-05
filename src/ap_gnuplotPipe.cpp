@@ -3,7 +3,9 @@
 #include <iostream>
 #include <string.h>
 
-GNUPLOT::GNUPLOT()
+namespace ap {
+
+GNUPLOT_PIPE::GNUPLOT_PIPE()
 {
 	MatrixFlag = 0;
 	FromCloumn = 1;
@@ -16,7 +18,7 @@ GNUPLOT::GNUPLOT()
 #endif
 }
 
-int GNUPLOT::Plot2D(std::string DataFile)
+int GNUPLOT_PIPE::Plot2D(std::string DataFile)
 {
     char Num[16], Line[256];
     
@@ -66,7 +68,7 @@ int GNUPLOT::Plot2D(std::string DataFile)
 	return 0;
 }
 
-int GNUPLOT::Plot3D(std::string DataFile)
+int GNUPLOT_PIPE::Plot3D(std::string DataFile)
 {
 	char Line[20056];
     
@@ -102,8 +104,10 @@ int GNUPLOT::Plot3D(std::string DataFile)
 	return 0;
 }
 
-void GNUPLOT::PlotFromPlt(std::string PltFile)
+void GNUPLOT_PIPE::PlotFromPlt(std::string PltFile)
 {
 	std::string Command = GnuPlotDir + " " + PltFile; 
 	std::clog << system(Command.c_str()) << std::endl;
 }
+
+} // namespace ap
