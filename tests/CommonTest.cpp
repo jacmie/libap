@@ -1,8 +1,3 @@
-#ifdef _WIN32
-	//#include "JMconsole.h"
-	//CONSOLE con;
-#endif
-
 int main(int argc, char *argv[])
 {
 	using namespace std;
