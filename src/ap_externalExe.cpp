@@ -15,6 +15,8 @@
 	#include <sys/wait.h>
 #endif
 
+namespace ap {
+
 int Call(char *buffer)
 {
     char call[256];
@@ -25,11 +27,11 @@ int Call(char *buffer)
     return system(call);
 }
 
-int Pipe(char *Program, char *input, char *log, char *buffer, char *mode)
+int Pipe(char *program, char *input, char *log, char *buffer, char *mode)
 {
     char Command[256];
 
-    strcpy(Command, Program);
+    strcpy(Command, program);
     
     if(std::string(input) != "")
     {
@@ -192,3 +194,4 @@ int ExeCreateProcess(std::vector <std::string> &Arg, bool Wait)
 	return ExeCreateProcess(Arg.size(), &Ptr[0], Wait);
 }
 
+} // namespace ap
