@@ -6,45 +6,54 @@
 #include <ap_matrix.h>
 #include <ap_vector.h>
 
+namespace ap {
+
+//! Technical font that can be used in the Open Gl space
 /*
-	USE WITHIN:
-
-	glBegin (GL_LINES);
-		glTextLine...
-	glEnd();
-
- w = 8 units (letters)
- w = 6 units (numbers)
- w = 1-6 units (symbols)
-<------------------>
-         /\          A
-        /  \         |
-       /    \        |
-      /      \       |
-     /        \      | h = 10 units
-    /__________\     | (normalized to 1.0 in gl before scaling for Big letters)
-   /            \    | (normalized to 0.6 in gl before scaling for Small letters)
-  /              \   |
- /                \  |
-/                  \ V__
-                      s = 2 units (separation)
-
-*/
-
+ * The letters are drawn with lines.  
+ *
+ *	USE WITHIN:
+ *
+ *	glBegin (GL_LINES);
+ *		glTextLine...
+ *	glEnd();
+ *
+ *	 w = 8 units (letters)
+ *	 w = 6 units (numbers)
+ * 	 w = 1-6 units (symbols)
+ *
+ * <------------------>
+ *          /\          A
+ *         /  \         |
+ *        /    \        |
+ *       /      \       |
+ *      /        \      | h = 10 units
+ *     /__________\     | (normalized to 1.0 in gl before scaling for Big letters)
+ *    /            \    | (normalized to 0.6 in gl before scaling for Small letters)
+ *   /              \   |
+ *  /                \  |
+ * /                  \ V__
+ * 		                   s = 2 units (separation)
+ */
 class GL_TECH_FONT
 {
 	public:
 
-	bool  MoveOriginWithRotation;
-	GLfloat Scale;
+	bool  moveOriginWithRotation_;	//!< Flag to move the character origin with rotation.
+	GLfloat scale_;					//!< Scale for the characters.
 
-	GL_TECH_FONT(GLfloat Size, MATRIX_3x3 &RotationMatrix);
+	//! Tech font constructor
+	/*!
+	 * \param size - sets size of the characters
+	 * \param rotationMatrix - current rotation matrix passed, used to derotate the character perpendicular to the screen 
+	 */
+	GL_TECH_FONT(GLfloat size, MATRIX_3x3 <GLfloat> &rotationMatrix);
 
 	private:
 
- 	VECTOR_3D 	Origin;
-    MATRIX_3x3 	RotMatrix;
-    MATRIX_3x3 	RotMatrixInv;
+ 	VECTOR_3 <GLfloat>	 origin_;
+    MATRIX_3x3 <GLfloat> rotMatrix_;
+    MATRIX_3x3 <GLfloat> rotMatrixInv_;
 	
 	void LetterOrigin(GLfloat &x_pos, GLfloat &y_pos, GLfloat &z_pos);
 	void Vertex(GLfloat x_pos, GLfloat y_pos);
@@ -123,4 +132,7 @@ class GL_TECH_FONT
 	void NoChar(GLfloat x_pos, GLfloat y_pos, GLfloat z_pos);
 };
 
+} // namespace ap
+
 #endif
+

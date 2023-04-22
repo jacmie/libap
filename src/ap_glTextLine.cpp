@@ -1,569 +1,566 @@
 #include "ap_glTextLine.h"
 
-using namespace std;
+namespace ap {
 
 GL_TEXT_LINE::GL_TEXT_LINE()
 {
-	Sep 		= 2.0;
-	Small		= 0.6;
+	sep_ 		= 2.0;
+	small_		= 0.6;
 }
 
-GL_TEXT_LINE::GL_TEXT_LINE(GLfloat Size_0, GLfloat Zoom_0, MATRIX_3x3 &RotationMatrix)
+GL_TEXT_LINE::GL_TEXT_LINE(GLfloat size, GLfloat zoom, MATRIX_3x3 <GLfloat> &rotationMatrix)
 {
-	Sep 		= 2.0;
-	Small		= 0.6; 
+	sep_ 		= 2.0;
+	small_		= 0.6; 
 	
-    Init(Size_0, Zoom_0, RotationMatrix);
-	/*Size 		= Size_0;
-	Zoom 		= Zoom_0;
-	RotMatrix 	= RotationMatrix;*/
+    Init(size, zoom, rotationMatrix);
 }
 
-void GL_TEXT_LINE::Init(GLfloat Size_0, GLfloat Zoom_0, MATRIX_3x3 &RotationMatrix)
+void GL_TEXT_LINE::Init(GLfloat size, GLfloat zoom, MATRIX_3x3 <GLfloat> &rotationMatrix)
 {
-	Size 		= Size_0;
-	Zoom 		= Zoom_0;
-	RotMatrix 	= RotationMatrix;
+	size_ 		= size;
+	zoom_		= zoom;
+	rotMatrix_ 	= rotationMatrix;
 }
 
-void GL_TEXT_LINE::MoveOrigin(GLfloat LetterWidth)
+void GL_TEXT_LINE::MoveOrigin(GLfloat letterWidth)
 {
-	VECTOR_3D NextLetter((LetterWidth + Sep)*0.1*Size, 0, 0); 
- 	Origin += NextLetter;
+	VECTOR_3 <GLfloat> nextLetter((letterWidth + sep_)*0.1*size_, 0, 0); 
+ 	origin_ += nextLetter;
 }
 
-void GL_TEXT_LINE::Write(GLfloat x_pos, GLfloat y_pos, GLfloat z_pos, string Line)
+void GL_TEXT_LINE::Write(GLfloat x_pos, GLfloat y_pos, GLfloat z_pos, std::string line)
 {
- 	VECTOR_3D Oinit; 
- 	Oinit.GetFrom(x_pos*Zoom, y_pos*Zoom, z_pos*Zoom);
- 	Origin = RotMatrix * Oinit;
+ 	VECTOR_3 <GLfloat> oInit; 
+ 	oInit.Set(x_pos*zoom_, y_pos*zoom_, z_pos*zoom_);
+ 	origin_ = rotMatrix_ * oInit;
 
-	GL_TECH_FONT Letter(Size, RotMatrix);
-	Letter.MoveOriginWithRotation = 0;
+	GL_TECH_FONT Letter(size_, rotMatrix_);
+	Letter.moveOriginWithRotation_ = 0;
     
-	for(unsigned int i=0; i<Line.size(); i++)
+	for(unsigned int i=0; i<line.size(); i++)
 	{
-		switch(Line[i])
+		switch(line[i])
 		{
 			case 'a':
-				Letter.Scale *= Small;
-				Letter.A(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.A(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'A':
-				Letter.A(Origin.x, Origin.y, Origin.z);
+				Letter.A(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'b':
-				Letter.Scale *= Small;
-				Letter.B(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.B(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'B':
-				Letter.B(Origin.x, Origin.y, Origin.z);
+				Letter.B(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'c':
-				Letter.Scale *= Small;
-				Letter.C(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.C(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'C':
-				Letter.C(Origin.x, Origin.y, Origin.z);
+				Letter.C(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'd':
-				Letter.Scale *= Small;
-				Letter.D(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.D(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'D':
-				Letter.D(Origin.x, Origin.y, Origin.z);
+				Letter.D(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'e':
-				Letter.Scale *= Small;
-				Letter.E(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.E(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'E':
-				Letter.E(Origin.x, Origin.y, Origin.z);
+				Letter.E(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'f':
-				Letter.Scale *= Small;
-				Letter.F(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.F(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'F':
-				Letter.F(Origin.x, Origin.y, Origin.z);
+				Letter.F(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'g':
-				Letter.Scale *= Small;
-				Letter.G(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.G(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'G':
-				Letter.G(Origin.x, Origin.y, Origin.z);
+				Letter.G(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'h':
-				Letter.Scale *= Small;
-				Letter.H(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.H(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'H':
-				Letter.H(Origin.x, Origin.y, Origin.z);
+				Letter.H(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'i':
-				Letter.Scale *= Small;
-				Letter.I(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.I(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'I':
-				Letter.I(Origin.x, Origin.y, Origin.z);
+				Letter.I(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'j':
-				Letter.Scale *= Small;
-				Letter.J(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.J(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'J':
-				Letter.J(Origin.x, Origin.y, Origin.z);
+				Letter.J(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'k':
-				Letter.Scale *= Small;
-				Letter.K(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.K(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'K':
-				Letter.K(Origin.x, Origin.y, Origin.z);
+				Letter.K(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'l':
-				Letter.Scale *= Small;
-				Letter.L(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.L(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'L':
-				Letter.L(Origin.x, Origin.y, Origin.z);
+				Letter.L(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'm':
-				Letter.Scale *= Small;
-				Letter.M(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.M(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'M':
-				Letter.M(Origin.x, Origin.y, Origin.z);
+				Letter.M(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'n':
-				Letter.Scale *= Small;
-				Letter.N(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.N(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'N':
-				Letter.N(Origin.x, Origin.y, Origin.z);
+				Letter.N(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'o':
-				Letter.Scale *= Small;
-				Letter.O(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.O(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'O':
-				Letter.O(Origin.x, Origin.y, Origin.z);
+				Letter.O(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'p':
-				Letter.Scale *= Small;
-				Letter.P(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.P(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'P':
-				Letter.P(Origin.x, Origin.y, Origin.z);
+				Letter.P(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'q':
-				Letter.Scale *= Small;
-				Letter.Q(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.Q(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'Q':
-				Letter.Q(Origin.x, Origin.y, Origin.z);
+				Letter.Q(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'r':
-				Letter.Scale *= Small;
-				Letter.R(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.R(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'R':
-				Letter.R(Origin.x, Origin.y, Origin.z);
+				Letter.R(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 's':
-				Letter.Scale *= Small;
-				Letter.S(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.S(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'S':
-				Letter.S(Origin.x, Origin.y, Origin.z);
+				Letter.S(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 't':
-				Letter.Scale *= Small;
-				Letter.T(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.T(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'T':
-				Letter.T(Origin.x, Origin.y, Origin.z);
+				Letter.T(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'u':
-				Letter.Scale *= Small;
-				Letter.U(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.U(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'U':
-				Letter.U(Origin.x, Origin.y, Origin.z);
+				Letter.U(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'v':
-				Letter.Scale *= Small;
-				Letter.V(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.V(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'V':
-				Letter.V(Origin.x, Origin.y, Origin.z);
+				Letter.V(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'w':
-				Letter.Scale *= Small;
-				Letter.W(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.W(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'W':
-				Letter.W(Origin.x, Origin.y, Origin.z);
+				Letter.W(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'x':
-				Letter.Scale *= Small;
-				Letter.X(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.X(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'X':
-				Letter.X(Origin.x, Origin.y, Origin.z);
+				Letter.X(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'y':
-				Letter.Scale *= Small;
-				Letter.Y(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.Y(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'Y':
-				Letter.Y(Origin.x, Origin.y, Origin.z);
+				Letter.Y(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case 'z':
-				Letter.Scale *= Small;
-				Letter.Z(Origin.x, Origin.y, Origin.z);
- 				MoveOrigin(8*Small);
-				Letter.Scale /= Small;
+				Letter.scale_ *= small_;
+				Letter.Z(origin_.x, origin_.y, origin_.z);
+ 				MoveOrigin(8*small_);
+				Letter.scale_ /= small_;
 				break;
 
 			case 'Z':
-				Letter.Z(Origin.x, Origin.y, Origin.z);
+				Letter.Z(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case '0':
-				Letter.Num0(Origin.x, Origin.y, Origin.z);
+				Letter.Num0(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '1':
-				Letter.Num1(Origin.x, Origin.y, Origin.z);
+				Letter.Num1(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '2':
-				Letter.Num2(Origin.x, Origin.y, Origin.z);
+				Letter.Num2(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '3':
-				Letter.Num3(Origin.x, Origin.y, Origin.z);
+				Letter.Num3(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '4':
-				Letter.Num4(Origin.x, Origin.y, Origin.z);
+				Letter.Num4(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 			
 			case '5':
-				Letter.Num5(Origin.x, Origin.y, Origin.z);
+				Letter.Num5(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 			
 			case '6':
-				Letter.Num6(Origin.x, Origin.y, Origin.z);
+				Letter.Num6(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '7':
-				Letter.Num7(Origin.x, Origin.y, Origin.z);
+				Letter.Num7(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '8':
-				Letter.Num8(Origin.x, Origin.y, Origin.z);
+				Letter.Num8(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '9':
-				Letter.Num9(Origin.x, Origin.y, Origin.z);
+				Letter.Num9(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '{':
-				Letter.OpenBrace(Origin.x, Origin.y, Origin.z);
+				Letter.OpenBrace(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(2);
 				break;
 
 			case '[':
-				Letter.OpenSqBracket(Origin.x, Origin.y, Origin.z);
+				Letter.OpenSqBracket(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case '(':
-				Letter.OpenBracket(Origin.x, Origin.y, Origin.z);
+				Letter.OpenBracket(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1.5);
 				break;
 
 			case '<':
-				Letter.Less(Origin.x, Origin.y, Origin.z);
+				Letter.Less(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '~':
-				Letter.Tilda(Origin.x, Origin.y, Origin.z);
+				Letter.Tilda(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '!':
-				Letter.ExclamationMark(Origin.x, Origin.y, Origin.z);
+				Letter.ExclamationMark(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case '@':
-				Letter.Monkey(Origin.x, Origin.y, Origin.z);
+				Letter.Monkey(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 
 			case '#':
-				Letter.Hash(Origin.x, Origin.y, Origin.z);
+				Letter.Hash(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '$':
-				Letter.Dolar(Origin.x, Origin.y, Origin.z);
+				Letter.Dolar(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '%':
-				Letter.Percent(Origin.x, Origin.y, Origin.z);
+				Letter.Percent(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '^':
-				Letter.Bird(Origin.x, Origin.y, Origin.z);
+				Letter.Bird(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '&':
-				Letter.And(Origin.x, Origin.y, Origin.z);
+				Letter.And(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '*':
-				Letter.Star(Origin.x, Origin.y, Origin.z);
+				Letter.Star(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '_':
-				Letter.Underscore(Origin.x, Origin.y, Origin.z);
+				Letter.Underscore(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '+':
-				Letter.Plus(Origin.x, Origin.y, Origin.z);
+				Letter.Plus(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '-':
-				Letter.Minus(Origin.x, Origin.y, Origin.z);
+				Letter.Minus(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '=':
-				Letter.Equal(Origin.x, Origin.y, Origin.z);
+				Letter.Equal(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '|':
-				Letter.Vline(Origin.x, Origin.y, Origin.z);
+				Letter.Vline(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case '/':
-				Letter.Slash(Origin.x, Origin.y, Origin.z);
+				Letter.Slash(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(3);
 				break;
 
 			case '\\':
-				Letter.BackSlash(Origin.x, Origin.y, Origin.z);
+				Letter.BackSlash(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(3);
 				break;
 
 			case ':':
-				Letter.Colon(Origin.x, Origin.y, Origin.z);
+				Letter.Colon(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case ';':
-				Letter.SemiColon(Origin.x, Origin.y, Origin.z);
+				Letter.SemiColon(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case '\"':
-				Letter.Quote(Origin.x, Origin.y, Origin.z);
+				Letter.Quote(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case '\'':
-				Letter.Apostrophe(Origin.x, Origin.y, Origin.z);
+				Letter.Apostrophe(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case '`':
-				Letter.Apostrophe(Origin.x, Origin.y, Origin.z);
+				Letter.Apostrophe(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case '.':
-				Letter.Dot(Origin.x, Origin.y, Origin.z);
+				Letter.Dot(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case ',':
-				Letter.Coma(Origin.x, Origin.y, Origin.z);
+				Letter.Coma(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case '?':
-				Letter.QuestionMark(Origin.x, Origin.y, Origin.z);
+				Letter.QuestionMark(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case '>':
-				Letter.More(Origin.x, Origin.y, Origin.z);
+				Letter.More(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(6);
 				break;
 
 			case ')':
-				Letter.CloseBracket(Origin.x, Origin.y, Origin.z);
+				Letter.CloseBracket(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1.5);
 				break;
 
 			case ']':
-				Letter.CloseSqBracket(Origin.x, Origin.y, Origin.z);
+				Letter.CloseSqBracket(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(1);
 				break;
 
 			case '}':
-				Letter.CloseBrace(Origin.x, Origin.y, Origin.z);
+				Letter.CloseBrace(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(2);
 				break;
 
@@ -576,9 +573,11 @@ void GL_TEXT_LINE::Write(GLfloat x_pos, GLfloat y_pos, GLfloat z_pos, string Lin
 				break;
 
 			default:
-				Letter.NoChar(Origin.x, Origin.y, Origin.z);
+				Letter.NoChar(origin_.x, origin_.y, origin_.z);
  				MoveOrigin(8);
 				break;
 		}
 	}
 }
+
+} // namespace ap

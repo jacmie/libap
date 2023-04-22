@@ -7,7 +7,7 @@
 
 namespace ap
 {
-//! \brief MATRIX_3x3 class and functions
+//! \brief Matrix class and functions
 ///
 /// Matrix elements:
 /// <pre>

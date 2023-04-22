@@ -1,38 +1,39 @@
 #include "ap_glTechFont.h"
 
-GL_TECH_FONT::GL_TECH_FONT(GLfloat Size, MATRIX_3x3 &RotationMatrix)
-{
-	Scale 		 = 0.1;
-	Scale 		 *= Size;
+namespace ap {
 
-	MoveOriginWithRotation = 1;
+GL_TECH_FONT::GL_TECH_FONT(GLfloat size, MATRIX_3x3 <GLfloat> &rotationMatrix)
+{
+	scale_  = 0.1;
+	scale_ *= size;
+
+	moveOriginWithRotation_ = 1;
 	
-	RotMatrix    = RotationMatrix;
-	RotMatrixInv = !RotMatrix;
+	rotMatrix_    = rotationMatrix;
+	rotMatrixInv_ = !rotMatrix_;
 }
 
 void GL_TECH_FONT::LetterOrigin(GLfloat &x_pos, GLfloat &y_pos, GLfloat &z_pos)
 {
-	if(MoveOriginWithRotation)
+	if(moveOriginWithRotation_)
 	{
- 		VECTOR_3D Oinit; 
- 		Oinit.GetFrom(x_pos, y_pos, z_pos);
- 		Origin = RotMatrix * Oinit;
+ 		VECTOR_3 <GLfloat> oInit(x_pos, y_pos, z_pos);
+ 		origin_ = rotMatrix_ * oInit;
 	}
 
 	else
- 		Origin.GetFrom(x_pos, y_pos, z_pos);
+ 		origin_.Set(x_pos, y_pos, z_pos);
 }
 
 void GL_TECH_FONT::Vertex(GLfloat x_pos, GLfloat y_pos)
 {
- 	VECTOR_3D Ver; 
- 	VECTOR_3D VerW;
+ 	VECTOR_3 <GLfloat> ver; 
+ 	VECTOR_3 <GLfloat> verW;
  	
-	Ver.GetFrom(x_pos*Scale, y_pos*Scale, 0);
- 	Ver += Origin;
- 	VerW = RotMatrixInv * Ver;
-	glVertex3f (VerW.x, VerW.y, VerW.z);            
+	ver.Set(x_pos*scale_, y_pos*scale_, 0);
+ 	ver += origin_;
+ 	verW = rotMatrixInv_ * ver;
+	glVertex3f (verW.x, verW.y, verW.z);            
 }
 
 void GL_TECH_FONT::A(GLfloat x_pos, GLfloat y_pos, GLfloat z_pos)
@@ -1146,3 +1147,5 @@ void GL_TECH_FONT::NoChar(GLfloat x_pos, GLfloat y_pos, GLfloat z_pos)
 	Vertex(0,  0);
 	Vertex(8, 10);
 }
+
+} // namespace ap

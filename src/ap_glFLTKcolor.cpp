@@ -4,7 +4,7 @@ using namespace std;
 
 bool ColorIndex2RGB(unsigned int Index, GLubyte &Rcolor, GLubyte &Gcolor, GLubyte &Bcolor)
 {
-    if(0 > Index || Index > 255)
+    if(Index > 255)
     {
         clog << "Color Index out of range <0,255> !!!" << endl;
         return 1;

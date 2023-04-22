@@ -33,9 +33,8 @@ set(FL_HEADERS
 )
 
 set(GL_HEADERS
-#    ap_glGeometryObject.h
-#    ap_glTechFont.h
-#    ap_glTextLine.h
+    ap_glTechFont.h
+    ap_glTextLine.h
 )
 
 set(INDEPENDENT_SRC
@@ -61,9 +60,8 @@ set(FL_SRC
 )
 
 set(GL_SRC
-#    ap_glGeometryObject.cpp
-#    ap_glTechFont.cpp
-#    ap_glTextLine.cpp
+    ap_glTechFont.cpp
+    ap_glTextLine.cpp
 )
 
 foreach(H_FILE ${INDEPENDENT_HEADERS})

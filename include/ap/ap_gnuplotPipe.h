@@ -5,6 +5,7 @@
 
 namespace ap {
 
+//! Class to create pipe to the Gnuplot from the code level
 class GNUPLOT_PIPE
 {
 	public:
