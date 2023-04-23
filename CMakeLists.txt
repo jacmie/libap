@@ -99,13 +99,10 @@ set(INCLUDE_DIR_FLTK            "/usr/local/include"                CACHE PATH "
 
 set(LIBRARY_DIR_FLTK            "/usr/local/lib"                    CACHE PATH "FLTK library binaries directory.")
 
-# In future check details and shift to: target_...
-link_libraries(-lfltk_jpeg -lfltk_images -lfltk_gl -lfltk)
-
 if (WIN32) #MINGW
     link_libraries(-lws2_32 -lwindowscodecs -lole32 -loleaut32 -lpsapi -lopengl32 -lglu32)
     link_libraries(-mwindows -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm -lz)
-    link_libraries(-lfltk_png)
+#    link_libraries(-lfltk_jpeg -lfltk_png)
 elseif (LINUX)
     link_libraries(-ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes)
 elseif (IOS)
@@ -147,7 +144,7 @@ endif()
 
 if(USE_GL)
     target_sources(ap PRIVATE ${FULLPATH_GL_HEADERS} ${FULLPATH_GL_SRC})
-#    target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK})
+#    target_include_directories(ap PRIVATE ${INCLUDE_DIR_GL})
 endif()
 
 message(">> See available Cache Variables settings")
