@@ -15,14 +15,14 @@ runs:
     - name: FLTK - Unix
       if: inputs.cmake_generator == 'Unix Makefiles'
       run: |
-        echo '### download ###'
-        cd ~
-        git clone https://github.com/tcltk/tcl.git
         echo '### configure ###'
-        cd tcl/unix/
-        ./configure --enable-64bit
+        cd extern/fltk/
+        pwd
         echo '### compile ###'
-        make -j 8
+        mkdir build
+        cd build
+        cmake -G "Unix Makefiles" -B . \
+        -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATIO=OFF 
         echo '### install ###'
         sudo make install
         echo '### include dir ###'
