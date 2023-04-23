@@ -70,8 +70,8 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt install libjpeg-dev
-          sudo apt install libXfixes-devel
-          sudo apt install libXft-devel
+          sudo apt install libxfixes-dev
+          sudo apt install libxft-dev
 #          sudo apt install libgl1-mesa-dev
 #         sudo apt install mesa-common-dev
 
