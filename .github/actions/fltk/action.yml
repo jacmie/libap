@@ -21,7 +21,7 @@ runs:
         echo '### compile ###'
         mkdir build
         cd build
-        cmake -G "Unix Makefiles" -B . \
+        cmake -G "Unix Makefiles" -S .. -B . \
         -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATIO=OFF 
         echo '### install ###'
         sudo make install
