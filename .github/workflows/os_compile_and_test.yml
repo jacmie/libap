@@ -69,10 +69,10 @@ jobs:
       - name: Set Ubuntu
         if: matrix.os == 'ubuntu-latest'
         run: |
-          sudo apt install libfontconfig
           sudo apt install libxfixes-dev
           sudo apt install libxft-dev
           sudo apt install libgl1-mesa-dev
+#         sudo apt install libfontconfig
 
       # MacOS
       - name: Set MacOS

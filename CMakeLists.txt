@@ -104,7 +104,7 @@ if (WIN32) #MINGW
     link_libraries(-mwindows -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm -lz)
 #    link_libraries(-lfltk_jpeg -lfltk_png)
 elseif (LINUX)
-    link_libraries(-ldl -lX11 -lpng -lGL -lXft -lXrender -lXfixes)
+    link_libraries(-ldl -lX11 -lfontconfig1 -lpng -lGL -lXft -lXrender -lXfixes)
 #    link_libraries(-ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes)
 elseif (IOS)
     # iOS libs
