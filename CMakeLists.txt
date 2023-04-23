@@ -119,12 +119,12 @@ if(USE_FLTK)
     endif()
 endif()
 
-#if(USE_GL)
-#    find_library(OPENGL_LIB GL)
-#    if(NOT OPENGL_LIB)
-#        message(FATAL_ERROR "OpenGL library not found!")
-#    endif()
-#endif()
+if(USE_GL)
+    find_library(OPENGL_LIB GL)
+    if(NOT OPENGL_LIB)
+        message(FATAL_ERROR "OpenGL library not found!")
+    endif()
+endif()
 
 
 ### Compile ###

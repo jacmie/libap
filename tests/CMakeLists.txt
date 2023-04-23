@@ -18,7 +18,6 @@ macro(build_test TESTNAME FILES LIBRARIES)
     target_include_directories(${TESTNAME} PRIVATE ../include/ap)
 
     gtest_discover_tests(${TESTNAME} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME})
-    #gtest_add_tests(${TESTNAME} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME})
 endmacro()
 
 add_executable(sq ap_externalExe_tests/bin/sq.cpp)
