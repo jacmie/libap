@@ -6,10 +6,9 @@ on:
   push:    
     branches:
       - '**'
-
-workflow_dispatch:
-  branches: 
-    - '**'
+  workflow_dispatch:
+    branches: 
+      - '**'
 
 jobs:
   release_binaries:
