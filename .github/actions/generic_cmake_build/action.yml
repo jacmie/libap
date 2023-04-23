@@ -1,0 +1,66 @@
+name: generic_cmake_build
+description: 'Build on particular system'
+
+inputs:
+  shell_type:
+    description: 'Shell type'
+    required: true
+    default: 'bash'
+  project_dir:
+    description: 'Project directory with sources'
+    required: true
+    default: ${{github.workspace}}
+  build_type:
+    description: 'Build type'
+    required: true
+    default: 'Debug'
+  cmake_generator:
+    description: 'Makefile generator used by CMake'
+    required: true
+    default: 'Unix Makefiles'
+  parallel:
+    description: 'Number of threads for parallel run'
+    required: true
+    default:  1
+  tests_flag:
+    description: 'Run tests flag'
+    required: true
+    default:  true
+
+runs:
+  using: "composite"
+  steps:
+    
+    - name: Configure CMake - Unix
+      if: inputs.cmake_generator == 'Unix Makefiles'
+      run: |
+        cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} \
+        -DBUILD_DOC_Overview=OFF -DBUILD_MODULE_Draw=OFF
+      shell: bash
+
+    - name: Configure CMake - MinGW
+      if: inputs.cmake_generator == 'MinGW Makefiles'
+      run: |
+        cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} `
+        -DBUILD_DOC_Overview=OFF -DBUILD_MODULE_Draw=OFF`
+        -D3RDPARTY_FREETYPE_DIR='D:/a/_temp/msys64/mingw64' `
+      shell: pwsh 
+
+    - name: Configure CMake - VS17
+      if: inputs.cmake_generator == 'Visual Studio 17 2022'
+      run: |
+        cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} `
+        -DBUILD_DOC_Overview=OFF -DBUILD_MODULE_Draw=OFF `
+        -D3RDPARTY_FREETYPE_DIR='${{github.workspace}}/3rdparty/freetype-vc17-x64-release' 
+      shell: pwsh 
+
+    - name: Build
+      run: cmake --build ${{inputs.project_dir}}/build -j ${{inputs.parallel}} --config ${{inputs.build_type}}
+      shell: ${{inputs.shell_type}}
+
+    - name: Test
+      if: ${{ inputs.tests_flag == 'true' }}
+      working-directory: ${{inputs.project_dir}}/build
+      run: ctest -C ${{ inputs.build_type }}
+      shell: ${{ inputs.shell_type }}
+

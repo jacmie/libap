@@ -1,0 +1,93 @@
+name: build_fltk
+description: 'Build FLTK library'
+
+inputs:
+  cmake_generator:
+    description: 'Makefile generator used by CMake'
+    required: true
+    default: 'Unix Makefiles'
+
+runs:
+  using: "composite"
+
+  steps:
+
+    - name: FLTK - Unix
+      if: inputs.cmake_generator == 'Unix Makefiles'
+      run: |
+        echo '### download ###'
+        cd ~
+        git clone https://github.com/tcltk/tcl.git
+        echo '### configure ###'
+        cd tcl/unix/
+        ./configure --enable-64bit
+        echo '### compile ###'
+        make -j 8
+        echo '### install ###'
+        sudo make install
+        echo '### include dir ###'
+        cd /usr/local/include
+        pwd
+        ls -d */
+        ls -c -ltd -- *tcl*
+        echo '### lib dir ###'
+        cd /usr/local/lib
+        pwd
+        ls -d */
+        ls -c -ltd -- *tcl*
+      shell: bash
+    
+    - name: FLTK - MinGW
+      if: inputs.cmake_generator == 'MinGW Makefiles'
+      run: |
+        echo '### download ###'
+        cd ~
+        wget https://prdownloads.sourceforge.net/tcl/tcl8.6.13-src.tar.gz
+        tar xf tcl8.6.13-src.tar.gz
+        echo '### configure ###'
+        cd tcl8.6.13/win/
+        ./configure --enable-64bit
+        echo '### compile ###'
+        make -j 8
+        echo '### install ###'
+        make install
+        cd '/mingw64/lib'
+        cp ./libtcl86.dll.a ./libtcl86.a 
+        echo '### include dir ###'
+        cd /mingw64/include/
+        pwd
+        ls -d */
+        ls -c -ltd -- *tcl*
+        echo '### lib dir ###'
+        cd /mingw64/lib/
+        pwd
+        ls -d */
+        ls -c -ltd -- *tcl*
+        echo '### bin dir ###'
+        cd /mingw64/bin/
+        pwd
+        ls -c -ltd -- *tcl*
+      shell: msys2 {0}
+
+    - name: FLTK - VS17
+      if: inputs.cmake_generator == 'Visual Studio 17 2022'
+      run: |
+        echo '### download ###'
+        cd ~
+        wget https://prdownloads.sourceforge.net/tcl/tcl8.6.13-src.tar.gz
+        tar xf tk8.6.13-src.tar.gz
+        ls
+        echo '### unzip ###'
+        7z x './tcl8613-src.zip'
+        ls
+        cd tcl8613/win/
+        echo '### modified rules.vc ###'
+        (Get-Content -Path rules.vc) -Replace 'tsgx', 'sgx' | Set-Content -Path rules.vc
+        echo '### run nmake ###'
+        (get-command nmake).Path
+        nmake -nologo -f makefile.vc release install
+#       echo '### install ###'
+#       cp -Path 'C:/Tcl' -Destination '${{github.workspace}}/3rdparty/tcltk-vc17-x64-release' -Recurse
+#       tree '${{github.workspace}}/3rdparty' /f /a
+      shell: pwsh
+

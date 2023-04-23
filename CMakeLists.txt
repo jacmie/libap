@@ -96,10 +96,8 @@ set(USE_FLTK ON CACHE BOOL "Build parts of the liballPurpose dependent on the FL
 set(USE_GL ON CACHE BOOL "Build parts of the liballPurpose dependent on the OpenGL library")
 
 set(INCLUDE_DIR_FLTK            "/usr/local/include"                CACHE PATH "FLTK library header files directory.")
-#set(INCLUDE_DIR_PANUKL_CONFIG   "/usr/local/include/PanuklConfig"   CACHE PATH "PanuklConfig library header files directory.")
 
 set(LIBRARY_DIR_FLTK            "/usr/local/lib"                    CACHE PATH "FLTK library binaries directory.")
-#set(LIBRARY_DIR_PANUKL_CONFIG   "/usr/local/lib"                    CACHE PATH "PanuklConfig library binaries directory.")
 
 # In future check details and shift to: target_...
 link_libraries(-lfltk_jpeg -lfltk_images -lfltk_gl -lfltk)
@@ -164,18 +162,7 @@ if(BUILD_GTESTS)
     enable_testing()
     include(GoogleTest)
     add_subdirectory("extern/googletest")
-    add_subdirectory(tests)
-
-#    mark_as_advanced(
-#        BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
-#        gmock_build_tests gtest_build_samples gtest_build_tests
-#        gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
-#    )
-
-#    set_target_properties(gtest PROPERTIES FOLDER extern)
-#    set_target_properties(gtest_main PROPERTIES FOLDER extern)
-#    set_target_properties(gmock PROPERTIES FOLDER extern)
-#    set_target_properties(gmock_main PROPERTIES FOLDER extern)    
+    add_subdirectory(tests)  
 endif()
 
 
