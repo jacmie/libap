@@ -22,7 +22,7 @@ runs:
         mkdir build
         cd build
         cmake -G "Unix Makefiles" -S .. -B . \
-        -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATIO=OFF 
+        -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
         echo '### build ###'
         cmake --build . -j 8
         echo '### install ###'

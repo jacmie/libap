@@ -5,8 +5,6 @@
 #include <fstream>
 #include <string>
 
-#include <boost/algorithm/string/predicate.hpp>
-
 #ifdef _WIN32
 	#include <windows.h>
 #endif
@@ -16,6 +14,10 @@
 #include "ap_flDialogs.h"
 
 namespace ap {
+
+bool iequals(const std::string &a, const std::string &b) {
+    return std::equal(a.begin(), a.end(), b.begin(), b.end(), [](char a, char b) { return tolower(a) == tolower(b); });
+}
 
 std::string Browse_FileExists(std::string fileName, bool askOverwriteFlag) {
 	namespace fs = std::filesystem;
@@ -57,7 +59,7 @@ std::string Browse(const char *filter, int dialogType, bool askOverwriteFlag) {
     	int id = fileName.find_last_of('.');
 
     	if(id<0) return Browse_FileExists(fileName + filterExtension, askOverwriteFlag); // No extension, add
-        if(id>=0 && !boost::iequals(fileName.substr(id), filterExtension)) return Browse_FileExists(fileName + filterExtension, askOverwriteFlag); // Extension different than in the filter, add
+        if(id>=0 && !iequals(fileName.substr(id), filterExtension)) return Browse_FileExists(fileName + filterExtension, askOverwriteFlag); // Extension different than in the filter, add
 
         return Browse_FileExists(fileName, askOverwriteFlag);
     }
