@@ -15,26 +15,28 @@ runs:
     - name: FLTK - Unix
       if: inputs.cmake_generator == 'Unix Makefiles'
       run: |
-        echo '### configure ###'
         cd extern/fltk/
         pwd
-        echo '### compile ###'
+        echo '### configure ###'
+        rmdir -f -r ./build
         mkdir build
         cd build
         cmake -G "Unix Makefiles" -S .. -B . \
         -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATIO=OFF 
+        echo '### build ###'
+        cmake --build . -j 8
         echo '### install ###'
         sudo make install
         echo '### include dir ###'
         cd /usr/local/include
         pwd
         ls -d */
-        ls -c -ltd -- *tcl*
+        ls -c -ltd -- *FL*
         echo '### lib dir ###'
         cd /usr/local/lib
         pwd
         ls -d */
-        ls -c -ltd -- *tcl*
+        ls -c -ltd -- *fltk*
       shell: bash
     
     - name: FLTK - MinGW
