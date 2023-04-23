@@ -18,7 +18,7 @@ runs:
         cd extern/fltk/
         pwd
         echo '### configure ###'
-        rmdir -f -r ./build
+        rm -f -r ./build
         mkdir build
         cd build
         cmake -G "Unix Makefiles" -S .. -B . \
