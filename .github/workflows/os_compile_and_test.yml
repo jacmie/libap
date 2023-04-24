@@ -125,14 +125,14 @@ jobs:
 #         cmake_generator: ${{ matrix.cmake_generator }}
 
       # Build Release
-      - name: Build Release
+      - name: Build & Test
         uses: ./.github/actions/generic_cmake_build
         with:        
           shell_type:       ${{ matrix.shell_type }}
           build_type:       Release
           cmake_generator:  ${{ matrix.cmake_generator }}
           parallel:         8
-          tests_flag:       false
+          tests_flag:       true
 
 #     # Compress Artefacts
 #     - name: Compress Artefacts

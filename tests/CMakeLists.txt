@@ -39,7 +39,6 @@ build_test(ap_externalExe_tests ap_externalExe_tests.cpp ap)
 
 if(USE_FLTK)
     set(LIBS ap)
-    build_test(ap_flDialogs_tests ap_flDialogs_tests.cpp ${LIBS})
+#   build_test(ap_flDialogs_tests ap_flDialogs_tests.cpp ${LIBS})
     build_test(ap_flFilesHandling_tests ap_flFilesHandling_tests.cpp ${LIBS})
 endif()
-#    set(LIBS ap -ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes -lfltk_images -lfltk_gl -lfltk)

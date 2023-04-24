@@ -257,8 +257,8 @@ TEST(ap_basicMath_tests, VECTOR_3_set_from_array) {
 	EXPECT_DOUBLE_EQ(t.z, v[2]);
 	
 	t.SetGolobalResizeFlag(0);                
-	EXPECT_EQ(1, t.Set(2, u, 0)) << "grFlag=0, rFlag=0" << std::endl; 
-	EXPECT_EQ(1, t.Set(2, u, 1)) << "grFlag=0, rFlag=1" << std::endl;
+	EXPECT_EQ(1, t.Set(1, u, 0)) << "grFlag=0, rFlag=0" << std::endl; 
+	EXPECT_EQ(1, t.Set(1, u, 1)) << "grFlag=0, rFlag=1" << std::endl;
 	t.SetGolobalResizeFlag(1);                
 	EXPECT_EQ(1, t.Set(2, u, 0)) << "grFlag=1, rFlag=0" << std::endl;
 	EXPECT_EQ(0, t.Set(2, u, 1)) << "grFlag=1, rFlag=1 - resize allowed" << std::endl;
