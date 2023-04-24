@@ -99,17 +99,6 @@ set(INCLUDE_DIR_FLTK            "/usr/local/include"                CACHE PATH "
 
 set(LIBRARY_DIR_FLTK            "/usr/local/lib"                    CACHE PATH "FLTK library binaries directory.")
 
-if (WIN32) #MINGW
-    link_libraries(-lws2_32 -lwindowscodecs -lole32 -loleaut32 -lpsapi -lopengl32 -lglu32)
-    link_libraries(-mwindows -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm -lz)
-#    link_libraries(-lfltk_jpeg -lfltk_png)
-elseif (LINUX)
-    link_libraries(-ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes)
-#    link_libraries(-ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes)
-elseif (IOS)
-    # iOS libs
-endif()
-
 if(USE_FLTK)
     find_library(FLTK_LIB fltk)
     if(NOT FLTK_LIB)
@@ -127,10 +116,23 @@ endif()
 
 ### Compile ###
 
+#link_libraries(-lpng -lGL -lXft -lXrender -lXfixes -lfontconfig -lX11 -ldl)
+
+if (WIN32) #MINGW
+    link_libraries(-lws2_32 -lwindowscodecs -lole32 -loleaut32 -lpsapi -lopengl32 -lglu32)
+    link_libraries(-mwindows -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm -lz)
+#    link_libraries(-lfltk_jpeg -lfltk_png)
+elseif (LINUX)
+    link_libraries(-lpng -lGL -lXft -lXrender -lXfixes -lfontconfig -lX11 -ldl)
+elseif (IOS)
+    # iOS libs
+endif()
 
 add_library(ap STATIC)
 target_sources(ap PRIVATE ${FULLPATH_INDEPENDENT_HEADERS} ${FULLPATH_INDEPENDENT_SRC})
 target_include_directories(ap PRIVATE include/ap)
+
+#link_libraries(-ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes)
 
 if(USE_FLTK)
     target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
