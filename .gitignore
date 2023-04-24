@@ -49,3 +49,5 @@ build/
 extern/
 
 dox/html/
+
+tests/ap_xfoil_tests/:00.bl
