@@ -72,12 +72,13 @@ jobs:
           sudo apt install libxfixes-dev
           sudo apt install libxft-dev
           sudo apt install libgl1-mesa-dev
-#         sudo apt install libfontconfig
 
       # MacOS
       - name: Set MacOS
         if: matrix.os == 'macos-latest'
-        run:  brew install tree
+        run: |
+          brew install tree
+          brew install mesa
 
       # MSYS
       - name: Set MSYS
