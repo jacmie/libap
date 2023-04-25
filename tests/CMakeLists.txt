@@ -21,6 +21,7 @@ macro(build_test TESTNAME FILES LIBRARIES)
 endmacro()
 
 add_executable(sq ap_externalExe_tests/bin/sq.cpp)
+target_link_libraries(sq -L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib)
 
 build_test(ap_basicMath_tests ap_basicMath_tests.cpp ap)
 
