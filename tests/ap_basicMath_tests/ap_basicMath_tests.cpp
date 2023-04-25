@@ -699,7 +699,7 @@ TEST(ap_basicMath_tests, MATRIX_3x3_set_from_array) {
 	
 	double v[3][3];
 	for(unsigned int i=0; i<3; i++) {
-		for(unsigned int j; j<3; j++) { v[i][j] = 1.0 + i*0.1*j; }
+		for(unsigned int j=0; j<3; j++) { v[i][j] = 1.0 + i*0.1*j; }
 	}
 		
 	A.Set(v);
@@ -718,7 +718,7 @@ TEST(ap_basicMath_tests, MATRIX_3x3_set_from_array_of_pointers) {
 	double **v = new double* [3];
 	for(unsigned int i=0; i<3; i++) {
   		v[i] = new double [3];
-		for(unsigned int j; j<3; j++) { v[i][j] = 1.0 + i*0.1*j; }
+		for(unsigned int j=0; j<3; j++) { v[i][j] = 1.0 + i*0.1*j; }
 	}
 	
 	MATRIX_3x3 <double> A;
@@ -736,7 +736,7 @@ TEST(ap_basicMath_tests, MATRIX_3x3_set_from_array_of_pointers) {
 	double **v2 = new double* [2];
 	for(unsigned int i=0; i<2; i++) {
   		v2[i] = new double [2];
-		for(unsigned int j; j<2; j++) { v2[i][j] = 1.0 + i*0.2*j; }
+		for(unsigned int j=0; j<2; j++) { v2[i][j] = 1.0 + i*0.2*j; }
 	}
 	
 	A.SetGolobalResizeFlag(0);                
@@ -753,7 +753,7 @@ TEST(ap_basicMath_tests, MATRIX_3x3_set_from_array_of_pointers) {
 	double **v3 = new double* [4];
 	for(unsigned int i=0; i<4; i++) {
   		v3[i] = new double [4];
-		for(unsigned int j; j<4; j++) { v3[i][j] = 1.0 + i*0.3*j; }
+		for(unsigned int j=0; j<4; j++) { v3[i][j] = 1.0 + i*0.3*j; }
 	}
 	
 	A.SetGolobalResizeFlag(0);                

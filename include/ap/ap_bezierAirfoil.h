@@ -1,14 +1,6 @@
 #ifndef _SPLINE_AIRFOIL_H_
 #define _SPLINE_AIRFOIL_H_
 
-#include <iomanip>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <stdlib.h>
-#include <FL/fl_ask.H>
-
-#include "ap_basicMath.h"
 #include "ap_bezier.h"
 
 namespace ap {

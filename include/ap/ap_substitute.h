@@ -32,8 +32,6 @@ class SUBSTITUTE
     char prompt, endPrompt;
     bool endFlag;
 	std::vector <OUT_VARIABLE> outVar;
-
-	unsigned int allLinesNr = 0;
     
 	public:
 
