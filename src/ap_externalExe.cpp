@@ -16,7 +16,7 @@
 	
 	#ifdef __APPLE__
 		#include <crt_externs.h>
-		INLINE char **macos_environ () { return (*_NSGetEnviron()); }
+		//INLINE char **macos_environ () { return (*_NSGetEnviron()); }
 	#endif	
 #endif
 
