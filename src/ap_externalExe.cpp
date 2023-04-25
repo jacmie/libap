@@ -13,7 +13,12 @@
 	#include <pwd.h>
 	#include <spawn.h>
 	#include <sys/wait.h>
+	
+	#ifdef __APPLE__
+		#include <crt_externs.h>
+	#endif	
 #endif
+
 
 namespace ap {
 
@@ -143,7 +148,12 @@ int ExeCreateProcess(int ArgNr, char **Arg, bool Wait)
 	pid_t Pid;
   	int status;
 
-	status = posix_spawnp(&Pid, Arg[0], NULL, NULL, Arg, environ);
+	#ifdef __APPLE__
+		status = posix_spawnp(&Pid, Arg[0], NULL, NULL, Arg, _NSGetEnviron());
+	#else
+		status = posix_spawnp(&Pid, Arg[0], NULL, NULL, Arg, environ);
+	#endif	
+	
 	if(status) return status;
 
 	/* Alternative
@@ -168,13 +178,11 @@ int ExeCreateProcess(int ArgNr, char **Arg, bool Wait)
 
     // *** Parent ***
     
-	if( Wait )
-	{          
+	if( Wait ) {          
 		while( waitpid(Pid, &status, WNOHANG) == 0 ) usleep(20000); // 2ms
 	}
 
-	else
-	{
+	else {
 		signal(SIGCHLD, SIG_IGN);
 	}
     
