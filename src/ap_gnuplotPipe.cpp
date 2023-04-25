@@ -44,10 +44,10 @@ int GNUPLOT_PIPE::Plot2D(std::string DataFile)
         strcat(Line, DataFile.c_str());
         strcat(Line, "'");
         strcat(Line, " using ");
-        sprintf(Num, "%i", FromCloumn);
+        snprintf(Num, 16, "%i", FromCloumn);
         strcat(Line, Num);
         strcat(Line, ":");
-        sprintf(Num, "%i", i+1);
+        snprintf(Num, 16, "%i", i+1);
         strcat(Line, Num);
             
         if(i != NrOfDataCloumns)

@@ -46,7 +46,7 @@ int Cstr2int(char *Cstr)
 char *int2Cstr(int i)
 {
 	static char Cstr[15];
-    sprintf(Cstr, "%i", i);
+    snprintf(Cstr, 15, "%i", i);
 	return Cstr;
 }
 
@@ -93,7 +93,7 @@ char *f2Cstr(float f)
 char *f2Cstr(std::string format, float f)
 {
    static char Cstr[32];
-   sprintf(Cstr, format.c_str(), f);
+   snprintf(Cstr, 32, format.c_str(), f);
    return Cstr;
 }
 
@@ -115,7 +115,7 @@ std::string f2Str(float f)
 std::string f2Str(std::string format, float f)
 {
    static char Cstr[32];
-   sprintf(Cstr, format.c_str(), f);
+   snprintf(Cstr, 32, format.c_str(), f);
    return std::string(Cstr);
 }
 
@@ -144,7 +144,7 @@ char *d2Cstr(double d)
 char *d2Cstr(std::string format, double d)
 {
    static char Cstr[32];
-   sprintf(Cstr, format.c_str(), d);
+   snprintf(Cstr, 32, format.c_str(), d);
    return Cstr;
 }
 
@@ -166,7 +166,7 @@ std::string d2Str(double d)
 std::string d2Str(std::string format, double d)
 {
    static char Cstr[32];
-   sprintf(Cstr, format.c_str(), d);
+   snprintf(Cstr, 32, format.c_str(), d);
    return std::string(Cstr);
 }
 
