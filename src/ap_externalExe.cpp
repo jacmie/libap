@@ -16,6 +16,7 @@
 	
 	#ifdef __APPLE__
 		#include <crt_externs.h>
+		INLINE char **macos_environ (void) { return (*_NSGetEnviron()); }
 	#endif	
 #endif
 
@@ -149,7 +150,7 @@ int ExeCreateProcess(int ArgNr, char **Arg, bool Wait)
   	int status;
 
 	#ifdef __APPLE__
-		status = posix_spawnp(&Pid, Arg[0], NULL, NULL, Arg, _NSGetEnviron());
+		status = posix_spawnp(&Pid, Arg[0], NULL, NULL, Arg, macos_environ);
 	#else
 		status = posix_spawnp(&Pid, Arg[0], NULL, NULL, Arg, environ);
 	#endif	
