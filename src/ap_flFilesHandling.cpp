@@ -67,7 +67,7 @@ std::string Browse(const char *filter, int dialogType, bool askOverwriteFlag) {
     return fileName;
 }
 
-#ifndef WIN32
+#ifdef __linux__
 
 int GetUserGroups(std::vector <gid_t> &Groups) {
 	int GroupsNr = 1;
