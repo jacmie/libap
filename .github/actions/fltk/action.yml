@@ -21,7 +21,7 @@ runs:
         rm -f -r ./build
         mkdir build
         cd build
-        cmake -G "Unix Makefiles" -S .. -B . \
+        cmake -G inputs.cmake_generator -S .. -B . \
         -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
         echo '### build ###'
         cmake --build . -j 8
@@ -42,15 +42,16 @@ runs:
     - name: FLTK - MinGW
       if: inputs.cmake_generator == 'MinGW Makefiles'
       run: |
-        echo '### download ###'
-        cd ~
-        wget https://prdownloads.sourceforge.net/tcl/tcl8.6.13-src.tar.gz
-        tar xf tcl8.6.13-src.tar.gz
+        cd extern/fltk/
+        pwd
         echo '### configure ###'
-        cd tcl8.6.13/win/
-        ./configure --enable-64bit
-        echo '### compile ###'
-        make -j 8
+        rm -f -r ./build
+        mkdir build
+        cd build
+        cmake -G inputs.cmake_generator -S .. -B . \
+        -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
+        echo '### build ###'
+        cmake --build . -j 8
         echo '### install ###'
         make install
         cd '/mingw64/lib'
@@ -59,35 +60,34 @@ runs:
         cd /mingw64/include/
         pwd
         ls -d */
-        ls -c -ltd -- *tcl*
+        ls -c -ltd -- *fltk*
         echo '### lib dir ###'
         cd /mingw64/lib/
         pwd
         ls -d */
-        ls -c -ltd -- *tcl*
+        ls -c -ltd -- *fltk*
         echo '### bin dir ###'
         cd /mingw64/bin/
         pwd
-        ls -c -ltd -- *tcl*
+        ls -c -ltd -- *fltk*
       shell: msys2 {0}
 
     - name: FLTK - VS17
       if: inputs.cmake_generator == 'Visual Studio 17 2022'
       run: |
-        echo '### download ###'
-        cd ~
-        wget https://prdownloads.sourceforge.net/tcl/tcl8.6.13-src.tar.gz
-        tar xf tk8.6.13-src.tar.gz
-        ls
-        echo '### unzip ###'
-        7z x './tcl8613-src.zip'
-        ls
-        cd tcl8613/win/
-        echo '### modified rules.vc ###'
-        (Get-Content -Path rules.vc) -Replace 'tsgx', 'sgx' | Set-Content -Path rules.vc
+        cd extern/fltk/
+        pwd
+        echo '### configure ###'
+        rm -f -r ./build
+        mkdir build
+        cd build
+        cmake -G inputs.cmake_generator -S .. -B . \
+        -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
+        echo '### build ###'
+        cmake --build . -j 8
         echo '### run nmake ###'
-        (get-command nmake).Path
-        nmake -nologo -f makefile.vc release install
+#       (get-command nmake).Path
+#       nmake -nologo -f makefile.vc release install
 #       echo '### install ###'
 #       cp -Path 'C:/Tcl' -Destination '${{github.workspace}}/3rdparty/tcltk-vc17-x64-release' -Recurse
 #       tree '${{github.workspace}}/3rdparty' /f /a
