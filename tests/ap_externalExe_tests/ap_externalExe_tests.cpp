@@ -12,14 +12,10 @@ using namespace ap;
 TEST(ap_externalExe_tests, pipe) {
 	
 #ifdef _WIN32
-
 	Pipe((char *)"TestDir\\JMxfoil\\Xfoil.exe", (char *)"", (char *)"TestDir\\JMexternalExe\\Xfoil.log", (char *)"NACA0012\nquit\n", (char *)"w");
-	
-#else
-
+#elif __linux__  // no Xfoil for MacOS, to do
 	//Pipe((char*)"./TestDir/JMxfoil/Xfoil", (char *)"./TestDir/JMexternalExe/XfoilCommands.txt", (char *)"./TestDir/JMexternalExe/Xfoil.log", (char *)"NACA0012", (char *)"w");
 	Pipe((char*)"../ap_xfoil_tests/bin/linux/Xfoil", (char *)"", (char *)"./out/out_xfoil.log", (char *)"NACA0012\nquit\n", (char *)"w");
-
 #endif
 	
 	std::string str1, str2;

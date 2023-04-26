@@ -8,6 +8,8 @@
 using namespace std;
 using namespace ap;
 
+#ifndef __APPLE__  // no Xfoil for MacOS, to do
+
 TEST(ap_xfoil_tests, make_airfoil) {
 	XFOIL createFoil;
 #ifdef _WIN32
@@ -80,3 +82,5 @@ TEST(ap_xfoil_tests, analyz) {
 	else
 		clog << errors << endl;
 }
+
+#endif
