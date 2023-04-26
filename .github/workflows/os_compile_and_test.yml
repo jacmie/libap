@@ -121,9 +121,8 @@ jobs:
       # Build FLTK
       - name: FLTK - Dowload & Build
         uses: ./.github/actions/fltk
-#       with:        
-#         release: 2.12.1
-#         cmake_generator: ${{ matrix.cmake_generator }}
+        with:        
+          cmake_generator: ${{ matrix.cmake_generator }}
 
       # Build Release
       - name: Build & Test
