@@ -8,7 +8,7 @@ using namespace std;
 using namespace ap;
 
 TEST(ap_flFilesHandling_tests, file_permissions) {
-#ifndef _WIN32
+#ifdef __linux__
     std::vector <bool> permResults;
     permResults.resize(3);
     

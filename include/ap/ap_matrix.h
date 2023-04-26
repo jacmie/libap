@@ -304,8 +304,8 @@ namespace ap
     	bool Set(const unsigned int n, real **A, const bool rFlag=1)
         {
 			std::cerr << "Copies components values from the array (two dimensional)" << std::endl;
-			for(unsigned int i; i<3; i++) {
-				for(unsigned int j; j<3; j++) { std::clog << A[i][j] << std::endl; }
+			for(unsigned int i=0; i<3; i++) {
+				for(unsigned int j=0; j<3; j++) { std::clog << A[i][j] << std::endl; }
 			}
 
 			if( !(grFlag && rFlag) )	
