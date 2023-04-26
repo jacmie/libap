@@ -18,7 +18,6 @@ runs:
         cd extern/fltk/
         pwd
         echo '### configure ###'
-        rm -f -r ./build
         mkdir build
         cd build
         cmake -G '${{inputs.cmake_generator}}' -S .. -B . \
@@ -45,7 +44,6 @@ runs:
         cd extern/fltk/
         pwd
         echo '### configure ###'
-        rm -f -r ./build
         mkdir build
         cd build
         cmake -G '${{inputs.cmake_generator}}' -S .. -B . \
@@ -78,7 +76,6 @@ runs:
         cd extern/fltk/
         pwd
         echo '### configure ###'
-        rm -f -r ./build
         mkdir build
         cd build
         cmake -G '${{inputs.cmake_generator}}' -S .. -B . \
