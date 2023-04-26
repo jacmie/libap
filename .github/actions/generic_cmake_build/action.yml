@@ -56,6 +56,6 @@ runs:
     - name: Test
       if: ${{ inputs.tests_flag == 'true' }}
       working-directory: ${{inputs.project_dir}}/build
-      run: ctest -C ${{ inputs.build_type }}
+      run: ctest --output-on-failure -C ${{ inputs.build_type }}
       shell: ${{ inputs.shell_type }}
 
