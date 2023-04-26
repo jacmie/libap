@@ -20,8 +20,7 @@ runs:
         echo '### configure ###'
         mkdir build
         cd build
-        cmake -G '${{inputs.cmake_generator}}' -S .. -B . \
-        -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
+        cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
         echo '### build ###'
         cmake --build . -j 8
         echo '### install ###'
@@ -46,8 +45,7 @@ runs:
         echo '### configure ###'
         mkdir build
         cd build
-        cmake -G '${{inputs.cmake_generator}}' -S .. -B . \
-        -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
+        cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
         echo '### build ###'
         cmake --build . -j 8
         echo '### install ###'
@@ -78,8 +76,7 @@ runs:
         echo '### configure ###'
         mkdir build
         cd build
-        cmake -G '${{inputs.cmake_generator}}' -S .. -B . \
-        -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
+        cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
         echo '### build ###'
         cmake --build . -j 8
         echo '### run nmake ###'
