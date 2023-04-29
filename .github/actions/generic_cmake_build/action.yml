@@ -47,6 +47,7 @@ runs:
       if: inputs.cmake_generator == 'Visual Studio 17 2022'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} `
+        -DINCLUDE_DIR_FLTK='${{inputs.build_type}}/extern/fltk/include' -DLIB_DIR_FLTK='${{inputs.build_type}}/extern/fltk/lib'
       shell: pwsh 
 
     - name: Build
