@@ -56,16 +56,23 @@ runs:
         cd /mingw64/include/
         pwd
         ls -d */
-        ls -c -ltd -- *fltk*
+        cd /usr/local/include/
+        pwd
+        ls -d */
         echo '### lib dir ###'
         cd /mingw64/lib/
         pwd
         ls -d */
-        ls -c -ltd -- *fltk*
+        cd /usr/local/lib/
+        pwd
+        ls -d */
         echo '### bin dir ###'
         cd /mingw64/bin/
         pwd
-        ls -c -ltd -- *fltk*
+        ls -d */
+        cd /usr/local/bin/
+        pwd
+        ls -d */
       shell: msys2 {0}
 
     - name: FLTK - VS17
