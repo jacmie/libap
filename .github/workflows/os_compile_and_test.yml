@@ -91,6 +91,7 @@ jobs:
           update:       true
           platform-check-severity: fatal
           install: >-
+            cmake
             tree
             git
             base-devel
