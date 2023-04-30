@@ -90,7 +90,11 @@ int XFOIL::Mixing(std::string airfoil_in1, std::string airfoil_in2, std::string 
 
 	FILE *pXfoil;
           
+#ifdef _WIN32          
+    if (( pXfoil = _popen(command.c_str(), "w")) == NULL)
+#else
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
+#endif
     {
         std::clog << "XFoil pipe error!!!" << std::endl;
         return 1;
@@ -136,7 +140,11 @@ int XFOIL::ModifyAirfoil(std::string airfoil_in, std::string airfoil_out, std::s
 
 	FILE *pXfoil;
           
+#ifdef _WIN32          
+    if (( pXfoil = _popen(command.c_str(), "w")) == NULL)
+#else
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
+#endif
     {
         std::clog << "XFoil pipe error!!!" << std::endl;
         return 1;
@@ -200,7 +208,11 @@ int XFOIL::Flap(std::string airfoil_in, std::string airfoil_out, std::string pip
 
 	FILE *pXfoil;
           
+#ifdef _MSC_VER          
+    if (( pXfoil = _popen(command.c_str(), "w")) == NULL)
+#else
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
+#endif
     {
         std::clog << "XFoil pipe error!!!" << std::endl;
         return 1;
@@ -249,7 +261,11 @@ int XFOIL::Analyz(bool flowFlag, double flow, std::string airfoil_in, std::strin
 
     FILE *pXfoil;
     
-	if (( pXfoil = popen(command.c_str(), "w")) == NULL)
+#ifdef _MSC_VER          
+    if (( pXfoil = _popen(command.c_str(), "w")) == NULL)
+#else
+    if (( pXfoil = popen(command.c_str(), "w")) == NULL)
+#endif
     {
         std::clog << "XFoil pipe error!!!" << std::endl;
         return 1;

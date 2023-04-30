@@ -3,7 +3,9 @@
 
 #include <iostream>
 
-#include <FL/gl.h>
+extern "C" {
+	#include <FL/gl.h>
+}
 #include <FL/Fl.H>
 #include <FL/fl_show_colormap.H>
 

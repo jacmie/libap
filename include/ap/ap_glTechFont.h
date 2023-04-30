@@ -1,7 +1,9 @@
 #ifndef AP_GL_TECH_FONT_H
 #define AP_GL_TECH_FONT_H
 
-#include <GL/gl.h>
+extern "C" {
+	#include <GL/gl.h>
+}
 
 #include <ap_matrix.h>
 #include <ap_vector.h>
