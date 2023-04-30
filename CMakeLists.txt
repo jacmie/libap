@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.25)
 project(ap LANGUAGES CXX)
 
 #add_compile_options(-Wall -Wextra)
-add_compile_options(-Wall)
+#add_compile_options(-Wall)
 set(CMAKE_CXX_STANDARD 17) 
 
 
@@ -101,7 +101,10 @@ set(INCLUDE_DIR_FLTK            "/usr/local/include"                CACHE PATH "
 set(LIBRARY_DIR_FLTK            "/usr/local/lib"                    CACHE PATH "FLTK library binaries directory.")
 
 #if(USE_FLTK)
-#    find_library(FLTK_LIB fltk)
+#    find_library(FLTK_LIB
+        NAMES fltk_jpeg fltk_png fltk_images fltk_gl fltk
+        HINTS '${LIBRARY_DIR_FLTK}'
+    )
 #    if(NOT FLTK_LIB)
 #        message(FATAL_ERROR "FLTK library not found!")
 #    endif()
