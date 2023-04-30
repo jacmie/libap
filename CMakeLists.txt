@@ -100,15 +100,16 @@ set(INCLUDE_DIR_FLTK            "/usr/local/include"                CACHE PATH "
 
 set(LIBRARY_DIR_FLTK            "/usr/local/lib"                    CACHE PATH "FLTK library binaries directory.")
 
-#if(USE_FLTK)
-#    find_library(FLTK_LIB
-#       NAMES fltk_jpeg fltk_png fltk_images fltk_gl fltk
-#       HINTS '${LIBRARY_DIR_FLTK}'
-#   )
-#    if(NOT FLTK_LIB)
-#        message(FATAL_ERROR "FLTK library not found!")
-#    endif()
-#endif()
+if(USE_FLTK)
+    find_library(FLTK_LIB
+        NAMES fltk_jpeg fltk_png fltk_images fltk_gl fltk
+        HINTS "${LIBRARY_DIR_FLTK}"
+        REQUIRED
+    )
+    if(NOT FLTK_LIB)
+        message(FATAL_ERROR "FLTK library not found!")
+    endif()
+endif()
 
 #if(USE_GL)
 #    find_library(OPENGL_LIB GL)
@@ -132,17 +133,11 @@ elseif (IOS)
     # iOS libs
 endif()
 
-add_library(ap STATIC)
-target_sources(ap PRIVATE ${FULLPATH_INDEPENDENT_HEADERS} ${FULLPATH_INDEPENDENT_SRC})
-target_include_directories(ap PRIVATE include/ap)
-
-#link_libraries(-ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes)
-
 if(USE_FLTK)
     target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
     target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK})
 #    link_libraries(-L${LIBRARY_DIR_FLTK})
-    link_libraries(${LIBRARY_DIR_FLTK})
+    link_directories(${LIBRARY_DIR_FLTK})
     link_libraries(fltk_images fltk_gl fltk)
     if(WIN32)
         link_libraries(fltk_jpeg fltk_png)
@@ -156,6 +151,12 @@ if(USE_GL)
 #    target_include_directories(ap PRIVATE ${INCLUDE_DIR_GL})
 #    link_libraries(-L${LIBRARY_DIR_GL})
 endif()
+
+add_library(ap STATIC)
+target_sources(ap PRIVATE ${FULLPATH_INDEPENDENT_HEADERS} ${FULLPATH_INDEPENDENT_SRC})
+target_include_directories(ap PRIVATE include/ap)
+
+#link_libraries(-ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes)
 
 message(">> See available Cache Variables settings")
 
