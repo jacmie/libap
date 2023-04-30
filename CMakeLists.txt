@@ -133,10 +133,17 @@ elseif (IOS)
     # iOS libs
 endif()
 
+add_library(ap STATIC)
+target_sources(ap PRIVATE ${FULLPATH_INDEPENDENT_HEADERS} ${FULLPATH_INDEPENDENT_SRC})
+target_include_directories(ap PRIVATE include/ap)
+
+#link_libraries(-ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes)
+
 if(USE_FLTK)
     target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
     target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK})
 #    link_libraries(-L${LIBRARY_DIR_FLTK})
+    target_link_directories(ap PRIVATE ${LIBRARY_DIR_FLTK})
     link_directories(${LIBRARY_DIR_FLTK})
     link_libraries(fltk_images fltk_gl fltk)
     if(WIN32)
@@ -151,12 +158,6 @@ if(USE_GL)
 #    target_include_directories(ap PRIVATE ${INCLUDE_DIR_GL})
 #    link_libraries(-L${LIBRARY_DIR_GL})
 endif()
-
-add_library(ap STATIC)
-target_sources(ap PRIVATE ${FULLPATH_INDEPENDENT_HEADERS} ${FULLPATH_INDEPENDENT_SRC})
-target_include_directories(ap PRIVATE include/ap)
-
-#link_libraries(-ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes)
 
 message(">> See available Cache Variables settings")
 
