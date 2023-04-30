@@ -41,8 +41,11 @@ int XFOIL::MakeAirfoil(std::string airfoil_in, std::string airfoil_out, std::str
 		command = pipe_command;
 	
     FILE *pXfoil;
-          
+#ifdef _WIN32          
+    if (( pXfoil = _popen(command.c_str(), "w")) == NULL)
+#else
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
+#endif
     {
         std::clog << "XFoil pipe error!!!" << std::endl;
         return 1;
@@ -69,8 +72,12 @@ int XFOIL::MakeAirfoil(std::string airfoil_in, std::string airfoil_out, std::str
 	
     fflush(pXfoil);
   
+#ifdef _WIN32          
+    _pclose(pXfoil);
+#else
     pclose(pXfoil);
-	
+#endif
+
 	return 0;
 }
 
