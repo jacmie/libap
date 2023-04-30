@@ -99,19 +99,19 @@ set(INCLUDE_DIR_FLTK            "/usr/local/include"                CACHE PATH "
 
 set(LIBRARY_DIR_FLTK            "/usr/local/lib"                    CACHE PATH "FLTK library binaries directory.")
 
-if(USE_FLTK)
-    find_library(FLTK_LIB fltk)
-    if(NOT FLTK_LIB)
-        message(FATAL_ERROR "FLTK library not found!")
-    endif()
-endif()
+#if(USE_FLTK)
+#    find_library(FLTK_LIB fltk)
+#    if(NOT FLTK_LIB)
+#        message(FATAL_ERROR "FLTK library not found!")
+#    endif()
+#endif()
 
-if(USE_GL)
-    find_library(OPENGL_LIB GL)
-    if(NOT OPENGL_LIB)
-        message(FATAL_ERROR "OpenGL library not found!")
-    endif()
-endif()
+#if(USE_GL)
+#    find_library(OPENGL_LIB GL)
+#    if(NOT OPENGL_LIB)
+#        message(FATAL_ERROR "OpenGL library not found!")
+#    endif()
+#endif()
 
 
 ### Compile ###
