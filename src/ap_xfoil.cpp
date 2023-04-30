@@ -41,7 +41,8 @@ int XFOIL::MakeAirfoil(std::string airfoil_in, std::string airfoil_out, std::str
 		command = pipe_command;
 	
     FILE *pXfoil;
-#ifdef _WIN32          
+
+#ifdef _MSC_VER          
     if (( pXfoil = _popen(command.c_str(), "w")) == NULL)
 #else
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
@@ -72,7 +73,7 @@ int XFOIL::MakeAirfoil(std::string airfoil_in, std::string airfoil_out, std::str
 	
     fflush(pXfoil);
   
-#ifdef _WIN32          
+#ifdef _MSC_VER          
     _pclose(pXfoil);
 #else
     pclose(pXfoil);
@@ -90,7 +91,7 @@ int XFOIL::Mixing(std::string airfoil_in1, std::string airfoil_in2, std::string 
 
 	FILE *pXfoil;
           
-#ifdef _WIN32          
+#ifdef _MSC_VER          
     if (( pXfoil = _popen(command.c_str(), "w")) == NULL)
 #else
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
@@ -126,7 +127,11 @@ int XFOIL::Mixing(std::string airfoil_in1, std::string airfoil_in2, std::string 
 	
 	fflush(pXfoil);
   
+#ifdef _MSC_VER          
+    _pclose(pXfoil);
+#else
     pclose(pXfoil);
+#endif
 	
 	return 0;
 }
@@ -140,7 +145,7 @@ int XFOIL::ModifyAirfoil(std::string airfoil_in, std::string airfoil_out, std::s
 
 	FILE *pXfoil;
           
-#ifdef _WIN32          
+#ifdef _MSC_VER          
     if (( pXfoil = _popen(command.c_str(), "w")) == NULL)
 #else
     if (( pXfoil = popen(command.c_str(), "w")) == NULL)
@@ -194,7 +199,11 @@ int XFOIL::ModifyAirfoil(std::string airfoil_in, std::string airfoil_out, std::s
 	
 	fflush(pXfoil);
   
+#ifdef _MSC_VER          
+    _pclose(pXfoil);
+#else
     pclose(pXfoil);
+#endif
 	
 	return 0;
 }
@@ -247,7 +256,11 @@ int XFOIL::Flap(std::string airfoil_in, std::string airfoil_out, std::string pip
 	
 	fflush(pXfoil);
   
+#ifdef _MSC_VER          
+    _pclose(pXfoil);
+#else
     pclose(pXfoil);
+#endif
 	
 	return 0;
 }
@@ -336,7 +349,11 @@ int XFOIL::Analyz(bool flowFlag, double flow, std::string airfoil_in, std::strin
    
     fflush(pXfoil);
   
+#ifdef _MSC_VER          
+    _pclose(pXfoil);
+#else
     pclose(pXfoil);
+#endif
 	
 	return 0;
 }
