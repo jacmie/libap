@@ -102,9 +102,9 @@ set(LIBRARY_DIR_FLTK            "/usr/local/lib"                    CACHE PATH "
 
 #if(USE_FLTK)
 #    find_library(FLTK_LIB
-        NAMES fltk_jpeg fltk_png fltk_images fltk_gl fltk
-        HINTS '${LIBRARY_DIR_FLTK}'
-    )
+#       NAMES fltk_jpeg fltk_png fltk_images fltk_gl fltk
+#       HINTS '${LIBRARY_DIR_FLTK}'
+#   )
 #    if(NOT FLTK_LIB)
 #        message(FATAL_ERROR "FLTK library not found!")
 #    endif()
