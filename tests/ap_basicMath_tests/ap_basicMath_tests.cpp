@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#define _USE_MATH_DEFINES
+
 #include "ap_basicMath.h"
 #include "ap_vector.h"
 #include "ap_matrix.h"
