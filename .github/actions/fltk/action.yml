@@ -91,6 +91,6 @@ runs:
 #       nmake -nologo -f makefile.vc release install
 #       echo '### install ###'
 #       cp -Path 'C:/Tcl' -Destination '${{github.workspace}}/3rdparty/tcltk-vc17-x64-release' -Recurse
-#       tree '${{github.workspace}}/3rdparty' /f /a
+        tree '${{github.workspace}}/extern/fltk' /f /a
       shell: pwsh
 

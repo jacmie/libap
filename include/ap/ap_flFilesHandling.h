@@ -1,8 +1,9 @@
 #ifndef AP_FILES_HANDLING_H
 #define AP_FILES_HANDLING_H
 
+#include <string>
+
 #ifndef _WIN32
-	#include <string>
 	#include <vector>
 	
 	#include <pwd.h>
