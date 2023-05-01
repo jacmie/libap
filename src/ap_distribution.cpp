@@ -1,8 +1,8 @@
-#include "ap_distribution.h"
-
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <iostream>
+
+#include "ap_distribution.h"
 
 namespace ap {
 

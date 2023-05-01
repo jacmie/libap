@@ -57,7 +57,11 @@ int Pipe(char *program, char *input, char *log, char *buffer, char *mode)
     
     FILE *pipe;
           
+#ifdef _MSC_VER          
+    if (( pipe = _popen(Command, mode)) == NULL)
+#else
     if (( pipe = popen(Command, mode)) == NULL)
+#endif
     {
         std::clog << "Pipe error!!!" << std::endl;
         return -1;
@@ -80,7 +84,11 @@ int Pipe(char *program, char *input, char *log, char *buffer, char *mode)
     
     fflush(pipe);
   
+#ifdef _MSC_VER          
+    _pclose(pipe);
+#else
     pclose(pipe);
+#endif
 
 	return 1;
 }
