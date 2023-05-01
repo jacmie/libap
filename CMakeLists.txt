@@ -125,7 +125,7 @@ endif()
 
 if (WIN32) #MINGW
     link_libraries(ws2_32 windowscodecs ole32 oleaut32 psapi opengl32 glu32)
-    link_libraries(-mwindows -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm -lz)
+#    link_libraries(-mwindows -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm -lz)
 #    link_libraries(-lfltk_jpeg -lfltk_png)
 elseif (LINUX)
     link_libraries(-lpng -lGL -lXft -lXrender -lXfixes -lfontconfig -lX11 -ldl)

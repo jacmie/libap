@@ -3,6 +3,7 @@
 #ifndef AP_VECTOR_3_H
 #define AP_VECTOR_3_H
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <cstdio>
 #include <iomanip>
