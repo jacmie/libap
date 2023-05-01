@@ -1,13 +1,13 @@
 #include <gtest/gtest.h>
 
 #define _USE_MATH_DEFINES
+#include <cmath>
+#include <iostream>
+#include <fstream>
 
 #include "ap_basicMath.h"
 #include "ap_vector.h"
 #include "ap_matrix.h"
-
-#include <iostream>
-#include <fstream>
 
 using namespace std;
 using namespace ap;
