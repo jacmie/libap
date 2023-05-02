@@ -57,12 +57,12 @@ runs:
 
     - name: Temp
       run: |
-        cd '${{inputs.project_dir}}/build/tests'
+        cd "${{inputs.project_dir}}/build/tests"
         pwd
-        tree '${{inputs.project_dir}}/build/tests' /f /a
+        tree "${{inputs.project_dir}}/build/tests" /f /a
         sq 1.1 2.3
-      shell: ${{ inputs.shell_type }
-    }
+      shell: ${{ inputs.shell_type }}
+    
     - name: Test
       if: ${{ inputs.tests_flag == 'true' }}
       working-directory: ${{inputs.project_dir}}/build
