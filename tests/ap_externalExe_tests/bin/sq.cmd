@@ -1,2 +1,2 @@
 @echo "=== Square.cmd ==="
-Sq.exe %1 %2
+../../build/tests/Release/sq.exe %1 %2
