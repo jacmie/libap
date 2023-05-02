@@ -13,7 +13,7 @@ macro(build_test TESTNAME FILES LIBRARIES)
     target_link_libraries(
         ${TESTNAME}
         GTest::gtest_main
-        -L/usr/local/lib
+#        -L/usr/local/lib
         ${LIBRARIES} 
     )
     target_include_directories(${TESTNAME} PRIVATE ../include/ap)
