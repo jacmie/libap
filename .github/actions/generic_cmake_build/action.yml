@@ -61,7 +61,6 @@ runs:
         cd   "${{inputs.project_dir}}/build/tests/Release"
         tree "${{inputs.project_dir}}/build/tests/Release" /f /a
         pwd
-        sq.exe 1.1 2.3
       shell: ${{ inputs.shell_type }}
     
     - name: Test
