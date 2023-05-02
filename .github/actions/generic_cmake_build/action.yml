@@ -57,7 +57,7 @@ runs:
 
     - name: Temp
       run: |
-        cd ${{inputs.project_dir}}/build/tests
+        cd '${{inputs.project_dir}}/build/tests'
         pwd
         tree '${{inputs.project_dir}}/build/tests' /f /a
         sq 1.1 2.3
