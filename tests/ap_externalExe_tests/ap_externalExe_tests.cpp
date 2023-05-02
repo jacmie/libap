@@ -28,7 +28,7 @@ TEST(ap_externalExe_tests, execute_binary) {
 #ifdef _WIN32
 	// Put to PATH: "C:/msys64/usr/local/bin/Sq.exe" !!!
     //arg.push_back("../../build/tests/sq"); 
-	clog << "Start from:"
+	clog << "Start from:" << endl;
 	system(pwd);
 	//D:\a\libap\libap\extern\googletest\googletest\src\gtest_main.cc
     arg.push_back("../../../../../build/tests/sq"); 
