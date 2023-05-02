@@ -29,7 +29,7 @@ TEST(ap_externalExe_tests, execute_binary) {
 	// Put to PATH: "C:/msys64/usr/local/bin/Sq.exe" !!!
     //arg.push_back("../../build/tests/sq"); 
 	clog << "Start from:" << endl;
-	system(pwd);
+	system("pwd");
 	//D:\a\libap\libap\extern\googletest\googletest\src\gtest_main.cc
     arg.push_back("../../../../../build/tests/sq"); 
     //arg.push_back("C:/msys64/usr/local/bin/sq.exe");  	// Global directory
