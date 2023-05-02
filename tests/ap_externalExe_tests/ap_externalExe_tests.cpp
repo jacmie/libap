@@ -32,7 +32,8 @@ TEST(ap_externalExe_tests, execute_binary) {
 	system("pwd");
 	//D:\a\libap\libap\extern\googletest\googletest\src\gtest_main.cc
     //arg.push_back("../../../../../build/tests/sq"); 
-    arg.push_back("../../build/tests/sq.exe"); 
+    //arg.push_back("../../build/tests/sq.exe"); 
+    arg.push_back("D:/a/libap/libap/build/tests/sq.exe"); 
     //arg.push_back("C:/msys64/usr/local/bin/sq.exe");  	// Global directory
 #else
     arg.push_back("../../build/tests/sq"); 
