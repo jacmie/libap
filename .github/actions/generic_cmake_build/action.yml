@@ -41,7 +41,7 @@ runs:
       if: inputs.cmake_generator == 'MinGW Makefiles'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} `
-        -DINCLUDE_DIR_FLTK='${{inputs.project_dir}}/extern/fltk' -DLIBRARY_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/lib'
+        -DINCLUDE_DIR_FLTK='${{inputs.project_dir}}/extern/fltk' -DLIBRARY_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/lib -DBUILD_GTESTS=OFF -DBUILD_GMOCK=OFF
       shell: pwsh 
 
     - name: Configure CMake - VS17
@@ -63,10 +63,10 @@ runs:
         pwd
       shell: ${{ inputs.shell_type }}
     
-#   - name: Test
-#     if: ${{ inputs.tests_flag == 'true' }}
-#     working-directory: ${{inputs.project_dir}}/build
-#     run: ctest --output-on-failure -C ${{ inputs.build_type }}
-#     shell: pwsh
-#      shell: ${{ inputs.shell_type }}
+    - name: Test
+      if: ${{ inputs.tests_flag == 'true' }}
+      working-directory: ${{inputs.project_dir}}/build
+      run: ctest --output-on-failure -C ${{ inputs.build_type }}
+      shell: pwsh
+       shell: ${{ inputs.shell_type }}
 
