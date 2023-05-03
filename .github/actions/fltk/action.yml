@@ -48,6 +48,7 @@ runs:
         cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
         echo '### build ###'
         cmake --build . -j 8
+        tree .
 #       echo '### install ###'
 #       make install
 #       cd '/mingw64/lib'
