@@ -41,7 +41,7 @@ runs:
       if: inputs.cmake_generator == 'MinGW Makefiles'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} `
-        -DINCLUDE_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/${{inputs.build_type}}/include' -DLIB_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/${{inputs.build_type}}/lib'
+        -DINCLUDE_DIR_FLTK='${{inputs.project_dir}}/extern/fltk' -DLIB_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/lib'
       shell: pwsh 
 
     - name: Configure CMake - VS17
