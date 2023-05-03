@@ -133,7 +133,7 @@ jobs:
           shell_type:       ${{ matrix.shell_type }}
           build_type:       Release
           cmake_generator:  ${{ matrix.cmake_generator }}
-          parallel:         8
+          parallel:         1
           tests_flag:       true
 
 #     # Compress Artefacts
