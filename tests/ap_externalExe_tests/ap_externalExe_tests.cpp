@@ -43,7 +43,7 @@ TEST(ap_externalExe_tests, execute_script) {
 	
 #ifdef _WIN32
 	//arg.push_back("TestDir\\JMexternalExe\\Sq.cmd");	// Local directory only in MSYS, doesn't support home dir: '~' !!!
-	arg.push_back("cmd");    							// Global direcotry
+	//arg.push_back("cmd");    							// Global direcotry
 	arg.push_back("./bin/sq.cmd");	    				// Local directory, doesn't support home dir: '~' !!!
 	//Arg.push_back("C:\\msys64\\home\\jmiel\\JMcommon\\TestDir\\JMexternalExe\\Sq.cmd"); // Global direcotry
 #else
