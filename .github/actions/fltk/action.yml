@@ -23,18 +23,18 @@ runs:
         cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
         echo '### build ###'
         cmake --build . -j 8
-        echo '### install ###'
-        sudo make install
-        echo '### include dir ###'
-        cd /usr/local/include
-        pwd
-        ls -d */
-        ls -c -ltd -- *FL*
-        echo '### lib dir ###'
-        cd /usr/local/lib
-        pwd
-        ls -d */
-        ls -c -ltd -- *fltk*
+#       echo '### install ###'
+#       sudo make install
+#       echo '### include dir ###'
+#       cd /usr/local/include
+#       pwd
+#       ls -d */
+#       ls -c -ltd -- *FL*
+#       echo '### lib dir ###'
+#       cd /usr/local/lib
+#       pwd
+#       ls -d */
+#       ls -c -ltd -- *fltk*
       shell: bash
     
     - name: FLTK - MinGW
@@ -48,32 +48,6 @@ runs:
         cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
         echo '### build ###'
         cmake --build . -j 8
-        tree .
-#       echo '### install ###'
-#       make install
-#       cd '/mingw64/lib'
-#       cp ./libtcl86.dll.a ./libtcl86.a 
-#       echo '### include dir ###'
-#       cd /mingw64/include/
-#       pwd
-#       ls -d */
-#       cd /usr/local/include/
-#       pwd
-#       ls -d */
-#       echo '### lib dir ###'
-#       cd /mingw64/lib/
-#       pwd
-#       ls -d */
-#       cd /usr/local/lib/
-#       pwd
-#       ls -d */
-#       echo '### bin dir ###'
-#       cd /mingw64/bin/
-#       pwd
-#       ls -d */
-#       cd /usr/local/bin/
-#       pwd
-#       ls -d */
       shell: msys2 {0}
 
     - name: FLTK - VS17
@@ -87,11 +61,5 @@ runs:
         cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
         echo '### build ###'
         cmake --build . -j 8 --config Release
-        pwd
-        tree '${{github.workspace}}/extern/fltk' /f /a
-#       (get-command nmake).Path
-#       nmake -nologo -f makefile.vc release install
-#       echo '### install ###'
-#       cp -Path 'C:/Tcl' -Destination '${{github.workspace}}/3rdparty/tcltk-vc17-x64-release' -Recurse
       shell: pwsh
 

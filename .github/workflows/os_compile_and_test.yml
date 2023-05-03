@@ -17,23 +17,23 @@ jobs:
       matrix:
         include:
 
-#         - os:                 ubuntu-latest
-#           shell_type:         bash
-#           cmake_generator:    "Unix Makefiles"
-#           release_dir:        "/build"
-#           ext:                ""
-#           bin_dir:            "lin64"
-#           compress:           "tar -czvf"
-#           compress_ext:       "UnixMake.tar.gz"
+          - os:                 ubuntu-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "lin64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
 
-#         - os:                 macos-latest
-#           shell_type:         bash
-#           cmake_generator:    "Unix Makefiles"
-#           release_dir:        "/build"
-#           ext:                ""
-#           bin_dir:            "mac64"
-#           compress:           "tar -czvf"
-#           compress_ext:       "UnixMake.tar.gz"
+          - os:                 macos-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "mac64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
 
           - os:                 windows-latest
             shell_type:         pwsh
@@ -44,14 +44,14 @@ jobs:
             compress:           "7z a"
             compress_ext:       "MinGW.zip"
 
-#         - os:                 windows-latest
-#           shell_type:         pwsh
-#           cmake_generator:    "Visual Studio 17 2022"  
-#           release_dir:        "/build"
-#           ext:                ".exe"
-#           bin_dir:            "win64"
-#           compress:           "7z a "
-#           compress_ext:       "VS17.zip"
+          - os:                 windows-latest
+            shell_type:         pwsh
+            cmake_generator:    "Visual Studio 17 2022"  
+            release_dir:        "/build"
+            ext:                ".exe"
+            bin_dir:            "win64"
+            compress:           "7z a "
+            compress_ext:       "VS17.zip"
 
     permissions:
       contents: write
@@ -105,14 +105,6 @@ jobs:
         with:
           arch: x86_64
           vsversion: 17.0
-
-#     # Freetype
-#     - name: Freetype - Dowload & Build
-#       if: matrix.cmake_generator == 'Visual Studio 17 2022'
-#       uses: ./.github/actions/freetype
-#       with:        
-#         release: 2.12.1
-#         cmake_generator: ${{ matrix.cmake_generator }}
 
       # Submodules update
       - name: Pull & update submodules recursively

@@ -35,6 +35,7 @@ runs:
       if: inputs.cmake_generator == 'Unix Makefiles'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} \
+        -DINCLUDE_DIR_FLTK='${{inputs.project_dir}}/extern/fltk' -DLIBRARY_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/lib'
       shell: bash
 
     - name: Configure CMake - MinGW

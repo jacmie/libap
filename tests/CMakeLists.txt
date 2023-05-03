@@ -1,20 +1,14 @@
 #include(GoogleTest)
 
-macro(build_test TESTNAME FILES LIBRARIES)
-    set(FILE_PATHS "")    
-    foreach(FILE ${FILES})
-        list(APPEND FILE_PATHS ${TESTNAME}/${FILE})
-    endforeach()
-
+macro(build_test TESTNAME)
     add_executable(
         ${TESTNAME}
-        ${FILE_PATHS}
+        "${TESTNAME}/${TESTNAME}.cpp"
     )
     target_link_libraries(
         ${TESTNAME}
         GTest::gtest_main
-#        -L/usr/local/lib
-        ${LIBRARIES} 
+        ap 
     )
     target_include_directories(${TESTNAME} PRIVATE ../include/ap)
 
@@ -22,25 +16,21 @@ macro(build_test TESTNAME FILES LIBRARIES)
 endmacro()
 
 add_executable(sq ap_externalExe_tests/bin/sq.cpp)
-#target_link_libraries(sq -L/usr/local/lib)
 
-build_test(ap_basicMath_tests ap_basicMath_tests.cpp ap)
-
-build_test(ap_bezierPoint_tests ap_bezierPoint_tests.cpp ap)
-build_test(ap_bezier_tests ap_bezier_tests.cpp ap)
-build_test(ap_bezierAirfoil_tests ap_bezierAirfoil_tests.cpp ap)
-build_test(ap_bspline_tests ap_bspline_tests.cpp ap)
-build_test(ap_convert_tests ap_convert_tests.cpp ap)
-build_test(ap_distribution_tests ap_distribution_tests.cpp ap)
-build_test(ap_filter_tests ap_filter_tests.cpp ap)
-build_test(ap_airfoil_tests ap_airfoil_tests.cpp ap)
-build_test(ap_substitute_tests ap_substitute_tests.cpp ap)
-build_test(ap_xfoil_tests ap_xfoil_tests.cpp ap)
-build_test(ap_externalExe_tests ap_externalExe_tests.cpp ap)
-
+build_test(ap_basicMath_tests)
+build_test(ap_bezierPoint_tests)
+build_test(ap_bezier_tests)
+build_test(ap_bezierAirfoil_tests)
+build_test(ap_bspline_tests)
+build_test(ap_convert_tests)
+build_test(ap_distribution_tests)
+build_test(ap_filter_tests)
+build_test(ap_airfoil_tests)
+build_test(ap_substitute_tests)
+build_test(ap_xfoil_tests)
+build_test(ap_externalExe_tests)
 
 if(USE_FLTK)
-    set(LIBS ap)
-#   build_test(ap_flDialogs_tests ap_flDialogs_tests.cpp ${LIBS})
-    build_test(ap_flFilesHandling_tests ap_flFilesHandling_tests.cpp ${LIBS})
+#   build_test(ap_flDialogs_tests)
+    build_test(ap_flFilesHandling_tests)
 endif()
