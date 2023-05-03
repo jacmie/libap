@@ -4,7 +4,7 @@
 
 using namespace ap;
 
-#ifndef __APPLE__
+//#ifndef __APPLE__
 
 TEST(ap_filter_tests, filter) {
 	double P[10];
@@ -35,4 +35,4 @@ TEST(ap_filter_tests, filter) {
 	EXPECT_EQ(0.0085314844148224617,	Filt.xFiltered[9]);
 }
 
-#endif
+//#endif
