@@ -2,7 +2,7 @@
 
 #define _USE_MATH_DEFINES
 #include <cmath>
-#define M_PI 3.14159265358979323846264338327950288
+//#define M_PI 3.14159265358979323846264338327950288
 
 #include <iostream>
 #include <fstream>
