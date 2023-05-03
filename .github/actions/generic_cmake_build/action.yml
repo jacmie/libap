@@ -54,14 +54,6 @@ runs:
     - name: Build
       run: cmake --build ${{inputs.project_dir}}/build -j ${{inputs.parallel}} --config ${{inputs.build_type}}
       shell: ${{inputs.shell_type}}
-
-    - name: Temp
-      run: |
-        tree "${{inputs.project_dir}}/build/tests" /f /a
-        cd   "${{inputs.project_dir}}/build/tests/Release"
-        tree "${{inputs.project_dir}}/build/tests/Release" /f /a
-        pwd
-      shell: ${{ inputs.shell_type }}
     
     - name: Test
       if: ${{ inputs.tests_flag == 'true' }}
