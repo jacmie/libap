@@ -93,7 +93,7 @@ endforeach()
 ### Include & Lib Dependencies ###
 
 
-set(USE_FLTK ON CACHE BOOL "Build parts of the liballPurpose dependent on the FLTK library")
+set(USE_FLTK OFF CACHE BOOL "Build parts of the liballPurpose dependent on the FLTK library")
 set(USE_GL ON CACHE BOOL "Build parts of the liballPurpose dependent on the OpenGL library")
 
 set(INCLUDE_DIR_FLTK "/usr/local/include"   CACHE PATH "FLTK library header files directory.")
@@ -122,9 +122,9 @@ endif()
 ### Compile ###
 
 if (WIN32) #MINGW
-    link_libraries(ws2_32 windowscodecs ole32 oleaut32 psapi opengl32 glu32)
+    #link_libraries(ws2_32 windowscodecs ole32 oleaut32 psapi opengl32 glu32)
 elseif (LINUX)
-    link_libraries(-lpng -lGL -lXft -lXrender -lXfixes -lfontconfig -lX11 -ldl)
+    #link_libraries(-lpng -lGL -lXft -lXrender -lXfixes -lfontconfig -lX11 -ldl)
 elseif (IOS)
     # iOS libs
 endif()
