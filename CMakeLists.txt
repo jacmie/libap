@@ -149,10 +149,10 @@ if(USE_FLTK)
     target_link_directories(ap PRIVATE ${LIBRARY_DIR_FLTK})
     link_directories(${LIBRARY_DIR_FLTK})
     link_libraries(fltk_images fltk_gl fltk)
-    if(WIN32)
+    if(LINUX)
+        link_libraries(-ljpeg -lpng) 
+    else
         link_libraries(fltk_jpeg fltk_png)
-    elseif(UNIX)
-        link_libraries(-ljpeg -lpng)    
     endif()
 endif()
 
