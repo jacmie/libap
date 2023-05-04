@@ -119,20 +119,15 @@ if(USE_GL)
             HINTS "${LIBRARY_DIR_GL}"
             REQUIRED
         )
-    else()
-        find_library(LIB_OPENGL
-            NAMES opengl32
-            HINTS "${LIBRARY_DIR_GL}"
-            REQUIRED
-        )
-    endif()
-    if(NOT LIB_OPENGL)
-        message(FATAL_ERROR "OpenGL library not found!")
+        if(NOT LIB_OPENGL)
+            message(FATAL_ERROR "OpenGL library not found!")
+        endif()
     endif()
 endif()
 
 
 ### Compile ###
+
 
 if (LINUX)
     link_libraries(-ldl -lX11 -lfontconfig -lXft -lXrender -lXfixes)
