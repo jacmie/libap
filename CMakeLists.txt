@@ -113,11 +113,19 @@ if(USE_FLTK)
 endif()
 
 if(USE_GL)
-    find_library(LIB_OPENGL
-        NAMES GL
-        HINTS "${LIBRARY_DIR_GL}"
-        REQUIRED
-    )
+    if(LINUX)
+        find_library(LIB_OPENGL
+            NAMES GL
+            HINTS "${LIBRARY_DIR_GL}"
+            REQUIRED
+        )
+    else()
+        find_library(LIB_OPENGL
+            NAMES opengl32
+            HINTS "${LIBRARY_DIR_GL}"
+            REQUIRED
+        )
+    endif()
     if(NOT LIB_OPENGL)
         message(FATAL_ERROR "OpenGL library not found!")
     endif()
