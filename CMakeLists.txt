@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.25)
 
 project(ap LANGUAGES CXX)
 
-add_compile_options(-Wall)
+if(UNIX)
+    add_compile_options(-Wall -Wno-array-bounds)
+endif()
 set(CMAKE_CXX_STANDARD 17) 
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 
