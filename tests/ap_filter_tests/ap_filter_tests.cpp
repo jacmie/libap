@@ -4,8 +4,6 @@
 
 using namespace ap;
 
-//#ifndef __APPLE__
-
 TEST(ap_filter_tests, filter) {
 	double P[10];
     
@@ -34,5 +32,3 @@ TEST(ap_filter_tests, filter) {
 	EXPECT_NEAR(0.0076755120719470141,		Filt.xFiltered[8], 1e-6);
 	EXPECT_NEAR(0.0085314844148224617,		Filt.xFiltered[9], 1e-6);
 }
-
-//#endif
