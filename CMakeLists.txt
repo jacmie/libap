@@ -96,9 +96,9 @@ endforeach()
 set(USE_FLTK ON CACHE BOOL "Build parts of the liballPurpose dependent on the FLTK library")
 set(USE_GL ON CACHE BOOL "Build parts of the liballPurpose dependent on the OpenGL library")
 
-set(INCLUDE_DIR_FLTK            "/usr/local/include"                CACHE PATH "FLTK library header files directory.")
+set(INCLUDE_DIR_FLTK "/usr/local/include"   CACHE PATH "FLTK library header files directory.")
 
-set(LIBRARY_DIR_FLTK            "/usr/local/lib"                    CACHE PATH "FLTK library binaries directory.")
+set(LIBRARY_DIR_FLTK "/usr/local/lib"       CACHE PATH "FLTK library binaries directory.")
 
 if(USE_FLTK)
     find_library(FLTK_LIB
@@ -121,12 +121,8 @@ endif()
 
 ### Compile ###
 
-#link_libraries(-lpng -lGL -lXft -lXrender -lXfixes -lfontconfig -lX11 -ldl)
-
 if (WIN32) #MINGW
     link_libraries(ws2_32 windowscodecs ole32 oleaut32 psapi opengl32 glu32)
-#    link_libraries(-mwindows -lole32 -luuid -lcomctl32 -lwsock32 -lsupc++ -lwinmm -lgdi32 -lm -lz)
-#    link_libraries(-lfltk_jpeg -lfltk_png)
 elseif (LINUX)
     link_libraries(-lpng -lGL -lXft -lXrender -lXfixes -lfontconfig -lX11 -ldl)
 elseif (IOS)
@@ -137,16 +133,11 @@ add_library(ap STATIC)
 target_sources(ap PRIVATE ${FULLPATH_INDEPENDENT_HEADERS} ${FULLPATH_INDEPENDENT_SRC})
 target_include_directories(ap PRIVATE include/ap)
 
-#link_libraries(-ldl -lX11 -lfontconfig -lpng -lGL -lXft -lXrender -lXfixes)
-
 if(USE_FLTK)
     target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
-    target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK} ${INCLUDE_DIR_FLTK}/build)
+#    target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK} ${INCLUDE_DIR_FLTK}/build)
     include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK} ${INCLUDE_DIR_FLTK}/build)
-    message(${INCLUDE_DIR_FLTK})
-    message(${INCLUDE_DIR_FLTK}/build)
-#    link_libraries(-L${LIBRARY_DIR_FLTK})
-    target_link_directories(ap PRIVATE ${LIBRARY_DIR_FLTK})
+#    target_link_directories(ap PRIVATE ${LIBRARY_DIR_FLTK})
     link_directories(${LIBRARY_DIR_FLTK})
     link_libraries(fltk_images fltk_gl fltk)
     if(LINUX)
