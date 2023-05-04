@@ -160,6 +160,7 @@ if(USE_GL)
     target_sources(ap PRIVATE ${FULLPATH_GL_HEADERS} ${FULLPATH_GL_SRC})
 #    target_include_directories(ap PRIVATE ${INCLUDE_DIR_GL})
 #    link_libraries(-L${LIBRARY_DIR_GL})
+# macos -> <OpenGL/gl.h>
 endif()
 
 message(">> See available Cache Variables settings")

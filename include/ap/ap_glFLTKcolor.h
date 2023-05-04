@@ -3,9 +3,12 @@
 
 #include <iostream>
 
-//extern "C" {
-	#include <FL/gl.h>
-//}
+#if defined(__APPLE__)
+	#include <OpenGL/gl.h>
+#else
+	#include <GL/gl.h>
+#endif
+
 #include <FL/Fl.H>
 #include <FL/fl_show_colormap.H>
 

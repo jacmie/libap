@@ -5,9 +5,11 @@
 	#include <windows.h>
 #endif
 
-//extern "C" {
+#if defined(__APPLE__)
+	#include <OpenGL/gl.h>
+#else
 	#include <GL/gl.h>
-//}
+#endif
 
 #include <ap_matrix.h>
 #include <ap_vector.h>
