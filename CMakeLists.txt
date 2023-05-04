@@ -151,7 +151,7 @@ if(USE_FLTK)
     link_libraries(fltk_images fltk_gl fltk)
     if(LINUX)
         link_libraries(-ljpeg -lpng) 
-    else
+    else()
         link_libraries(fltk_jpeg fltk_png)
     endif()
 endif()
