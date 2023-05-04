@@ -2,10 +2,9 @@ cmake_minimum_required(VERSION 3.25)
 
 project(ap LANGUAGES CXX)
 
-#add_compile_options(-Wall -Wextra)
-#add_compile_options(-Wall)
+add_compile_options(-Wall -Wno-array-bounds)
 set(CMAKE_CXX_STANDARD 17) 
-
+set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 
 ### Process Source Files ### 
 
@@ -93,40 +92,42 @@ endforeach()
 ### Include & Lib Dependencies ###
 
 
-set(USE_FLTK OFF CACHE BOOL "Build parts of the liballPurpose dependent on the FLTK library")
+set(USE_FLTK ON CACHE BOOL "Build parts of the liballPurpose dependent on the FLTK library")
 set(USE_GL ON CACHE BOOL "Build parts of the liballPurpose dependent on the OpenGL library")
 
 set(INCLUDE_DIR_FLTK "/usr/local/include"   CACHE PATH "FLTK library header files directory.")
+set(INCLUDE_DIR_GL   "/usr/local/include"   CACHE PATH "GL library header files directory.")
 
 set(LIBRARY_DIR_FLTK "/usr/local/lib"       CACHE PATH "FLTK library binaries directory.")
+set(LIBRARY_DIR_GL   "/usr/local/lib"       CACHE PATH "GL library binaries directory.")
 
 if(USE_FLTK)
-    find_library(FLTK_LIB
-        NAMES fltk_jpeg fltk_png fltk_images fltk_gl fltk
+    find_library(LIB_FLTK
+        NAMES fltk fltk_jpeg fltk_png fltk_images fltk_gl
         HINTS "${LIBRARY_DIR_FLTK}"
         REQUIRED
     )
-    if(NOT FLTK_LIB)
+    if(NOT LIB_FLTK)
         message(FATAL_ERROR "FLTK library not found!")
     endif()
 endif()
 
-#if(USE_GL)
-#    find_library(OPENGL_LIB GL)
-#    if(NOT OPENGL_LIB)
-#        message(FATAL_ERROR "OpenGL library not found!")
-#    endif()
-#endif()
+if(USE_GL)
+    find_library(LIB_OPENGL
+        NAMES GL
+        HINTS "${LIBRARY_DIR_GL}"
+        REQUIRED
+    )
+    if(NOT LIB_OPENGL)
+        message(FATAL_ERROR "OpenGL library not found!")
+    endif()
+endif()
 
 
 ### Compile ###
 
-if (WIN32) #MINGW
-    #link_libraries(ws2_32 windowscodecs ole32 oleaut32 psapi opengl32 glu32)
-elseif (LINUX)
-    #link_libraries(-lpng -lGL -lXft -lXrender -lXfixes -lfontconfig -lX11 -ldl)
-elseif (IOS)
-    # iOS libs
+if (LINUX)
+    link_libraries(-ldl -lX11 -lfontconfig -lXft -lXrender -lXfixes)
 endif()
 
 add_library(ap STATIC)
@@ -135,9 +136,7 @@ target_include_directories(ap PRIVATE include/ap)
 
 if(USE_FLTK)
     target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
-#    target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK} ${INCLUDE_DIR_FLTK}/build)
     include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK} ${INCLUDE_DIR_FLTK}/build)
-#    target_link_directories(ap PRIVATE ${LIBRARY_DIR_FLTK})
     link_directories(${LIBRARY_DIR_FLTK})
     link_libraries(fltk_images fltk_gl fltk)
     if(LINUX)
@@ -149,9 +148,9 @@ endif()
 
 if(USE_GL)
     target_sources(ap PRIVATE ${FULLPATH_GL_HEADERS} ${FULLPATH_GL_SRC})
-#    target_include_directories(ap PRIVATE ${INCLUDE_DIR_GL})
-#    link_libraries(-L${LIBRARY_DIR_GL})
-# macos -> <OpenGL/gl.h>
+    include_directories(ap PRIVATE ${INCLUDE_DIR_GL})
+    #link_directories(${LIBRARY_DIR_GL})
+    #link_libraries(GL)
 endif()
 
 message(">> See available Cache Variables settings")
@@ -160,7 +159,8 @@ message(">> See available Cache Variables settings")
 ### Testing ###
 
 
-set(BUILD_GTESTS ON CACHE BOOL "Build the tests")
+set(BUILD_GTESTS ON CACHE BOOL "Build the tests.")
+set(INSTALL_GTEST OFF)
 
 if(BUILD_GTESTS)
     enable_testing()
@@ -170,9 +170,9 @@ if(BUILD_GTESTS)
 endif()
 
 
-### Installation ###
+### Install ###
 
-#install(DIRECTORY include/ap DESTINATION /usr/local/include)
 
-#install(TARGETS CADfoil DESTINATION bin)
-#install(TARGETS ap DESTINATION bin)
+install(DIRECTORY include/ap DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
+install(TARGETS ap DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+
