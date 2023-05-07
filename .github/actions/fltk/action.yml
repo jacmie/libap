@@ -6,52 +6,17 @@ inputs:
     description: 'Makefile generator used by CMake'
     required: true
     default: 'Unix Makefiles'
+  shell_type:
+    description: 'Shell type'
+    required: true
+    default: 'bash'
 
 runs:
   using: "composite"
 
   steps:
 
-    - name: FLTK - Unix
-      if: inputs.cmake_generator == 'Unix Makefiles'
-      run: |
-        cd extern/fltk/
-        pwd
-        echo '### configure ###'
-        mkdir build
-        cd build
-        cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
-        echo '### build ###'
-        cmake --build . -j 8
-#       echo '### install ###'
-#       sudo make install
-#       echo '### include dir ###'
-#       cd /usr/local/include
-#       pwd
-#       ls -d */
-#       ls -c -ltd -- *FL*
-#       echo '### lib dir ###'
-#       cd /usr/local/lib
-#       pwd
-#       ls -d */
-#       ls -c -ltd -- *fltk*
-      shell: bash
-    
-    - name: FLTK - MinGW
-      if: inputs.cmake_generator == 'MinGW Makefiles'
-      run: |
-        cd extern/fltk/
-        pwd
-        echo '### configure ###'
-        mkdir build
-        cd build
-        cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
-        echo '### build ###'
-        cmake --build . -j 8
-      shell: msys2 {0}
-
-    - name: FLTK - VS17
-      if: inputs.cmake_generator == 'Visual Studio 17 2022'
+    - name: FLTK
       run: |
         cd extern/fltk/
         pwd
@@ -61,5 +26,31 @@ runs:
         cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
         echo '### build ###'
         cmake --build . -j 8 --config Release
-      shell: pwsh
+      shell: ${{inputs.shell_type}}
+    
+#   - name: FLTK - MinGW
+#     if: inputs.cmake_generator == 'MinGW Makefiles'
+#     run: |
+#       cd extern/fltk/
+#       pwd
+#       echo '### configure ###'
+#       mkdir build
+#       cd build
+#       cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
+#       echo '### build ###'
+#       cmake --build . -j 8
+#     shell: msys2 {0}
+
+#   - name: FLTK - VS17
+#     if: inputs.cmake_generator == 'Visual Studio 17 2022'
+#     run: |
+#       cd extern/fltk/
+#       pwd
+#       echo '### configure ###'
+#       mkdir build
+#       cd build
+#       cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
+#       echo '### build ###'
+#       cmake --build . -j 8 --config Release
+#     shell: pwsh
 

@@ -17,23 +17,23 @@ jobs:
       matrix:
         include:
 
-#         - os:                 ubuntu-latest
-#           shell_type:         bash
-#           cmake_generator:    "Unix Makefiles"
-#           release_dir:        "/build"
-#           ext:                ""
-#           bin_dir:            "lin64"
-#           compress:           "tar -czvf"
-#           compress_ext:       "UnixMake.tar.gz"
+          - os:                 ubuntu-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "lin64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
 
-#         - os:                 macos-latest
-#           shell_type:         bash
-#           cmake_generator:    "Unix Makefiles"
-#           release_dir:        "/build"
-#           ext:                ""
-#           bin_dir:            "mac64"
-#           compress:           "tar -czvf"
-#           compress_ext:       "UnixMake.tar.gz"
+          - os:                 macos-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "mac64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
 
           - os:                 windows-latest
             shell_type:         pwsh
@@ -117,6 +117,7 @@ jobs:
         uses: ./.github/actions/fltk
         with:        
           cmake_generator: ${{ matrix.cmake_generator }}
+          shell_type:       ${{ matrix.shell_type }}
 
       # Build Release
       - name: Build & Test
