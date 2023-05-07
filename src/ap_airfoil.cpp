@@ -35,7 +35,7 @@ namespace ap
 
 		std::string line;
 		double x1_, y1_, x2_, y2_;
-
+/*
 		// === Check number of columns, format and count data rows ===
 		while( !buffer.eof() ) {
 			getline(buffer, line);
@@ -166,7 +166,7 @@ namespace ap
 					break; 
 					}
 		}
-
+*/
 		return type;
 	}
 
