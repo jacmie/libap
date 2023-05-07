@@ -27,30 +27,4 @@ runs:
         echo '### build ###'
         cmake --build . -j 8 --config Release
       shell: ${{inputs.shell_type}}
-    
-#   - name: FLTK - MinGW
-#     if: inputs.cmake_generator == 'MinGW Makefiles'
-#     run: |
-#       cd extern/fltk/
-#       pwd
-#       echo '### configure ###'
-#       mkdir build
-#       cd build
-#       cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
-#       echo '### build ###'
-#       cmake --build . -j 8
-#     shell: msys2 {0}
-
-#   - name: FLTK - VS17
-#     if: inputs.cmake_generator == 'Visual Studio 17 2022'
-#     run: |
-#       cd extern/fltk/
-#       pwd
-#       echo '### configure ###'
-#       mkdir build
-#       cd build
-#       cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
-#       echo '### build ###'
-#       cmake --build . -j 8 --config Release
-#     shell: pwsh
 
