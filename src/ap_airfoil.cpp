@@ -216,7 +216,7 @@ namespace ap
 		// * values 0-100
 		// if first line matches full HEADER or just number of lines
 		getline(buffer, line);
-		if( regex_match(line, prfHeader) || regex_match(line, integer_plus) ) {
+		/*if( regex_match(line, prfHeader) || regex_match(line, integer_plus) ) {
 			buffer.str(buckup); 
 			unsigned int n;
 			buffer >> n; // get declared number of lines
@@ -235,7 +235,7 @@ namespace ap
 				Prf2Xfoil();
 				return PRF_4;
 			}
-		}
+		}*/
 
 		// PRF 2
 		// HEADER1 - numer "1" or "2"
