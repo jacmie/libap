@@ -225,16 +225,16 @@ namespace ap
 			name = line.substr(line.find_first_of("#") + 1);
 			name.erase(0, name.find_first_not_of(" \t\n\r\f\v"));
 			name.erase(name.find_last_not_of(" \t\n\r\f\v") + 1);
-/*
+
 			if(PRF_4 == ReadColumns(PRF_4, buffer, x1, y1, x2, y2, n, 0) ) {
-				xg = x1;
+/*				xg = x1;
 				zg = y1;
 				xd = x2;
 				zd = y2;
 
 				Prf2Xfoil();
-				return PRF_4;
-			}*/
+				return PRF_4;*/
+			}
 		}
 
 		// PRF 2
