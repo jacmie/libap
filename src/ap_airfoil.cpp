@@ -203,6 +203,7 @@ namespace ap
 		// (\\+|-)? - possible + or minues - one or zero times
 		// . - whatever character
 		std::regex integer("\\s*\\d+\\s*");   						// positive integer
+		std::regex integer_plus("\\d\\d+");   						// positive integer 2 or more digits
 		std::regex number("\\s*(\\+|-)?[\\d\\.]+\\s*");   			// 1 22 1.2 0.2 .2  2. - any number
 		std::regex prfHeader("\\d+\\s+#\\s+.+");					// number_of_lines # name (e.g. "18	#	NACA 0012	")
 		std::regex kooHeader(".+\\s+,\\s+\\d+");					// name , number_of_lines-1
@@ -215,7 +216,7 @@ namespace ap
 		// * values 0-100
 		// if first line matches full HEADER or just number of lines
 		getline(buffer, line);
-		if( regex_match(line, prfHeader) || regex_match(line, integer) ) {
+		if( regex_match(line, prfHeader) || regex_match(line, integer_plus) ) {
 			buffer.str(buckup); 
 			unsigned int n;
 			buffer >> n; // get declared number of lines
