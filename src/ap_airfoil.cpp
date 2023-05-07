@@ -217,7 +217,7 @@ namespace ap
 		// if first line matches full HEADER or just number of lines
 		getline(buffer, line);
 		if( regex_match(line, prfHeader) || regex_match(line, integer_plus) ) {
-		/*	buffer.str(buckup); 
+			buffer.str(buckup); 
 			unsigned int n;
 			buffer >> n; // get declared number of lines
 			getline(buffer, line); //read the header line till the end
@@ -225,7 +225,7 @@ namespace ap
 			name = line.substr(line.find_first_of("#") + 1);
 			name.erase(0, name.find_first_not_of(" \t\n\r\f\v"));
 			name.erase(name.find_last_not_of(" \t\n\r\f\v") + 1);
-
+/*
 			if(PRF_4 == ReadColumns(PRF_4, buffer, x1, y1, x2, y2, n, 0) ) {
 				xg = x1;
 				zg = y1;
