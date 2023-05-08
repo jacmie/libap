@@ -16,6 +16,50 @@
 
 namespace ap
 {
+	int AIRFOIL::CheckNumByRegex(const int type, std::string line) {
+		std::string rxNum("([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
+		std::regex  rxExNum(rxNum);
+		
+		std::string num;
+		std::stringstream ss;
+		ss.str(line);
+
+		int n = 0;
+		while(ss >> num) {
+			std::clog << n << "\t" << num << "\t";
+
+			// check is number
+			if(!regex_match(num, rxExNum)) {
+				std::clog << 0;
+				return 0;
+			}
+			else {
+				std::clog << 1;
+			}
+			std::clog << std::endl;
+
+			n++;
+		}
+		
+		// check columns nr
+		std::clog << "type: " << type << std::endl;
+		std::clog << "n: " << n << std::endl;
+		switch(type) {
+			case PRF_4: {
+				if(n != 4) return 0; 
+				break; 
+			}
+			case PRF_3: { if(n != 3) return 0; break; }
+			case PRF_2: { if(n != 2) return 0; break; }
+			case KOO:   { if(n != 2) return 0; break; }
+			case XFOIL: { if(n != 2) return 0; break; }
+			case L_DAT: { if(n != 2) return 0; break; }
+		}
+
+		std::clog << "return: " << 1 << std::endl;
+		return 1;
+	}
+
 	int AIRFOIL::ReadColumns(const int type, std::stringstream &buffer, 
 		std::vector <double> &x1, std::vector <double> &z1, std::vector <double> &x2, std::vector <double> &z2, 
 		const unsigned int n1, const unsigned int n2)
@@ -29,6 +73,7 @@ namespace ap
 		std::string col2 = std::string(".*") + rxNum + std::string("\\s+") + rxNum + std::string(".*");
 		std::string col3 = col2 + rxNum + std::string("\\s+") + rxNum + std::string(".*");
 		std::string col4 = col3 + rxNum + std::string("\\s+") + rxNum + std::string(".*");
+		std::regex rxExNum(rxNum);
 		std::regex rxcol2(col2);
 		std::regex rxcol3(col3);
 		std::regex rxcol4(col4);
@@ -40,15 +85,18 @@ namespace ap
 		while( !buffer.eof() ) {
 			getline(buffer, line);
 			if( 0 == line.length() ) continue;
-		
+
 			std::clog << "REGEX" << std::endl;
+			std::clog << line << std::endl;
+
 			switch(type) { // one of the lines has incorrect format
-				case PRF_4: { if(!regex_match(line, rxcol4)) return 20; break; }
-				case PRF_3: { if(!regex_match(line, rxcol3)) return 21; break; }
-				case PRF_2: { if(!regex_match(line, rxcol2)) return 22; break; }
-				case KOO:   { if(!regex_match(line, rxcol2)) return 23; break; }
-				case XFOIL: { if(!regex_match(line, rxcol2)) return 24; break; }
-				case L_DAT: { if(!regex_match(line, rxcol2)) return 25; break; }
+				case PRF_4: { if(!CheckNumByRegex(type, line)) return 20; break; }
+//				case PRF_4: { if(!CheckNumByRegex(type, line)) return 20; break; }
+				case PRF_3: { if(!CheckNumByRegex(type, line)) return 21; break; }
+				case PRF_2: { if(!CheckNumByRegex(type, line)) return 22; break; }
+				case KOO:   { if(!CheckNumByRegex(type, line)) return 23; break; }
+				case XFOIL: { if(!CheckNumByRegex(type, line)) return 24; break; }
+				case L_DAT: { if(!CheckNumByRegex(type, line)) return 25; break; }
 			}
 			std::clog << "END REGEX" << std::endl;
 		

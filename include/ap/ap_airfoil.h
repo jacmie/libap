@@ -31,6 +31,7 @@ namespace ap
 
 		bool restrictiveCheck = 0;
 
+		int CheckNumByRegex(const int type, std::string line);
 		int ReadColumns(const int type, std::stringstream &buffer, 
 			std::vector <double> &x1, std::vector <double> &z1, std::vector <double> &x2, std::vector <double> &z2, 
 			const unsigned int n1, const unsigned int n2);
