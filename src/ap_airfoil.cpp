@@ -35,7 +35,7 @@ namespace ap
 
 		std::string line;
 		double x1_, y1_, x2_, y2_;
-/*
+
 		// === Check number of columns, format and count data rows ===
 		while( !buffer.eof() ) {
 			getline(buffer, line);
@@ -166,7 +166,7 @@ namespace ap
 					break; 
 					}
 		}
-*/
+
 		return type;
 	}
 
@@ -227,13 +227,13 @@ namespace ap
 			name.erase(name.find_last_not_of(" \t\n\r\f\v") + 1);
 
 			if(PRF_4 == ReadColumns(PRF_4, buffer, x1, y1, x2, y2, n, 0) ) {
-/*				xg = x1;
+				xg = x1;
 				zg = y1;
 				xd = x2;
 				zd = y2;
 
 				Prf2Xfoil();
-				return PRF_4;*/
+				return PRF_4;
 			}
 		}
 
