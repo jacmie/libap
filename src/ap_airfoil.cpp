@@ -40,7 +40,8 @@ namespace ap
 		while( !buffer.eof() ) {
 			getline(buffer, line);
 			if( 0 == line.length() ) continue;
-			
+		
+			clog << "REGEX" << endl;
 			switch(type) { // one of the lines has incorrect format
 				case PRF_4: { if(!regex_match(line, rxcol4)) return 20; break; }
 				case PRF_3: { if(!regex_match(line, rxcol3)) return 21; break; }
@@ -49,6 +50,7 @@ namespace ap
 				case XFOIL: { if(!regex_match(line, rxcol2)) return 24; break; }
 				case L_DAT: { if(!regex_match(line, rxcol2)) return 25; break; }
 			}
+			clog << "END REGEX" << endl;
 		
 			// --- read row of data ---
 			std::stringstream ss;
