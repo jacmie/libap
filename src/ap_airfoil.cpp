@@ -26,29 +26,14 @@ namespace ap
 
 		int n = 0;
 		while(ss >> num) {
-			std::clog << n << "\t" << num << "\t";
-
 			// check is number
-			if(!regex_match(num, rxExNum)) {
-				std::clog << 0;
-				return 0;
-			}
-			else {
-				std::clog << 1;
-			}
-			std::clog << std::endl;
-
+			if(!regex_match(num, rxExNum)) return 0;
 			n++;
 		}
 		
 		// check columns nr
-		std::clog << "type: " << type << std::endl;
-		std::clog << "n: " << n << std::endl;
 		switch(type) {
-			case PRF_4: {
-				if(n != 4) return 0; 
-				break; 
-			}
+			case PRF_4: { if(n != 4) return 0; break; }
 			case PRF_3: { if(n != 3) return 0; break; }
 			case PRF_2: { if(n != 2) return 0; break; }
 			case KOO:   { if(n != 2) return 0; break; }
@@ -56,7 +41,6 @@ namespace ap
 			case L_DAT: { if(n != 2) return 0; break; }
 		}
 
-		std::clog << "return: " << 1 << std::endl;
 		return 1;
 	}
 
@@ -86,19 +70,14 @@ namespace ap
 			getline(buffer, line);
 			if( 0 == line.length() ) continue;
 
-			std::clog << "REGEX" << std::endl;
-			std::clog << line << std::endl;
-
 			switch(type) { // one of the lines has incorrect format
 				case PRF_4: { if(!CheckNumByRegex(type, line)) return 20; break; }
-//				case PRF_4: { if(!CheckNumByRegex(type, line)) return 20; break; }
 				case PRF_3: { if(!CheckNumByRegex(type, line)) return 21; break; }
 				case PRF_2: { if(!CheckNumByRegex(type, line)) return 22; break; }
 				case KOO:   { if(!CheckNumByRegex(type, line)) return 23; break; }
 				case XFOIL: { if(!CheckNumByRegex(type, line)) return 24; break; }
 				case L_DAT: { if(!CheckNumByRegex(type, line)) return 25; break; }
 			}
-			std::clog << "END REGEX" << std::endl;
 		
 			// --- read row of data ---
 			std::stringstream ss;
