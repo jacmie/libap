@@ -179,9 +179,10 @@ Go to the libap github (https://github.com/jacmie/libap/pulls) pull request tab.
 
 Few loose advices on the development:\n
 Follow the rule: *KISS* - Keep It Stupid Simple, always choose simpler solution (if possible). Simple things, simply work and are more easyly understood for other developers.\n
-Use meaningfull names of the variables and functions. Don't link new libraris, rather use standard ones if possible.\n
+Use meaningfull names of the variables and functions.\n
+Don't link new libraris, rather use standard ones if possible.\n
 Avoid complicated, one line code structures, they tend to look nice and efficient, but are hard to debug.\n
-Use common sense to balance using new programing features if they realy help, but don't overcomplicate things.\n
+Use common sense to balance using new programing features that help in the development, but don't overcomplicate things with added complexity of code and dependencies.\n
 Write tests for all new public methods and functions (see examples in the tests directory).\n
 Write documentation for all new public methods and functions. Describe general purpose of the function, input parameters and what it returns (see example comments in the header files).\n
 Follow general recomendations for code formating by Google (https://google.github.io/styleguide/cppguide.html).

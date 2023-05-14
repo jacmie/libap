@@ -130,7 +130,7 @@ jobs:
       - name: Compress Artefacts
         uses: ./.github/actions/compress
         with:        
-          bin_dir:      ${{github.workspace}}/build/install
+          artefacts_dir: ${{github.workspace}}/build/install
           compress:     ${{ matrix.compress }}
           compress_ext: ${{ matrix.compress_ext }}
           os:           ${{ matrix.os }}
