@@ -25,7 +25,7 @@ Update git submodules (gtest, FLTK):
 git submodule update --init --recursive
 git submodule update --recursive --remote
 ```
-Create directory for the build output files, for example in the libap directory.\n
+Create directory for the build output files, for example in the libap directory.\
 Navigate to the directory and make initial configuration of the project.
 
 ```
@@ -110,14 +110,14 @@ The project is automaticly build and tested by github actions in four different 
 - Windows - MSYS 2
 
 ## Building documentation
-To build documentaion *Doxygen* and *GraphViz* must be installed. Configuration of the documentation is in the *dox/doxyfile*.\n
-Do not include build documentation in the repository (the catalogue is listed in the .gitignore except the *doxyfile* and *README*).\n
+To build documentaion *Doxygen* and *GraphViz* must be installed. Configuration of the documentation is in the *dox/doxyfile*.\
+Do not include build documentation in the repository (the catalogue is listed in the .gitignore except the *doxyfile* and *README*).\
 To make changes in the documentation go to the *dox* catalogue:
 ```
 cd dox
 ```
 ### Main configuration
-It is not recommended to change it without a reason.\n
+It is not recommended to change it without a reason.\
 Still, to make changes of the main settings of the documentation in the gui: 
 ```
 doxywizard ./doxyfile
@@ -125,12 +125,12 @@ doxywizard ./doxyfile
 Optionally *doxyfile* can be edited directly.
 
 ### Documentation update
-Make update of the comments in the header files with appropriate format for *Doxygen*.\n
+Make update of the comments in the header files with appropriate format for *Doxygen*.\
 Build the documentation in the *Doxywizard* and display it, or build it from command line:
 ```
 doxygen ./doxyfile
 ```
-After building from command line open *html/index.html* with browser. The *html* catalogue will appear after building the documentation.\n
+After building from command line open *html/index.html* with browser. The *html* catalogue will appear after building the documentation.\
 When rebuilding the documentation and it is opened in the browser, just refresh the documentation to see changes. 
 
 ## Installation
@@ -156,10 +156,10 @@ sudo make install
 
 # Contributing to the project
 
-Github account may be needed. If you want to contribute to the project follow few guidelines:\n
-Clone the libap project, set it up, build and run tests. Make sure everting runs smoothly, if not ask for help.\n
-Create new branch for the development.
-For the bug fixes start name of the branch with *fix_<branch_name>* and for the new feature *ft_<branch_name>*.\n
+Github account may be needed. If you want to contribute to the project follow few guidelines:\
+Clone the libap project, set it up, build and run tests. Make sure everting runs smoothly, if not ask for help.\
+Create new branch for the development.\
+For the bug fixes start name of the branch with *fix_<branch_name>* and for the new feature *ft_<branch_name>*.\
 Add and commit changes:
 ```
 # add all recent changes to the repository including new, or delated files
@@ -168,8 +168,8 @@ git commit -m "Meaningful comment"
 git push origin ft_<branch_name>
 ```
  
-Fix bugs, or make new features. If your development is mature enough make pull request.\n
-Go to the libap github (https://github.com/jacmie/libap/pulls) pull request tab.\n 
+Fix bugs, or make new features. If your development is mature enough make pull request.\
+Go to the libap github (https://github.com/jacmie/libap/pulls) pull request tab.\
 * *New pull request*
 * Select *base* branch as *develop* and your branch as *compare* 
 * If you get message *Able to merge*, then *Create pull request*
@@ -177,14 +177,14 @@ Go to the libap github (https://github.com/jacmie/libap/pulls) pull request tab.
 
 ## Good practice
 
-Few loose advices on the development:\n
-Follow the rule: *KISS* - Keep It Stupid Simple, always choose simpler solution (if possible). Simple things, simply work and are more easyly understood for other developers.\n
-Use meaningfull names of the variables and functions.\n
-Don't link new libraris, rather use standard ones if possible.\n
-Avoid complicated, one line code structures, they tend to look nice and efficient, but are hard to debug.\n
-Use common sense to balance using new programing features that help in the development, but don't overcomplicate things with added complexity of code and dependencies.\n
-Write tests for all new public methods and functions (see examples in the tests directory).\n
-Write documentation for all new public methods and functions. Describe general purpose of the function, input parameters and what it returns (see example comments in the header files).\n
+Few loose advices on the development:\
+Follow the rule: *KISS* - Keep It Stupid Simple, always choose simpler solution (if possible). Simple things, simply work and are more easyly understood for other developers.\
+Use meaningfull names of the variables and functions.\
+Don't link new libraris, rather use standard ones if possible.\
+Avoid complicated, one line code structures, they tend to look nice and efficient, but are hard to debug.\
+Use common sense to balance using new programing features that help in the development, but don't overcomplicate things with added complexity of code and dependencies.\
+Write tests for all new public methods and functions (see examples in the tests directory).\
+Write documentation for all new public methods and functions. Describe general purpose of the function, input parameters and what it returns (see example comments in the header files).\
 Follow general recomendations for code formating by Google (https://google.github.io/styleguide/cppguide.html).
 
 

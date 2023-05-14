@@ -1,6 +1,6 @@
 # libap
 
-This is All Purpose Library - libap, which contains various, useful procedures for engineering.\n
+This is All Purpose Library - libap, which contains various, useful procedures for engineering.\
 It is written in C++ and the project is run with cmake. It is tested in different environments via github actions.
 
 # Parts of the library
@@ -51,16 +51,16 @@ It is written in C++ and the project is run with cmake. It is tested in differen
 
 # Repository Structure
 
-**dox**             - contains the libap project documentation. See README.md in the directory for more details.\n
-**extern**          - contains external submodules used in the project:\n
-    * googletest - to perform testing\n
-    * fltk - gui library used to optionally build FLTK addons\n
-**include**         - directory with header files of the libap library.\n
-**src**             - directory with source files of the libap library.\n
-**tests**           - directory with unit tests.\n
-**.git**            - git repository configuration files\n
-**.github**         - github actions configuration files\n
-**CMakeLists.txt**  - main cmake file\n
-**README.md**       - the readme file you are reading ;)\n
-**.gitignore**      - files and directories git does not include in the repository\n
-**.gitmodules**     - configuration of git submodules, see also extern directory\n
+**dox**             - contains the libap project documentation. See README.md in the directory for more details.\
+**extern**          - contains external submodules used in the project:\
+    * googletest - to perform testing\
+    * fltk - gui library used to optionally build FLTK addons\
+**include**         - directory with header files of the libap library.\
+**src**             - directory with source files of the libap library.\
+**tests**           - directory with unit tests.\
+**.git**            - git repository configuration files\
+**.github**         - github actions configuration files\
+**CMakeLists.txt**  - main cmake file\
+**README.md**       - the readme file you are reading ;)\
+**.gitignore**      - files and directories git does not include in the repository\
+**.gitmodules**     - configuration of git submodules, see also extern directory\
