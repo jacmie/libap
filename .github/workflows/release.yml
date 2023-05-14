@@ -1,4 +1,4 @@
-name: os_compile_and_test
+S
 
 run-name: Compile and Test the library on particular OS
 
@@ -17,41 +17,41 @@ jobs:
       matrix:
         include:
 
-#         - os:                 ubuntu-latest
-#           shell_type:         bash
-#           cmake_generator:    "Unix Makefiles"
-#           release_dir:        "/build"
-#           ext:                ""
-#           bin_dir:            "lin64"
-#           compress:           "tar -czvf"
-#           compress_ext:       "UnixMake.tar.gz"
+          - os:                 ubuntu-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "lin64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
 
-#         - os:                 macos-latest
-#           shell_type:         bash
-#           cmake_generator:    "Unix Makefiles"
-#           release_dir:        "/build"
-#           ext:                ""
-#           bin_dir:            "mac64"
-#           compress:           "tar -czvf"
-#           compress_ext:       "UnixMake.tar.gz"
+          - os:                 macos-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "mac64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
 
-#         - os:                 windows-latest
-#           shell_type:         pwsh
-#           cmake_generator:    "MinGW Makefiles"
-#           release_dir:        "/build"
-#           ext:                ".exe"
-#           bin_dir:            "win64"
-#           compress:           "7z a"
-#           compress_ext:       "MinGW.zip"
+          - os:                 windows-latest
+            shell_type:         pwsh
+            cmake_generator:    "MinGW Makefiles"
+            release_dir:        "/build"
+            ext:                ".exe"
+            bin_dir:            "win64"
+            compress:           "7z a"
+            compress_ext:       "MinGW.zip"
 
-#         - os:                 windows-latest
-#           shell_type:         pwsh
-#           cmake_generator:    "Visual Studio 17 2022"  
-#           release_dir:        "/build"
-#           ext:                ".exe"
-#           bin_dir:            "win64"
-#           compress:           "7z a "
-#           compress_ext:       "VS17.zip"
+          - os:                 windows-latest
+            shell_type:         pwsh
+            cmake_generator:    "Visual Studio 17 2022"  
+            release_dir:        "/build"
+            ext:                ".exe"
+            bin_dir:            "win64"
+            compress:           "7z a "
+            compress_ext:       "VS17.zip"
 
     permissions:
       contents: write
@@ -126,22 +126,22 @@ jobs:
           parallel:         1
           tests_flag:       true
 
-#     # Compress Artefacts
-#     - name: Compress Artefacts
-#       uses: ./.github/actions/compress
-#       with:        
-#         bin_dir:      ${{ matrix.bin_dir }}
-#         compress:     ${{ matrix.compress }}
-#         compress_ext: ${{ matrix.compress_ext }}
-#         os:           ${{ matrix.os }}
-# 
-#     # Create Github release with release note from file and binary asset attached
-#     - name: Deploy Release
-#       uses: ncipollo/release-action@v1
-#       with:
-#         allowUpdates: true
-#         name: ${{ env.GITHUB_REF_NAME }}
-#         tag: ${{ env.GITHUB_REF_NAME }}
-#         artifacts: '${{github.workspace}}/build/OCCTbuild_${{ matrix.os }}_${{ matrix.compress_ext}}'
-#         token: ${{ secrets.GITHUB_TOKEN }}
+      # Compress Artefacts
+      - name: Compress Artefacts
+        uses: ./.github/actions/compress
+        with:        
+          bin_dir:      ${{github.workspace}}/build/install
+          compress:     ${{ matrix.compress }}
+          compress_ext: ${{ matrix.compress_ext }}
+          os:           ${{ matrix.os }}
+  
+      # Create Github release with release note from file and binary asset attached
+      - name: Deploy Release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          name: ${{ env.GITHUB_REF_NAME }}
+          tag: ${{ env.GITHUB_REF_NAME }}
+          artifacts: '${{github.workspace}}/build/OCCTbuild_${{ matrix.os }}_${{ matrix.compress_ext}}'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
