@@ -37,7 +37,7 @@ cd build
 # the project directory with the main CMakeLists.txt file
 cmake ..
 ```
-## Configure the project
+## Configure
 The project has been configured by cmake with the default settings. To adjust the settings use ccmake in unix systems, or cmake gui.
 
 ```
@@ -169,7 +169,7 @@ git push origin ft_<branch_name>
 ```
  
 Fix bugs, or make new features. If your development is mature enough make pull request.\
-Go to the libap github (https://github.com/jacmie/libap/pulls) pull request tab.\
+Go to the libap github (https://github.com/jacmie/libap/pulls) pull request tab.
 * *New pull request*
 * Select *base* branch as *develop* and your branch as *compare* 
 * If you get message *Able to merge*, then *Create pull request*
