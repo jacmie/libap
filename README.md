@@ -51,13 +51,13 @@ It is written in C++ and the project is run with cmake. It is tested in differen
 
 # Repository Structure
 
-**dox**             - contains the libap project documentation. See README.md in the directory for more details.\
+**dox**             - contains the libap project documentation. See README.md in the *dox* directory for more details\
 **extern**          - contains external submodules used in the project:\
-    * googletest - to perform testing\
-    * fltk - gui library used to optionally build FLTK addons\
-**include**         - directory with header files of the libap library.\
-**src**             - directory with source files of the libap library.\
-**tests**           - directory with unit tests.\
+  * googletest - to perform testing\
+  * fltk - gui library used to optionally build FLTK addons\
+**include**         - directory with header files of the libap library\
+**src**             - directory with source files of the libap library\
+**tests**           - directory with unit tests\
 **.git**            - git repository configuration files\
 **.github**         - github actions configuration files\
 **CMakeLists.txt**  - main cmake file\
