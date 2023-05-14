@@ -1,6 +1,6 @@
-S
+name: release
 
-run-name: Compile and Test the library on particular OS
+run-name: Create artefacts for the release
 
 on:
   push:    
