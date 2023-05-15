@@ -80,7 +80,7 @@ To build the project:
 # the "." points to current directory
 cmake --build .
 ```
-For specyfying particular build system and other options look in to the cmake documentation (https://cmake.org/cmake/help/latest/manual/cmake.1.html).
+For specifying particular build system and other options look in to the cmake documentation (https://cmake.org/cmake/help/latest/manual/cmake.1.html).
 
 After Configuration and Generation of the project also the native build system may be used, for example:
 ```
@@ -103,14 +103,14 @@ After Configuration and Generation of the project also the native build system m
 make test
 ```
 
-The project is automaticly build and tested by github actions in four different environments:
+The project is automatically build and tested by github actions in four different environments:
 - Ubuntu
 - Macos
 - Windows - VS 17
 - Windows - MSYS 2
 
 ## Building documentation
-To build documentaion *Doxygen* and *GraphViz* must be installed. Configuration of the documentation is in the *dox/doxyfile*.\
+To build documentation *Doxygen* and *GraphViz* must be installed. Configuration of the documentation is in the *dox/doxyfile*.\
 Do not include build documentation in the repository (the catalogue is listed in the .gitignore except the *doxyfile* and *README*).\
 To make changes in the documentation go to the *dox* catalogue:
 ```
@@ -141,7 +141,7 @@ To install the library and header files:
 # the "." points to current directory
 cmake --install .
 ```
-On Unix systems administrator privilages may be needed. Then run the command, or similar appropriate for the operating system to enable the administrator privilages:
+On Unix systems administrator privileges may be needed. Then run the command, or similar appropriate for the operating system to enable the administrator privileges:
 ```
 # from the build directory,
 # the "." points to current directory
@@ -162,7 +162,7 @@ Create new branch for the development.\
 For the bug fixes start name of the branch with *fix_<branch_name>* and for the new feature *ft_<branch_name>*.\
 Add and commit changes:
 ```
-# add all recent changes to the repository including new, or delated files
+# add all recent changes to the repository including new, or deleted files
 git add -A
 git commit -m "Meaningful comment"
 git push origin ft_<branch_name>
@@ -173,20 +173,16 @@ Go to the libap github (https://github.com/jacmie/libap/pulls) pull request tab.
 * *New pull request*
 * Select *base* branch as *develop* and your branch as *compare* 
 * If you get message *Able to merge*, then *Create pull request*
-* Otherwise, update your branch with *pull*, solve conflicts and repet the procedure from the beginning
+* Otherwise, update your branch with *pull*, solve conflicts and repeat the procedure from the beginning
 
 ## Good practice
 
-Few loose advices on the development:\
-Follow the rule: *KISS* - Keep It Stupid Simple, always choose simpler solution (if possible). Simple things, simply work and are more easyly understood for other developers.\
-Use meaningfull names of the variables and functions.\
-Don't link new libraris, rather use standard ones if possible.\
+Few loose advises on the development:\
+Follow the rule: *KISS* - Keep It Stupid Simple, always choose simpler solution (if possible). Simple things, simply work and are more easily understood for other developers.\
+Use meaningful names of the variables and functions.\
+Don't link new libraries, rather use standard ones if possible.\
 Avoid complicated, one line code structures, they tend to look nice and efficient, but are hard to debug.\
-Use common sense to balance using new programing features that help in the development, but don't overcomplicate things with added complexity of code and dependencies.\
+Use common sense to balance using new programming features that help in the development, but don't over complicate things with added complexity of code and dependencies.\
 Write tests for all new public methods and functions (see examples in the tests directory).\
 Write documentation for all new public methods and functions. Describe general purpose of the function, input parameters and what it returns (see example comments in the header files).\
-Follow general recomendations for code formating by Google (https://google.github.io/styleguide/cppguide.html).
-
-
-
-
+Follow general recommendations for code formatting by Google (https://google.github.io/styleguide/cppguide.html).
