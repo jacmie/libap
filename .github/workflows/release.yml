@@ -27,32 +27,32 @@ jobs:
             compress:           "tar -czvf"
             compress_ext:       "UnixMake.tar.gz"
 
-#         - os:                 macos-latest
-#           shell_type:         bash
-#           cmake_generator:    "Unix Makefiles"
-#           release_dir:        "/build"
-#           ext:                ""
-#           bin_dir:            "mac64"
-#           compress:           "tar -czvf"
-#           compress_ext:       "UnixMake.tar.gz"
+          - os:                 macos-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "mac64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
 
-#         - os:                 windows-latest
-#           shell_type:         pwsh
-#           cmake_generator:    "MinGW Makefiles"
-#           release_dir:        "/build"
-#           ext:                ".exe"
-#           bin_dir:            "win64"
-#           compress:           "7z a"
-#           compress_ext:       "MinGW.zip"
+          - os:                 windows-latest
+            shell_type:         pwsh
+            cmake_generator:    "MinGW Makefiles"
+            release_dir:        "/build"
+            ext:                ".exe"
+            bin_dir:            "win64"
+            compress:           "7z a"
+            compress_ext:       "MinGW.zip"
 
-#         - os:                 windows-latest
-#           shell_type:         pwsh
-#           cmake_generator:    "Visual Studio 17 2022"  
-#           release_dir:        "/build"
-#           ext:                ".exe"
-#           bin_dir:            "win64"
-#           compress:           "7z a "
-#           compress_ext:       "VS17.zip"
+          - os:                 windows-latest
+            shell_type:         pwsh
+            cmake_generator:    "Visual Studio 17 2022"  
+            release_dir:        "/build"
+            ext:                ".exe"
+            bin_dir:            "win64"
+            compress:           "7z a "
+            compress_ext:       "VS17.zip"
 
     permissions:
       contents: write
