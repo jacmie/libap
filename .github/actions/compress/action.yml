@@ -51,6 +51,3 @@ runs:
         ${{inputs.compress}} libap_${{inputs.os}}_${{inputs.compress_ext}} ${{inputs.artefacts_dir}} 
         tree '${{github.workspace}}/build' /f /a
       shell: pwsh 
-
-#echo '${{inputs.compress}} libap_${{inputs.os}}_${{inputs.compress_ext}} ${{github.workspace}}/build/inc/* ${{github.workspace}}/build/${{inputs.artefacts_dir}}/*' 
-#${{inputs.compress}} '${{github.workspace}}/build/libap_${{inputs.os}}_${{inputs.compress_ext}}' '${{github.workspace}}/build/${{inputs.bin_dir}}' 

@@ -8,8 +8,7 @@ on:
       - v*
     with:
       branches:
-        - develop
-#        - master
+        - master
 
 jobs:
   release_binaries:
@@ -18,23 +17,23 @@ jobs:
       matrix:
         include:
 
-#         - os:                 ubuntu-latest
-#           shell_type:         bash
-#           cmake_generator:    "Unix Makefiles"
-#           release_dir:        "/build"
-#           ext:                ""
-#           bin_dir:            "lin64"
-#           compress:           "tar -czvf"
-#           compress_ext:       "UnixMake.tar.gz"
+          - os:                 ubuntu-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "lin64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
 
-#         - os:                 macos-latest
-#           shell_type:         bash
-#           cmake_generator:    "Unix Makefiles"
-#           release_dir:        "/build"
-#           ext:                ""
-#           bin_dir:            "mac64"
-#           compress:           "tar -czvf"
-#           compress_ext:       "UnixMake.tar.gz"
+          - os:                 macos-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "mac64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
 
           - os:                 windows-latest
             shell_type:         pwsh
