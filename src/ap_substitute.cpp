@@ -1,6 +1,5 @@
 #include "ap_substitute.h"
 
-#include <cstring> // refactor code and remove !!!!
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -121,9 +120,9 @@ int ap::SUBSTITUTE::Insert() {
                 unsigned int i;
 
 				for(i=0; i<var.size(); i++) {
-					len = strlen(var[i].name.c_str());
+					len = var[i].name.length();
 					
-					if(endFlag == 0 && !strcmp(line.substr(pos+1, len).c_str(), var[i].name.c_str())) { //empty space separator
+					if(endFlag == 0 && !var[i].name.compare( line.substr(pos+1, len) ))  { //empty space separator
 						out << var[i].value;
 
 						if( (pos + 1 + len + 1) == int(line.length()) )  out << std::endl;
@@ -133,7 +132,7 @@ int ap::SUBSTITUTE::Insert() {
 						break;
 					}
 					
-					if(endFlag == 1 && !strcmp(line.substr(pos+1, len).c_str(), var[i].name.c_str()) && line[pos+len+1] == endPrompt) { //end mark present
+					if(endFlag == 1 && !var[i].name.compare( line.substr(pos+1, len) ) && line[pos+len+1] == endPrompt) { //end mark present
 						out << var[i].value;
 						
                         if( (pos + 1 + len + 1) == int(line.length()) )  out << std::endl;
