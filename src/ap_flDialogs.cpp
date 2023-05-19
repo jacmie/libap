@@ -301,6 +301,22 @@ void DIALOGS::form_box(Fl_Boxtype formboxtype) {
 	form_boxtype = formboxtype;
 }
 
+void DIALOGS::iconlabel_on() {
+	icon_textflag = 1;
+}
+	
+void DIALOGS::iconlabel_off() {
+	icon_textflag = 0;
+}
+
+void DIALOGS::iconimage_on() {
+	icon_logoflag = 1;
+}
+	
+void DIALOGS::iconimage_off() {
+	icon_logoflag = 0;
+}
+
 void DIALOGS::icon_label(std::string icolabel) {
 	icon_textflag = 1;
 	icon_newtext  = icolabel;

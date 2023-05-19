@@ -165,6 +165,22 @@ class DIALOGS
 	void form_box(Fl_Boxtype formboxtype);
 	
 
+	//! Makes icon label visible
+	/** By default icon label option is on. */
+	void iconlabel_on();
+	
+	//! Makes icon label invisible
+	/** By default icon label option is on. */
+	void iconlabel_off();
+
+	//! Makes icon image visible
+	/** By default icon image option is off, but setting new log turns it on. */
+	void iconimage_on();
+	
+	//! Makes icon image invisible
+	/** By default icon image option is off, but setting new log turns it on. */
+	void iconimage_off();
+
 	//! Sets label in the icon field
 	/** 
 	 * \param icolabel - label in the icon field 
