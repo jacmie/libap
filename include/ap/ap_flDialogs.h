@@ -44,7 +44,7 @@ class DIALOGS
 		DIALOG_FORM();
 
 		void set_form(bool hotspot_flag, std::string form_label, Fl_Color bgcolor, Fl_Boxtype boxtype); 
-		void set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Pixmap *logo);
+		void set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Image *logo);
 		void set_input(bool	flag, const char *defstr, uchar type, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 		void set_message(const char* fmt, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype);
 		void set_buttons(const char *b0, const char *b1, const char *b2, Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color color, Fl_Color downcolor, Fl_Boxtype boxtype);
@@ -78,7 +78,7 @@ class DIALOGS
 	bool		icon_textflag		= 1;
 	std::string	icon_deftext		= "?";
 	std::string icon_newtext		= "";
-	Fl_Pixmap 	*logo;
+	Fl_Image 	*logo;
 	
 	Fl_Font 	icon_font_style		= FL_TIMES_BOLD; 
 	Fl_Fontsize icon_size			= 34; 

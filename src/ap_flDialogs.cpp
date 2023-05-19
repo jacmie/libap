@@ -92,7 +92,7 @@ void DIALOGS::DIALOG_FORM::set_form(bool hotspot_flag, std::string form_label, F
   	message_form->box(boxtype);
 }
 
-void DIALOGS::DIALOG_FORM::set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Pixmap *logo) 
+void DIALOGS::DIALOG_FORM::set_icon(Fl_Font font, Fl_Fontsize size, Fl_Color textcolor, Fl_Color bgcolor, Fl_Boxtype boxtype, bool textflag, const char *text, bool logoflag, Fl_Image *logo) 
 {
   	icon->labelfont(font);
   	icon->labelsize(size);
