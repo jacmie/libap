@@ -26,9 +26,7 @@ TEST(ap_externalExe_tests, execute_binary) {
 	std::vector <std::string> arg;
 	
 #ifdef _WIN32
-	// Put to PATH: "C:/msys64/usr/local/bin/Sq.exe" !!!
     arg.push_back("../../build/tests/Release/sq.exe"); 
-    //arg.push_back("C:/msys64/usr/local/bin/sq.exe");  	// Global directory
 #else
     arg.push_back("../../build/tests/sq"); 
 #endif
@@ -42,10 +40,7 @@ TEST(ap_externalExe_tests, execute_script) {
 	std::vector <std::string> arg;
 	
 #ifdef _WIN32
-	//arg.push_back("TestDir\\JMexternalExe\\Sq.cmd");	// Local directory only in MSYS, doesn't support home dir: '~' !!!
-	//arg.push_back("cmd");    							// Global direcotry
 	arg.push_back("./bin/sq.cmd");	    				// Local directory, doesn't support home dir: '~' !!!
-	//Arg.push_back("C:\\msys64\\home\\jmiel\\JMcommon\\TestDir\\JMexternalExe\\Sq.cmd"); // Global direcotry
 #else
 	arg.push_back("sh");    							// Global direcotry
 	arg.push_back("./bin/sq.sh");	    				// Local directory, doesn't support home dir: '~' !!!
