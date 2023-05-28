@@ -1,5 +1,3 @@
-#include(GoogleTest)
-
 macro(build_test TESTNAME)
     add_executable(
         ${TESTNAME}

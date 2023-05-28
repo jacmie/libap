@@ -155,8 +155,6 @@ endif()
 if(USE_GL)
     target_sources(ap PRIVATE ${FULLPATH_GL_HEADERS} ${FULLPATH_GL_SRC})
     include_directories(ap PRIVATE ${INCLUDE_DIR_GL})
-    #link_directories(${LIBRARY_DIR_GL})
-    #link_libraries(GL)
 endif()
 
 message(">> See available Cache Variables settings")
