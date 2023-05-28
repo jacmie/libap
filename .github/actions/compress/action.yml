@@ -1,0 +1,53 @@
+name: compress
+description: 'Compress resulting file form the build depending on os'
+
+inputs:
+  artefacts_dir:
+    description: 'Binaries catalogue'
+    required: true
+    default: 'lin64/'
+  compress:
+    description: 'Compress command'
+    required: true
+    default: 'tar -czvf'
+  compress_ext:
+    description: 'Compress extension'
+    required: true
+    default: 'UnixMake.tar.gz'
+  os:
+    description: 'Operating system'
+    required: true
+    default: 'ubuntu-latest'
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Linux & MacOS Compress Artefacts
+      if: matrix.cmake_generator == 'Unix Makefiles'
+      run: |
+        cd '${{github.workspace}}/build'
+        ls
+        set -x
+        ${{inputs.compress}} libap_${{inputs.os}}_${{inputs.compress_ext}} ${{inputs.artefacts_dir}} 
+      shell: bash
+
+    - name: MinGW Compress Artefacts
+      if: matrix.cmake_generator == 'MinGW Makefiles'
+      run: |
+        cd '${{github.workspace}}/build'
+        ls
+        Set-PSDebug -Trace 1
+        ${{inputs.compress}} libap_${{inputs.os}}_${{inputs.compress_ext}} ${{inputs.artefacts_dir}} 
+      shell: pwsh
+
+    - name: VS17 Compress Artefacts
+      if: matrix.cmake_generator == 'Visual Studio 17 2022'
+      run: |
+        cd '${{github.workspace}}/build'
+        pwd
+        ls
+        tree '${{github.workspace}}/build' /f /a
+        ${{inputs.compress}} libap_${{inputs.os}}_${{inputs.compress_ext}} ${{inputs.artefacts_dir}} 
+        tree '${{github.workspace}}/build' /f /a
+      shell: pwsh 

@@ -1,0 +1,30 @@
+name: build_fltk
+description: 'Build FLTK library'
+
+inputs:
+  cmake_generator:
+    description: 'Makefile generator used by CMake'
+    required: true
+    default: 'Unix Makefiles'
+  shell_type:
+    description: 'Shell type'
+    required: true
+    default: 'bash'
+
+runs:
+  using: "composite"
+
+  steps:
+
+    - name: FLTK
+      run: |
+        cd extern/fltk/
+        pwd
+        echo '### configure ###'
+        mkdir build
+        cd build
+        cmake -G '${{inputs.cmake_generator}}' -S .. -B . -D FLTK_BUILD_FLUID=OFF -D FLTK_BUILD_TEST=OFF -D OPTION_BUILD_HTML_DOCUMENTATION=OFF 
+        echo '### build ###'
+        cmake --build . -j 8 --config Release
+      shell: ${{inputs.shell_type}}
+

@@ -1,0 +1,6 @@
+[submodule "extern/googletest"]
+	path = extern/googletest
+	url = git@github.com:google/googletest.git
+[submodule "extern/fltk"]
+	path = extern/fltk
+	url = https://github.com/fltk/fltk

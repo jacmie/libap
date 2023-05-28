@@ -1,0 +1,147 @@
+name: release
+
+run-name: Create artefacts for the release
+
+on:
+  push:    
+    tags:
+      - v*
+    with:
+      branches:
+        - master
+
+jobs:
+  release_binaries:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+
+          - os:                 ubuntu-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "lin64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
+
+          - os:                 macos-latest
+            shell_type:         bash
+            cmake_generator:    "Unix Makefiles"
+            release_dir:        "/build"
+            ext:                ""
+            bin_dir:            "mac64"
+            compress:           "tar -czvf"
+            compress_ext:       "UnixMake.tar.gz"
+
+          - os:                 windows-latest
+            shell_type:         pwsh
+            cmake_generator:    "MinGW Makefiles"
+            release_dir:        "/build"
+            ext:                ".exe"
+            bin_dir:            "win64"
+            compress:           "7z a"
+            compress_ext:       "MinGW.zip"
+
+          - os:                 windows-latest
+            shell_type:         pwsh
+            cmake_generator:    "Visual Studio 17 2022"  
+            release_dir:        "/build"
+            ext:                ".exe"
+            bin_dir:            "win64"
+            compress:           "7z a "
+            compress_ext:       "VS17.zip"
+
+    permissions:
+      contents: write
+  
+    steps:
+
+      - uses: actions/checkout@v3
+        with: 
+          submodules: 'recursive'
+
+      # Linux
+      - name: Set Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt install libxfixes-dev
+          sudo apt install libxft-dev
+          sudo apt install libgl1-mesa-dev
+
+      # MacOS
+      - name: Set MacOS
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install tree
+          brew install mesa
+
+      # MSYS
+      - name: Set MSYS
+        if: matrix.cmake_generator == 'MinGW Makefiles'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem:      MINGW64 # (default), Other - MSYS, UCRT64, CLANG64
+          path-type:    minimal # (default), Other - strict, inherit
+          release:      true
+          update:       true
+          platform-check-severity: fatal
+          install: >-
+            tree
+            git
+            base-devel
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-toolchain
+            mingw-w64-clang-x86_64-freeglut
+
+      # Set MSVC
+      - name: Set MSVC 
+        if: matrix.cmake_generator == 'Visual Studio 17 2022'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86_64
+          vsversion: 17.0
+
+      # Submodules update
+      - name: Pull & update submodules recursively
+        run: |
+          git submodule update --init --recursive
+          git submodule update --recursive --remote
+
+      # Build FLTK
+      - name: FLTK - Dowload & Build
+        uses: ./.github/actions/fltk
+        with:        
+          cmake_generator: ${{ matrix.cmake_generator }}
+          shell_type:       ${{ matrix.shell_type }}
+
+      # Build Release
+      - name: Build & Test
+        uses: ./.github/actions/generic_cmake_build
+        with:        
+          shell_type:       ${{ matrix.shell_type }}
+          build_type:       Release
+          cmake_generator:  ${{ matrix.cmake_generator }}
+          parallel:         1
+          tests_flag:       true
+
+      # Compress Artefacts
+      - name: Compress Artefacts
+        uses: ./.github/actions/compress
+        with:        
+          artefacts_dir: ${{github.workspace}}/build/install
+          compress:     ${{ matrix.compress }}
+          compress_ext: ${{ matrix.compress_ext }}
+          os:           ${{ matrix.os }}
+  
+      # Create Github release with release note from file and binary asset attached
+      - name: Deploy Release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          name: ${{ env.GITHUB_REF_NAME }}
+          tag: ${{ env.GITHUB_REF_NAME }}
+          artifacts: '${{github.workspace}}/build/libap_${{ matrix.os }}_${{ matrix.compress_ext}}'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
