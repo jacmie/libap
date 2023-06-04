@@ -133,7 +133,7 @@ endif()
 
 
 if (LINUX)
-    link_libraries(-ldl -lX11 -lfontconfig -lXft -lXrender -lXfixes)
+    link_libraries(-ldl -lX11 -lfontconfig -lXft -lXrender -lXfixes -lXinerama -lXcursor)
 endif()
 
 add_library(ap STATIC)
