@@ -35,6 +35,8 @@ namespace ap {
 
 namespace ap {
 	
+    bool iequals(const std::string &a, const std::string &b);
+
 	//! File, or directory dialog window 
 	/*!
  	 * \param filt - filter for file types
