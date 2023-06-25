@@ -61,7 +61,7 @@ namespace ap
 		//! Reads airfoil file
 		/*!
 		 * \param fileName - path to the airfoil data file
-		 * \return 0 on success
+		 * \return on success returns recognised file type from 0 to 5, on failure error id equal, or higher then 10
 		 */
 		int Read(std::string fileName);
 

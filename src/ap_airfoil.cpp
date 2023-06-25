@@ -377,7 +377,7 @@ namespace ap
 			return XFOIL;
 		}
 
-		return -1; // file type not found
+		return 100; // file type not found
 	}
 
 	void AIRFOIL::SetInterpolationData(std::vector <double> &xin, std::vector <double> &yin, std::vector <double> &xdata, std::vector <double> &zdata, double &xinterp) {
