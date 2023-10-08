@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include "../compare_files.h"
 
+#include <iomanip>
+
 #include "ap_distribution.h"
 
 using namespace std;
