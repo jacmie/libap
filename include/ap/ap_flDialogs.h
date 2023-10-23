@@ -193,18 +193,18 @@ class DIALOGS
 	 * \param icofile - path to the icon file 
 	 * \param textflag - should icon label text overlay over the icon image (image as background) 
 	 * \note The image is not compiled into the program. Typically it means the icon image has to be distributed with the program.
-	 * \sa icon_image(), where image is taken from Fl_Pixmap, which can be embedded in the code. Fl_Pixmap can be casted from other Fl_Image types. 
+	 * \sa icon_image(), where image is taken from resources, which can be embedded in the code.
 	 */
 	void icon_file(std::string icofile, bool textflag=0);
 	
-	//! Sets icon from Fl_Pixmap
+	//! Sets icon from Fl_Image
 	/** 
-	 * \param pixmap - path to the icon file 
+	 * \param image - path to the icon file 
 	 * \param textflag - should icon label text overlay over the icon image (image as background) 
-	 * \note Depending on the implementation the pixmap image can be compiled into the program. It means the icon image doesn't have to be distributed with the program.
+	 * \note Depending on the implementation the image can be compiled into the program. It means the icon image doesn't have to be distributed with the program.
 	 * \sa icon_file() 
 	 */
-	void icon_image(Fl_Pixmap *pixmap, bool textflag=0);
+	void icon_image(Fl_Image *image, bool textflag=0);
 	
 	//! Sets icon label font and it's size
 	/** 

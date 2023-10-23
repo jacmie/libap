@@ -5,8 +5,10 @@
 #include <iostream>
 
 #include <FL/Fl_Pixmap.H>
+#include <FL/Fl_SVG_Image.H>
 #include "./data/logo.h"
 #include "./data/icon_res.h"
+#include "./data/AirfoilIco.h"
 
 using namespace std;
 using namespace ap;
@@ -33,4 +35,12 @@ TEST(ap_flDialogs_tests, dialogs) {
 	
 	dialog.form_color(FL_BLUE);
     clog << dialog.password("Hello World!!!", "BLOB") << endl;
+
+	dialog.form_color(FL_YELLOW);
+	dialog.icon_file("./data/Tree.svg");
+    dialog.message("Tree");
+	
+	dialog.form_color(FL_RED);
+	dialog.icon_image( new Fl_SVG_Image("AirfoilIco_svg", AirfoilIco_svg, AirfoilIco_svg_len) );
+    dialog.message("AirfoilIco_svg");
 }
