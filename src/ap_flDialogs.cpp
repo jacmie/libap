@@ -9,10 +9,17 @@
 #include <iostream>
 
 #include <FL/Fl_Return_Button.H>
-#include <FL/Fl_XPM_Image.H>
-
 #include <FL/fl_draw.H>
 #include <FL/fl_ask.H>
+
+#include <FL/Fl_XBM_Image.H>
+#include <FL/Fl_XPM_Image.H>
+#include <FL/Fl_GIF_Image.H>
+#include <FL/Fl_BMP_Image.H>
+#include <FL/Fl_JPEG_Image.H>
+#include <FL/Fl_PNG_Image.H>
+#include <FL/Fl_PNM_Image.H>
+#include <FL/Fl_SVG_Image.H>
 
 namespace ap {
 
@@ -323,15 +330,45 @@ void DIALOGS::icon_label(std::string icolabel) {
 }
 
 void DIALOGS::icon_file(std::string icofile, bool textflag) {
+    size_t pos = icofile.find_last_of('.');
+	std::string ext;
+    
+	// Check if a period was found and the position is not at the end of the string
+    if (pos != std::string::npos && pos != icofile.length() - 1) {
+        ext = icofile.substr(pos + 1);
+    } else {
+        std::cerr << "No file extension found!" << std::endl;
+		return;
+    }
+
+	if(ext.compare("xbm") == 0)	{	
+		logo = new Fl_XBM_Image(icofile.c_str());
+	} else if(ext.compare("xpm") == 0) {
+		logo = new Fl_XPM_Image(icofile.c_str());
+	} else if(ext.compare("gif") == 0) {
+		logo = new Fl_GIF_Image(icofile.c_str());
+	} else if(ext.compare("bmp") == 0) {
+		logo = new Fl_BMP_Image(icofile.c_str());
+	} else if(ext.compare("jpg") == 0 || ext.compare("jpeg") == 0 ) {
+		logo = new Fl_JPEG_Image(icofile.c_str());
+	} else if(ext.compare("png") == 0) {
+		logo = new Fl_PNG_Image(icofile.c_str());
+	} else if(ext.compare("pnm") == 0) {
+		logo = new Fl_PNM_Image(icofile.c_str());
+	} else if(ext.compare("svg") == 0) {
+		logo = new Fl_SVG_Image(icofile.c_str());
+	} else {
+		std::cerr << "Unrecognised image extension!" << std::endl;
+		return;
+	}
+
 	icon_logoflag = 1;
-	logo = new Fl_XPM_Image(icofile.c_str());
-	
 	icon_textflag = textflag;
 }
 
-void DIALOGS::icon_image(Fl_Pixmap *Pixmap, bool textflag) {
+void DIALOGS::icon_image(Fl_Image *image, bool textflag) {
 	icon_logoflag = 1;
-	logo = Pixmap;
+	logo = image;
 	
 	icon_textflag = textflag;
 }
