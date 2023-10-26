@@ -98,20 +98,27 @@ endforeach()
 set(USE_FLTK ON CACHE BOOL "Build parts of the liballPurpose dependent on the FLTK library")
 set(USE_GL ON CACHE BOOL "Build parts of the liballPurpose dependent on the OpenGL library")
 
-set(INCLUDE_DIR_FLTK "/usr/local/include"   CACHE PATH "FLTK library header files directory.")
 set(INCLUDE_DIR_GL   "/usr/local/include"   CACHE PATH "GL library header files directory.")
-
-set(LIBRARY_DIR_FLTK "/usr/local/lib"       CACHE PATH "FLTK library binaries directory.")
 set(LIBRARY_DIR_GL   "/usr/local/lib"       CACHE PATH "GL library binaries directory.")
+set(PACKAGE_CONFIG_DIR_FLTK "/home/jm/C++/Core/CADero/extern/fltk/install/share/fltk")
 
 if(USE_FLTK)
-    find_library(LIB_FLTK
-        NAMES fltk fltk_jpeg fltk_png fltk_images fltk_gl
-        HINTS "${LIBRARY_DIR_FLTK}"
-        REQUIRED
+    if(UNIX)
+    	set(COMPONENTS_FLTK fltk_images fltk_gl fltk) # jpeg, png - system native
+    else()
+    	set(COMPONENTS_FLTK fltk_images fltk_gl fltk_z fltk fltk_jpeg fltk_png)
+    endif()
+
+    find_package(FLTK 
+    	REQUIRED 
+    	COMPONENTS ${COMPONENTS_FLTK}
+    	PATHS ${PACKAGE_CONFIG_DIR_FLTK}
+    	NO_DEFAULT_PATH
     )
-    if(NOT LIB_FLTK)
-        message(FATAL_ERROR "FLTK library not found!")
+    if(${FLTK_FOUND})
+       message(STATUS "Found FLTK")
+    else()
+       message(FATAL_ERROR "Could not find FLTK")
     endif()
 endif()
 
@@ -132,8 +139,8 @@ endif()
 ### Compile ###
 
 
-if (LINUX)
-    link_libraries(-ldl -lX11 -lfontconfig -lXft -lXrender -lXfixes -lXinerama -lXcursor -lz)
+if(LINUX)
+    link_libraries(dl X11 fontconfig Xft Xrender Xfixes Xinerama Xcursor jpeg png)
 endif()
 
 add_library(ap STATIC)
@@ -142,19 +149,13 @@ target_include_directories(ap PRIVATE include/ap)
 
 if(USE_FLTK)
     target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
-    include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK} ${INCLUDE_DIR_FLTK}/build)
-    link_directories(${LIBRARY_DIR_FLTK})
-    link_libraries(fltk_images fltk_gl fltk)
-    if(LINUX)
-        link_libraries(-ljpeg -lpng) 
-    else()
-        link_libraries(fltk_jpeg fltk_png)
-    endif()
+    target_include_directories(ap PRIVATE ${FLTK_INCLUDE_DIRS})
+    target_link_libraries(ap PRIVATE ${COMPONENTS_FLTK})
 endif()
 
 if(USE_GL)
     target_sources(ap PRIVATE ${FULLPATH_GL_HEADERS} ${FULLPATH_GL_SRC})
-    include_directories(ap PRIVATE ${INCLUDE_DIR_GL})
+    target_include_directories(ap PRIVATE ${INCLUDE_DIR_GL})
 endif()
 
 message(">> See available Cache Variables settings")
