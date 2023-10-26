@@ -102,15 +102,19 @@ set(INCLUDE_DIR_GL   "/usr/local/include"   CACHE PATH "GL library header files 
 set(LIBRARY_DIR_GL   "/usr/local/lib"       CACHE PATH "GL library binaries directory.")
 
 if(LINUX)
+    set(INCLUDE_DIR_FLTK        "${CMAKE_SOURCE_DIR}/extern/fltk/build/install/include"    CACHE PATH "FLTK library header files directory.")
     set(PACKAGE_CONFIG_DIR_FLTK	"${CMAKE_SOURCE_DIR}/extern/fltk/build/install/share/fltk" CACHE PATH "FLTK library binaries directory.")
 elseif(APPLE)
+    set(INCLUDE_DIR_FLTK        "${CMAKE_SOURCE_DIR}/extern/fltk/build/install/include"    CACHE PATH "FLTK library header files directory.")
 	set(PACKAGE_CONFIG_DIR_FLTK	"${CMAKE_SOURCE_DIR}/extern/fltk/build/install/FLTK.framework/Resources/CMake" CACHE PATH "FLTK library binaries directory.")
 elseif(WIN32)
-    set(PACKAGE_CONFIG_DIR_FLTK	"${CMAKE_SOURCE_DIR}/extern/fltk/build/install/CMake" CACHE PATH "FLTK library CMake configuration directory.")
+    set(INCLUDE_DIR_FLTK        "${CMAKE_SOURCE_DIR}/extern/fltk/build/install/include"    CACHE PATH "FLTK library header files directory.")
+    set(PACKAGE_CONFIG_DIR_FLTK	"${CMAKE_SOURCE_DIR}/extern/fltk/build/install/CMake"      CACHE PATH "FLTK library CMake configuration directory.")
 endif()
 
-message(">> INCLUDE_DIR_GL: ${INCLUDE_DIR_GL}")
-message(">> LIBRARY_DIR_GL: ${LIBRARY_DIR_GL}")
+message(">> INCLUDE_DIR_GL:          ${INCLUDE_DIR_GL}")
+message(">> LIBRARY_DIR_GL:          ${LIBRARY_DIR_GL}")
+message(">> INCLUDE_DIR_FLTK:        ${INCLUDE_DIR_FLTK}")
 message(">> PACKAGE_CONFIG_DIR_FLTK: ${PACKAGE_CONFIG_DIR_FLTK}")
 
 if(USE_FLTK)
@@ -159,9 +163,8 @@ target_sources(ap PRIVATE ${FULLPATH_INDEPENDENT_HEADERS} ${FULLPATH_INDEPENDENT
 target_include_directories(ap PRIVATE include/ap)
 
 if(USE_FLTK)
-    message(">> FLTK_INCLUDE_DIRS: ${FLTK_INCLUDE_DIRS}")
     target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
-    target_include_directories(ap PRIVATE ${FLTK_INCLUDE_DIRS})
+    target_include_directories(ap PRIVATE ${INCLUDE_DIR_FLTK})
     target_link_libraries(ap PRIVATE ${COMPONENTS_FLTK})
 endif()
 
