@@ -121,7 +121,8 @@ jobs:
       # Build Release
       - name: Build & Test
         uses: ./.github/actions/generic_cmake_build
-        with:        
+        with:
+          os:               ${{ matrix.os }}        
           shell_type:       ${{ matrix.shell_type }}
           build_type:       Release
           cmake_generator:  ${{ matrix.cmake_generator }}
