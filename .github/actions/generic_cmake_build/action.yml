@@ -39,7 +39,6 @@ runs:
       if: inputs.os == 'ubuntu-latest'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} \
-        -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/istall/share/fltk' \
         -DCMAKE_INSTALL_PREFIX='${{inputs.project_dir}}/build/install'
       shell: bash
 
@@ -47,7 +46,6 @@ runs:
       if: inputs.os == 'macos-latest'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} \
-        -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/install/FLTK.framework/Resources/CMake' \
         -DCMAKE_INSTALL_PREFIX='${{inputs.project_dir}}/build/install'
       shell: bash
 
@@ -55,7 +53,7 @@ runs:
       if: inputs.cmake_generator == 'MinGW Makefiles'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} `
-        -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/istall/share/fltk' -DBUILD_GTESTS=OFF -DBUILD_GMOCK=OFF `
+        -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/install/share/fltk' -DBUILD_GTESTS=OFF -DBUILD_GMOCK=OFF `
         -DCMAKE_INSTALL_PREFIX='${{inputs.project_dir}}/build/install'
       shell: pwsh 
 
