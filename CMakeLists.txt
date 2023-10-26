@@ -100,7 +100,7 @@ set(USE_GL ON CACHE BOOL "Build parts of the liballPurpose dependent on the Open
 
 set(INCLUDE_DIR_GL   "/usr/local/include"   CACHE PATH "GL library header files directory.")
 set(LIBRARY_DIR_GL   "/usr/local/lib"       CACHE PATH "GL library binaries directory.")
-set(PACKAGE_CONFIG_DIR_FLTK "/home/jm/C++/Core/CADero/extern/fltk/install/share/fltk")
+set(PACKAGE_CONFIG_DIR_FLTK "/usr/local/share/fltk")
 
 if(USE_FLTK)
     if(UNIX)

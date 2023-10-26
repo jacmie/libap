@@ -35,7 +35,7 @@ runs:
       if: inputs.cmake_generator == 'Unix Makefiles'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} \
-        -DINCLUDE_DIR_FLTK='${{inputs.project_dir}}/extern/fltk' -DLIBRARY_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/lib' \
+        -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build' \
         -DCMAKE_INSTALL_PREFIX='${{inputs.project_dir}}/build/install'
       shell: bash
 
@@ -43,7 +43,7 @@ runs:
       if: inputs.cmake_generator == 'MinGW Makefiles'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} `
-        -DINCLUDE_DIR_FLTK='${{inputs.project_dir}}/extern/fltk' -DLIBRARY_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/lib' -DBUILD_GTESTS=OFF -DBUILD_GMOCK=OFF `
+        -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build' -DBUILD_GTESTS=OFF -DBUILD_GMOCK=OFF `
         -DCMAKE_INSTALL_PREFIX='${{inputs.project_dir}}/build/install'
       shell: pwsh 
 
@@ -51,7 +51,7 @@ runs:
       if: inputs.cmake_generator == 'Visual Studio 17 2022'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} `
-        -DINCLUDE_DIR_FLTK='${{inputs.project_dir}}/extern/fltk' -DLIBRARY_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/lib/${{inputs.build_type}}' `
+        -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build' `
         -DCMAKE_INSTALL_PREFIX='${{inputs.project_dir}}/build/install'
       shell: pwsh 
 
