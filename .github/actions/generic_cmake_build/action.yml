@@ -2,6 +2,10 @@ name: generic_cmake_build
 description: 'Build on particular system'
 
 inputs:
+  os:
+    description: 'Operating system'
+    required: true
+    default: 'ubuntu-latest'
   shell_type:
     description: 'Shell type'
     required: true
@@ -32,7 +36,7 @@ runs:
   steps:
     
     - name: Configure CMake - Unix
-      if: inputs.cmake_generator == 'Unix Makefiles'
+      if: inputs.os == 'ubuntu-latest'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} \
         -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/istall/share/fltk' \
@@ -40,7 +44,7 @@ runs:
       shell: bash
 
     - name: Configure CMake - MacOs
-      if: inputs.cmake_generator == 'Unix Makefiles'
+      if: inputs.os == 'macos-latest'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} \
         -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/install/FLTK.framework/Resources/CMake' \
