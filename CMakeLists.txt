@@ -106,7 +106,7 @@ if(LINUX)
 elseif(APPLE)
 	set(PACKAGE_CONFIG_DIR_FLTK	"${CMAKE_SOURCE_DIR}/extern/fltk/build/install/FLTK.framework/Resources/CMake" CACHE PATH "FLTK library binaries directory.")
 elseif(WIN32)
-    set(PACKAGE_CONFIG_DIR_FLTK	"${CMAKE_SOURCE_DIR}/extern/fltk/build/install/CMake" CACHE PATH "FLTK library binaries directory.")
+    set(PACKAGE_CONFIG_DIR_FLTK	"${CMAKE_SOURCE_DIR}/extern/fltk/build/install/CMake" CACHE PATH "FLTK library CMake configuration directory.")
 endif()
 
 message(">> INCLUDE_DIR_GL: ${INCLUDE_DIR_GL}")
@@ -159,6 +159,7 @@ target_sources(ap PRIVATE ${FULLPATH_INDEPENDENT_HEADERS} ${FULLPATH_INDEPENDENT
 target_include_directories(ap PRIVATE include/ap)
 
 if(USE_FLTK)
+    message(">> FLTK_INCLUDE_DIRS: ${FLTK_INCLUDE_DIRS}")
     target_sources(ap PRIVATE ${FULLPATH_FL_HEADERS} ${FULLPATH_FL_SRC})
     target_include_directories(ap PRIVATE ${FLTK_INCLUDE_DIRS})
     target_link_libraries(ap PRIVATE ${COMPONENTS_FLTK})
