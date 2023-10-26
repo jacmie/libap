@@ -23,7 +23,7 @@ runs:
         echo '### configure ###'
         mkdir build
         cd build
-        cmake -G '${{inputs.cmake_generator}}' -S .. -B . -DFLTK_BUILD_FLUID=OFF -DFLTK_BUILD_TEST=OFF -DOPTION_BUILD_HTML_DOCUMENTATION=OFF -DOPTION_USE_CAIRO=OFF -DOPTION_USE_WAYLAND=OFF -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_SOURCE_DIR}/build/install"
+        cmake -G '${{inputs.cmake_generator}}' -S .. -B . -DFLTK_BUILD_FLUID=OFF -DFLTK_BUILD_TEST=OFF -DOPTION_BUILD_HTML_DOCUMENTATION=OFF -DOPTION_USE_CAIRO=OFF -DOPTION_USE_WAYLAND=OFF -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_SOURCE_DIR}/build/install
         echo '### build ###'
         cmake --build . -j 8 --config Release
         cmake --install .
