@@ -27,6 +27,7 @@ set(INDEPENDENT_HEADERS
     ap_naca.h
     ap_substitute.h
     ap_xfoil.h
+    ap_utils.h
 )
 
 set(FL_HEADERS
@@ -54,6 +55,7 @@ set(INDEPENDENT_SRC
     ap_naca.cpp
     ap_substitute.cpp
     ap_xfoil.cpp
+    ap_utils.cpp
 )
 
 set(FL_SRC

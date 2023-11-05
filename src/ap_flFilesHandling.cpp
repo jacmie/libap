@@ -11,13 +11,10 @@
 
 #include <FL/Fl_Native_File_Chooser.H>
 
+#include "ap_utils.h"
 #include "ap_flDialogs.h"
 
 namespace ap {
-
-bool iequals(const std::string &a, const std::string &b) {
-    return std::equal(a.begin(), a.end(), b.begin(), b.end(), [](char a, char b) { return tolower(a) == tolower(b); });
-}
 
 std::string Browse_FileExists(std::string fileName, bool askOverwriteFlag) {
 	namespace fs = std::filesystem;
