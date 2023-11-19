@@ -1,6 +1,9 @@
 #ifndef AP_UTILS_H
 #define AP_UTILS_H 
 
+#include <string>
+#include <vector>
+
 namespace ap {
 
 	//! Non case sensitive strings comparison  
