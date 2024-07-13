@@ -418,6 +418,36 @@ namespace ap
 		 */
 		void RotMatZdeg(real degAng) { RotMatZ(degAng*M_PI/180); }
 
+   		//! Set rotation MATRIX_3x3 about defined axis
+		/*!
+		 * \param axis - axis of rotation
+		 * \param degAng - angle of rotation about the axis in degrees
+		 * \return Rotation matrix about the axis.
+		 */
+        void RotAxisMatDeg(const ap::VECTOR_3 <real> &axis, const real &degAng) {
+            RotAxisMat(axis, degAng*M_PI/180);
+        }
+
+   		//! Set rotation MATRIX_3x3 about defined axis
+		/*!
+		 * \param axis - axis of rotation
+		 * \param radAng - angle of rotation about the axis in radians
+		 * \return Rotation matrix about the axis.
+		 */
+        void RotAxisMat(const ap::VECTOR_3 <real> &axis, const real &radAng) {
+        	real Sth = sin(radAng);
+        	real Cth = cos(radAng);
+        	real ux, uy, uz;
+
+            VECTOR_3 u(axis);
+        	u.Norm();
+        	u.Get(ux, uy, uz);
+
+        	Set(Cth + ux*ux*(1 - Cth),    ux*uy*(1 - Cth) - uz*Sth, ux*uz*(1 - Cth) + uy*Sth,
+                uy*ux*(1 - Cth) + uz*Sth, Cth + uy*uy*(1 - Cth),    uy*uz*(1 - Cth) - ux*Sth,
+                uz*ux*(1 - Cth) - uy*Sth, uz*uy*(1 - Cth) + ux*Sth, Cth + uz*uz*(1 - Cth));
+        }
+
 		//! Get to MATRIX_3x3 values
 		/*!
 		 * \param xx_p - xx value copied from the MATRIX_3x3 
