@@ -103,12 +103,9 @@ set(USE_GL ON CACHE BOOL "Build parts of the liballPurpose dependent on the Open
 set(INCLUDE_DIR_GL   "/usr/local/include"   CACHE PATH "GL library header files directory.")
 set(LIBRARY_DIR_GL   "/usr/local/lib"       CACHE PATH "GL library binaries directory.")
 
-if(LINUX)
+if(UNIX)
     set(INCLUDE_DIR_FLTK        "${CMAKE_SOURCE_DIR}/extern/fltk/build/install/include"    CACHE PATH "FLTK library header files directory.")
     set(PACKAGE_CONFIG_DIR_FLTK	"${CMAKE_SOURCE_DIR}/extern/fltk/build/install/share/fltk" CACHE PATH "FLTK library binaries directory.")
-elseif(APPLE)
-    set(INCLUDE_DIR_FLTK        "${CMAKE_SOURCE_DIR}/extern/fltk/build/install/include"    CACHE PATH "FLTK library header files directory.")
-	set(PACKAGE_CONFIG_DIR_FLTK	"${CMAKE_SOURCE_DIR}/extern/fltk/build/install/FLTK.framework/Resources/CMake" CACHE PATH "FLTK library binaries directory.")
 elseif(WIN32)
     set(INCLUDE_DIR_FLTK        "${CMAKE_SOURCE_DIR}/extern/fltk/build/install/include"    CACHE PATH "FLTK library header files directory.")
     set(PACKAGE_CONFIG_DIR_FLTK	"${CMAKE_SOURCE_DIR}/extern/fltk/build/install/CMake"      CACHE PATH "FLTK library CMake configuration directory.")
