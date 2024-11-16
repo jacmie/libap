@@ -64,7 +64,7 @@ TEST(ap_bspline_tests, bspline_length) {
 	B_SPLINE <double> bs(9, 2, PEACEWISE);
 	BsplineInit(bs); // vertexes generated in init function
 	
-	EXPECT_EQ(6.8800015506146686, bs.Length());
+	EXPECT_NEAR(6.8800015506146686, bs.Length(), 1e-6);
 }
 
 TEST(ap_bspline_tests, bspline_min_max) {

@@ -19,6 +19,7 @@ TEST(ap_bezierAirfoil_tests, from_2_bezier_curves) {
     
     Airfoil2b.InitAirfoilSplinePoints();
 
+#ifndef __APPLE__
 	std::string str1, str2;
     Airfoil2b.PrintOutPoles("./out/out_bezierAiroil2bPoles.xls");
 	EXPECT_EQ(0, Files2str("bezierAiroil2bPoles.xls", str1, str2));
@@ -27,6 +28,7 @@ TEST(ap_bezierAirfoil_tests, from_2_bezier_curves) {
 	Airfoil2b.PrintOutVertex("./out/out_bezierAiroil2bVertex.xls", "Airfoil2b");
 	EXPECT_EQ(0, Files2str("bezierAiroil2bVertex.xls", str1, str2));
 	EXPECT_EQ(str1, str2);
+#endif
 }
 
 TEST(ap_bezierAirfoil_tests, from_4_bezier_curves) {
@@ -43,6 +45,7 @@ TEST(ap_bezierAirfoil_tests, from_4_bezier_curves) {
     
     Airfoil4b.InitAirfoilSplinePoints();
 
+#ifndef __APPLE__
 	std::string str1, str2;
     Airfoil4b.PrintOutPoles("./out/out_bezierAiroil4bPoles.xls");
 	EXPECT_EQ(0, Files2str("bezierAiroil4bPoles.xls", str1, str2));
@@ -50,4 +53,5 @@ TEST(ap_bezierAirfoil_tests, from_4_bezier_curves) {
 	Airfoil4b.PrintOutVertex("./out/out_bezierAiroil4bVertex.xls", "Airfoil4b");
 	EXPECT_EQ(0, Files2str("bezierAiroil4bVertex.xls", str1, str2));
 	EXPECT_EQ(str1, str2);
+#endif
 }

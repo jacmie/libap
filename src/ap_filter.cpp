@@ -39,14 +39,13 @@ FILTER::FILTER(int array_n, int filter_n, double amplitude) {
 int FILTER::Filter(std::vector <double> &xInput, bool overwrite) {
 	if(fn > n) return 1;
 	
-    int fcount, findicator;
+    int findicator;
 	
 	bool   filt_edge;
     double filt_sum;
 	
     for(int i=0; i<n; i++)
     {
-        fcount = 0;
 		filt_edge = 0;
 		filt_sum  = 0;
         xFiltered[i] = 0;
@@ -55,7 +54,6 @@ int FILTER::Filter(std::vector <double> &xInput, bool overwrite) {
             findicator = i - int(0.5*fn) + f;
             
             if(0 <= findicator && findicator < n) {
-                ++fcount;
                 xFiltered[i] += filter[f]*xInput[findicator];
             }
 			
