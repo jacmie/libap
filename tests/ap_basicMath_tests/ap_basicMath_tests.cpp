@@ -564,6 +564,18 @@ TEST(ap_basicMath_tests, VECTOR_3_revers) {
 	EXPECT_EQ(-a, b);
 }
 
+TEST(ap_basicMath_tests, VECTOR_3_index) {
+	VECTOR_3 <double> a;
+	
+	a[0] = 1.1;
+	a[1] = 2.2;
+	a[2] = 3.3;
+
+	EXPECT_EQ(a[0], 1.1);
+	EXPECT_EQ(a[1], 2.2);
+	EXPECT_EQ(a[2], 3.3);
+}
+
 TEST(ap_basicMath_tests, MATRIX_3x3_set_from_std_vector) {
 	vector <double> w;
 	w.assign(9, 3.3);
@@ -1321,3 +1333,4 @@ TEST(ap_basicMath_tests, MATRIX_3x3_inversion) {
 	EXPECT_DOUBLE_EQ(C.zy, 4);
 	EXPECT_DOUBLE_EQ(C.zz, 1);
 }
+	

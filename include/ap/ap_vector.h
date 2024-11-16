@@ -351,6 +351,26 @@ namespace ap
 			return 0;
 		}
 
+		// Operator[] for non-const objects
+    	real& operator[](size_t index) {
+    	    switch (index) {
+    	        case 0: return x;
+    	        case 1: return y;
+    	        case 2: return z;
+    	        default: throw std::out_of_range("Index out of range");
+    	    }
+    	}
+
+    	// Operator[] for const objects
+    	const real& operator[](size_t index) const {
+    	    switch (index) {
+    	        case 0: return x;
+    	        case 1: return y;
+    	        case 2: return z;
+    	        default: throw std::out_of_range("Index out of range");
+    	    }
+    	}
+
 	private:
 		bool grFlag = 1; // global resize flag
 	};
