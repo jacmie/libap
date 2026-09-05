@@ -9,8 +9,7 @@ using namespace ap;
 
 TEST(ap_flFilesHandling_tests, file_permissions) {
 #ifdef __linux__
-    std::vector <bool> permResults;
-    permResults.resize(3);
+    std::vector<bool> permResults = {false, false, false};
     
     EXPECT_EQ(0, CheckPermissions("../ap_substitute_tests/data/insert_1.txt", permResults) );
 
