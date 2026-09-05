@@ -1,0 +1,14 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+if(@USE_FLTK@)
+    set(PACKAGE_CONFIG_DIR_FLTK "@PACKAGE_CONFIG_DIR_FLTK@")
+    find_dependency(FLTK REQUIRED COMPONENTS @COMPONENTS_FLTK@ PATHS "${PACKAGE_CONFIG_DIR_FLTK}" NO_DEFAULT_PATH)
+endif()
+
+if(@USE_GL@)
+    find_dependency(OpenGL REQUIRED)
+endif()
+
+include("${CMAKE_CURRENT_LIST_DIR}/apTargets.cmake")
