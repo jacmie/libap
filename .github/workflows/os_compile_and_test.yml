@@ -54,6 +54,7 @@ jobs:
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/extern/googletest/build/install
         -DBUILD_GMOCK=OFF
+        -Dgtest_force_shared_crt=ON
         -DINSTALL_GTEST=ON
         && cmake --build ${{ github.workspace }}/extern/googletest/build
         --config ${{ matrix.build_type }} --parallel 8
