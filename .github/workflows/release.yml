@@ -103,7 +103,6 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x86_64
-          vsversion: 17.0
 
       # Submodules update
       - name: Pull & update submodules recursively
@@ -147,4 +146,3 @@ jobs:
           tag: ${{ env.GITHUB_REF_NAME }}
           artifacts: '${{github.workspace}}/build/libap_${{ matrix.os }}_${{ matrix.compress_ext}}'
           token: ${{ secrets.GITHUB_TOKEN }}
-
