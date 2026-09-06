@@ -89,6 +89,7 @@ prepend_paths(FULLPATH_GL_SRC              "src"        ${GL_SRC})
 ### Include & Lib Dependencies ###
 
 
+set(AP_BASE ON CACHE BOOL "Build the base parts of the liballPurpose library")
 set(USE_FLTK OFF CACHE BOOL "Build parts of the liballPurpose dependent on the FLTK library")
 set(USE_GL OFF CACHE BOOL "Build parts of the liballPurpose dependent on the OpenGL library")
 
@@ -102,7 +103,6 @@ if(USE_FLTK)
     endif()
 
     find_package(FLTK 
-    	REQUIRED 
     	COMPONENTS ${COMPONENTS_FLTK}
     	PATHS ${PACKAGE_CONFIG_DIR_FLTK}
     	NO_DEFAULT_PATH
@@ -110,21 +110,50 @@ if(USE_FLTK)
     if(${FLTK_FOUND})
        message(STATUS "Found FLTK: ${FLTK_DIR} (version ${FLTK_VERSION})")
     else()
-       message(FATAL_ERROR "Could not find FLTK")
+       message(FATAL_ERROR 
+            "\n=======================================================================\n"
+            " FLTK NOT FOUND OR NOT BUILT YET!\n"
+            "=======================================================================\n"
+            " It looks like you haven't built the FLTK submodule dependency.\n"
+            " Please run these commands (copy) in your terminal to build it first:\n\n"
+            "   cd ${CMAKE_SOURCE_DIR}/extern/fltk\n"
+            "   git submodule update --init\n"
+            "   cmake -B build -DCMAKE_BUILD_TYPE=Release\n"
+            "   cmake --build build -j8\n\n"
+            " If you have FLTK compiled elsewhere, point CMake directly to it\n"
+            " by passing this variable when configuring your project:\n\n"
+            "   -DPACKAGE_CONFIG_DIR_FLTK=/path/to/your/built/fltk\n\n"
+            " Once finished, return to your main build folder and run CMake again.\n"
+            "=======================================================================\n"
+       )
     endif()
 endif()
 
 if(USE_GL)
-    if(LINUX)
-        find_library(LIB_OPENGL
-            NAMES GL
-            HINTS "${LIBRARY_DIR_GL}"
-            REQUIRED
-        )
-        if(LIB_OPENGL)
-            message(STATUS "Found OpenGL: ${LIB_OPENGL}")
+    find_package(OpenGL)
+
+    if(OPENGL_FOUND)
+        message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
+    else()
+        if(WIN32)
+            message(FATAL_ERROR 
+                "\n=======================================================================\n"
+                " OPENGL NOT FOUND!\n"
+                "=======================================================================\n"
+                " Please ensure you have installed the Windows SDK via the \n"
+                " Visual Studio Installer (Desktop development with C++ component).\n"
+                "=======================================================================\n"
+            )
         else()
-            message(FATAL_ERROR "OpenGL library not found!")
+            message(FATAL_ERROR 
+                "\n=======================================================================\n"
+                " OPENGL NOT FOUND!\n"
+                "=======================================================================\n"
+                " Please ensure you have the OpenGL development libraries installed.\n"
+                " On Ubuntu/Debian: sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev\n"
+                " On Fedora/CentOS: sudo dnf install mesa-libGL-devel mesa-libGLU-devel\n"
+                "=======================================================================\n"
+            )
         endif()
     endif()
 endif()
@@ -201,11 +230,43 @@ set(BUILD_GTESTS OFF CACHE BOOL "Build the tests.")
 set(INSTALL_GTEST OFF)
 set(INSTALL_GMOCK OFF)
 
+set(PACKAGE_CONFIG_DIR_GTEST "${CMAKE_SOURCE_DIR}/extern/googletest/build/install" CACHE PATH "GoogleTest library CMake configuration directory.")
+
 if(BUILD_GTESTS)
     enable_testing()
     include(GoogleTest)
-    add_subdirectory("extern/googletest")
-    add_subdirectory(tests)  
+
+    find_package(GTest 
+        CONFIG 
+        PATHS 
+            "${PACKAGE_CONFIG_DIR_GTEST}"
+            "${PACKAGE_CONFIG_DIR_GTEST}/lib/cmake/GTest"
+            "${PACKAGE_CONFIG_DIR_GTEST}/lib64/cmake/GTest"
+        NO_DEFAULT_PATH
+    )
+
+    if(GTest_FOUND)
+        message(STATUS "Found GoogleTest: ${GTest_DIR}")
+        add_subdirectory(tests)  
+    else()
+        message(FATAL_ERROR 
+            "\n=======================================================================\n"
+            " GOOGLETEST NOT FOUND OR NOT BUILT YET!\n"
+            "=======================================================================\n"
+            " It looks like you haven't built the GoogleTest submodule dependency.\n"
+            " Please run these commands (copy) in your terminal to build it first:\n\n"
+            "   cd ${CMAKE_SOURCE_DIR}/extern/googletest\n"
+            "   git submodule update --init\n"
+            "   cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/install\n"
+            "   cmake --build build -j8\n"
+            "   cmake --install build\n\n"
+            " If you have GoogleTest compiled elsewhere, point CMake directly to it\n"
+            " by passing this variable when configuring your project:\n\n"
+            "   -DPACKAGE_CONFIG_DIR_GTEST=/path/to/your/built/googletest\n\n"
+            " Once finished, return to your main build folder and run CMake again.\n"
+            "=======================================================================\n"
+        )
+    endif()
 endif()
 
 
