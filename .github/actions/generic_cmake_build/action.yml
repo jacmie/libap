@@ -36,21 +36,21 @@ runs:
   steps:
     
     - name: Configure CMake - Unix
-      if: inputs.os == 'ubuntu-latest'
+      if: inputs.os == 'ubuntu-latest' && inputs.cmake_generator != 'Visual Studio 17 2022'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} \
         -DCMAKE_INSTALL_PREFIX='${{inputs.project_dir}}/build/install'
       shell: bash
 
     - name: Configure CMake - MacOs
-      if: inputs.os == 'macos-latest'
+      if: inputs.os == 'macos-latest' && inputs.cmake_generator != 'Visual Studio 17 2022'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} \
         -DCMAKE_INSTALL_PREFIX='${{inputs.project_dir}}/build/install'
       shell: bash
 
     - name: Configure CMake - MinGW
-      if: inputs.cmake_generator == 'MinGW Makefiles'
+      if: inputs.os == 'windows-latest' && inputs.cmake_generator == 'MinGW Makefiles'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} `
         -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/install/CMake' -DBUILD_GTESTS=OFF -DBUILD_GMOCK=OFF `
@@ -58,7 +58,7 @@ runs:
       shell: pwsh 
 
     - name: Configure CMake - VS17
-      if: inputs.cmake_generator == 'Visual Studio 17 2022'
+      if: inputs.os == 'windows-latest' && inputs.cmake_generator == 'Visual Studio 17 2022'
       run: |
         cmake -G "${{inputs.cmake_generator}}" -B ${{inputs.project_dir}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} `
         -DPACKAGE_CONFIG_DIR_FLTK='${{inputs.project_dir}}/extern/fltk/build/install/CMake' `

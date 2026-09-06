@@ -3,12 +3,9 @@ name: release
 run-name: Create artefacts for the release
 
 on:
-  push:    
+  push:
     tags:
       - v*
-    with:
-      branches:
-        - master
 
 jobs:
   release_binaries:
