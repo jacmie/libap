@@ -76,7 +76,7 @@ Update git submodules (gtest, FLTK):
 git submodule update --init --recursive
 ```
 
-## Build & Install
+## Build
 
 The library offers modular control over what gets compiled. You can selectively disable the core layer or explicitly pull optional graphics wrappers depending on your project constraints.
 
@@ -121,7 +121,7 @@ Compiles all base assets, GUI layers, OpenGL typography modules, and prepares th
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_FLTK=ON -DUSE_GL=ON -DBUILD_GTESTS=ON
 cmake --build . -j8
-ctest
+ctest --output-on-failure
 ```
 
 #### Scenario 5: Isolated OpenGL Module (Without Core Base)
