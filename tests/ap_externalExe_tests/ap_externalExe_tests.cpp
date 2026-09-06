@@ -26,7 +26,12 @@ TEST(ap_externalExe_tests, execute_binary) {
 	std::vector <std::string> arg;
 	
 #ifdef _WIN32
-    arg.push_back("../../build/tests/Release/sq.exe"); 
+    std::ifstream ifile("../../build/tests/sq.exe");
+    if (ifile.good()) {
+        arg.push_back("../../build/tests/sq.exe"); // MinGW Makefiles path
+    } else {
+        arg.push_back("../../build/tests/Release/sq.exe"); // Visual Studio path
+    }
 #else
     arg.push_back("../../build/tests/sq"); 
 #endif
