@@ -149,7 +149,7 @@ To run the tests on the project (testing the libap takes few seconds):
 ctest --output-on-failure
 ```
 
-### Installation
+## Installation
 
 Only the libraries and corresponding headers that were selected during the configuration are installed.  
 When installing, targets and headers are sorted into system-standard structural conventions:
