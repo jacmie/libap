@@ -46,8 +46,6 @@ _deps
 build/
 [bB][uU][iI][lL][dD]/
 
-extern/
-
 dox/html/
 
 tests/ap_xfoil_tests/out/
