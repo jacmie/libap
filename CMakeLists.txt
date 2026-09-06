@@ -171,55 +171,53 @@ macro(setup_ap_includes TARGET_NAME)
     )
 endmacro()
 
-add_library(ap_base_obj OBJECT ${FULLPATH_INDEPENDENT_SRC} ${FULLPATH_INDEPENDENT_HEADERS})
-setup_ap_includes(ap_base_obj)
+if(AP_BASE)
+    add_library(ap_base_obj OBJECT ${FULLPATH_INDEPENDENT_SRC} ${FULLPATH_INDEPENDENT_HEADERS})
+    setup_ap_includes(ap_base_obj)
+
+    add_library(ap_base STATIC $<TARGET_OBJECTS:ap_base_obj>)
+    setup_ap_includes(ap_base)
+    
+    add_library(ap STATIC $<TARGET_OBJECTS:ap_base_obj>)
+    setup_ap_includes(ap)
+endif()
 
 if(USE_FLTK)
     add_library(ap_fl_obj OBJECT ${FULLPATH_FL_SRC} ${FULLPATH_FL_HEADERS})
     setup_ap_includes(ap_fl_obj)
     target_include_directories(ap_fl_obj PRIVATE ${FLTK_INCLUDE_DIRS})
+
+    add_library(ap_fl STATIC $<TARGET_OBJECTS:ap_fl_obj>)
+    setup_ap_includes(ap_fl)
+    
+    target_link_libraries(ap_fl PUBLIC fltk fltk_images fltk_gl)
+    if(LINUX)
+        target_link_libraries(ap_fl PRIVATE dl X11 fontconfig Xft Xrender Xfixes Xinerama Xcursor jpeg png)
+    endif()
+
+    if(TARGET ap)
+        target_sources(ap PRIVATE $<TARGET_OBJECTS:ap_fl_obj>)
+        target_link_libraries(ap PUBLIC fltk fltk_images fltk_gl)
+        if(LINUX)
+            target_link_libraries(ap PRIVATE dl X11 fontconfig Xft Xrender Xfixes Xinerama Xcursor jpeg png)
+        endif()
+    endif()
 endif()
 
 if(USE_GL)
     add_library(ap_gl_obj OBJECT ${FULLPATH_GL_SRC} ${FULLPATH_GL_HEADERS})
     setup_ap_includes(ap_gl_obj)
     target_include_directories(ap_gl_obj PRIVATE ${OPENGL_INCLUDE_DIR})
-endif()
 
-
-add_library(ap_base STATIC $<TARGET_OBJECTS:ap_base_obj>)
-setup_ap_includes(ap_base)
-
-if(USE_FLTK)
-    add_library(ap_fl STATIC $<TARGET_OBJECTS:ap_fl_obj>)
-    setup_ap_includes(ap_fl)
-    target_link_libraries(ap_fl PUBLIC ap_base fltk fltk_images fltk_gl)
-    if(LINUX)
-        target_link_libraries(ap_fl PRIVATE dl X11 fontconfig Xft Xrender Xfixes Xinerama Xcursor jpeg png)
-    endif()
-endif()
-
-if(USE_GL)
     add_library(ap_gl STATIC $<TARGET_OBJECTS:ap_gl_obj>)
     setup_ap_includes(ap_gl)
-    target_link_libraries(ap_gl PUBLIC ap_base ${OPENGL_LIBRARIES})
-endif()
+    
+    target_link_libraries(ap_gl PUBLIC ${OPENGL_LIBRARIES})
 
-
-add_library(ap STATIC $<TARGET_OBJECTS:ap_base_obj>)
-setup_ap_includes(ap)
-
-if(USE_FLTK)
-    target_sources(ap PRIVATE $<TARGET_OBJECTS:ap_fl_obj>)
-    target_link_libraries(ap PUBLIC fltk fltk_images fltk_gl)
-    if(LINUX)
-        target_link_libraries(ap PRIVATE dl X11 fontconfig Xft Xrender Xfixes Xinerama Xcursor jpeg png)
+    if(TARGET ap)
+        target_sources(ap PRIVATE $<TARGET_OBJECTS:ap_gl_obj>)
+        target_link_libraries(ap PUBLIC ${OPENGL_LIBRARIES})
     endif()
-endif()
-
-if(USE_GL)
-    target_sources(ap PRIVATE $<TARGET_OBJECTS:ap_gl_obj>)
-    target_link_libraries(ap PUBLIC ${OPENGL_LIBRARIES})
 endif()
 
 
@@ -271,40 +269,41 @@ endif()
 
 
 ### Install ###
-set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Default local dependencies installation target layout path prefix." FORCE)
 
-if(NOT CMAKE_INSTALL_BINDIR)
-    set(CMAKE_INSTALL_BINDIR bin)
-endif()
-if(NOT CMAKE_INSTALL_INCLUDEDIR)
-    set(CMAKE_INSTALL_INCLUDEDIR include)
-endif()
-if(NOT CMAKE_INSTALL_LIBDIR)
-    set(CMAKE_INSTALL_LIBDIR lib)
+
+include(GNUInstallDirs)
+
+set(EXPORT_TARGETS "")
+
+if(AP_BASE)
+    list(APPEND EXPORT_TARGETS ap ap_base)
+    install(FILES ${FULLPATH_INDEPENDENT_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ap)
 endif()
 
-set(EXPORT_TARGETS ap ap_base)
 if(USE_FLTK)
     list(APPEND EXPORT_TARGETS ap_fl)
+    install(FILES ${FULLPATH_FL_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ap)
 endif()
+
 if(USE_GL)
     list(APPEND EXPORT_TARGETS ap_gl)
+    install(FILES ${FULLPATH_GL_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ap)
 endif()
 
-install(TARGETS ${EXPORT_TARGETS}
-    EXPORT apTargets
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+if(EXPORT_TARGETS)
+    install(TARGETS ${EXPORT_TARGETS}
+        EXPORT apTargets
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
 
-install(DIRECTORY include/ap DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
-install(EXPORT apTargets
-    FILE apTargets.cmake
-    NAMESPACE ap::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ap
-)
+    install(EXPORT apTargets
+        FILE apTargets.cmake
+        NAMESPACE ap::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ap
+    )
+endif()
 
 include(CMakePackageConfigHelpers)
 
@@ -312,10 +311,6 @@ configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/apConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/apConfig.cmake"
     INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/ap"
-)
-
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/apConfig.cmake"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/ap"
 )
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/apConfig.cmake"
