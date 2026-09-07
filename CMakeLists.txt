@@ -28,6 +28,9 @@ set(INDEPENDENT_HEADERS
     ap_substitute.h
     ap_xfoil.h
     ap_utils.h
+    # to install:
+    ap_matrix.h
+    ap_vector.h
 )
 
 set(FL_HEADERS
