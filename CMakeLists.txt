@@ -167,7 +167,7 @@ macro(setup_ap_includes TARGET_NAME)
         PUBLIC 
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/ap>
-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/ap>
     )
 endmacro()
 
@@ -177,9 +177,11 @@ if(AP_BASE)
 
     add_library(ap_base STATIC $<TARGET_OBJECTS:ap_base_obj>)
     setup_ap_includes(ap_base)
-    
+    add_library(ap::ap_base ALIAS ap_base) 
+
     add_library(ap STATIC $<TARGET_OBJECTS:ap_base_obj>)
     setup_ap_includes(ap)
+    add_library(ap::ap ALIAS ap) 
 endif()
 
 if(USE_FLTK)
@@ -189,7 +191,8 @@ if(USE_FLTK)
 
     add_library(ap_fl STATIC $<TARGET_OBJECTS:ap_fl_obj>)
     setup_ap_includes(ap_fl)
-    
+    add_library(ap::ap_fl ALIAS ap_fl) 
+
     target_link_libraries(ap_fl PUBLIC fltk fltk_images fltk_gl)
     if(LINUX)
         target_link_libraries(ap_fl PRIVATE dl X11 fontconfig Xft Xrender Xfixes Xinerama Xcursor jpeg png)
@@ -211,6 +214,7 @@ if(USE_GL)
 
     add_library(ap_gl STATIC $<TARGET_OBJECTS:ap_gl_obj>)
     setup_ap_includes(ap_gl)
+    add_library(ap::ap_gl ALIAS ap_gl) 
     
     target_link_libraries(ap_gl PUBLIC ${OPENGL_LIBRARIES})
 
